@@ -25,23 +25,23 @@ int skip_whitespace(xmlTextReaderPtr reader, bool skip_significant = true)
 using namespace nrps;
 
 Nrp::Nrp(Nrp::Type type)
-: m_type(type)
+: std::vector<Monomer>(), m_type(type)
 {}
 
 Nrp::Nrp(const char *file)
-: m_type(Nrp::Type::Linear)
+: std::vector<Monomer>(), m_type(Nrp::Type::Linear)
 {
     fromFile(file);
 }
 
 Nrp::Nrp(const std::string &file)
-: m_type(Nrp::Type::Linear)
+: std::vector<Monomer>(), m_type(Nrp::Type::Linear)
 {
     fromFile(file);
 }
 
 Nrp::Nrp(int fd)
-: m_type(Nrp::Type::Linear)
+: std::vector<Monomer>(), m_type(Nrp::Type::Linear)
 {
     fromFile(fd);
 }

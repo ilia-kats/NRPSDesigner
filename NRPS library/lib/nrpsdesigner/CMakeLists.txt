@@ -9,6 +9,6 @@ set(SRCS
     nrp.cpp
 )
 
-add_library(nrpsdesign ${SRCS})
-generate_export_header(nrpsdesign)
-target_link_libraries(nrpsdesign ${LIBXML2_LIBRARIES})
+add_library(nrpsdesigner ${SRCS})
+generate_export_header(nrpsdesigner)
+target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES})
