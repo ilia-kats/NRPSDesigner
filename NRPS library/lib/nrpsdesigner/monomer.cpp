@@ -10,27 +10,27 @@ Monomer::Monomer(Monomer&& other)
 : m_id(other.m_id), m_name(std::move(other.m_name)), m_configuration(other.m_configuration), m_modifications(other.m_modifications)
 {}
 
-Monomer::Monomer(int id)
+Monomer::Monomer(uint32_t id)
 : m_id(id), m_name(), m_configuration(Configuration::L), m_modifications(static_cast<modification_type>(Modification::None))
 {}
 
-Monomer::Monomer(int id, const std::string &name, Configuration conf, modification_type mod)
+Monomer::Monomer(uint32_t id, const std::string &name, Configuration conf, modification_type mod)
 : m_id(id), m_name(name), m_configuration(conf), m_modifications(mod)
 {}
 
-Monomer::Monomer(int id, std::string&& name, Configuration conf, modification_type mod)
+Monomer::Monomer(uint32_t id, std::string&& name, Configuration conf, modification_type mod)
 : m_id(id), m_name(std::move(name)), m_configuration(conf), m_modifications(mod)
 {}
 
 Monomer::~Monomer()
 {}
 
-int Monomer::id() const
+uint32_t Monomer::id() const
 {
     return m_id;
 }
 
-void Monomer::setId(int id)
+void Monomer::setId(uint32_t id)
 {
     m_id = id;
 }
@@ -50,12 +50,12 @@ void Monomer::setName(std::string &&name)
     m_name = std::move(name);
 }
 
-Monomer::Configuration Monomer::configuration() const
+Configuration Monomer::configuration() const
 {
     return m_configuration;
 }
 
-void Monomer::setConfiguration(Monomer::Configuration conf)
+void Monomer::setConfiguration(Configuration conf)
 {
     m_configuration = conf;
 }
@@ -81,4 +81,10 @@ bool Monomer::removeModification(Monomer::Modification mod)
     bool ret = m_modifications & modi;
     m_modifications &= ~modi;
     return ret;
+}
+
+bool Monomer::hasModification(Monomer::Modification mod) const
+{
+    modification_type modi = static_cast<modification_type>(mod);
+    return m_modifications & modi;
 }

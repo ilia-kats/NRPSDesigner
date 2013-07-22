@@ -95,7 +95,7 @@ void Nrp::fromFile(int fd)
         ret = skip_whitespace(reader);
         name = xmlTextReaderName(reader);
         while (ret == 1 && !in_monomer) {
-            if (monomer.id() == -1 &&  !xmlStrcmp(name, s_id_node)) {
+            if (!xmlStrcmp(name, s_id_node)) {
                 value = xmlTextReaderReadInnerXml(reader);
                 monomer.setId(std::atoi((const char*)value));
                 xmlFree(value);
@@ -105,7 +105,7 @@ void Nrp::fromFile(int fd)
                 xmlFree(value);
             } else if (!xmlStrcmp(name, s_configuration_node)) {
                 value = xmlTextReaderReadInnerXml(reader);
-                monomer.setConfiguration(*((const char*)value) == 'D' ? Monomer::Configuration::D : Monomer::Configuration::L);
+                monomer.setConfiguration(*((const char*)value) == 'D' ? Configuration::D : Configuration::L);
                 xmlFree(value);
             } else if (!xmlStrcmp(name, s_modification_node)) {
                 value = xmlTextReaderReadInnerXml(reader);
@@ -121,6 +121,7 @@ void Nrp::fromFile(int fd)
         xmlFree(name);
         push_back(std::move(monomer));
     }
+    xmlFreeTextReader(reader);
 }
 
 #define NRP_NODE "nrp"
