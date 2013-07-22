@@ -6,6 +6,11 @@
 #include <curl/curl.h>
 #include <string>
 
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+
 using namespace nrps;
 
 size_t write_fun (char *ptr, size_t size, size_t nmemb, void *userdata)
@@ -46,4 +51,25 @@ int main(int argc, char *argv[])
     curl_easy_cleanup(handle);
     curl_global_cleanup();
     std::cout << xml << std::endl;
+
+    try {
+        sql::Driver *driver = get_driver_instance();
+        sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "root", "");
+        con->setSchema("nrps_designer");
+        sql::Statement *stmt = con->createStatement();
+        sql::ResultSet  *res = stmt->executeQuery("SELECT * FROM `main`");
+        while (res->next()) {
+            std::cout << res->getInt("pathway_id") << "\t" << res->getString("organism") << "\t" << res->getString("pathway") << "\t" << res->getString("dna_sequence") << std::endl;
+        }
+        con->close();
+        delete res;
+        delete stmt;
+        delete con;
+    } catch (sql::SQLException &e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+    }
 }
