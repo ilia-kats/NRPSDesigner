@@ -15,7 +15,7 @@ GeneralPathway::GeneralPathway(const Nrp &nrp)
     for (++iter; iter != end; ++iter) {
         processMonomer(*iter);
     }
-    emplace_back(new DomainTypeTe(nrp.type() == Nrp::Type::Circular));
+    emplace_back(new DomainTypeTe<>(nrp.type() == Nrp::Type::Circular));
 }
 
 GeneralPathway::~GeneralPathway()
@@ -23,7 +23,7 @@ GeneralPathway::~GeneralPathway()
 
 void GeneralPathway::processMonomer(const Monomer &monomer, bool initial)
 {
-    emplace_back(initial ? new DomainTypeA(monomer.id()) : new DomainTypeAC(monomer.id(), m_lastConfiguration));
+    emplace_back(initial ? new DomainTypeA<>(monomer.id()) : new DomainTypeAC<>(monomer.id(), m_lastConfiguration));
     m_lastConfiguration = monomer.configuration();
 
     // tailoring before T
@@ -31,10 +31,10 @@ void GeneralPathway::processMonomer(const Monomer &monomer, bool initial)
         // add NMT-Domain
     }
 
-    emplace_back(new DomainTypeT(m_lastConfiguration == Configuration::L ? DomainTPosition::BeforeC : DomainTPosition::BeforeE));
+    emplace_back(new DomainTypeT<>(m_lastConfiguration == Configuration::L ? DomainTPosition::BeforeC : DomainTPosition::BeforeE));
 
     // add tailoring domains
 
     if (m_lastConfiguration == Configuration::D)
-        emplace_back(new DomainTypeE());
+        emplace_back(new DomainTypeE<>());
 }

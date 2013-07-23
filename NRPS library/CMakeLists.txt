@@ -20,6 +20,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/nrpsdesigner
     ${CMAKE_CURRENT_BINARY_DIR}/lib/nrpsdesigner
     ${LIBXML2_INCLUDE_DIR}
+    ${MYSQLCPP_INCLUDE_DIR}
 )
 
 add_subdirectory(lib)

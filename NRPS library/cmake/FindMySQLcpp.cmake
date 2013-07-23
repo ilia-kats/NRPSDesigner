@@ -1,13 +1,10 @@
 # - Try to find MySQL / MySQL Embedded library
 # Find the MySQL includes and client library
 # This module defines
-#  MYSQL_INCLUDE_DIR, where to find mysql.h
-#  MYSQL_LIBRARIES, the libraries needed to use MySQL.
-#  MYSQL_LIB_DIR, path to the MYSQL_LIBRARIES
-#  MYSQL_EMBEDDED_LIBRARIES, the libraries needed to use MySQL Embedded.
-#  MYSQL_EMBEDDED_LIB_DIR, path to the MYSQL_EMBEDDED_LIBRARIES
-#  MYSQL_FOUND, If false, do not try to use MySQL.
-#  MYSQL_EMBEDDED_FOUND, If false, do not try to use MySQL Embedded.
+#  MYSQLCPP_INCLUDE_DIR, where to find mysql.h
+#  MYSQLCPP_LIBRARIES, the libraries needed to use MySQL.
+#  MYSQLCPP_LIB_DIR, path to the MYSQL_LIBRARIES
+#  MYSQLCPP_FOUND, If false, do not try to use MySQL.
 
 # Copyright (c) 2013 Ilia Kats, based on FindMYSQL.cmake, (c) 2006-2008, Jarosław Staniek <staniek@kde.org>
 #

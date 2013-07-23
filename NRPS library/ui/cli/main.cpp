@@ -1,5 +1,6 @@
 #include <nrp.h>
 #include <generalpathway.h>
+#include <abstractdatabaseconnector.h>
 
 #include <iostream>
 
@@ -38,6 +39,17 @@ int main(int argc, char *argv[])
     for (const std::shared_ptr<AbstractDomainType> &ptr : pathway) {
         std::cout << static_cast<int>(ptr->type()) << std::endl;
     }
+    auto dbConn = AbstractDatabaseConnector::getInstance();
+    dbConn->initialize();
+    auto possiblePathway = dbConn->getPotentialDomains(pathway);
+    for (const auto &position : possiblePathway) {
+        if (!position->empty()) {
+            for (const auto &domain : *position) {
+                std::cout << domain->domainId() << "\t";
+            }
+        }
+        std::cout << std::endl;
+    }
 
     char url[] = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=562&rettype=xml";
     std::string xml;
@@ -57,9 +69,15 @@ int main(int argc, char *argv[])
         sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "root", "");
         con->setSchema("nrps_designer");
         sql::Statement *stmt = con->createStatement();
-        sql::ResultSet  *res = stmt->executeQuery("SELECT * FROM `main`");
+        sql::ResultSet *res = stmt->executeQuery("SELECT * FROM `main`");
+        sql::ResultSetMetaData *resMeta = res->getMetaData();
+        for (unsigned int i = 1; i <= resMeta->getColumnCount(); ++i)
+            std::cout << resMeta->getColumnName(i) << "\t";
+        std::cout << std::endl;
         while (res->next()) {
-            std::cout << res->getInt("pathway_id") << "\t" << res->getString("organism") << "\t" << res->getString("pathway") << "\t" << res->getString("dna_sequence") << std::endl;
+            for (unsigned int i = 1; i <= resMeta->getColumnCount(); ++i)
+                std::cout << res->getString(i) << "\t";
+            std::cout << std::endl;
         }
         con->close();
         delete res;

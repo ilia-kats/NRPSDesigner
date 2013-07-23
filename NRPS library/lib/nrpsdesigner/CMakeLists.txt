@@ -2,7 +2,7 @@ project(libnrpsdesigner)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/domaintypes
+    ${CMAKE_CURRENT_SOURCE_DIR}/domains
 )
 
 set(SRCS
@@ -10,15 +10,20 @@ set(SRCS
     nrp.cpp
 
     abstractdomaintype.cpp
-    domaintypes/domaintypea.cpp
-    domaintypes/domaintypeac.cpp
-    domaintypes/domaintypet.cpp
-    domaintypes/domaintypee.cpp
-    domaintypes/domaintypete.cpp
+    domains/domaintypea.cpp
+    domains/domaintypeac.cpp
+    domains/domaintypet.cpp
+    domains/domaintypee.cpp
+    domains/domaintypete.cpp
+
+    domain.cpp
 
     generalpathway.cpp
+    pathway.cpp
+    abstractdatabaseconnector.cpp
+    mysqldatabaseconnector.cpp
 )
 
 add_library(nrpsdesigner ${SRCS})
 generate_export_header(nrpsdesigner)
-target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES})
+target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${MYSQLCPP_LIBRARIES})
