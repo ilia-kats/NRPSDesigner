@@ -5,6 +5,11 @@ using namespace nrps;
 
 AbstractDatabaseConnector *AbstractDatabaseConnector::s_instance = nullptr;
 
+AbstractDatabaseConnector::~AbstractDatabaseConnector()
+{
+    s_instance = nullptr;
+}
+
 AbstractDatabaseConnector* AbstractDatabaseConnector::getInstance()
 {
     if (s_instance == nullptr) {

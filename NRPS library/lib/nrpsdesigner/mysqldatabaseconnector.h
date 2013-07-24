@@ -13,16 +13,7 @@ class ResultSet;
 
 namespace nrps
 {
-template<bool>
-class DomainTypeA;
-template<bool>
-class DomainTypeAC;
-template<bool>
-class DomainTypeT;
-template<bool>
-class DomainTypeE;
-template<bool>
-class DomainTypeTe;
+class AbstractDomainType;
 class Domain;
 
 class MySQLDatabaseConnector : public AbstractDatabaseConnector
@@ -35,15 +26,15 @@ public:
 
 private:
     template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getADomains(const DomainTypeA<full>*);
+    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getADomains(const AbstractDomainType*);
     template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getACDomains(const DomainTypeAC<full>*);
+    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getACDomains(const AbstractDomainType*);
     template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getTDomains(const DomainTypeT<full>*);
+    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getTDomains(const AbstractDomainType*);
     template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getEDomains(const DomainTypeE<full>*);
+    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getEDomains(const AbstractDomainType*);
     template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getTeDomains(const DomainTypeTe<full>*);
+    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getTeDomains(const AbstractDomainType*);
     template<template<bool> class D, typename... Args>
     std::shared_ptr<std::vector<std::shared_ptr<Domain>>> populateInitialDomains(sql::ResultSet *res, const Args&... args);
     sql::Connection *m_connection;

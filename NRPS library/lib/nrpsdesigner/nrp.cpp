@@ -82,6 +82,7 @@ void Nrp::fromFile(int fd)
     }
     if (!nrp_found)
         throw std::invalid_argument("Could not find nrp root node");
+    clear();
     value = xmlTextReaderGetAttribute(reader, s_type_attr);
     if (!xmlStrcmp(value, s_type_circular))
         m_type = Type::Circular;

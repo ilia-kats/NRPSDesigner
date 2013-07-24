@@ -40,7 +40,6 @@ MySQLDatabaseConnector::~MySQLDatabaseConnector()
     if (m_stmtTeDomains != nullptr) {
         delete m_stmtTeDomains;
     }
-    s_instance = nullptr;
 }
 
 void MySQLDatabaseConnector::initialize()
@@ -61,69 +60,59 @@ std::vector<std::shared_ptr<std::vector<std::shared_ptr<Domain>>>> MySQLDatabase
         throw std::logic_error("Not inizialized");
     std::unordered_map<AbstractDomainType*, std::shared_ptr<std::vector<std::shared_ptr<Domain>>>> cache;
     std::vector<std::shared_ptr<std::vector<std::shared_ptr<Domain>>>> potentialDomains;
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> sentinel;
     for (const std::shared_ptr<AbstractDomainType> &domain : pathway) {
         if (cache.count(domain.get()) > 0)
             potentialDomains.push_back(cache[domain.get()]);
         else {
+            const AbstractDomainType *d = domain.get();
+            std::shared_ptr<std::vector<std::shared_ptr<Domain>>> fullDomain;
             switch (domain->type()) {
                 case DomainType::A:
                     if (domain->full()) {
-                        const DomainTypeA<true> *d = dynamic_cast<const DomainTypeA<true>*>(domain.get());
-                        potentialDomains.push_back(getADomains(d));
+                        fullDomain = getADomains<true>(d);
                     } else {
-                        const DomainTypeA<false> *d = dynamic_cast<const DomainTypeA<false>*>(domain.get());
-                        potentialDomains.push_back(getADomains(d));
+                        fullDomain = getADomains<false>(d);
                     }
                     break;
                 case DomainType::AC:
                     if (domain->full()) {
-                        const DomainTypeAC<true> *d = dynamic_cast<const DomainTypeAC<true>*>(domain.get());
-                        potentialDomains.push_back(getACDomains(d));
+                        fullDomain = getACDomains<true>(d);
                     } else {
-                        const DomainTypeAC<false> *d = dynamic_cast<const DomainTypeAC<false>*>(domain.get());
-                        potentialDomains.push_back(getACDomains(d));
+                        fullDomain = getACDomains<false>(d);
                     }
                     break;
                 case DomainType::T:
                     if (domain->full()) {
-                        const DomainTypeT<true> *d = dynamic_cast<const DomainTypeT<true>*>(domain.get());
-                        potentialDomains.push_back(getTDomains(d));
+                        fullDomain = getTDomains<true>(d);
                     } else {
-                        const DomainTypeT<false> *d = dynamic_cast<const DomainTypeT<false>*>(domain.get());
-                        potentialDomains.push_back(getTDomains(d));
+                        fullDomain = getTDomains<false>(d);
                     }
                     break;
                 case DomainType::E:
                     if (domain->full()) {
-                        const DomainTypeE<true> *d = dynamic_cast<const DomainTypeE<true>*>(domain.get());
-                        potentialDomains.push_back(getEDomains(d));
+                        fullDomain = getEDomains<true>(d);
                     } else {
-                        const DomainTypeE<false> *d = dynamic_cast<const DomainTypeE<false>*>(domain.get());
-                        potentialDomains.push_back(getEDomains(d));
+                        fullDomain = getEDomains<false>(d);
                     }
                     break;
                 case DomainType::Te:
                     if (domain->full()) {
-                        const DomainTypeTe<true> *d = dynamic_cast<const DomainTypeTe<true>*>(domain.get());
-                        potentialDomains.push_back(getTeDomains(d));
+                        fullDomain = getTeDomains<true>(d);
                     } else {
-                        const DomainTypeTe<false> *d = dynamic_cast<const DomainTypeTe<false>*>(domain.get());
-                        potentialDomains.push_back(getTeDomains(d));
+                        fullDomain = getTeDomains<false>(d);
                     }
                     break;
-                default:
-                    potentialDomains.push_back(sentinel);
-                    break;
             }
+            potentialDomains.push_back(fullDomain);
         }
     }
     return potentialDomains;
 }
 
 template <bool full>
-std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getADomains(const DomainTypeA<full>* d)
+std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getADomains(const AbstractDomainType *domain)
 {
+    const DomainTypeA<full> *d = dynamic_cast<const DomainTypeA<full>*>(domain);
     m_stmtInitiationADomains->setUInt(1, d->substrate());
     m_stmtInitiationADomains->setBoolean(2, true);
     sql::ResultSet *res = m_stmtInitiationADomains->executeQuery();
@@ -133,8 +122,9 @@ std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::ge
 }
 
 template <bool full>
-std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getACDomains(const DomainTypeAC<full>* d)
+std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getACDomains(const AbstractDomainType *domain)
 {
+    const DomainTypeAC<full> *d = dynamic_cast<const DomainTypeAC<full>*>(domain);
     m_stmtElongationACDomains->setUInt(1, d->substrate());
     m_stmtElongationACDomains->setBoolean(2, d->chirality() == Configuration::D);
     m_stmtElongationACDomains->setBoolean(3, true);
@@ -145,8 +135,9 @@ std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::ge
 }
 
 template <bool full>
-std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getTDomains(const DomainTypeT<full>* d)
+std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getTDomains(const AbstractDomainType *domain)
 {
+    const DomainTypeT<full> *d = dynamic_cast<const DomainTypeT<full>*>(domain);
     m_stmtTDomains->setBoolean(1, d->position() == DomainTPosition::BeforeE);
     m_stmtTDomains->setBoolean(2, true);
     sql::ResultSet *res = m_stmtTDomains->executeQuery();
@@ -156,8 +147,9 @@ std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::ge
 }
 
 template <bool full>
-std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getEDomains(const DomainTypeE<full>* d)
+std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getEDomains(const AbstractDomainType *domain)
 {
+    const DomainTypeE<full> *d = dynamic_cast<const DomainTypeE<full>*>(domain);
     m_stmtEDomains->setBoolean(1, true);
     sql::ResultSet *res = m_stmtEDomains->executeQuery();
     auto ret = populateInitialDomains<DomainTypeE>(res);
@@ -166,8 +158,9 @@ std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::ge
 }
 
 template <bool full>
-std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getTeDomains(const DomainTypeTe<full>* d)
+std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::getTeDomains(const AbstractDomainType *domain)
 {
+    const DomainTypeTe<full> *d = dynamic_cast<const DomainTypeTe<full>*>(domain);
     m_stmtTeDomains->setBoolean(1, true);
     sql::ResultSet *res = m_stmtTeDomains->executeQuery();
     auto ret = populateInitialDomains<DomainTypeTe>(res, d->circularizing());

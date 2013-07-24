@@ -10,7 +10,6 @@ namespace nrps
 {
 class NRPSDESIGNER_EXPORT Pathway
 {
-friend class AbstractDatabaseConnector;
 public:
     // move constructor will be implicitly generated if no user-defined destructor is present
     Pathway() = default;

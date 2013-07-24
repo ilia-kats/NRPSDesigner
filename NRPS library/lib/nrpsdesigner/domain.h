@@ -14,7 +14,6 @@ namespace nrps
 {
 class NRPSDESIGNER_EXPORT Domain : public AbstractDomainType
 {
-friend class AbstractDatabaseConnector;
 public:
     virtual std::size_t hash() const;
     virtual bool full() const;

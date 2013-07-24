@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         << "name: " << monomer.name() << std::endl
         << "configuration:" << (monomer.configuration() == Configuration::L ? "L" : "D") << std::endl
         << "modification:" << std::endl;
-        if (monomer.modifications() & static_cast<Monomer::modification_type>(Monomer::Modification::Nmethyl))
+        if (monomer.hasModification(Monomer::Modification::Nmethyl))
             std::cout << "\tN-methylation" << std::endl;
     }
 
