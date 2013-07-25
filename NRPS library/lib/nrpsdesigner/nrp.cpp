@@ -1,5 +1,6 @@
 #include "nrp.h"
 #include "monomer.h"
+#include "global_enums.h"
 
 #include <ios>
 #include <stdexcept>
@@ -8,7 +9,21 @@
 #include <unistd.h>
 #include <cstdlib>
 
+
+#include <libxml/xmlstring.h>
 #include <libxml/xmlreader.h>
+
+#define NRP_NODE "nrp"
+#define TYPE_ATTR "type"
+#define MONOMER_NODE "monomer"
+#define NAME_NODE "name"
+#define ID_NODE "id"
+#define CONFIGURATION_NODE "configuration"
+#define MODIFICATION_NODE "modification"
+
+#define TYPE_LINEAR "linear"
+#define TYPE_CIRCULAR "circular"
+#define MODIFICATION_NMETHYL "N-methylation"
 
 int skip_whitespace(xmlTextReaderPtr reader, bool skip_significant = true)
 {
@@ -77,73 +92,50 @@ void Nrp::fromFile(int fd)
     xmlChar *value;
     while (!nrp_found && (ret = xmlTextReaderRead(reader)) == 1) {
         name = xmlTextReaderName(reader);
-        nrp_found = !xmlStrcmp(name, s_nrp_node);
+        nrp_found = !xmlStrcmp(name, BAD_CAST NRP_NODE);
         xmlFree(name);
     }
     if (!nrp_found)
         throw std::invalid_argument("Could not find nrp root node");
     clear();
-    value = xmlTextReaderGetAttribute(reader, s_type_attr);
-    if (!xmlStrcmp(value, s_type_circular))
+    value = xmlTextReaderGetAttribute(reader, BAD_CAST TYPE_ATTR);
+    if (!xmlStrcmp(value, BAD_CAST TYPE_CIRCULAR))
         m_type = Type::Circular;
     xmlFree(value);
     ret = skip_whitespace(reader);
     name = xmlTextReaderName(reader);
-    bool in_monomer = !xmlStrcmp(xmlTextReaderName(reader), s_monomer_node);
+    bool in_monomer = !xmlStrcmp(xmlTextReaderName(reader), BAD_CAST MONOMER_NODE);
     while (ret == 1 && in_monomer) {
         Monomer monomer;
         in_monomer = false;
         ret = skip_whitespace(reader);
         name = xmlTextReaderName(reader);
         while (ret == 1 && !in_monomer) {
-            if (!xmlStrcmp(name, s_id_node)) {
+            if (!xmlStrcmp(name, BAD_CAST ID_NODE)) {
                 value = xmlTextReaderReadInnerXml(reader);
                 monomer.setId(std::atoi((const char*)value));
                 xmlFree(value);
-            } else if (monomer.name().empty() && !xmlStrcmp(name, s_name_node)) {
+            } else if (monomer.name().empty() && !xmlStrcmp(name, BAD_CAST NAME_NODE)) {
                 value = xmlTextReaderReadInnerXml(reader);
                 monomer.setName((const char*)value);
                 xmlFree(value);
-            } else if (!xmlStrcmp(name, s_configuration_node)) {
+            } else if (!xmlStrcmp(name, BAD_CAST CONFIGURATION_NODE)) {
                 value = xmlTextReaderReadInnerXml(reader);
                 monomer.setConfiguration(*((const char*)value) == 'D' ? Configuration::D : Configuration::L);
                 xmlFree(value);
-            } else if (!xmlStrcmp(name, s_modification_node)) {
+            } else if (!xmlStrcmp(name, BAD_CAST MODIFICATION_NODE)) {
                 value = xmlTextReaderReadInnerXml(reader);
-                if (!xmlStrcmp(value, s_modification_nmethyl))
+                if (!xmlStrcmp(value, BAD_CAST MODIFICATION_NMETHYL))
                     monomer.addModification(Monomer::Modification::Nmethyl);
                 xmlFree(value);
             }
             xmlFree(name);
             ret = skip_whitespace(reader);
             name = xmlTextReaderName(reader);
-            in_monomer = !xmlStrcmp(name, s_monomer_node) && !(xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT);
+            in_monomer = !xmlStrcmp(name, BAD_CAST MONOMER_NODE) && !(xmlTextReaderNodeType(reader) == XML_READER_TYPE_END_ELEMENT);
         }
         xmlFree(name);
         push_back(std::move(monomer));
     }
     xmlFreeTextReader(reader);
 }
-
-#define NRP_NODE "nrp"
-#define TYPE_ATTR "type"
-#define MONOMER_NODE "monomer"
-#define NAME_NODE "name"
-#define ID_NODE "id"
-#define CONFIGURATION_NODE "configuration"
-#define MODIFICATION_NODE "modification"
-
-xmlChar *Nrp::s_nrp_node           = xmlCharStrdup(NRP_NODE);
-xmlChar *Nrp::s_type_attr          = xmlCharStrdup(TYPE_ATTR);
-xmlChar *Nrp::s_monomer_node       = xmlCharStrdup(MONOMER_NODE);
-xmlChar *Nrp::s_name_node          = xmlCharStrdup(NAME_NODE);
-xmlChar *Nrp::s_id_node            = xmlCharStrdup(ID_NODE);
-xmlChar *Nrp::s_configuration_node = xmlCharStrdup(CONFIGURATION_NODE);
-xmlChar *Nrp::s_modification_node  = xmlCharStrdup(MODIFICATION_NODE);
-
-#define TYPE_LINEAR "linear"
-#define TYPE_CIRCULAR "circular"
-#define MODIFICATION_NMETHYL "N-methylation"
-xmlChar *Nrp::s_type_linear          = xmlCharStrdup(TYPE_LINEAR);
-xmlChar *Nrp::s_type_circular        = xmlCharStrdup(TYPE_CIRCULAR);
-xmlChar *Nrp::s_modification_nmethyl = xmlCharStrdup(MODIFICATION_NMETHYL);
