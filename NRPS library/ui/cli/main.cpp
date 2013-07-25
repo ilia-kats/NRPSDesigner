@@ -1,6 +1,7 @@
 #include <nrp.h>
 #include <generalpathway.h>
 #include <abstractdatabaseconnector.h>
+#include <taxon.h>
 
 #include <iostream>
 
@@ -51,7 +52,19 @@ int main(int argc, char *argv[])
         std::cout << std::endl;
     }
 
-    char url[] = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=562&rettype=xml";
+    Taxon taxon(562);
+    char time[100];
+    std::time_t t = std::chrono::system_clock::to_time_t(taxon.pubDate());
+    std::strftime(time, 100, "%F %T", std::localtime(&t));
+    std::cout << "scientific name: " << taxon.scientificName() << std::endl
+    << "rank: " << static_cast<int>(taxon.rank()) << std::endl
+    << "pubDate: " << time << std::endl << "lineage: ";
+    for (const auto &t : taxon.lineage()) {
+        std::cout << std::endl << "\t" << "id: " << t->id() << " name: " << t->scientificName();
+    }
+    std::cout << std::endl;
+
+    /*char url[] = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=562&rettype=xml";
     std::string xml;
     CURLcode init = curl_global_init(CURL_GLOBAL_DEFAULT);
     CURL *handle = curl_easy_init();
@@ -62,7 +75,7 @@ int main(int argc, char *argv[])
     ret = curl_easy_perform(handle);
     curl_easy_cleanup(handle);
     curl_global_cleanup();
-    std::cout << xml << std::endl;
+    std::cout << xml << std::endl;*/
 
     try {
         sql::Driver *driver = get_driver_instance();

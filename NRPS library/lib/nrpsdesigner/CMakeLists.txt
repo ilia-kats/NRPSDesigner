@@ -22,8 +22,14 @@ set(SRCS
     pathway.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
+    taxon.cpp
 )
+
+if (UNIX)
+    add_definitions("-DUSE_STRPTIME") # GCC does not yet implement std::get_time,
+                                      # see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54354
+endif(UNIX)
 
 add_library(nrpsdesigner ${SRCS})
 generate_export_header(nrpsdesigner)
-target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${MYSQLCPP_LIBRARIES})
+target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${CURL_LIBRARIES} ${MYSQLCPP_LIBRARIES})
