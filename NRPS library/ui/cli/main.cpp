@@ -64,6 +64,10 @@ int main(int argc, char *argv[])
     }
     std::cout << std::endl;
 
+    Taxon tac(54914);
+    auto d = taxon - tac;
+    std::cout << "diff1: " << (int)d[0] << " ; diff2: " << (int)d[1] << std::endl;
+
     /*char url[] = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=562&rettype=xml";
     std::string xml;
     CURLcode init = curl_global_init(CURL_GLOBAL_DEFAULT);

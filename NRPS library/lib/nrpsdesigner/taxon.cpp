@@ -151,7 +151,7 @@ void Taxon::fetch()
             s_handle = curl_easy_init( );
     }
     std::string url = s_url + std::to_string(m_id);
-    xmlParserCtxtPtr ctxt = xmlCreatePushParserCtxt(NULL, NULL, NULL, 0, url.c_str());
+    xmlParserCtxtPtr ctxt = xmlCreatePushParserCtxt(nullptr, nullptr, nullptr, 0, url.c_str());
 
     CURLcode ret = curl_easy_setopt(s_handle, CURLOPT_URL, url.c_str());
     ret = curl_easy_setopt(s_handle, CURLOPT_WRITEFUNCTION, static_cast<size_t (*)( char*, size_t, size_t, void*)>([](char *ptr, size_t size, size_t nmemb, void *userdata){xmlParseChunk((xmlParserCtxtPtr)userdata, ptr, size * nmemb, 0);return size * nmemb;}));
@@ -172,8 +172,7 @@ void Taxon::fetch()
     node = xmlFirstElementChild(node);
     try {
         parseTaxon(node);
-    }
-    catch (std::exception &e) {
+    } catch (std::exception &e) {
         xmlFreeDoc(doc);
         throw;
     }
@@ -297,4 +296,34 @@ std::chrono::system_clock::time_point Taxon::parseDate(xmlNodePtr node)
 #endif
     auto test2 = std::mktime(&t);
     return std::chrono::system_clock::from_time_t(std::mktime(&t));
+}
+
+std::array<uint8_t, 2> Taxon::operator-(const Taxon &o) const
+{
+    return diff(o, Rank::Species);
+}
+
+std::array<uint8_t, 2> Taxon::diff(const Taxon &o, Taxon::Rank r) const
+{
+    std::array<uint8_t, 2> ret;
+    int lca;
+    bool species = false;
+    for (lca = 0; lca < m_lineage.size() && lca < o.m_lineage.size() && m_lineage[lca]->id() == o.m_lineage[lca]->id(); ++lca) {
+        if (m_lineage[lca]->rank() == r)
+            species = true;
+    }
+    uint8_t tsp = 0, tssp = 0, osp = 0, ossp = 0;
+    for (int i = lca; i < m_lineage.size(); ++i) {
+        !species ? ++tsp : ++tssp;
+        if (m_lineage[i]->rank() == r)
+            species = true;
+    }
+    for (int i = lca; i < o.m_lineage.size(); ++i) {
+        !species ? ++osp : ++ossp;
+        if (o.m_lineage[i]->rank() == r)
+            species = true;
+    }
+    ret[0] = std::max(tsp, osp);
+    ret[1] = std::max(tssp, ossp);
+    return ret;
 }

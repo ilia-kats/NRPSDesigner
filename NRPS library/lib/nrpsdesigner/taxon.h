@@ -50,6 +50,9 @@ public:
 
     void fetch();
 
+    std::array<uint8_t, 2> operator-(const Taxon&) const;
+    std::array<uint8_t, 2> diff(const Taxon&, Rank r = Rank::Species) const;
+
 private:
     Taxon(xmlNodePtr);
 
