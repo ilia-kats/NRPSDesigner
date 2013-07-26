@@ -64,10 +64,6 @@ if (!$organism && !$pathway && !$linkout && !$dna_sequence && !$uni_prot_id && !
         $norine_id_invalid = true;
         $invalid = true;
     }
-    if (!$description) {
-        $description_invalid = true;
-        $invalid = true;
-    }
 }
 
 if (!$invalid) {
