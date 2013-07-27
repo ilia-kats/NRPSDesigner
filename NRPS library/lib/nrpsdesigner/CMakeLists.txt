@@ -23,6 +23,7 @@ set(SRCS
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
     taxon.cpp
+    nrps.cpp
 )
 
 if (UNIX)
