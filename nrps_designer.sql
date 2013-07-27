@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `substrates` (
   `aminoacid` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `aa_id` int(20) NOT NULL AUTO_INCREMENT,
   `structure` text COLLATE utf8_unicode_ci NOT NULL,
+  `modification` int(20),
   `linkout` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`aa_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
@@ -76,6 +77,19 @@ CREATE TABLE IF NOT EXISTS `substrates` (
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Table structure for table `modifications`
+--
+
+DROP TABLE IF EXISTS `modifications`;
+CREATE TABLE IF NOT EXISTS `modifications` (
+  `type` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `mod_id` int(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`mod_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+
 
 --
 -- Constraints for tables `domain_types`
