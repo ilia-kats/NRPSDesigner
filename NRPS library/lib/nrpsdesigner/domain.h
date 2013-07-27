@@ -29,7 +29,6 @@ public:
     const std::string& refSeqId() const;
     const std::string& uniProtId() const;
 
-    Pathway &pathway();
     void setDomainId(uint32_t);
     void setModuleId(uint32_t);
     void setPathway(const Pathway&);

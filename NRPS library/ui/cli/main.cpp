@@ -2,6 +2,7 @@
 #include <generalpathway.h>
 #include <abstractdatabaseconnector.h>
 #include <taxon.h>
+#include <nrps.h>
 
 #include <iostream>
 
@@ -51,6 +52,8 @@ int main(int argc, char *argv[])
         }
         std::cout << std::endl;
     }
+
+    //Nrps nrps(possiblePathway); database empty as of now
 
     Taxon taxon(562);
     char time[100];
