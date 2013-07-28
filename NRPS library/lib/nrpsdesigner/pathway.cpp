@@ -2,8 +2,8 @@
 
 using namespace nrps;
 
-Pathway::Pathway(uint32_t pathwayId, uint32_t taxId)
-: m_pathwayId(pathwayId), m_taxId(taxId)
+Pathway::Pathway(uint32_t pathwayId)
+: m_pathwayId(pathwayId)
 {}
 
 Pathway::Pathway(uint32_t pathwayId, uint32_t taxId, const std::string &pathway, const std::string &linkout, const std::string &uniprotId, const std::string &norineId, const std::string &description)

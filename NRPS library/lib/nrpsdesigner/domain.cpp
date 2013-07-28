@@ -2,6 +2,8 @@
 
 using namespace nrps;
 
+std::unordered_map<uint32_t, std::shared_ptr<Pathway>> Domain::s_pathways = std::unordered_map<uint32_t, std::shared_ptr<Pathway>>();
+
 Domain::Domain(DomainType type)
 : AbstractDomainType(type)
 {}
@@ -36,19 +38,18 @@ void Domain::setModuleId(uint32_t id)
     m_moduleId = id;
 }
 
-const Pathway& Domain::pathway() const
+const std::shared_ptr<Pathway>& Domain::pathway() const
 {
-    return m_pathway;
+    return s_pathways[m_pathway];
 }
 
-void Domain::setPathway(const Pathway &pathway)
+const std::shared_ptr<Pathway>& Domain::setPathway(uint32_t pathwayid)
 {
-    m_pathway = pathway;
-}
-
-void Domain::setPathway(Pathway &&pathway)
-{
-    m_pathway = std::move(pathway);
+    if (s_pathways.count(pathwayid) == 0) {
+        s_pathways.emplace(pathwayid, std::shared_ptr<Pathway>(new Pathway(pathwayid)));
+    }
+    m_pathway = pathwayid;
+    return s_pathways[m_pathway];
 }
 
 const std::string& Domain::bioBrickId() const

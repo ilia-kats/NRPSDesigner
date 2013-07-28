@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 namespace nrps
 {
@@ -20,7 +21,7 @@ public:
 
     uint32_t domainId() const;
     uint32_t moduleId() const;
-    const Pathway& pathway() const;
+    const std::shared_ptr<Pathway>& pathway() const;
     const std::string& bioBrickId() const;
     const std::string& description() const;
     const std::string& dnaSequence() const;
@@ -31,8 +32,7 @@ public:
 
     void setDomainId(uint32_t);
     void setModuleId(uint32_t);
-    void setPathway(const Pathway&);
-    void setPathway(Pathway&&);
+    const std::shared_ptr<Pathway>& setPathway(uint32_t);
     void setBioBrickId(const std::string&);
     void setBioBrickId(std::string&&);
     void setDescription(const std::string&);
@@ -55,7 +55,7 @@ protected:
 private:
     uint32_t m_domainId;
     uint32_t m_moduleId;
-    Pathway m_pathway;
+    uint32_t m_pathway;
     std::string m_bioBrickId;
     std::string m_description;
     std::string m_dnaSeq;
@@ -63,6 +63,8 @@ private:
     std::string m_nativeLinkerAfter;
     std::string m_refSeqId;
     std::string m_uniProtId;
+
+    static std::unordered_map<uint32_t, std::shared_ptr<Pathway>> s_pathways;
 };
 
 template<bool full>

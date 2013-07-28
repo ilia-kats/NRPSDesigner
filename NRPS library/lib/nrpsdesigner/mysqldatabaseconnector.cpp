@@ -175,7 +175,7 @@ std::shared_ptr<std::vector<std::shared_ptr<Domain>>> MySQLDatabaseConnector::po
     while (res->next()) {
         D<true> *d = new D<true>(args...);
         d->setDomainId(res->getUInt("domain.id"));
-        d->setPathway(Pathway(res->getUInt("domain.pathway_id"), res->getUInt("main.organism")));
+        d->setPathway(res->getUInt("domain.pathway_id"))->setTaxId(res->getUInt("main.organism"));
         domains->emplace_back(d);
     }
     return domains;

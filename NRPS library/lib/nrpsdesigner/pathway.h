@@ -13,7 +13,7 @@ class NRPSDESIGNER_EXPORT Pathway
 public:
     // move constructor will be implicitly generated if no user-defined destructor is present
     Pathway() = default;
-    Pathway(uint32_t id, uint32_t taxId);
+    Pathway(uint32_t id);
     Pathway(uint32_t pathwayId, uint32_t taxId, const std::string &pathway, const std::string &linkout, const std::string &uniprotId, const std::string &norineId, const std::string &description);
 
     uint32_t pathwayId() const;
