@@ -14,8 +14,8 @@ SET time_zone = "+00:00";
 -- Database: `nrps_designer`
 --
 
-CREATE DATABASE `nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `nrps_designer`;
+CREATE DATABASE `2nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `2nrps_designer`;
 
 -- --------------------------------------------------------
 --
@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS `main` (
 
 DROP TABLE IF EXISTS `substrates`;
 CREATE TABLE IF NOT EXISTS `substrates` (
+  `aa_id` int(20) NOT NULL UNIQUE AUTO_INCREMENT,
   `aminoacid` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `aa_id` int(20) NOT NULL AUTO_INCREMENT,
   `structure` text COLLATE utf8_unicode_ci NOT NULL,
   `mod_id` int(36),
   `linkout` text COLLATE utf8_unicode_ci NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `types` (
 
 DROP TABLE IF EXISTS `modifications`;
 CREATE TABLE IF NOT EXISTS `modifications` (
-  `modification_id` int(20) NOT NULL AUTO_INCREMENT,
+  `modification_id` int(20) NOT NULL UNIQUE AUTO_INCREMENT,
   `modification_desc` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`modification_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
@@ -106,8 +106,8 @@ CREATE TABLE IF NOT EXISTS `modifications` (
 DROP TABLE IF EXISTS `substrates_xref_modifications`;
 CREATE TABLE IF NOT EXISTS `substrates_xref_modifications` (
   `aa_id` int(20) NOT NULL,
-  `mod_id` int(20) NOT NULL,
-  PRIMARY KEY (`aa_id`, `mod_id`)
+  `modification_id` int(20) NOT NULL,
+  PRIMARY KEY (`aa_id`, `modification_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -123,3 +123,7 @@ ALTER TABLE `domains`
 
 ALTER TABLE `domains`
   ADD FOREIGN KEY (`type_id`) REFERENCES `types` (`type_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE `substrates_xref_modifications`
+  ADD FOREIGN KEY (`aa_id`) REFERENCES `substrates` (`aa_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD FOREIGN KEY (`modification_id`) REFERENCES `modifications` (`modification_id`) ON DELETE CASCADE ON UPDATE CASCADE;
