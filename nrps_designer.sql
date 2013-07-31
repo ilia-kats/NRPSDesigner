@@ -14,8 +14,8 @@ SET time_zone = "+00:00";
 -- Database: `nrps_designer`
 --
 
-CREATE DATABASE `2nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `2nrps_designer`;
+CREATE DATABASE `nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `nrps_designer`;
 
 -- --------------------------------------------------------
 --
@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS `domains` (
 -- Table structure for table `main`
 --
 
-DROP TABLE IF EXISTS `main`;
-CREATE TABLE IF NOT EXISTS `main` (
+DROP TABLE IF EXISTS `pathways`;
+CREATE TABLE IF NOT EXISTS `pathways` (
   `pathway_id` int(20) NOT NULL AUTO_INCREMENT,
   `organism` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `pathway` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
