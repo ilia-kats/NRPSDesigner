@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `substrates_xref_modifications` (
 -- Constraints for tables `domain_types`
 -- reference to main table
 ALTER TABLE `domains`
-  ADD CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`pathway_id`) REFERENCES `main` (`pathway_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`pathway_id`) REFERENCES `pathways` (`pathway_id`) ON DELETE CASCADE ON UPDATE CASCADE;
   
 ALTER TABLE `domains`
   ADD INDEX ( `substrate_specificity_aa_id` ),
