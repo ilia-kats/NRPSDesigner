@@ -18,8 +18,8 @@ while ($row = $res->fetch_row()) {
 
 
 // insert modifications of aminoacids in json
-while ($row = $res->fetch_row())
-$arr = array ('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5);
+//while ($row = $res->fetch_row())
+//$arr = array ('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5);
 
 //  echo json_encode($arr);
 
@@ -30,9 +30,7 @@ $arr = array ('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5);
 
 <html>
     <head>
-        <title>
-            
-        </title>
+        <title>NRPS Designer</title>
         <style type="text/css">
               body
         {
@@ -53,29 +51,59 @@ $arr = array ('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5);
                 var inner = "";
                 for (var i = 0; i < obj.value; ++i) {
 <?php
-echo "inner += \"<select name='aminoacids' size='1'>";
+echo "inner += \"<select name='aminoacids[]' size='1'>";
 foreach ($aminoacids as $aminoacid) {
     echo "<option>$aminoacid</option>";
+    
 }
-echo "</select><input type='radio' name='aa\"+i+\"' value='L'> L-conf.<br><input type='radio' name='aa\"+i+\"' value='D'> D-conf.<br>\"";
+echo "</select><input type='radio' name='aa[\" + i + \"]' value='L'> L-conf.<br><input type='radio' name='aa[]' value='D'> D-conf.<br>\"";
 ?>
+                    ;p.innerHTML = inner;
                 }
-                p.innerHTML = inner;
-            }
-            function makeCheckbox(args) {
-                
-                //code
             }
         </script>
     </head>
     <body>
-        <form action="select.htm">
+<?php
+if (!isset($_POST['aminoacids']) || !isset($_POST['aa']) || count($_POST['aminoacids']) != count($_POST['aa'])) {
+?>
+        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+            organism: <input name="organism" type="text" size"30" maxlength="30";>
             length: <input name="length" type="text" size="30" maxlength="30" onkeyup="makeDropdown(this);">
             <p id="aminoacids">
                 
             </p>
-            
-            organism: <input name="organism" type="text" size"30" maxlength="30";>
-</form>
+            <input type="submit" value="submit">
+        </form>
+<?php
+} else {
+    $oXMLWriter = new XMLWriter;
+    $oXMLWriter->openMemory();
+    $oXMLWriter->setIndent(true);
+    $oXMLWriter->setIndentString("    ");
+    $oXMLWriter->startDocument('1.0', 'UTF-8');
+    
+    $oXMLWriter->startElement('nrp');
+        
+            for ($i = 0; $i < count($_POST['aminoacids']); ++$i) {
+                $oXMLWriter->startElement('monomer');
+                $oXMLWriter->startElement('name');
+                $oXMLWriter->text($_POST['aminoacids'][$i]);
+                $oXMLWriter->endElement();
+                
+                $oXMLWriter->startElement('configuration');
+                $oXMLWriter->text($_POST['aa'][$i]);
+                $oXMLWriter->endElement();
+                
+                //$oXMLWriter->startElement('modification');
+                //$oXMLWriter->endElement();
+                
+        $oXMLWriter->endElement();
+            }
+    $oXMLWriter->endElement();
+    $oXMLWriter->endDocument();
+    echo $oXMLWriter->outputMemory(TRUE);
+}
+?>
     </body>
 </html>
