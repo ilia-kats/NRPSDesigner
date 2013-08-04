@@ -9,6 +9,7 @@ set(CMAKE_MODULE_PATH
 
 find_package(LibXml2 REQUIRED)
 find_package(MySQLcpp REQUIRED)
+find_package(MySQL REQUIRED)
 
 set(CMAKE_CXX_FLAGS
 "${CMAKE_CXX_FLAGS} -std=c++11"
@@ -20,8 +21,13 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/nrpsdesigner
     ${CMAKE_CURRENT_BINARY_DIR}/lib/nrpsdesigner
     ${LIBXML2_INCLUDE_DIR}
+    ${MYSQL_INCLUDE_DIR}
     ${MYSQLCPP_INCLUDE_DIR}
 )
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+   add_definitions("-D_CXX_CLANG")
+endif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
 add_subdirectory(lib)
 add_subdirectory(ui)

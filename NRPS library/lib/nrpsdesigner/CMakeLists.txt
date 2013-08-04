@@ -33,4 +33,4 @@ endif(UNIX)
 
 add_library(nrpsdesigner ${SRCS})
 generate_export_header(nrpsdesigner)
-target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${CURL_LIBRARIES} ${MYSQLCPP_LIBRARIES})
+target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${CURL_LIBRARIES} ${MYSQL_LIBRARIES} ${MYSQLCPP_LIBRARIES})

@@ -12,5 +12,8 @@ template<bool full>
 DomainTypeE<full>::~DomainTypeE()
 {}
 
-template class DomainTypeE<true>;
-template class DomainTypeE<false>;
+namespace nrps
+{
+    template class DomainTypeE<true>;
+    template class DomainTypeE<false>;
+}

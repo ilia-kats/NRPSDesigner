@@ -28,5 +28,8 @@ std::size_t DomainTypeAC<true>::hash() const
     return DomainTypeA<true>::hash();
 }
 
-template class NRPSDESIGNER_EXPORT DomainTypeAC<true>;
-template class NRPSDESIGNER_EXPORT DomainTypeAC<false>;
+namespace nrps
+{
+    template class NRPSDESIGNER_EXPORT DomainTypeAC<true>;
+    template class NRPSDESIGNER_EXPORT DomainTypeAC<false>;
+}
