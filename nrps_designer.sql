@@ -2,8 +2,6 @@
 -- version 3.4.11.1deb1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Jul 16, 2013 at 05:27 PM
 -- Server version: 5.5.31
 -- PHP Version: 5.4.6-1ubuntu1.2
 
@@ -13,7 +11,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `nrps_designer`
 --
-
+DROP DATABASE IF EXISTS `nrps_designer`;
 CREATE DATABASE `nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `nrps_designer`;
 
@@ -26,40 +24,39 @@ DROP TABLE IF EXISTS `domains`;
 CREATE TABLE IF NOT EXISTS `domains` (
   `domain_id` int(20) NOT NULL,
   `module_id` int(20) NOT NULL,
-  `pathway_id` int(20) NOT NULL,
+  `origin_id` int(20) NOT NULL,
   `type_id` int(20) UNIQUE,
-  `refseq_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `substrate_specificity_aa_id` int(20) default NULL,
+  `refseq_id` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `substrate_specificity_aa_id` int(20) DEFAULT NULL,
   `chirality` tinyint(1) NOT NULL,
-  `uniprot_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `bb_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `uniprot_id` varchar(20) COLLATE utf8_unicode_ci default NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `dna_sequence` text COLLATE utf8_unicode_ci NOT NULL,
-  `native_linker_before` text COLLATE utf8_unicode_ci NOT NULL,
-  `native_linker_after` text COLLATE utf8_unicode_ci NOT NULL,
-  `pfam_border_before` int(5) NOT NULL,
-  `pfam_border_after` int(5) NOT NULL,
-  `defined_border_before` int(5) default NULL,
-  `defined_border_after` int(5) default NULL,
+  `pfam_linker_start` int(5) NOT NULL,
+  `pfam_linker_stop` int(5) NOT NULL,
+  `defined_linker_start` int(5) DEFAULT NULL,
+  `defined_linker_stop` int(5) DEFAULT NULL,
+  `pfam_start` int(5) NOT NULL,
+  `pfam_stop` int(5) NOT NULL,
+  `defined_start` int(5) DEFAULT NULL,
+  `defined_stop` int(5) DEFAULT NULL,
   PRIMARY KEY (`domain_id`),
   KEY `substrate_specificity_aa_id` (`substrate_specificity_aa_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 --
--- Table structure for table `main`
+-- Table structure for table `origin`
 --
 
-DROP TABLE IF EXISTS `pathways`;
-CREATE TABLE IF NOT EXISTS `pathways` (
-  `pathway_id` int(20) NOT NULL AUTO_INCREMENT,
-  `organism` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `pathway` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+DROP TABLE IF EXISTS `origin`;
+CREATE TABLE IF NOT EXISTS `origin` (
+  `origin_id` int(20) NOT NULL AUTO_INCREMENT,
+  `source` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `product` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `linkout` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
   `dna_sequence` text COLLATE utf8_unicode_ci NOT NULL,
-  `uniprot_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `norine_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`pathway_id`)
+  PRIMARY KEY (`origin_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -71,9 +68,8 @@ CREATE TABLE IF NOT EXISTS `pathways` (
 DROP TABLE IF EXISTS `substrates`;
 CREATE TABLE IF NOT EXISTS `substrates` (
   `aa_id` int(20) NOT NULL UNIQUE AUTO_INCREMENT,
-  `aminoacid` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `structure` text COLLATE utf8_unicode_ci NOT NULL,
-  `mod_id` int(36),
   `linkout` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`aa_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
@@ -85,29 +81,21 @@ CREATE TABLE IF NOT EXISTS `substrates` (
 DROP TABLE IF EXISTS `types`;
 CREATE TABLE IF NOT EXISTS `types` (
   `type_id` int(20) NOT NULL AUTO_INCREMENT,
-  `type_desc` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(4) COLLATE utf8_unicode_ci NOT NULL,
+  `info` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
---
--- Table structure for table `modifications`
---
-
-DROP TABLE IF EXISTS `modifications`;
-CREATE TABLE IF NOT EXISTS `modifications` (
-  `modification_id` int(20) NOT NULL UNIQUE AUTO_INCREMENT,
-  `modification_desc` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`modification_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
--- Table structure for table `substrates_xref_modifications`
+-- Table structure for table `origin_relations`
 --
-DROP TABLE IF EXISTS `substrates_xref_modifications`;
-CREATE TABLE IF NOT EXISTS `substrates_xref_modifications` (
-  `aa_id` int(20) NOT NULL,
-  `modification_id` int(20) NOT NULL,
-  PRIMARY KEY (`aa_id`, `modification_id`)
+DROP TABLE IF EXISTS `origin_relations`;
+CREATE TABLE IF NOT EXISTS `origin_relations` (
+  `origin_basis` int(20) NOT NULL,
+  `origin_derived` int(20) NOT NULL,
+  `info` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`origin_basis`, `origin_derived`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -115,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `substrates_xref_modifications` (
 -- Constraints for tables `domain_types`
 -- reference to main table
 ALTER TABLE `domains`
-  ADD CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`pathway_id`) REFERENCES `pathways` (`pathway_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`origin_id`) REFERENCES `origin` (`origin_id`) ON DELETE CASCADE ON UPDATE CASCADE;
   
 ALTER TABLE `domains`
   ADD INDEX ( `substrate_specificity_aa_id` ),
@@ -124,6 +112,6 @@ ALTER TABLE `domains`
 ALTER TABLE `domains`
   ADD FOREIGN KEY (`type_id`) REFERENCES `types` (`type_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
-ALTER TABLE `substrates_xref_modifications`
-  ADD FOREIGN KEY (`aa_id`) REFERENCES `substrates` (`aa_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD FOREIGN KEY (`modification_id`) REFERENCES `modifications` (`modification_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `origin_relations`
+  ADD FOREIGN KEY ( `origin_basis` ) REFERENCES `nrps_designer`.`origin` (`origin_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD FOREIGN KEY ( `origin_derived` ) REFERENCES `nrps_designer`.`origin` (`origin_id`) ON DELETE CASCADE ON UPDATE CASCADE;
