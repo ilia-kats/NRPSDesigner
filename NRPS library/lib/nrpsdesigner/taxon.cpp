@@ -288,13 +288,12 @@ std::chrono::system_clock::time_point Taxon::parseDate(xmlNodePtr node)
 {
     std::tm t;
 #ifdef USE_STRPTIME
-    auto test = strptime(XMLTXT(node), TIME_FORMAT, &t);
+    strptime(XMLTXT(node), TIME_FORMAT, &t);
 #else
     std::istringstream s(XMLTXT(node));
     s.imbue(std::locale("en_US"));
     s >> std::get_time(&t, TIME_FORMAT);
 #endif
-    auto test2 = std::mktime(&t);
     return std::chrono::system_clock::from_time_t(std::mktime(&t));
 }
 
