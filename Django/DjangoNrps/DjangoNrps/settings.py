@@ -64,7 +64,7 @@ DATABASES = {
         'NAME': 'nrps_designer',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '',
+        'HOST': '127.0.0.1',
     }
 }
 

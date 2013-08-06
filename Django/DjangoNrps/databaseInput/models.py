@@ -27,7 +27,7 @@ class Origin(models.Model):
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
 
     def __unicode__(self):
-        return self.description
+        return self.source + self.product
 
 class Domain(models.Model):
     module = models.IntegerField()
@@ -49,7 +49,7 @@ class Domain(models.Model):
     #linkout = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
-        return self.description
+        return str(self.origin) + str(self.module) + str(self.domainType)
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
