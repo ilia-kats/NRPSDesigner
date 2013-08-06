@@ -28,5 +28,8 @@ std::size_t DomainTypeT<true>::hash() const
     return DomainBaseType<true>::type::hash();
 }
 
-template class DomainTypeT<true>;
-template class DomainTypeT<false>;
+namespace nrps
+{
+    template class DomainTypeT<true>;
+    template class DomainTypeT<false>;
+}

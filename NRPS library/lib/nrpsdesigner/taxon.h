@@ -7,6 +7,10 @@
 #include <string>
 #include <chrono>
 #include <memory>
+#include <array>
+#ifdef _CXX_CLANG // Clang has std::array defined in tuple header
+#include <tuple>
+#endif
 
 #include <libxml/tree.h>
 
