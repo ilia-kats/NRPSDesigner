@@ -1,0 +1,197 @@
+
+{% load dajaxice_templatetags %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+<script type="text/javascript" src="{{ MEDIA_URL }}jquery.dajax.core.js"></script>
+
+
+	
+ <head>
+
+    <title>Domain graphics test page</title>
+	{% dajaxice_js_import %}
+
+    <!-- load the prototype library from google -->
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">google.load("prototype", "1.7");</script>
+
+    <!-- the following libraries are all hosted on the Pfam site, but can obviously be
+         retrieved and served locally -->
+
+    <!-- the domain graphics library -->
+    <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/domain_graphics.js"></script>
+
+    <!-- in order to standardize the look of text, and in order to make it work at
+         all in older browsers (and IE), we need the canvas text library. And, in turn,
+         that library uses a font description in a separate javascript file -->
+    <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/canvas.text.js?dontUseMoz=true&amp;reimplement=true"></script>
+    <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/faces/optimer-bold-normal.js"></script>
+
+    <!-- we use the (non-free) prototip2 library to add tooltips. It's not free, but
+         nearly. The domain graphics code should cope if it's not loaded, so you
+         could just omit the prototip load -->
+    <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/prototip.js"></script>
+    <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/styles.js"></script>
+
+    <!-- stylesheets. We only really need the rules that are specific to the tooltips -->
+    <link rel="stylesheet" href="http://pfam.sanger.ac.uk/static/css/pfam.css" type="text/css" />
+    <link rel="stylesheet" href="http://pfam.sanger.ac.uk/shared/css/prototip.css" type="text/css" />
+
+    <!-- IE, being IE, needs extra help. In particular we need to add an extra library
+         that implements <canvas> using the VML drawing layer in IE. And, so that 
+         "console.log" calls don't screw everything up, we include the firebug-lite 
+         script -->
+    <!--[if IE]>
+      <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/excanvas.js"></script>
+      <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+      #dg canvas { 
+        margin: 2em;
+      }
+      #errors {
+        border: 1px solid red;
+        margin: 1em 0;
+        padding: 0.4em;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <h3>Domain graphics test page</h3>
+
+    <p>
+      This page allows you test the domain graphics library with different
+      domain graphics descriptions. You can edit the string in the text area
+      below and press &quot;submit&quot; to see the resulting graphic. If 
+      there are problems with the description, you should see an explanatory
+      error message...
+    </p>
+    <p>
+      Read the source code of the page for an explanation of how to use
+      the library. We also recommend taking a look at the source code of the
+      javascript library itself.
+    </p>
+
+    <!-- this will hold the canvas element -->
+    <div id="dg"></div>
+    
+
+    <script>
+
+    	function fillBox(data){
+   		jQuery("#seq").val(JSON.stringify(data));
+   	}
+   	</script>
+
+    <textarea cols="80" rows="10" id="textSauce"></textarea><br/>
+	<input type="button" onclick="Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#textSauce').val()})" value="Send!"/>
+
+    <button id="submit">Submit</button>
+    <button id="clear">Clear</button>
+
+    <div id="errors" style="display: none"></div>
+
+    <div id="form">
+    
+      <!-- example taken from Q560V8_CRYNE (Q560V8) -->
+      <textarea cols="80" rows="40" id="seq">
+      </textarea><br />
+      <label for="xscale">X-scale: <input id="xscale" value="1.0"></input></label><br />
+      <label for="yscale">Y-scale: <input id="yscale" value="1.0"></input></label><br />
+
+    </div>  
+
+    
+    <!-- This is the script tag that is responsible for controlling the page. 
+         We define a function that's will actually generate the domain graphic,
+         based on the content of the form field above. -->
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+
+      // instantiate an object
+      var pg = new PfamGraphic();
+
+      // the function that gets called when the "submit" button is clicked
+      var generate = function() {
+
+        // start by getting hiding any previous error messages and then 
+        // delete the old canvas element. We could effectively blank the
+        // old canvas by overwriting it with a big white rectangle, but 
+        // here we're just removing it and letting the domain graphics
+        // library generate a new one
+        $("errors").hide();
+        if ( $("dg").select("canvas").size() > 0 ) {
+          $("dg").select("canvas").first().remove();
+        }
+
+        // see if we can turn the contents of the text area into a valid
+        // javascript data structure. If not, display an error message.
+        try {
+          sequence = eval( "sequence = " + $("seq").getValue() );
+        } catch ( e ) {
+          $("errors").update( e ).show();
+          return;
+        }
+
+        // give the object the ID of the container that will hold the canvas.
+        // We could have specified this when we instantiated the object instead.
+        // We could also have supplied a reference to the element itself, rather
+        // than it's ID; the libary doesn't care.
+        pg.setParent( "dg" );
+
+        // get the values of X-scale and Y-scale from the form and set them
+        // on the object. These two values can be used to scale the domain
+        // graphics. Set them large to see how the domain graphic looks in detail,
+        // but ignore the drawing errors...
+        pg.setImageParams( {
+          xscale: $F("xscale"),
+          yscale: $F("yscale")
+        } );
+
+        // hand the domain graphics description to the domain graphics object. It
+        // will throw an exception (hopefully with a meaningful error message 
+        // embedded) if it can't parse the data structure or if there's a problem, 
+        // such as a start value that's greater than an end value. If there's an 
+        // error, show it in the error div.
+        try {
+          pg.setSequence( sequence );
+          pg.render();
+        } catch ( e ) {
+          $("errors").update( e ).show();
+          return;
+        }
+      };
+
+      // a function to blank everything and start again
+      var clear = function() {
+        $("errors").hide();
+        $("seq").setValue("");
+        $("seq").focus()
+        $("seq").select();
+      };
+
+      // when the DOM is loaded, add listeners to the two buttons
+      document.observe( "dom:loaded", function() {
+
+        $("seq").focus();
+        $("seq").select();
+
+        $("submit").observe( "click", generate );
+        $("clear").observe( "click", clear );
+
+        // we could generate the domain graphic as soon as the page is loaded,
+        // assuming the textarea contains a real domain graphics description
+        // generate();
+      } );
+
+      // ]]>
+    </script>
+
+  </body>
+
+</html>
