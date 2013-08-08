@@ -60,19 +60,10 @@
 
   <body>
 
-    <h3>Domain graphics test page</h3>
+    <h3>Pfam stuff</h3>
 
     <p>
-      This page allows you test the domain graphics library with different
-      domain graphics descriptions. You can edit the string in the text area
-      below and press &quot;submit&quot; to see the resulting graphic. If 
-      there are problems with the description, you should see an explanatory
-      error message...
-    </p>
-    <p>
-      Read the source code of the page for an explanation of how to use
-      the library. We also recommend taking a look at the source code of the
-      javascript library itself.
+    pls enter your sauce
     </p>
 
     <!-- this will hold the canvas element -->
@@ -82,23 +73,21 @@
     <script>
 
     	function fillBox(data){
-   		jQuery("#seq").val(JSON.stringify(data));
+   		mySeq = JSON.stringify(data);
+   		generate(mySeq);
    	}
    	</script>
 
     <textarea cols="80" rows="10" id="textSauce"></textarea><br/>
 	<input type="button" onclick="Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#textSauce').val()})" value="Send!"/>
 
-    <button id="submit">Submit</button>
     <button id="clear">Clear</button>
 
     <div id="errors" style="display: none"></div>
 
     <div id="form">
     
-      <!-- example taken from Q560V8_CRYNE (Q560V8) -->
-      <textarea cols="80" rows="40" id="seq">
-      </textarea><br />
+
       <label for="xscale">X-scale: <input id="xscale" value="1.0"></input></label><br />
       <label for="yscale">Y-scale: <input id="yscale" value="1.0"></input></label><br />
 
@@ -117,7 +106,7 @@
       var pg = new PfamGraphic();
 
       // the function that gets called when the "submit" button is clicked
-      var generate = function() {
+      var generate = function(mySeq) {
 
         // start by getting hiding any previous error messages and then 
         // delete the old canvas element. We could effectively blank the
@@ -132,7 +121,7 @@
         // see if we can turn the contents of the text area into a valid
         // javascript data structure. If not, display an error message.
         try {
-          sequence = eval( "sequence = " + $("seq").getValue() );
+          sequence = eval( "sequence = " + mySeq);
         } catch ( e ) {
           $("errors").update( e ).show();
           return;
@@ -170,23 +159,16 @@
       // a function to blank everything and start again
       var clear = function() {
         $("errors").hide();
-        $("seq").setValue("");
-        $("seq").focus()
-        $("seq").select();
+        $("textSauce").setValue("");
+        $("textSauce").focus()
+        $("textSauce").select();
       };
 
-      // when the DOM is loaded, add listeners to the two buttons
+      // when the DOM is loaded, add listeners to the clear button
       document.observe( "dom:loaded", function() {
 
-        $("seq").focus();
-        $("seq").select();
-
-        $("submit").observe( "click", generate );
         $("clear").observe( "click", clear );
 
-        // we could generate the domain graphic as soon as the page is loaded,
-        // assuming the textarea contains a real domain graphics description
-        // generate();
       } );
 
       // ]]>
