@@ -13,16 +13,26 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+class Cds(models.Model):
+    origin = models.ForeignKey('Origin')
+    geneName = models.CharField(max_length=100) 
+    dnaSequence = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    linkout =  generic.GenericRelation('Linkout')
+   
+    def __unicode__(self):
+        return str(self.origin) + self.geneName
 
+    class Meta:
+        verbose_name = "Coding sequence"
+        verbose_name_plural = "Coding sequences"
 
 class Origin(models.Model):
+    sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('DNA','DNA')))
     source = models.CharField(max_length=20) #usually taxon ID, can also be biobrick or plasmid identifier
     species = models.CharField(max_length = 100, blank=True, null= True)
-    product = models.CharField(max_length=20)
-    dnaSequence = models.TextField()
+    product = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
-    #linkout = models.TextField()
-    #norine = models.CharField(max_length=30, blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
 
@@ -31,7 +41,7 @@ class Origin(models.Model):
 
 class Domain(models.Model):
     module = models.IntegerField()
-    origin = models.ForeignKey('Origin')
+    cds = models.ForeignKey('Cds')
     domainType = models.ForeignKey('Type')
     substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')), blank=True, null=True)
@@ -46,7 +56,6 @@ class Domain(models.Model):
     definedStop = models.IntegerField()
     linkout =  generic.GenericRelation('Linkout')
 
-    #linkout = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return str(self.origin) + str(self.module) + str(self.domainType)
@@ -57,13 +66,14 @@ class Substrate(models.Model):
     structure = models.TextField()
     linkout =  generic.GenericRelation('Linkout')
 
-    #linkout = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
 
 class Type(models.Model):
     name = models.CharField(max_length=4)
+    pfamName = models.CharField(max_length=100, blank=True, null=True)
+    pfamId   = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
 
     def __unicode__(self):
@@ -72,7 +82,7 @@ class Type(models.Model):
 class Linkout(models.Model):
     linkoutType = models.ForeignKey('LinkoutType')
     identifier = models.CharField(max_length=50)
-    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin')
+    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds')
     content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
