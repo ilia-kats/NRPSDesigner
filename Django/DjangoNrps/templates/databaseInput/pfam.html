@@ -60,15 +60,79 @@
     <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/prototip.js"></script>
     <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/styles.js"></script>
 
-    <h3>Pfam stuff</h3>
 
-    <p>
-    Please enter your sequence!
-    </p>
 
     <!-- this will hold the canvas element -->
-    
+     <script>
+jQuery(function() {
+jQuery( "#tabs" ).tabs();
+});
+
+jQuery(function() {
+jQuery( "#accordion" ).accordion({
+heightStyle: "content",
+collapsible: true
+});
+});
+</script>
     <div id="dg"></div>
+
+     <form method="post">{% csrf_token %}
+<div id = "tabs">
+<ul>
+<li><a href="#tabs-1">Origin</a></li>
+<li><a href="#tabs-2">Coding Sequence</a></li>
+<li><a href="#tabs-3">Domains</a></li>
+</ul>
+
+ <div id="tabs-1">
+ </div>
+
+ <div id="tabs-2">
+    {{ form.non_field_errors }}
+
+      <div class="fieldWrapper">
+        {{ form.dnaSequence.errors }}
+        <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
+        {{ form.dnaSequence }}
+
+          <input type="button" onclick="Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#id_dnaSequence').val()})" value="Send!"/>
+
+    <button id="clear">Clear</button>
+    </div>
+    <div class="fieldWrapper">
+        {{ form.origin.errors }}
+        <label for="id_subject">Origin:<br/> </label>
+        {{ form.origin }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.geneName.errors }}
+        <label for="id_message">Gene Name:<br/> </label>
+        {{ form.geneName }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.description.errors }}
+        <label for="id_sender">Description:<br/> </label>
+        {{ form.description }}
+    </div>
+  </div>
+
+
+
+<div id="tabs-3">
+<div id="accordion">
+{% for formOrigin in originSet %}
+
+<h3> Domain {{ forloop.counter }} </h3>
+<div>
+{{ formOrigin.as_p }}
+</div>
+{% endfor %}
+</div>
+    <p><input type="submit" value="Send message" /></p>
+
+ </div>
+</form>
 
     <script>
 
@@ -78,14 +142,11 @@
    	}
    	</script>
 
-    <textarea cols="80" rows="10" id="textSauce"></textarea><br/>
-	<input type="button" onclick="Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#textSauce').val()})" value="Send!"/>
 
-    <button id="clear">Clear</button>
 
     <div id="errors" style="display: none"></div>
 
-    <div id="form">
+    <div id="form" style="visibility: hidden">
     
 
       <label for="xscale">X-scale: <input id="xscale" value="1.0"></input></label><br />
@@ -159,7 +220,7 @@
       // a function to blank everything and start again
       var clear = function() {
         jQuery('#errors').hide();
-        jQuery('#textSauce').val("");
+        jQuery('#id_dnaSequence').val("");
       };
 
       // when the DOM is loaded, add listeners to the clear button
@@ -170,10 +231,8 @@
       // ]]>
     </script>
 
-<form method="post">
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+
+
 {% endblock %}
 
 
