@@ -1,2 +1,8 @@
+from django.db import models
 
-# Create your models hereself.
+class Species(models.Model):
+  species = models.CharField(max_length=100)
+  taxon_id = models.CharField(max_length=20)
+  
+  def __unicode__(self):
+    return str(species)

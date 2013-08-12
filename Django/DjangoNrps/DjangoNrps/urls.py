@@ -4,7 +4,7 @@ from django.contrib import admin
 from databaseInput.views import PfamView, UserDetailView, HomeTemplateView, ProfileTemplateView
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from designerGui.views import OriginListView
+from designerGui.views import SpeciesListView
 
 dajaxice_autodiscover()
 admin.autodiscover()
@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^user/profile', ProfileTemplateView.as_view()),
     url(r'^user/', include('registration.backends.simple.urls')),
     url(r'^user/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
-    url(r'^tool/', OriginListView.as_view())
+    url(r'^tool/', SpeciesListView.as_view())
 )
 
 urlpatterns += staticfiles_urlpatterns()

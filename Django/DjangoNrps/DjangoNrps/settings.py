@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'databaseInput',
     'django_evolution',
     'dajaxice',
-    'registration'
+    'registration',
+    'designerGui'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,7 +1,7 @@
-from databaseInput.models import Origin
+from designerGui.models import Species
 from django.views.generic import ListView
 
 
-class OriginListView(ListView):
+class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
-  model = Origin
+  model = Species
