@@ -1,24 +1,52 @@
+{% extends "base.html" %}
 
-{% load dajaxice_templatetags %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
-<script type="text/javascript" src="{{ MEDIA_URL }}jquery.dajax.core.js"></script>
+
 
 
 	
- <head>
+ 
 
-    <title>Domain graphics test page</title>
-	{% dajaxice_js_import %}
-
-    <!-- load the prototype library from google -->
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-    <script type="text/javascript">google.load("prototype", "1.7");</script>
 
     <!-- the following libraries are all hosted on the Pfam site, but can obviously be
          retrieved and served locally -->
 
     <!-- the domain graphics library -->
-    <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/domain_graphics.js"></script>
+    
+
+    <!-- stylesheets. We only really need the rules that are specific to the tooltips -->
+    <link rel="stylesheet" href="http://pfam.sanger.ac.uk/static/css/pfam.css" type="text/css" />
+
+
+    <!-- IE, being IE, needs extra help. In particular we need to add an extra library
+         that implements <canvas> using the VML drawing layer in IE. And, so that 
+         "console.log" calls don't screw everything up, we include the firebug-lite 
+         script -->
+    <!--[if IE]>
+      <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/excanvas.js"></script>
+      <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+    <![endif]-->
+
+
+
+ {% block content %}
+
+     <link rel="stylesheet" href="http://pfam.sanger.ac.uk/shared/css/prototip.css" type="text/css" />
+    <style type="text/css">
+      #dg canvas { 
+        margin: 2em;
+      }
+      #errors {
+        border: 1px solid red;
+        margin: 1em 0;
+        padding: 0.4em;
+      }
+    </style>
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">google.load("prototype", "1.7");</script>
+
+<script src="{{ STATIC_URL }}js/domain_graphics.js" type="text/javascript"></script>
+
 
     <!-- in order to standardize the look of text, and in order to make it work at
          all in older browsers (and IE), we need the canvas text library. And, in turn,
@@ -32,43 +60,15 @@
     <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/prototip.js"></script>
     <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/styles.js"></script>
 
-    <!-- stylesheets. We only really need the rules that are specific to the tooltips -->
-    <link rel="stylesheet" href="http://pfam.sanger.ac.uk/static/css/pfam.css" type="text/css" />
-    <link rel="stylesheet" href="http://pfam.sanger.ac.uk/shared/css/prototip.css" type="text/css" />
-
-    <!-- IE, being IE, needs extra help. In particular we need to add an extra library
-         that implements <canvas> using the VML drawing layer in IE. And, so that 
-         "console.log" calls don't screw everything up, we include the firebug-lite 
-         script -->
-    <!--[if IE]>
-      <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/excanvas.js"></script>
-      <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
-    <![endif]-->
-
-    <style type="text/css">
-      #dg canvas { 
-        margin: 2em;
-      }
-      #errors {
-        border: 1px solid red;
-        margin: 1em 0;
-        padding: 0.4em;
-      }
-    </style>
-
-  </head>
-
-  <body>
-
     <h3>Pfam stuff</h3>
 
     <p>
-    pls enter your sauce
+    Please enter your sequence!
     </p>
 
     <!-- this will hold the canvas element -->
-    <div id="dg"></div>
     
+    <div id="dg"></div>
 
     <script>
 
@@ -98,7 +98,7 @@
          We define a function that's will actually generate the domain graphic,
          based on the content of the form field above. -->
 
-    <script type="text/javascript">
+ <script type="text/javascript">
       // <![CDATA[
 
 
@@ -158,22 +158,22 @@
 
       // a function to blank everything and start again
       var clear = function() {
-        $("errors").hide();
-        $("textSauce").setValue("");
-        $("textSauce").focus()
-        $("textSauce").select();
+        jQuery('#errors').hide();
+        jQuery('#textSauce').val("");
       };
 
       // when the DOM is loaded, add listeners to the clear button
-      document.observe( "dom:loaded", function() {
 
-        $("clear").observe( "click", clear );
+        jQuery('#clear').bind( "click", clear );
 
-      } );
 
       // ]]>
     </script>
 
-  </body>
+<form method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}
 
-</html>
+

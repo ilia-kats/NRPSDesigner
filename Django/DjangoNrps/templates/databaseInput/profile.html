@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ui-widget-content ui-corner-all content fixed-width">
+<h2>{{ user.username }}</h2>
+<p style="font-style:italic;">{{ user.first_name }} {{ user.last_name }}</p>
+<h3>Delete Account</h3>
+<p>To delete your account, <a href='/user/delete'>click here</a>.</p>
+</div>
+{% endblock %}

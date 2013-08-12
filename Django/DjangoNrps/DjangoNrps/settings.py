@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'databaseInput',
     'django_evolution',
-    'dajaxice'
+    'dajaxice',
+    'registration'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -85,8 +86,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
-
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
 
 TEMPLATE_DIRS = (
    os.path.join(BASE_DIR, 'templates'), 
@@ -113,3 +117,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'dajaxice.finders.DajaxiceFinder',
 )
+
+LOGIN_REDIRECT_URL = '/user/profile'

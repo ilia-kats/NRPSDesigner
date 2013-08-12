@@ -1,0 +1,103 @@
+{% load static from staticfiles %}
+{% load dajaxice_templatetags %}
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% dajaxice_js_import %}
+
+<title>NRPS Designer:{{ title|default:"Home" }}</title>
+<link rel="shortcut icon" href="/static/images/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery-ui-1.10.3.custom.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+{% block css-include %}{% endblock %}
+<script src="{{ STATIC_URL }}js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/jquery-ui-1.10.3.custom.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL}}js/base.js" type="text/javascript"></script>
+
+<script>
+      jQuery.noConflict();
+</script>
+
+{% block js-include %}{% endblock %}
+
+<script type="text/javascript">
+var STATIC_URL = "{{ STATIC_URL }}";
+
+</script>
+{% block js %}{% endblock %}
+</head>
+
+<body>
+
+<div id="container">
+	<div class="ui-widget-header" id="header">
+		<div class="fixed-width">
+			<div id="primary-menu">
+				{% if user.is_authenticated %}
+				<span class="user_tab drop">
+					<a href="/user/profile/" id="user_tab_profile" class="user_tab">Logged in as {{ user }}</a>
+					<ul class="ui-widget-content ui-corner-bottom">
+						<li><a href="/user/profile/">Profile</a></li>
+						<li><a href="/user/logout">Log out</a></li>
+					</ul>
+				</span>
+				{% else %}
+				<span class="user_tab"><a href="/user/login/" id="user_tab_login" class="user_tab">Log in</a></span>
+				<span class="user_tab"><a href="/user/register/" id="user_tab_register" class="user_tab">Register</a></span>
+				{% endif %}
+				<span class="user_tab drop">
+					<a href="/help/" id="user_tab_help" class="user_tab">Help</a>
+					<ul class="ui-widget-content ui-corner-bottom">
+						<li><a href="/help/gibson/">NRPS Designer</a></li>
+						<li><a href="/help/primer/">Add NRPS into library</a></li>
+					</ul>
+				</span>
+				<span class="user_tab drop">
+					<a href="/tools/" id="user_tab_tools" class="user_tab">Apps</a>
+					<ul class="ui-widget-content ui-corner-bottom">
+						<li><a href="/fragment/">NRPS Designer</a></li>
+						<li><a href={% url 'pfam' %}>Add NRPS into library</a></li>
+					</ul>
+				</span>
+				<span class="user_tab drop">
+					<a href="/" id="user_tab_home" class="user_tab">Home</a>
+					<ul class="ui-widget-content ui-corner-bottom">
+						<li><a href="/">Home</a></li>
+					</ul>
+				</span>	
+			</div>
+			<a href="/"><img src="{{ STATIC_URL }}images/iGEMhd.png" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
+			<h2 id="main_title">NRPS Designer<!--:<span style="font-size:0.7em">{{ title|default:"Home" }}</span>--></h2>
+		</div>
+	</div>
+	{% block no-app-menu %}
+	{% block app-menu %}
+	{% endblock %}
+	{% endblock %}
+	
+	{% block login_prompt %}
+	{% if user.is_authenticated %}
+	{% else %}
+	<!--<div class="ui-state-highlight ui-corner-all content">
+	<p>Want to have a play around? Just <a href="/user/login">login</a> with the username 'demo' and password 'demo'. Nothing is guaranteed to work, but please email any problems you do find to <a href="mailto:bill@gibthon.org">me</a></p>
+	</div>-->
+	{% endif %}
+	{% endblock %}
+	<div id="sub-container" class="ui-widget-content ui-corner-bottom">
+	{% block content %}{% endblock %}
+	<div style="clear:both;"></div>
+	</div>
+	<div style="height:30px;"></div>
+	<div class="ui-state-disabled" id="footer">
+		iGEMhd
+	</div>
+</div>
+
+{% block dialog %}
+{% endblock %}
+<div id="prompt"></div>
+<div id="prompt2"></div>
+</body>
+</html>

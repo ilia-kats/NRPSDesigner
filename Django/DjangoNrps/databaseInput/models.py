@@ -65,13 +65,14 @@ class Substrate(models.Model):
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')))
     structure = models.TextField()
     linkout =  generic.GenericRelation('Linkout')
-
+    
 
     def __unicode__(self):
         return self.name
 
 class Type(models.Model):
     name = models.CharField(max_length=4)
+    isModification = models.BooleanField()
     pfamName = models.CharField(max_length=100, blank=True, null=True)
     pfamId   = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()

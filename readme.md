@@ -26,6 +26,10 @@ sudo pip install django-dajax
 
 sudo pip install django-dajaxice
 
+* __django-registration: Handles user login etc.
+
+sudo pip install django-registration
+
 
 Other stuff that is loaded by some of our python functions:
 -----------------------------------------------------------
