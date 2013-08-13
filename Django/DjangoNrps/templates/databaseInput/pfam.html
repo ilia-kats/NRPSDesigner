@@ -44,8 +44,10 @@
 
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">google.load("prototype", "1.7");</script>
+{% load staticfiles %}
 
-<script src="{{ STATIC_URL }}js/domain_graphics.js" type="text/javascript"></script>
+<script src="{% static "js/domain_graphics.js" %}" type="text/javascript"></script>
+<script src="{% static "js/spin.js" %}" type="text/javascript"></script>
 
 
     <!-- in order to standardize the look of text, and in order to make it work at
@@ -74,7 +76,43 @@ heightStyle: "content",
 collapsible: true
 });
 });
+
+var opts = {
+  lines: 13, // The number of lines to draw
+  length: 20, // The length of each line
+  width: 10, // The line thickness
+  radius: 30, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#000', // #rgb or #rrggbb
+  speed: 1, // Rounds per second
+  trail: 60, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: 'auto', // Top position relative to parent in px
+  left: 'auto' // Left position relative to parent in px
+};
+
+var spinner;
 </script>
+
+    <script>
+    function dajaxiceFunc(){
+      var target = document.getElementById('tabs-2');
+      spinner = new Spinner(opts).spin(target);
+      Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#id_dnaSequence').val()});
+    };
+
+      function fillBox(data){
+      mySeq = JSON.stringify(data);
+      generate(mySeq);
+      spinner.stop();
+    }
+    </script>
+
     <div id="dg"></div>
 
      <form method="post">{% csrf_token %}
@@ -86,6 +124,18 @@ collapsible: true
 </ul>
 
  <div id="tabs-1">
+     <div class="fieldWrapper">
+        {{ form.origin.errors }}
+        <label for="id_subject">Origin:<br/> </label>
+        {{ form.origin }}
+    </div>
+
+    <p> if your origin not included above, then use below form to create new one </p>
+ <form action="/contact/" method="post">{% csrf_token %}
+{{ originForm.as_p }}
+<input type="submit" value="originSubmit" name="originSubmit"/>
+</form>
+
  </div>
 
  <div id="tabs-2">
@@ -96,15 +146,11 @@ collapsible: true
         <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
         {{ form.dnaSequence }}
 
-          <input type="button" onclick="Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#id_dnaSequence').val()})" value="Send!"/>
+          <input type="button" onclick="dajaxiceFunc()" value="Send!"/>
 
-    <button id="clear">Clear</button>
+          <input type="button" id="clear" value="Clear!"/>
     </div>
-    <div class="fieldWrapper">
-        {{ form.origin.errors }}
-        <label for="id_subject">Origin:<br/> </label>
-        {{ form.origin }}
-    </div>
+
     <div class="fieldWrapper">
         {{ form.geneName.errors }}
         <label for="id_message">Gene Name:<br/> </label>
@@ -134,13 +180,6 @@ collapsible: true
  </div>
 </form>
 
-    <script>
-
-    	function fillBox(data){
-   		mySeq = JSON.stringify(data);
-   		generate(mySeq);
-   	}
-   	</script>
 
 
 

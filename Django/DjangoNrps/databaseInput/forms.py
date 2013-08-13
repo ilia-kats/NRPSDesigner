@@ -11,3 +11,7 @@ class CdsForm(ModelForm):
         widgets = {
             'dnaSequence': HiddenInput()
         }
+
+class OriginForm(ModelForm):
+	class Meta:
+		model = Origin

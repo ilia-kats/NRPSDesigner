@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.contenttypes import generic
 
-from databaseInput.models import Domain, Substrate, Origin, Type, Cds,	 Linkout, LinkoutType
+from databaseInput.models import Domain, Substrate, Origin, Type, Cds,	 Linkout, LinkoutType, Modification
 # Register your models here.
 
 class DomainInLine(generic.GenericTabularInline):
@@ -40,4 +40,5 @@ admin.site.register(Origin, OriginAdmin)
 admin.site.register(Cds, CdsAdmin)
 admin.site.register(Type)
 admin.site.register(LinkoutType)
+admin.site.register(Modification)
 

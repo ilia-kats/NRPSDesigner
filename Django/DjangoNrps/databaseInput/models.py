@@ -63,11 +63,18 @@ class Domain(models.Model):
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')))
-    modification = models.BigIntegerField(default = 0)
     structure = models.TextField()
     linkout =  generic.GenericRelation('Linkout')
-    enantiomer = models.ForeignKey('self')
+    enantiomer = models.ForeignKey('self', blank=True, null=True)
+    modification = models.ManyToManyField('Modification', blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
+
+    def __unicode__(self):
+        return self.name
+
+class Modification(models.Model):
+    name = models.CharField(max_length=100)
+    domain =  models.ForeignKey('Domain', blank=True, null=True, related_name='modificationAdded')
 
     def __unicode__(self):
         return self.name
