@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, include, url
-
 from django.contrib import admin
 from databaseInput.views import PfamView, UserDetailView, HomeTemplateView, ProfileTemplateView
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config

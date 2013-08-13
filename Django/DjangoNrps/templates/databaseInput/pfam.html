@@ -127,7 +127,9 @@ var spinner;
      <div class="fieldWrapper">
         {{ form.origin.errors }}
         <label for="id_subject">Origin:<br/> </label>
+        <div class = "chosenWrapper">
         {{ form.origin }}
+        </div>
     </div>
 
     <p> if your origin not included above, then use below form to create new one </p>
@@ -142,16 +144,22 @@ var spinner;
  <div id="tabs-2">
     {{ form.non_field_errors }}
 
+        <div class="row">
+        <div class="span3">
       <div class="fieldWrapper">
         {{ form.dnaSequence.errors }}
         <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
-        {{ form.dnaSequence }}
+        {{ form.dnaSequence }} <br/>
+    <div class="btn-group">
+        <input type="button" class="btn" onclick="dajaxiceFunc()" value="Send to Pfam!"/>
 
-          <input type="button" onclick="dajaxiceFunc()" value="Send!"/>
-
-          <input type="button" id="clear" value="Clear!"/>
+          <input type="button" class="btn" id="clear" value="Clear!"/>
+    </div>
+      
+    </div>
     </div>
 
+    <div class="span6">
     <div class="fieldWrapper">
         {{ form.geneName.errors }}
         <label for="id_message">Gene Name:<br/> </label>
@@ -161,6 +169,8 @@ var spinner;
         {{ form.description.errors }}
         <label for="id_sender">Description:<br/> </label>
         {{ form.description }}
+    </div>
+    </div>
     </div>
   </div>
 
@@ -174,7 +184,7 @@ var spinner;
 <div>
     {{ domainForm.non_field_errors }}
     <div class="row">
-    <div class="span6">
+    <div class="span3">
       <div class="fieldWrapper">
         {{ domainForm.module.errors }}
         <label for="id_module">Module: <br/> </label>
@@ -187,11 +197,20 @@ var spinner;
         {{ domainForm.domainType }}
     </div>
     </div>
-    <div class="span6">
+    <div class="span3">
+
+
       <div class="fieldWrapper">
         {{ domainForm.substrateSpecificity.errors }}
         <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
+                  <div class = "chosenWrapper">
+
         {{ domainForm.substrateSpecificity }}
+        </div>
+
+ 
+
+
     </div>
 
      <div class="fieldWrapper">
@@ -289,6 +308,7 @@ var spinner;
       var clear = function() {
         jQuery('#errors').hide();
         jQuery('#id_dnaSequence').val("");
+        jQuery('#dg').val("");
       };
 
       // when the DOM is loaded, add listeners to the clear button
@@ -300,6 +320,13 @@ var spinner;
     </script>
 
 
+   <script type="text/javascript">
+
+
+
+jQuery(document).ready(function() {
+  jQuery('.chosenWrapper').children().select2();});
+</script>
 
 {% endblock %}
 
