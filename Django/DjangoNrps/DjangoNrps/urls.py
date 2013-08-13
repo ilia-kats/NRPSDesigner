@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^user/profile', ProfileTemplateView.as_view()),
     url(r'^user/', include('registration.backends.simple.urls')),
     url(r'^user/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
-    url(r'^tool/', SpeciesListView.as_view()),
+    url(r'^tool/', SpeciesListView.as_view(), name="guiTool"),
 )
 
 urlpatterns += staticfiles_urlpatterns()

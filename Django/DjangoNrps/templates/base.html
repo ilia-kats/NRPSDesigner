@@ -54,8 +54,8 @@ var STATIC_URL = "{{ STATIC_URL }}";
 					</ul>
 				</span>
 				{% else %}
-				<span class="user_tab"><a href="/user/login/" id="user_tab_login" class="user_tab">Log in</a></span>
-				<span class="user_tab"><a href="/user/register/" id="user_tab_register" class="user_tab">Register</a></span>
+				<span class="user_tab"><a href="user/login/" id="user_tab_login" class="user_tab">Log in</a></span>
+				<span class="user_tab"><a href="user/register/" id="user_tab_register" class="user_tab">Register</a></span>
 				{% endif %}
 				<span class="user_tab drop">
 					<a href="/help/" id="user_tab_help" class="user_tab">Help</a>
@@ -67,7 +67,7 @@ var STATIC_URL = "{{ STATIC_URL }}";
 				<span class="user_tab drop">
 					<a href="/tools/" id="user_tab_tools" class="user_tab">Apps</a>
 					<ul class="ui-widget-content ui-corner-bottom">
-						<li><a href="/fragment/">NRPS Designer</a></li>
+						<li><a href={% url 'guiTool' %}>NRPS Designer</a></li>
 						<li><a href={% url 'pfam' %}>Add NRPS into library</a></li>
 					</ul>
 				</span>
