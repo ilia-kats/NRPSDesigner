@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'dajaxice',
     'registration',
     'designerGui',
-    'chosen'
 )
 
 MIDDLEWARE_CLASSES = (
