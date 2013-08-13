@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+import select2
 
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
@@ -44,7 +45,7 @@ class Domain(models.Model):
     cds = models.ForeignKey('Cds')
     domainType = models.ForeignKey('Type')
     substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
-    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')), blank=True, null=True)
+    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('None','None')), default='None')
     description = models.TextField()
     pfamLinkerStart = models.IntegerField()
     pfamLinkerStop = models.IntegerField()

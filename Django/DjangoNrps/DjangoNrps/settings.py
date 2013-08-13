@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'django_evolution',
     'dajaxice',
     'registration',
-    'designerGui'
+    'designerGui',
+    'chosen'
 )
 
 MIDDLEWARE_CLASSES = (

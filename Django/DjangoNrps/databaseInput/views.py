@@ -12,7 +12,7 @@ from databaseInput.forms import CdsFormSet, DomainFormSet, CdsForm, OriginForm
 
 class PfamView(CreateView):
 	template_name = 'databaseInput/pfam.html'
-	model = Cds
+	form_class = CdsForm
 	success_url = reverse_lazy("pfam")
 
 	def get_context_data(self, **kwargs):

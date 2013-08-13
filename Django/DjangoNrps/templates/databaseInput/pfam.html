@@ -133,7 +133,8 @@ var spinner;
     <p> if your origin not included above, then use below form to create new one </p>
  <form action="/contact/" method="post">{% csrf_token %}
 {{ originForm.as_p }}
-<input type="submit" value="originSubmit" name="originSubmit"/>
+
+<input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/>
 </form>
 
  </div>
@@ -167,12 +168,40 @@ var spinner;
 
 <div id="tabs-3">
 <div id="accordion">
-{% for formOrigin in originSet %}
+{% for domainForm in originSet %}
 
 <h3> Domain {{ forloop.counter }} </h3>
 <div>
-{{ formOrigin.as_p }}
-</div>
+    {{ domainForm.non_field_errors }}
+    <div class="row">
+    <div class="span6">
+      <div class="fieldWrapper">
+        {{ domainForm.module.errors }}
+        <label for="id_module">Module: <br/> </label>
+        {{ domainForm.module }}
+    </div>
+
+    <div class="fieldWrapper">
+        {{ domainForm.domainType.errors }}
+        <label for="id_domainType">Domain Type: <br/> </label>
+        {{ domainForm.domainType }}
+    </div>
+    </div>
+    <div class="span6">
+      <div class="fieldWrapper">
+        {{ domainForm.substrateSpecificity.errors }}
+        <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
+        {{ domainForm.substrateSpecificity }}
+    </div>
+
+     <div class="fieldWrapper">
+        {{ domainForm.chirality.errors }}
+        <label for="id_substrateSpecificity">Chirality: <br/> </label>
+        {{ domainForm.chirality }}
+    </div>
+    </div>
+    </div>
+    </div>
 {% endfor %}
 </div>
     <p><input type="submit" value="Send message" /></p>
