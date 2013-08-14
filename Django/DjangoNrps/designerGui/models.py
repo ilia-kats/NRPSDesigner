@@ -6,3 +6,4 @@ class Species(models.Model):
   
   def __unicode__(self):
     return str(species)
+  
