@@ -4,10 +4,11 @@
 {% load staticfiles %}
 
 <script type="text/javascript">
-	function AddSubstrate()
-	 {
+    var button_value = 1;
+    function AddSubstrate()
+    {
 	 jQuery("#monomer").append(
-		button_count += 1;
+		button_value += 1; ;
 		)
 	 };
 </script>
@@ -28,8 +29,6 @@
 	
 	.box_right
 	{
-
-		
 		padding:10px;
 		border:1px solid gray;
 		margin:0px;
@@ -46,8 +45,8 @@
 <div class="box_left">
   
 	<p>Please choose an organism to express your non-ribosomal peptide!</p>
-		<form action="submit.php">
-			<select name="organisms" size="1">
+    <form action="submit.php">
+        <select name="organisms" size="1">
 			{% for origin in object_list %}
 				<option value={{origin.source}}>{{origin.species}}</option>
 			{% endfor %}				
@@ -79,9 +78,7 @@
 			
 		</div>
 </div>
-
-
-
+<img src="{% url 'Structure' %}?as=1&as=2&as=5">
 <div class="span3">
  <div class="box_right">
 	<p>
