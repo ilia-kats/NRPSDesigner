@@ -37,7 +37,7 @@ class Origin(models.Model):
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
 
     def __unicode__(self):
-        return self.source + self.product
+        return self.species
 
 class Domain(models.Model):
     module = models.IntegerField()

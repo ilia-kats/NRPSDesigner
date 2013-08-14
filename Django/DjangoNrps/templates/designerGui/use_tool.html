@@ -69,7 +69,7 @@
                    {% endfor %}
                </tbody>
            </table>
-           {{ formset.management_form }}
+           {{ myFormSet.management_form }}
        </form>
 </div>
 </br>
@@ -77,11 +77,9 @@
 <div class="box_left">
        <p>The peptide you're about to create would look like this: </p>
         </br>
-    <img src="{% url 'Structure' %}?as=1&as=2&as=5"></br></br>
+    <img src="{% url 'Structure' %}?as=1&as=2&as=5" id="structimg"></br></br>
     <button class="btn" value="submit">Submit</button>
-    
 </div>
-
 </div>
 
 <div class="span5">
@@ -95,10 +93,33 @@
 </br>
 
        <script type="text/javascript">
+       		function aaChange() {
+       			var ids = "";
+				for (var i = 0; i < aaselects.length; ++i) {
+					ids += "&as=" + aaselects[i].options[aaselects[i].selectedIndex].value;
+				}
+				ids = "?" + ids.substring(1, ids.length);
+				jQuery('#structimg').attr('src',"/tool/structure/" + ids);
+       		}
+       		function bindAaChange() {
+   				aaselects.off('change');
+   				jQuery('#myForm tbody .delete-row').off('click', aaRemove);
+   				jQuery('#myForm tbody .delete-row').click(aaRemove);
+   				aaselects = jQuery('#myForm select');
+   				aaselects.change(aaChange)
+   			}
+   			function aaRemove() {
+   				bindAaChange();
+   				aaChange();
+   			}
            jQuery(function() {
-               jQuery('#myForm tbody tr').formset();
+               jQuery('#myForm tbody tr').formset({addCssClass: 'add-row', deleteCssClass: 'delete-row'});
      		   jQuery('#myForm tbody tr td> select > option').filter(':first').html('');
-               jQuery('#myForm tbody tr td').children().select2({placeholder: "Choose amino"});
+               //jQuery('#myForm tbody tr td').children().select2({placeholder: "Choose amino"});
+	           window['aaselects'] = jQuery('#myForm select');
+	           jQuery('#myForm tbody .add-row').click(bindAaChange);
+	           jQuery('#myForm tbody .delete-row').click(function() {bindAaChange(); aaChange();});
+	           bindAaChange();
            })
        </script>
 

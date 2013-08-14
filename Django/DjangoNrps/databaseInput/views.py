@@ -27,9 +27,9 @@ class PfamView(CreateView):
 			originForm = OriginForm(request.POST, prefix = 'origin')
 			if originForm.is_valid():
 				originForm.save()
-				return HttpResponseRedirect("http://www.google.com")
+				return HttpResponseRedirect(reverse_lazy("pfam"))
 			else:
-				return HttpResponseRedirect("http://www.yahoo.com")
+				return HttpResponseRedirect(reverse_lazy("pfam"))
 		else:
 			return super(PfamView, self).post(request, *args, **kwargs)
 
