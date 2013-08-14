@@ -99,7 +99,7 @@
 					ids += "&as=" + aaselects[i].options[aaselects[i].selectedIndex].value;
 				}
 				ids = "?" + ids.substring(1, ids.length);
-				jQuery('#structimg').attr('src',"/tool/structure/" + ids);
+				jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
        		}
        		function bindAaChange() {
    				aaselects.off('change');
