@@ -1,0 +1,170 @@
+<html>
+	<head>
+		<title>Browser title</title>
+		<link rel="stylesheet" type="text/css" href="./css/index.css">
+		<script type="text/javascript">
+			function hide_show_menu() {
+				var main_menu = document.getElementById('main-menu');
+				var team_logo = document.getElementById('team-logo');
+				var PS = document.getElementById('PS');
+				var igem_2013 = document.getElementById('igem-2013');
+				var menu_items = document.getElementsByClassName('menu-item');
+				var center_vert = document.getElementsByClassName('center-vert');
+				var height = main_menu.offsetHeight;
+				var element = null;
+				if(height == 200){
+					main_menu.style.height = "60px";
+					main_menu.style.backgroundImage = "none";
+					team_logo.style.top = "0px";
+					PS.style.top = "30px";
+					igem_2013.style.top = "0px";
+					for (var i = 0; i < menu_items.length; i++) {
+						element = menu_items[i];
+						element.style.display = "none";
+					}
+					for (var i = 0; i < center_vert.length; i++) {
+						element = center_vert[i];
+						element.style.top = "22px";
+					}
+				} else {
+					main_menu.style.height = "200px";
+					main_menu.style.backgroundImage = "url(./png/Imagemap_Menue_schrift_angepasst.jpg)";
+					team_logo.style.top = "135px";
+					PS.style.top = "165px";
+					igem_2013.style.top = "135px";
+					for (var i = 0; i < menu_items.length; i++) {
+						element = menu_items[i];
+						element.style.display = "block";
+					}
+					for (var i = 0; i < center_vert.length; i++) {
+						element = center_vert[i];
+						element.style.top = "220px";
+					}
+				}
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div id="center-wrapper">
+			
+			<div id="top-matter">
+				<div id="main-menu">
+					<div id="menu-team" class="menu-item">
+						<a id="link-team" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>Members</li>
+							<li>Advisors</li>
+							<li>Supervisors</li>
+						</ul>
+					</div>
+					<div id="menu-project" class="menu-item">
+						<a id="link-project" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>Module shuffling - Tyrocidine</li>
+							<li>Domain shufling - Indigoidine</li>
+							<li>Easy recycling - Delftibactin</li>
+						</ul>
+					</div>
+					<div id="menu-modelling" class="menu-item">
+						<a id="link-modelling" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>iGEM 42</li>
+							<li>NRPS designer</li>
+						</ul>
+					</div>
+					<div id="menu-parts" class="menu-item">
+						<a id="link-parts" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>Domains</li>
+							<li>Modules</li>
+							<li>Novel NRPS</li>
+						</ul>
+					</div>
+					<div id="menu-notebook" class="menu-item">
+						<a id="link-notebook" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>Indigoidine</li>
+							<li>Delftibactin</li>
+							<li>Tyrocidine</li>
+							<li>Programming</li>
+						</ul>
+					</div>
+					<div id="menu-human" class="menu-item">
+						<a id="link-human" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>Panel discussion</li>
+							<li>Cooperation</li>
+							<li>Art and Science</li>
+						</ul>
+					</div>
+					<div id="menu-safety" class="menu-item">
+						<a id="link-safety" class="menu-link">&nbsp;</a>
+						<ul>
+							<li>General issues</li>
+							<li>D. acidovorans</li>
+						</ul>
+					</div>
+					<div class="visualClear"></div>
+					<img id="team-logo" src="./png/logo.png" alt="team-logo" width="60" height="60"></img>
+					<h2 id="PS">PHILOSOPHER'S STONE</h2>
+					<a href="http://2013.igem.org/Main_Page"><img id="igem-2013" src="./png/wiki.png" alt="igem-2013" width="72" height="60"></img></a>
+				</div>
+				<div id="top-separator">
+					put current navigation here
+					<input type="button" value="hide/show menu" onclick="hide_show_menu()"/>
+				</div>
+			</div>
+			
+			<div id="main" class="center-vert">
+				<div id="navigation-bar" class="content-hori">
+					Navigation
+					buttons
+				</div>
+				<div id="main-content" class="content-hori">
+					{% extends "base.html" %}
+{% block content %}
+<style class="text/css">
+</style>
+
+ <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
+  <div class="">
+  
+    <p>Please choose an organism to express your non-ribosomal peptide! 
+	<form action="submit.php">
+	  <select name="organisms" size="1">
+	  {% for origin in object_list %}
+	    <option value={{origin.source}}>{{origin.species}}</option>
+	  {% endfor %}
+	  </select>
+	</form><br>Please select an amino acid you want to integrate into your peptide!
+    </p>
+    
+    <form action="">
+	<p>
+	  <input type="radio" name="conformation">L<br>
+	  <input type="radio" name="conformation">D<br>
+	</p>
+    </form>
+      
+  </div>
+  
+  <div align="right">
+      <p align="right">
+	This text will lead you through this website.............
+      </p>
+  </div>
+
+{% endblock %}
+					
+				</div>
+			</div>
+			
+			<div id="bottom-matter" class="center-vert">
+				Sponsored by Julia
+			</div>
+			
+		</div>
+	</body>
+	
+</html>
