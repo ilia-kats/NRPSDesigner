@@ -229,5 +229,9 @@ ul.errorlist li {
 }
 
 .chosenWrapper * {
-	width:50%;
+	width:100%;
+}
+
+#originChosenWrapper * {
+	data-placeholder: "Select existing origin"
 }

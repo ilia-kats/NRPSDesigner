@@ -68,6 +68,10 @@
      <script>
 jQuery(function() {
 jQuery( "#tabs" ).tabs();
+})
+
+jQuery(function() {
+jQuery( document ).tooltip();
 });
 
 jQuery(function() {
@@ -107,7 +111,7 @@ var spinner;
     };
 
       function fillBox(data){
-      mySeq = JSON.stringify(data);
+      mySeq = data.graphic
       generate(mySeq);
       spinner.stop();
     }
@@ -124,22 +128,46 @@ var spinner;
 </ul>
 
  <div id="tabs-1">
+ <div class="row">
+ <div class="span3">
      <div class="fieldWrapper">
         {{ form.origin.errors }}
-        <label for="id_subject">Origin:<br/> </label>
-        <div class = "chosenWrapper">
+        <label for="id_subject"></label>
+        <div id="originChosenWrapper" class = "chosenWrapper">
         {{ form.origin }}
         </div>
     </div>
+  </div>
 
-    <p> if your origin not included above, then use below form to create new one </p>
- <form action="/contact/" method="post">{% csrf_token %}
+<div class="span1">
+<p class="text-center"> or</p>
+</div>
+  <div class="span3">
+
+    <a href="#newOriginModal" role="button" class="btn btn-large" data-toggle="modal">    Add new Origin</a>
+
+
+<!-- Modal -->
+<div id="newOriginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<h3 id="myModalLabel">Add new origin</h3>
+</div>
+<div class="modal-body">
+<form action="" method="post">{% csrf_token %}
 {{ originForm.as_p }}
 
-<input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/>
+</div>
+<div class="modal-footer">
+<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+<input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/></div>
+</div>
+ 
 </form>
 
  </div>
+</div>
+</div>
 
  <div id="tabs-2">
     {{ form.non_field_errors }}
@@ -203,7 +231,7 @@ var spinner;
       <div class="fieldWrapper">
         {{ domainForm.substrateSpecificity.errors }}
         <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
-                  <div class = "chosenWrapper">
+                  <div class = "chosenWrapper multipleChosenWrapper">
 
         {{ domainForm.substrateSpecificity }}
         </div>
@@ -325,7 +353,11 @@ var spinner;
 
 
 jQuery(document).ready(function() {
-  jQuery('.chosenWrapper').children().select2();});
+  jQuery('#originChosenWrapper > select > option').filter(':first').html('');
+  jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
+  jQuery('.multipleChosenWrapper').children().select2();
+
+  });
 </script>
 
 {% endblock %}

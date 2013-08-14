@@ -53,5 +53,5 @@ def sauceFunc(request, sequence):
 	#	pfamDomains.append(match.attributes["id"].value)
 	pfamResultRequest = requests.get(pfamGraphicUrl)
 	#pdb.set_trace()
-	return pfamResultRequest.text[1:-1]
+	return simplejson.dumps({'graphic': pfamResultRequest.text[1:-1]})
 	

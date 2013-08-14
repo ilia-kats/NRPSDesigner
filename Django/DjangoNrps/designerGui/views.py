@@ -1,6 +1,7 @@
 from designerGui.models import Species
 from databaseInput.models import Substrate
-from django.views.generic import ListView
+from databaseInput.forms import SubstrateFormSet
+from django.views.generic import ListView, CreateView
 
 
 class SpeciesListView(ListView):
@@ -10,6 +11,6 @@ class SpeciesListView(ListView):
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
-        context['substrates'] = Substrate.objects.all()
+        context['myFormSet'] = SubstrateFormSet()
         return context
   

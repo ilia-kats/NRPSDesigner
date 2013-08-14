@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load staticfiles %}
 
 <script type="text/javascript">
 	function AddSubstrate()
@@ -10,29 +11,25 @@
 		)
 	 };
 </script>
-
+<script src="{% static "js/jquery.formset.js" %}"></script>
 
 <style class="text/css">
 
 	.box_left
-	{
-		width:60%;
+	{	
 		padding:10px;
 		border:1px solid gray;
 		margin:0px;
 		border-top-left-radius: 10px;
-		border-top-right-radius: 10px;
+		border-top-right-radius: 10px;	
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
 	}
 	
 	.box_right
 	{
-		width:36%;
-		position:absolute;
-		right:60px;
-		top:200px;
-		width:30%;
+
+		
 		padding:10px;
 		border:1px solid gray;
 		margin:0px;
@@ -44,6 +41,8 @@
 </style>
 
 <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
+<div class="row">
+<div class="span7">
 <div class="box_left">
   
 	<p>Please choose an organism to express your non-ribosomal peptide!</p>
@@ -55,36 +54,48 @@
 			</select>
 		</form>
 		<br>
-		<div id="monomer">
-		<p>Please select amino acids you want to integrate into your peptide!</p>
-		
-			<form action="">
-				<select name="amino_acids" size="1">
-					{% for substrate in substrates %}
-						<option value={{substrate.name}}>{{substrate.name}}</option>
-					{% endfor %}				
-				</select>
-			</form>
+
+<p> Please choose amino acids you want to integrate into your peptide! </p>
+<form id="myForm" method="post" action="">
+           <table border="0" cellpadding="0" cellspacing="0">
+               <tbody>
+                   {% for form in myFormSet.forms %}
+                   <tr>
+                      <td>
+
+                      {{ form.substrate }}
+                    
+                      </td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+           {{ formset.management_form }}
+       </form>
+
+		     
+
     
-			<form action="">
-				<p>
-					<input type="radio" name="conformation">L<br>
-					<input type="radio" name="conformation">D<br>
-				</p>
-			</form>
-			<button id="monomerButton"> Add a monomer </button>
+			
 		</div>
 </div>
 
-<script>
-	 jQuery( "#monomerButton" ).bind( "click", AddSubstrate);
 
-</script>
 
+<div class="span3">
  <div class="box_right">
 	<p>
 		This text will lead you through this website.............
 	</p>
 </div>
+</div>
+</div>
 
+       <script type="text/javascript">
+           jQuery(function() {
+               jQuery('#myForm tbody tr').formset();
+     		   jQuery('#myForm tbody tr td> select > option').filter(':first').html('');
+               jQuery('#myForm tbody tr td').children().select2({placeholder: "Choose amino"});
+           })
+       </script>
 {% endblock %}

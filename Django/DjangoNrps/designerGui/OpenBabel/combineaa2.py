@@ -17,7 +17,7 @@ natom = mol.GetAtom(mollist[0][0])
 
 for aa in sys.argv[2:]:
     mol2 = ob.OBMol()
-    conv.ReadFile(mol2, aa)
+    conv.ReadString(mol2, aa)
     pattern.Match(mol2)
     mollist = pattern.GetUMapList()
 
@@ -41,4 +41,4 @@ for aa in sys.argv[2:]:
     natom = fnatom
 
 builder.Build(mol)
-conv.WriteFile(mol, "test.svg") 
+return conv.WriteFile(mol)
