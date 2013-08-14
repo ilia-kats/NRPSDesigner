@@ -44,7 +44,7 @@ class Domain(models.Model):
     cds = models.ForeignKey('Cds')
     domainType = models.ForeignKey('Type')
     substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
-    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')), blank=True, null=True)
+    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('None','None')), default='None')
     description = models.TextField()
     pfamLinkerStart = models.IntegerField()
     pfamLinkerStop = models.IntegerField()
@@ -65,7 +65,16 @@ class Substrate(models.Model):
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')))
     structure = models.TextField()
     linkout =  generic.GenericRelation('Linkout')
-    
+    enantiomer = models.ForeignKey('self', blank=True, null=True)
+    modification = models.ManyToManyField('Modification', blank=True, null=True)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
+
+    def __unicode__(self):
+        return self.name
+
+class Modification(models.Model):
+    name = models.CharField(max_length=100)
+    domain =  models.ForeignKey('Domain', blank=True, null=True, related_name='modificationAdded')
 
     def __unicode__(self):
         return self.name
