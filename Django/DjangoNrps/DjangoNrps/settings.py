@@ -38,10 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'databaseInput',
-    'django_evolution',
     'dajaxice',
     'registration',
     'designerGui',
+    'django_evolution'
 )
 
 MIDDLEWARE_CLASSES = (

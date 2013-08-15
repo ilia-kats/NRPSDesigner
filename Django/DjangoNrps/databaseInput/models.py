@@ -74,7 +74,7 @@ class Substrate(models.Model):
 
 class Modification(models.Model):
     name = models.CharField(max_length=100)
-    domain =  models.ForeignKey('Domain', blank=True, null=True, related_name='modificationAdded')
+    domainType =  models.ForeignKey('Type', blank=True, null=True, related_name='modificationAdded')
 
     def __unicode__(self):
         return self.name
