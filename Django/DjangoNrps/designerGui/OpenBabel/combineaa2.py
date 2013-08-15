@@ -23,6 +23,7 @@ conv.ReadFile(mol, sys.argv[1])
 pattern.Match(mol)
 mollist = pattern.GetUMapList()[0]
 natom = mol.GetAtom(mollist[0])
+firstoatom = mol.GetAtom(mollist[4])
 makeResidue(mol, 0, mollist)
 
 i = 1
@@ -51,7 +52,12 @@ for aa in sys.argv[2:]:
     natom = fnatom
     i += 1
 
+oidx = firstoatom.GetIdx()
+nidx =  natom.GetIdx()
 builder.Build(mol)
+oatom = mol.GetAtom(oidx)
+natom = mol.GetAtom(nidx)
+
 for res in ob.OBResidueIter(mol):
     if res.GetNum() % 2 > 0:
         color = "red"
@@ -65,5 +71,17 @@ for res in ob.OBResidueIter(mol):
             bond.CloneData(data)
 mol.DeleteHydrogens()
 #mol.AddHydrogens()
+
+gen2d = ob.OBOp.FindType("gen2d")
+gen2d.Do(mol)
+
+print "x=%f; y=%f; z=%f" % (oatom.GetX(), oatom.GetY(), oatom.GetZ())
+print "x=%f; y=%f; z=%f" % (natom.GetX(), natom.GetY(), natom.GetZ())
+if (oatom.GetX() > natom.GetX()):
+    mol.Rotate(ob.double_array([-1, 0, 0,
+                                0, 1, 0,
+                                0, 0, -1]))
+print "x=%f; y=%f; z=%f" % (oatom.GetX(), oatom.GetY(), oatom.GetZ())
+print "x=%f; y=%f; z=%f" % (natom.GetX(), natom.GetY(), natom.GetZ())
 
 conv.WriteFile(mol, "test.svg")

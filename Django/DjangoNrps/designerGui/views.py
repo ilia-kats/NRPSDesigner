@@ -38,6 +38,7 @@ def make_structure(request):
     pattern.Match(mol)
     mollist = pattern.GetUMapList()[0]
     natom = mol.GetAtom(mollist[0])
+    firstoatom = mol.GetAtom(mollist[4])
     makeResidue(mol, 0, mollist)
 
     i = 1
@@ -66,7 +67,11 @@ def make_structure(request):
         natom = fnatom
         i += 1
 
+    oidx = firstoatom.GetIdx()
+    nidx =  natom.GetIdx()
     builder.Build(mol)
+    oatom = mol.GetAtom(oidx)
+    natom = mol.GetAtom(nidx)
     for res in ob.OBResidueIter(mol):
         for atom in ob.OBResidueAtomIter(res):
             for bond in ob.OBAtomBondIter(atom):
@@ -75,6 +80,12 @@ def make_structure(request):
                 data.SetValue(color)
                 bond.CloneData(data)
     mol.DeleteHydrogens()
+    gen2d = ob.OBOp.FindType("gen2d")
+    gen2d.Do(mol)
+    if (oatom.GetX() > natom.GetX()):
+        mol.Rotate(ob.double_array([-1, 0, 0,
+                                    0, 1, 0,
+                                    0, 0, -1]))
     svg = conv.WriteString(mol)
     return HttpResponse(svg, mimetype="image/svg+xml")
 
