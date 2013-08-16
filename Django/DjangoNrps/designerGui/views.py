@@ -14,6 +14,15 @@ class SpeciesListView(ListView):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
         context['myFormSet'] = SubstrateFormSet()
+        
+        aas = Substrate.objects.filter(chirality='L')
+        names = {}
+        for aa in aas:
+            if aa.name[0:2] == 'L-':
+                names[aa.pk] = aa.name[2:]
+            else:
+                names[aa.pk] = aa.name
+        context['substrates'] = names
         return context
   
 def make_structure(request):
@@ -58,4 +67,3 @@ def make_structure(request):
     builder.Build(mol)
     svg = conv.WriteString(mol)
     return HttpResponse(svg, mimetype="image/svg+xml")
-

@@ -4,13 +4,13 @@
 {% load staticfiles %}
 
 <script type="text/javascript">
-    var button_value = 1;
     function AddSubstrate()
     {
-	 jQuery("#monomer").append(
-		button_value += 1; ;
-		)
-	 };
+        if(document.getElementById("Add").onclick == true)
+            {
+                
+            }
+    };
 </script>
 <script src="{% static "js/jquery.formset.js" %}"></script>
 
@@ -37,59 +37,95 @@
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
 	}
+	
+	.pop-up_box1
+	.pop-up_box2
+	.pop-up_box3
+	{
+        background-clip: padding-box;
+        background-color: #E4E4E4;
+        background-image: -moz-linear-gradient(center top , #F4F4F4 20%, #F0F0F0 50%, #E8E8E8 52%, #EEEEEE 100%);
+        border: 1px solid #AAAAAA;
+        border-radius: 3px 3px 3px 3px;
+        box-shadow: 0 0 2px #FFFFFF inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+        color: #333333;
+        cursor: default;
+        line-height: 13px;
+        margin: 3px 0 3px 5px;
+        padding: 3px 5px 3px 18px;
+        position: relative;
+	}
+	
+	.pop-up_box1 
+	.pop-up_box2 
+	{
+        float: left;
+        list-style: none outside none;
+    }
+    
+    .pos_right
+    {
+        position:relative;
+        right:-20px;
+    }
 </style>
 
 <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
+</br>
 <div class="row">
+<div class="span5">
+ <div class="box_left">
+    <p>
+        This text will lead you through this website.............Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.
+    </p>
+</div>
+</div>
+
 <div class="span7">
-<div class="box_left">
+<div class="box_right">
   
 	<p>Please choose an organism to express your non-ribosomal peptide!</p>
-    <form action="submit.php">
+    <form action="">
         <select name="organisms" size="1">
 			{% for origin in object_list %}
 				<option value={{origin.source}}>{{origin.species}}</option>
-			{% endfor %}				
-			</select>
-		</form>
-		<br>
+			{% endfor %}
+		</select>
+	</form>
+</div>
 
+</br>
+<div class="box_right">
 <p> Please choose amino acids you want to integrate into your peptide! </p>
+
 <form id="myForm" method="post" action="">
            <table border="0" cellpadding="0" cellspacing="0">
                <tbody>
-                   {% for form in myFormSet.forms %}
-                   <tr>
-                      <td>
-
-                      {{ form.substrate }}
-                    
-                      </td>
-                   </tr>
+                   
+                   <select id="#e23">
+                   {% for key, aa in substrates.items %}
+                        <option value="{{ key }}">{{ aa }}</option>
                    {% endfor %}
+                        <input type="button" id="Add" class="btn pos_right" onclick="AddSubstrate();" value="Add monomer"/>
+                   </select>
+                   
                </tbody>
            </table>
-           {{ myFormSet.management_form }}
-       </form>
+           
+</form>
+      
 </div>
 </br>
 
-<div class="box_left">
-       <p>The peptide you're about to create would look like this: </p>
+<div class="box_right">
+       <p>The peptide you're about to create will look like this: </p>
         </br>
     <img src="{% url 'Structure' %}?as=1&as=2&as=5" id="structimg"></br></br>
     <button class="btn" value="submit">Submit</button>
 </div>
 </div>
 
-<div class="span5">
- <div class="box_right">
-	<p>
-		This text will lead you through this website.............Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.
-    </p>
-</div>
-</div>
-</div>
+
 </br>
 
        <script type="text/javascript">
@@ -113,14 +149,24 @@
    				aaChange();
    			}
            jQuery(function() {
-               jQuery('#myForm tbody tr').formset({addCssClass: 'add-row', deleteCssClass: 'delete-row'});
-     		   jQuery('#myForm tbody tr td> select > option').filter(':first').html('');
-               //jQuery('#myForm tbody tr td').children().select2({placeholder: "Choose amino"});
 	           window['aaselects'] = jQuery('#myForm select');
 	           jQuery('#myForm tbody .add-row').click(bindAaChange);
 	           jQuery('#myForm tbody .delete-row').click(function() {bindAaChange(); aaChange();});
 	           bindAaChange();
+
            })
+       </script>
+       <script type="text/javascript">
+
+
+
+            jQuery(document).ready(function() {
+            jQuery('#originChosenWrapper > select > option').filter(':first').html('');
+            jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
+            jQuery('.multipleChosenWrapper').children().select2();
+            jQuery('#e23').select2();
+
+            });
        </script>
 
 {% endblock %}
