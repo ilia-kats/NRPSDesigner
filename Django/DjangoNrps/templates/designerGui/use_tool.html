@@ -2,17 +2,96 @@
 
 {% block content %}
 {% load staticfiles %}
+<script src="{% static 'js/jquery.formset.js' %}"></script>
 
 <script type="text/javascript">
-    function AddSubstrate()
+    function getMonomers()
     {
-        if(document.getElementById("Add").onclick == true)
-            {
-                
-            }
-    };
+        var ids = Array();
+        var selected = jQuery('#selected_monomers :button[name="aa"]');
+        for (var i = 0; i < selected.length; ++i) {
+            ids[i] = jQuery(selected[i]).attr("value");
+        }
+        return ids;
+    }
+    function editMonomer(e)
+    {
+        jQuery('#e23').select2("val", jQuery(e.target).attr("value"));
+        jQuery("#e23").data("currMonomer", e.target);
+    }
+    function applyMonomer(e)
+    {
+        var btn = jQuery(jQuery("#e23").data("currMonomer"));
+        var select = jQuery('#e23');
+        btn.button("option", "label", select.select2("data").text);
+        btn.attr("value", select.select2("val"));
+
+        var ids = "?as=" + getMonomers().join("&as=");
+        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+    }
+    function removeMonomer(e)
+    {
+        jQuery(e.target).parent().remove();
+    }
+    function addMonomer(e)
+    {
+        var dflt = jQuery("#e23")[0].options[0];
+        var close = jQuery("<button>", {html: 'delete'});
+        var aa = jQuery('<button name="aa" value="' + dflt.value + '">' + dflt.text + '</button>');
+        var div = jQuery('<div>').append(close).append(aa);
+        close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
+        aa.button().click(editMonomer);
+        div.buttonset();
+        jQuery("#selected_monomers").append(div);
+        aa.click();
+        applyMonomer();
+    }
+//     function AddSubstrate()
+//     {
+//         if(document.getElementById("Add").onclick == true)
+//             {
+//
+//             }
+//     }
+//     function aaChange()
+//     {
+//         var ids = "";
+//         for (var i = 0; i < aaselects.length; ++i) {
+//             ids += "&as=" + aaselects[i].options[aaselects[i].selectedIndex].value;
+//         }
+//         ids = "?" + ids.substring(1, ids.length);
+//         jQuery('#structimg').attr('src',"/tool/structure/" + ids);
+//     }
+//     function bindAaChange()
+//     {
+//         aaselects.off('change');
+//         jQuery('#myForm tbody .delete-row').off('click', aaRemove);
+//         jQuery('#myForm tbody .delete-row').click(aaRemove);
+//         aaselects = jQuery('#myForm select');
+//         aaselects.change(aaChange)
+//     }
+//     function aaRemove()
+//     {
+//         bindAaChange();
+//         aaChange();
+//     }
+    jQuery(document).ready(function() {
+            jQuery("#organisms").select2();
+            jQuery("#e23").select2();
+            jQuery("#monomer_add").button().click(addMonomer);
+            jQuery("#monomer_apply").button().click(applyMonomer);
+            jQuery("#baa1del").button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer).next().button().click(editMonomer).parent().buttonset();
+//             window['aaselects'] = jQuery('#myForm select');
+//             jQuery('#myForm tbody .add-row').click(bindAaChange);
+//             jQuery('#myForm tbody .delete-row').click(function() {bindAaChange(); aaChange();});
+//             bindAaChange();
+            /*jQuery('#originChosenWrapper > select > option').filter(':first').html('');
+            jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
+            jQuery('.multipleChosenWrapper').children().select2();*/
+
+        });
 </script>
-<script src="{% static "js/jquery.formset.js" %}"></script>
+
 
 <style class="text/css">
 
@@ -86,7 +165,7 @@
   
 	<p>Please choose an organism to express your non-ribosomal peptide!</p>
     <form action="">
-        <select name="organisms" size="1">
+        <select id="organisms" size="1">
 			{% for origin in object_list %}
 				<option value={{origin.source}}>{{origin.species}}</option>
 			{% endfor %}
@@ -96,26 +175,20 @@
 
 </br>
 <div class="box_right">
-<p> Please choose amino acids you want to integrate into your peptide! </p>
+    <p> Please choose amino acids you want to integrate into your peptide! </p>
 
-<form id="myForm" method="post" action="">
-           <table border="0" cellpadding="0" cellspacing="0">
-               <tbody>
-                   
-                   <select id="#e23">
-                   {% for key, aa in substrates.items %}
-                        <option value="{{ key }}">{{ aa }}</option>
-                   {% endfor %}
-                        <input type="button" id="Add" class="btn pos_right" onclick="AddSubstrate();" value="Add monomer"/>
-                   </select>
-                   
-               </tbody>
-           </table>
-           
-</form>
-      
+    <select id="e23">
+        {% for key, aa in substrates.items %}
+            <option value="{{ key }}">{{ aa }}</option>
+        {% endfor %}
+    </select>
+    <button id="monomer_apply">Apply</button>
+
+    <div id="selected_monomers">
+    </div>
+    <button id="monomer_add">Add monomer</button>
 </div>
-</br>
+<br>
 
 <div class="box_right">
        <p>The peptide you're about to create will look like this: </p>
@@ -124,49 +197,5 @@
     <button class="btn" value="submit">Submit</button>
 </div>
 </div>
-
-
-</br>
-
-       <script type="text/javascript">
-       		function aaChange() {
-       			var ids = "";
-				for (var i = 0; i < aaselects.length; ++i) {
-					ids += "&as=" + aaselects[i].options[aaselects[i].selectedIndex].value;
-				}
-				ids = "?" + ids.substring(1, ids.length);
-				jQuery('#structimg').attr('src',"/tool/structure/" + ids);
-       		}
-       		function bindAaChange() {
-   				aaselects.off('change');
-   				jQuery('#myForm tbody .delete-row').off('click', aaRemove);
-   				jQuery('#myForm tbody .delete-row').click(aaRemove);
-   				aaselects = jQuery('#myForm select');
-   				aaselects.change(aaChange)
-   			}
-   			function aaRemove() {
-   				bindAaChange();
-   				aaChange();
-   			}
-           jQuery(function() {
-	           window['aaselects'] = jQuery('#myForm select');
-	           jQuery('#myForm tbody .add-row').click(bindAaChange);
-	           jQuery('#myForm tbody .delete-row').click(function() {bindAaChange(); aaChange();});
-	           bindAaChange();
-
-           })
-       </script>
-       <script type="text/javascript">
-
-
-
-            jQuery(document).ready(function() {
-            jQuery('#originChosenWrapper > select > option').filter(':first').html('');
-            jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
-            jQuery('.multipleChosenWrapper').children().select2();
-            jQuery('#e23').select2();
-
-            });
-       </script>
 
 {% endblock %}
