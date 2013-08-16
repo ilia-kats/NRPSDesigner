@@ -14,6 +14,11 @@
         }
         return ids;
     }
+    function makeStruct()
+    {
+        var ids = "?as=" + getMonomers().join("&as=");
+        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+    }
     function editMonomer(e)
     {
         jQuery('#e23').select2("val", jQuery(e.target).attr("value"));
@@ -26,19 +31,19 @@
         btn.button("option", "label", select.select2("data").text);
         btn.attr("value", select.select2("val"));
 
-        var ids = "?as=" + getMonomers().join("&as=");
-        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+        makeStruct();
     }
     function removeMonomer(e)
     {
         jQuery(e.target).parent().remove();
+        makeStruct();
     }
     function addMonomer(e)
     {
         var dflt = jQuery("#e23")[0].options[0];
         var close = jQuery("<button>", {html: 'delete'});
         var aa = jQuery('<button name="aa" value="' + dflt.value + '">' + dflt.text + '</button>');
-        var div = jQuery('<div>').append(close).append(aa);
+        var div = jQuery('<span>').append(close).append(aa);
         close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
         aa.button().click(editMonomer);
         div.buttonset();
@@ -184,8 +189,7 @@
     </select>
     <button id="monomer_apply">Apply</button>
 
-    <div id="selected_monomers">
-    </div>
+    <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
     <button id="monomer_add">Add monomer</button>
 </div>
 <br>
