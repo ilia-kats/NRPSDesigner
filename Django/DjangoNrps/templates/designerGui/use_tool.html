@@ -5,6 +5,11 @@
 <script src="{% static 'js/jquery.formset.js' %}"></script>
 
 <script type="text/javascript">
+    var monomers = [
+        {% for aa in substrates %}
+            {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did: {% firstof aa.D aa.L %}},
+        {% endfor %}
+    ];
     function getMonomers()
     {
         var ids = Array();
@@ -21,16 +26,30 @@
     }
     function editMonomer(e)
     {
-        jQuery('#e23').select2("val", jQuery(e.target).attr("value"));
+        jQuery('#e23').select2("val", jQuery(e.target).data("selectid"));
         jQuery("#e23").data("currMonomer", e.target);
+        data = jQuery('#e23').select2("data");
+        if (jQuery(e.target).attr("value") == data.lid) {
+            jQuery("#monomer_chirality_L").click();
+        } else {
+            jQuery("#monomer_chirality_D").click();
+        }
+        jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
     }
     function applyMonomer(e)
     {
         var btn = jQuery(jQuery("#e23").data("currMonomer"));
         var select = jQuery('#e23');
-        btn.button("option", "label", select.select2("data").text);
-        btn.attr("value", select.select2("val"));
+        var data = select.select2("data");
+        btn.button("option", "label", data.text);
+        if (jQuery("#monomer_chirality :checked").val() == 'L') {
+            btn.attr("value", data.lid);
+        } else {
+            btn.attr("value", data.did);
+        }
+        btn.data("selectid", data.id);
 
+        jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
         makeStruct();
     }
     function removeMonomer(e)
@@ -40,9 +59,10 @@
     }
     function addMonomer(e)
     {
-        var dflt = jQuery("#e23")[0].options[0];
+        var dflt = monomers[0];
         var close = jQuery("<button>", {html: 'delete'});
-        var aa = jQuery('<button name="aa" value="' + dflt.value + '">' + dflt.text + '</button>');
+        var aa = jQuery('<button name="aa" value="' + dflt['lid'] + '">' + dflt['text'] + '</button>');
+        aa.data("selectid", dflt.id);
         var div = jQuery('<span>').append(close).append(aa);
         close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
         aa.button().click(editMonomer);
@@ -51,49 +71,12 @@
         aa.click();
         applyMonomer();
     }
-//     function AddSubstrate()
-//     {
-//         if(document.getElementById("Add").onclick == true)
-//             {
-//
-//             }
-//     }
-//     function aaChange()
-//     {
-//         var ids = "";
-//         for (var i = 0; i < aaselects.length; ++i) {
-//             ids += "&as=" + aaselects[i].options[aaselects[i].selectedIndex].value;
-//         }
-//         ids = "?" + ids.substring(1, ids.length);
-//         jQuery('#structimg').attr('src',"/tool/structure/" + ids);
-//     }
-//     function bindAaChange()
-//     {
-//         aaselects.off('change');
-//         jQuery('#myForm tbody .delete-row').off('click', aaRemove);
-//         jQuery('#myForm tbody .delete-row').click(aaRemove);
-//         aaselects = jQuery('#myForm select');
-//         aaselects.change(aaChange)
-//     }
-//     function aaRemove()
-//     {
-//         bindAaChange();
-//         aaChange();
-//     }
+
     jQuery(document).ready(function() {
             jQuery("#organisms").select2();
-            jQuery("#e23").select2();
+            jQuery("#e23").select2({data: monomers}).change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer);
-            jQuery("#monomer_apply").button().click(applyMonomer);
-            jQuery("#baa1del").button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer).next().button().click(editMonomer).parent().buttonset();
-//             window['aaselects'] = jQuery('#myForm select');
-//             jQuery('#myForm tbody .add-row').click(bindAaChange);
-//             jQuery('#myForm tbody .delete-row').click(function() {bindAaChange(); aaChange();});
-//             bindAaChange();
-            /*jQuery('#originChosenWrapper > select > option').filter(':first').html('');
-            jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
-            jQuery('.multipleChosenWrapper').children().select2();*/
-
+            jQuery("#monomer_chirality").buttonset().change(applyMonomer);
         });
 </script>
 
@@ -182,12 +165,12 @@
 <div class="box_right">
     <p> Please choose amino acids you want to integrate into your peptide! </p>
 
-    <select id="e23">
-        {% for key, aa in substrates.items %}
-            <option value="{{ key }}">{{ aa }}</option>
-        {% endfor %}
-    </select>
-    <button id="monomer_apply">Apply</button>
+    <div id="e23" style="width:100%">
+    </div>
+    <div id="monomer_chirality">
+        <input type="radio" name="chirality" value="L" id="monomer_chirality_L" checked="checked"/><label for="monomer_chirality_L">L-configuration</label>
+        <input type="radio" name="chirality" value="D" id="monomer_chirality_D"/><label for="monomer_chirality_D">D-configuration</label>
+    </div>
 
     <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
     <button id="monomer_add">Add monomer</button>

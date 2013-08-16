@@ -15,14 +15,19 @@ class SpeciesListView(ListView):
         context = super(SpeciesListView, self).get_context_data(**kwargs)
         context['myFormSet'] = SubstrateFormSet()
         
-        aas = Substrate.objects.filter(chirality='L')
+        aas = Substrate.objects.all()
         names = {}
         for aa in aas:
-            if aa.name[0:2] == 'L-':
-                names[aa.pk] = aa.name[2:]
+            name = aa.name
+            if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
+                name = aa.name[2:]
+            if name in names:
+                names[name][aa.chirality] = aa.pk
+                names[name]['name'] = name
             else:
-                names[aa.pk] = aa.name
-        context['substrates'] = names
+                names[name] = {aa.chirality: aa.pk, 'name': name}
+        context['substrates'] = names.values()
+        context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
         return context
   
 def make_structure(request):
