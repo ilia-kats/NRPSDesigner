@@ -10,6 +10,7 @@
             {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did: {% firstof aa.D aa.L %}},
         {% endfor %}
     ];
+    var animationDuration = 300;
     function getMonomers()
     {
         var ids = Array();
@@ -54,7 +55,8 @@
     }
     function removeMonomer(e)
     {
-        jQuery(e.target).parent().remove();
+        var monomer = jQuery(e.delegateTarget).parent();
+        monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();});
         makeStruct();
     }
     function addMonomer(e)
@@ -63,11 +65,15 @@
         var close = jQuery("<button>", {html: 'delete'});
         var aa = jQuery('<button name="aa" value="' + dflt['lid'] + '">' + dflt['text'] + '</button>');
         aa.data("selectid", dflt.id);
-        var div = jQuery('<span>').append(close).append(aa);
+        var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").append(close).append(aa);
         close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
         aa.button().click(editMonomer);
         div.buttonset();
-        jQuery("#selected_monomers").append(div);
+        div.hide();
+        var selected = jQuery("#selected_monomers");
+        selected.append(div);
+        div.fadeIn(animationDuration);
+        selected.animate({scrollLeft: selected[0].scrollWidth}, animationDuration);
         aa.click();
         applyMonomer();
     }
@@ -75,8 +81,8 @@
     jQuery(document).ready(function() {
             jQuery("#organisms").select2();
             jQuery("#e23").select2({data: monomers}).change(applyMonomer);
-            jQuery("#monomer_add").button().click(addMonomer);
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
+            jQuery("#monomer_add").button().click(addMonomer).click();
         });
 </script>
 
@@ -180,7 +186,7 @@
 <div class="box_right">
        <p>The peptide you're about to create will look like this: </p>
         </br>
-    <img src="{% url 'Structure' %}?as=1&as=2&as=5" id="structimg"></br></br>
+    <img id="structimg"></br></br>
     <button class="btn" value="submit">Submit</button>
 </div>
 </div>
