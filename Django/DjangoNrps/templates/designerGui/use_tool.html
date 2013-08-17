@@ -2,17 +2,90 @@
 
 {% block content %}
 {% load staticfiles %}
+<script src="{% static 'js/jquery.formset.js' %}"></script>
 
 <script type="text/javascript">
-    var button_value = 1;
-    function AddSubstrate()
+    var monomers = [
+        {% for aa in substrates %}
+            {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did: {% firstof aa.D aa.L %}},
+        {% endfor %}
+    ];
+    var animationDuration = 300;
+    function getMonomers()
     {
-	 jQuery("#monomer").append(
-		button_value += 1; ;
-		)
-	 };
+        var ids = Array();
+        var selected = jQuery('#selected_monomers :button[name="aa"]');
+        for (var i = 0; i < selected.length; ++i) {
+            ids[i] = jQuery(selected[i]).attr("value");
+        }
+        return ids;
+    }
+    function makeStruct()
+    {
+        var ids = "?as=" + getMonomers().join("&as=");
+        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+    }
+    function editMonomer(e)
+    {
+        jQuery('#e23').select2("val", jQuery(e.target).data("selectid"));
+        jQuery("#e23").data("currMonomer", e.target);
+        data = jQuery('#e23').select2("data");
+        if (jQuery(e.target).attr("value") == data.lid) {
+            jQuery("#monomer_chirality_L").click();
+        } else {
+            jQuery("#monomer_chirality_D").click();
+        }
+        jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
+    }
+    function applyMonomer(e)
+    {
+        var btn = jQuery(jQuery("#e23").data("currMonomer"));
+        var select = jQuery('#e23');
+        var data = select.select2("data");
+        btn.button("option", "label", data.text);
+        if (jQuery("#monomer_chirality :checked").val() == 'L') {
+            btn.attr("value", data.lid);
+        } else {
+            btn.attr("value", data.did);
+        }
+        btn.data("selectid", data.id);
+
+        jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
+        makeStruct();
+    }
+    function removeMonomer(e)
+    {
+        var monomer = jQuery(e.delegateTarget).parent();
+        monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();});
+        makeStruct();
+    }
+    function addMonomer(e)
+    {
+        var dflt = monomers[0];
+        var close = jQuery("<button>", {html: 'delete'});
+        var aa = jQuery('<button name="aa" value="' + dflt['lid'] + '">' + dflt['text'] + '</button>');
+        aa.data("selectid", dflt.id);
+        var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").append(close).append(aa);
+        close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
+        aa.button().click(editMonomer);
+        div.buttonset();
+        div.hide();
+        var selected = jQuery("#selected_monomers");
+        selected.append(div);
+        div.fadeIn(animationDuration);
+        selected.animate({scrollLeft: selected[0].scrollWidth}, animationDuration);
+        aa.click();
+        applyMonomer();
+    }
+
+    jQuery(document).ready(function() {
+            jQuery("#organisms").select2();
+            jQuery("#e23").select2({data: monomers}).change(applyMonomer);
+            jQuery("#monomer_chirality").buttonset().change(applyMonomer);
+            jQuery("#monomer_add").button().click(addMonomer).click();
+        });
 </script>
-<script src="{% static "js/jquery.formset.js" %}"></script>
+
 
 <style class="text/css">
 
@@ -37,90 +110,85 @@
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
 	}
+	
+	.pop-up_box1
+	.pop-up_box2
+	.pop-up_box3
+	{
+        background-clip: padding-box;
+        background-color: #E4E4E4;
+        background-image: -moz-linear-gradient(center top , #F4F4F4 20%, #F0F0F0 50%, #E8E8E8 52%, #EEEEEE 100%);
+        border: 1px solid #AAAAAA;
+        border-radius: 3px 3px 3px 3px;
+        box-shadow: 0 0 2px #FFFFFF inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+        color: #333333;
+        cursor: default;
+        line-height: 13px;
+        margin: 3px 0 3px 5px;
+        padding: 3px 5px 3px 18px;
+        position: relative;
+	}
+	
+	.pop-up_box1 
+	.pop-up_box2 
+	{
+        float: left;
+        list-style: none outside none;
+    }
+    
+    .pos_right
+    {
+        position:relative;
+        right:-20px;
+    }
 </style>
 
 <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
-<div class="row">
-<div class="span7">
-<div class="box_left">
-  
-	<p>Please choose an organism to express your non-ribosomal peptide!</p>
-    <form action="submit.php">
-        <select name="organisms" size="1">
-			{% for origin in object_list %}
-				<option value={{origin.source}}>{{origin.species}}</option>
-			{% endfor %}				
-			</select>
-		</form>
-		<br>
-
-<p> Please choose amino acids you want to integrate into your peptide! </p>
-<form id="myForm" method="post" action="">
-           <table border="0" cellpadding="0" cellspacing="0">
-               <tbody>
-                   {% for form in myFormSet.forms %}
-                   <tr>
-                      <td>
-
-                      {{ form.substrate }}
-                    
-                      </td>
-                   </tr>
-                   {% endfor %}
-               </tbody>
-           </table>
-           {{ myFormSet.management_form }}
-       </form>
-</div>
 </br>
-
-<div class="box_left">
-       <p>The peptide you're about to create would look like this: </p>
-        </br>
-    <img src="{% url 'Structure' %}?as=1&as=2&as=5" id="structimg" style="width:100%"></br></br>
-    <button class="btn" value="submit">Submit</button>
-</div>
-</div>
-
+<div class="row">
 <div class="span5">
- <div class="box_right">
-	<p>
-		This text will lead you through this website.............Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.
+ <div class="box_left">
+    <p>
+        This text will lead you through this website.............Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.
     </p>
 </div>
 </div>
-</div>
-</br>
 
-       <script type="text/javascript">
-       		function aaChange() {
-       			var ids = "";
-				for (var i = 0; i < aaselects.length; ++i) {
-					ids += "&as=" + aaselects[i].options[aaselects[i].selectedIndex].value;
-				}
-				ids = "?" + ids.substring(1, ids.length);
-				jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
-       		}
-       		function bindAaChange() {
-   				aaselects.off('change');
-   				jQuery('#myForm tbody .delete-row').off('click', aaRemove);
-   				jQuery('#myForm tbody .delete-row').click(aaRemove);
-   				aaselects = jQuery('#myForm select');
-   				aaselects.change(aaChange)
-   			}
-   			function aaRemove() {
-   				bindAaChange();
-   				aaChange();
-   			}
-           jQuery(function() {
-               jQuery('#myForm tbody tr').formset({addCssClass: 'add-row', deleteCssClass: 'delete-row'});
-     		   jQuery('#myForm tbody tr td> select > option').filter(':first').html('');
-               //jQuery('#myForm tbody tr td').children().select2({placeholder: "Choose amino"});
-	           window['aaselects'] = jQuery('#myForm select');
-	           jQuery('#myForm tbody .add-row').click(bindAaChange);
-	           jQuery('#myForm tbody .delete-row').click(function() {bindAaChange(); aaChange();});
-	           bindAaChange();
-           })
-       </script>
+<div class="span7">
+<div class="box_right">
+  
+	<p>Please choose an organism to express your non-ribosomal peptide!</p>
+    <form action="">
+        <select id="organisms" size="1">
+			{% for origin in object_list %}
+				<option value={{origin.source}}>{{origin.species}}</option>
+			{% endfor %}
+		</select>
+	</form>
+</div>
+
+</br>
+<div class="box_right">
+    <p> Please choose amino acids you want to integrate into your peptide! </p>
+
+    <div id="e23" style="width:100%">
+    </div>
+    <div id="monomer_chirality">
+        <input type="radio" name="chirality" value="L" id="monomer_chirality_L" checked="checked"/><label for="monomer_chirality_L">L-configuration</label>
+        <input type="radio" name="chirality" value="D" id="monomer_chirality_D"/><label for="monomer_chirality_D">D-configuration</label>
+    </div>
+
+    <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
+    <button id="monomer_add">Add monomer</button>
+</div>
+<br>
+
+<div class="box_right">
+       <p>The peptide you're about to create will look like this: </p>
+        </br>
+    <img id="structimg" style="width:100%"></br></br>
+    <button class="btn" value="submit">Submit</button>
+</div>
+</div>
 
 {% endblock %}
