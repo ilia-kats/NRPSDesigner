@@ -4,6 +4,7 @@ from databaseInput.forms import SubstrateFormSet
 from django.views.generic import ListView, CreateView
 from django.http import HttpResponse
 
+import math
 import openbabel as ob
 
 class SpeciesListView(ListView):
@@ -48,6 +49,7 @@ def make_structure(request):
     builder = ob.OBBuilder()
     conv.SetInAndOutFormats("sdf", "svg")
     conv.AddOption("d", ob.OBConversion.OUTOPTIONS)
+    conv.AddOption("b", ob.OBConversion.OUTOPTIONS, "none")
     conv.ReadString(mol, str(Substrate.objects.get(pk=int(aminoacids[0])).structure))
     pattern.Match(mol)
     mollist = pattern.GetUMapList()[0]
@@ -96,9 +98,27 @@ def make_structure(request):
     mol.DeleteHydrogens()
     gen2d = ob.OBOp.FindType("gen2d")
     gen2d.Do(mol)
-    if (oatom.GetX() > natom.GetX()):
-        mol.Rotate(ob.double_array([-1, 0, 0,
-                                    0, 1, 0,
-                                    0, 0, -1]))
+
+    opp = natom.GetY() - oatom.GetY()
+    adj = natom.GetX() - oatom.GetX()
+    angle = abs(math.atan(opp / adj))
+    if opp > 0 and adj > 0:
+        pass
+    elif opp > 0 and adj < 0:
+        angle = math.pi - angle
+    elif opp < 0 and adj < 0:
+        angle = math.pi + angle
+    elif opp < 0 and adj > 0:
+        angle = 2 * math.pi - angle
+    angle = -angle
+    mol.Rotate(ob.double_array([math.cos(angle), -math.sin(angle), 0,
+                                math.sin(angle), math.cos(angle),  0,
+                                0,               0,                1]))
     svg = conv.WriteString(mol)
+    # need to get rid of square aspect ratio
+    delstart = svg.find("width")
+    delend = svg.find("svg", delstart)
+    delend = svg.find("viewBox", delend)
+    svgend = svg.rfind("</g>")
+    svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")

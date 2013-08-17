@@ -3,6 +3,7 @@
 {% block content %}
 {% load staticfiles %}
 <script src="{% static 'js/jquery.formset.js' %}"></script>
+<script src="{% static 'js/jquery.panzoom.min.js' %}"></script>
 
 <script type="text/javascript">
     var monomers = [
@@ -14,7 +15,7 @@
     function getMonomers()
     {
         var ids = Array();
-        var selected = jQuery('#selected_monomers :button[name="aa"]');
+        var selected = jQuery('#selected_monomers :input[type="checkbox"]');
         for (var i = 0; i < selected.length; ++i) {
             ids[i] = jQuery(selected[i]).attr("value");
         }
@@ -27,9 +28,11 @@
     }
     function editMonomer(e)
     {
-        jQuery('#e23').select2("val", jQuery(e.target).data("selectid"));
-        jQuery("#e23").data("currMonomer", e.target);
-        data = jQuery('#e23').select2("data");
+        jQuery("#selected_monomers input[type=checkbox]:checked").prop("checked", false).button("refresh");
+        jQuery(e.delegateTarget).prop("checked", true).button("refresh");
+        jQuery('#e23').select2("val", jQuery(e.delegateTarget).data("selectid"));
+        jQuery("#e23").data("currMonomer", e.delegateTarget);
+        var data = jQuery('#e23').select2("data");
         if (jQuery(e.target).attr("value") == data.lid) {
             jQuery("#monomer_chirality_L").click();
         } else {
@@ -63,11 +66,14 @@
     {
         var dflt = monomers[0];
         var close = jQuery("<button>", {html: 'delete'});
-        var aa = jQuery('<button name="aa" value="' + dflt['lid'] + '">' + dflt['text'] + '</button>');
+        var id =  Math.floor((Math.random()*100)+1);
+        //var aa = jQuery('<button name="aa" value="' + dflt['lid'] + '">' + dflt['text'] + '</button>');
+        var aa = jQuery('<input type="checkbox" value="' + dflt['lid'] + '" id="' + id + '"/>');
+        var label = jQuery('<label for="' + id + '" style="margin-bottom:0px"/>'); //margin: conflict with bootstrap
         aa.data("selectid", dflt.id);
-        var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").append(close).append(aa);
+        var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").append(close).append(aa).append(label);
         close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
-        aa.button().click(editMonomer);
+        aa.button({label: dflt['text']}).click(editMonomer);
         div.buttonset();
         div.hide();
         var selected = jQuery("#selected_monomers");
@@ -79,10 +85,16 @@
     }
 
     jQuery(document).ready(function() {
+            var zoomMin = .1;
+            var zoomMax = 5;
+            var zoomStep = .1;
             jQuery("#organisms").select2();
             jQuery("#e23").select2({data: monomers}).change(applyMonomer);
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
+            jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax});
+            jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("zoom", ui.value);}});
+            jQuery("#structimg").load(function(){jQuery("#structzoom").height(jQuery("#structimg").height());});
         });
 </script>
 
@@ -145,7 +157,7 @@
 
 <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
 </br>
-<div class="row">
+<div class="row-fluid">
 <div class="span5">
  <div class="box_left">
     <p>
@@ -185,8 +197,10 @@
 
 <div class="box_right">
        <p>The peptide you're about to create will look like this: </p>
-        </br>
-    <img id="structimg" style="width:100%"></br></br>
+        <div id="structzoom" style="float:left;"></div>
+        <div>
+            <img id="structimg" style="width:100%">
+        </div><br/>
     <button class="btn" value="submit">Submit</button>
 </div>
 </div>

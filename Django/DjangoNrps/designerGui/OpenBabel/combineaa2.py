@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 import sys
+import math
 import openbabel as ob
 
 def makeResidue(mol, idx, aaatoms):
@@ -18,6 +19,7 @@ pattern.Init("[NX3][$([CX4H1]([*])),$([CX4H2])][CX3](=[OX1])[OX2]")
 builder = ob.OBBuilder()
 conv.SetInAndOutFormats("sdf", "svg")
 conv.AddOption("d", ob.OBConversion.OUTOPTIONS)
+conv.AddOption("b", ob.OBConversion.OUTOPTIONS, "none")
 conv.ReadFile(mol, sys.argv[1])
 
 pattern.Match(mol)
@@ -74,14 +76,33 @@ mol.DeleteHydrogens()
 
 gen2d = ob.OBOp.FindType("gen2d")
 gen2d.Do(mol)
-
-print "x=%f; y=%f; z=%f" % (oatom.GetX(), oatom.GetY(), oatom.GetZ())
-print "x=%f; y=%f; z=%f" % (natom.GetX(), natom.GetY(), natom.GetZ())
-if (oatom.GetX() > natom.GetX()):
-    mol.Rotate(ob.double_array([-1, 0, 0,
-                                0, 1, 0,
-                                0, 0, -1]))
 print "x=%f; y=%f; z=%f" % (oatom.GetX(), oatom.GetY(), oatom.GetZ())
 print "x=%f; y=%f; z=%f" % (natom.GetX(), natom.GetY(), natom.GetZ())
 
-conv.WriteFile(mol, "test.svg")
+opp = natom.GetY() - oatom.GetY()
+adj = natom.GetX() - oatom.GetX()
+angle = abs(math.atan(opp / adj))
+if opp > 0 and adj > 0:
+    pass
+elif opp > 0 and adj < 0:
+    angle = math.pi - angle
+elif opp < 0 and adj < 0:
+    angle = math.pi + angle
+elif opp < 0 and adj > 0:
+    angle = 2 * math.pi - angle
+print math.degrees(angle)
+angle = -angle
+mol.Rotate(ob.double_array([math.cos(angle), -math.sin(angle), 0,
+                            math.sin(angle), math.cos(angle),  0,
+                            0,               0,                1]))
+
+svg = conv.WriteString(mol)
+# need to get rid of square aspect ratio
+delstart = svg.find("width")
+delend = svg.find("svg", delstart)
+delend = svg.find("viewBox", delend)
+svgend = svg.rfind("</g>")
+svg = svg[0:delstart] + svg[delend:svgend]
+outf = file("test.svg", "w")
+outf.write(svg)
+outf.close()
