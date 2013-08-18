@@ -53,41 +53,43 @@ def make_structure(request):
     conv.ReadString(mol, str(Substrate.objects.get(pk=int(aminoacids[0])).structure))
     pattern.Match(mol)
     mollist = pattern.GetUMapList()[0]
-    natom = mol.GetAtom(mollist[0])
-    firstoatom = mol.GetAtom(mollist[4])
+    oatom = mol.GetAtom(mollist[4])
+    catom = mol.GetAtom(mollist[2])
+    firstnatom = mol.GetAtom(mollist[0])
     makeResidue(mol, 0, mollist)
 
     i = 1
     for aa in aminoacids[1:]:
         mol2 = ob.OBMol()
-        conv.ReadString(mol2,str(Substrate.objects.get(pk=int(aa)).structure))
+        conv.ReadString(mol2, str(Substrate.objects.get(pk=int(aa)).structure))
         pattern.Match(mol2)
         mollist = pattern.GetUMapList()[0]
         makeResidue(mol2, i, mollist)
 
-        catom = mol2.GetAtom(mollist[2])
-        oatom = mol2.GetAtom(mollist[4])
-
         molnatoms = mol.NumAtoms()
         mol += mol2
 
-        builder.Connect(mol, natom.GetIdx(), molnatoms + catom.GetIdx())
-        foatom = mol.GetAtom(molnatoms + oatom.GetIdx())
-        fnatom = mol.GetAtom(molnatoms + mol2.GetAtom(mollist[0]).GetIdx())
-        mol.DeleteHydrogens(foatom)
-        mol.DeleteAtom(foatom)
+        natom = mol.GetAtom(molnatoms + mol2.GetAtom(mollist[0]).GetIdx())
+
+        builder.Connect(mol, catom.GetIdx(), natom.GetIdx())
+
+        foatom = mol.GetAtom(molnatoms + mol2.GetAtom(mollist[4]).GetIdx())
+        catom = mol.GetAtom(molnatoms + mol2.GetAtom(mollist[2]).GetIdx())
+        mol.DeleteHydrogens(oatom)
+        mol.DeleteAtom(oatom)
 
         natom.SetImplicitValence(3)
         mol.DeleteHydrogens(natom)
         mol.AddHydrogens(natom)
-        natom = fnatom
+        oatom = foatom
+
         i += 1
 
-    oidx = firstoatom.GetIdx()
-    nidx =  natom.GetIdx()
+    nidx = firstnatom.GetIdx()
+    oidx =  oatom.GetIdx()
     builder.Build(mol)
-    oatom = mol.GetAtom(oidx)
     natom = mol.GetAtom(nidx)
+    oatom = mol.GetAtom(oidx)
     for res in ob.OBResidueIter(mol):
         for atom in ob.OBResidueAtomIter(res):
             for bond in ob.OBAtomBondIter(atom):
@@ -99,8 +101,8 @@ def make_structure(request):
     gen2d = ob.OBOp.FindType("gen2d")
     gen2d.Do(mol)
 
-    opp = natom.GetY() - oatom.GetY()
-    adj = natom.GetX() - oatom.GetX()
+    opp = oatom.GetY() - natom.GetY()
+    adj = oatom.GetX() - natom.GetX()
     angle = abs(math.atan(opp / adj))
     if opp > 0 and adj > 0:
         pass
