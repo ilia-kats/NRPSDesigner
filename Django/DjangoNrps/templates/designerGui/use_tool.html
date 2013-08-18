@@ -92,9 +92,12 @@
             jQuery("#e23").select2({data: monomers}).change(applyMonomer);
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
-            jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax});
+            jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: "invert"});
             jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("zoom", ui.value);}});
-            jQuery("#structimg").load(function(){jQuery("#structzoom").height(jQuery("#structimg").height());});
+            jQuery("#structimg").load(function(){
+                jQuery("#structzoom").height(jQuery("#structimg").height());
+                jQuery("#structimg").data("__pz__")._buildContain(); // update panzoom dimensions
+            });
         });
 </script>
 
