@@ -85,6 +85,11 @@
         jQuery("#struct").height(jQuery("#params").height());
         applyMonomer();
     }
+    function formatAA(aminoAcid) {
+        // if (!aminoAcid.id) return aminoAcid.text; // optgroup
+        kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + aminoAcid.lid + "'/>" + aminoAcid.text;
+        return kek;
+    }
     function submit(e)
     {
 
@@ -95,7 +100,10 @@
             var zoomMax = 5;
             var zoomStep = .1;
             jQuery("#organisms").select2();
-            jQuery("#e23").select2({data: monomers}).change(applyMonomer);
+            jQuery("#e23").select2({data: monomers,
+             formatResult: formatAA,
+             dropdownCssClass: "bigdrop",
+             escapeMarkup: function(m) { return m; }}).change(applyMonomer);
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
             jQuery("#submit").button().click(submit).parent().buttonset();
