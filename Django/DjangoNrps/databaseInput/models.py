@@ -58,7 +58,7 @@ class Domain(models.Model):
 
 
     def __unicode__(self):
-        return str(self.origin) + str(self.module) + str(self.domainType)
+        return str(self.cds) + str(self.module) + str(self.domainType)
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
