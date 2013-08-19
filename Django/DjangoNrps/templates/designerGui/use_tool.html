@@ -92,7 +92,7 @@
     }
     function submit(e)
     {
-
+        Dajaxice.designerGui.submitNrp(function(d){alert(d.xml);}, {nrp: JSON.stringify(getMonomers())});
     }
 
     jQuery(function() {
