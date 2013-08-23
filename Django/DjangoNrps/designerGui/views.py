@@ -5,6 +5,8 @@ from django.views.generic import ListView, CreateView
 from django.http import HttpResponse
 
 import math
+import json
+import xml.etree.ElementTree as x
 import openbabel as ob
 
 class SpeciesListView(ListView):
@@ -30,6 +32,14 @@ class SpeciesListView(ListView):
         context['substrates'] = names.values()
         context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
         return context
+
+def submit_nrp(request):
+    nrpxml = x.Element('nrp')
+    for monomer in request.POST.getlist("as[]"):
+        monomerel = x.SubElement(nrpxml, 'monomer')
+        monomerid = x.SubElement(monomerel, 'id')
+        monomerid.text = monomer
+    return HttpResponse(x.tostring(nrpxml, "utf8"), mimetype="text/xml")
   
 def make_structure(request):
     def makeResidue(mol, idx, aaatoms):

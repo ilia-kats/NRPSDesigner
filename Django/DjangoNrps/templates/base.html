@@ -1,11 +1,9 @@
 {% load staticfiles %}
-{% load dajaxice_templatetags %}
 
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-{% dajaxice_js_import %}
 
 <title>NRPS Designer:{{ title|default:"Home" }}</title>
 <link rel="shortcut icon" href="/static/images/favicon.ico" />
@@ -37,13 +35,24 @@
 <script type="text/javascript">
 var STATIC_URL = "{{ STATIC_URL }}";
 
+jQuery.ajaxSetup({
+    crossDomain: false, // obviates need for sameOrigin test
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", jQuery("#crsf > input").val());
+        }
+    }
+});
+
 </script>
 
 {% block js %}{% endblock %}
 </head>
 
 <body>
-
+<div style="display:none" id="crsf">
+    {% csrf_token %}
+</div>
 <div id="container">
 	<div class="ui-widget-header" id="header">
 		<div class="fixed-width">

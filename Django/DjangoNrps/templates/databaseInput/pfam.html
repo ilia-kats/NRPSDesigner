@@ -104,15 +104,14 @@ var spinner;
 </script>
 
     <script>
-    function dajaxiceFunc(){
+    function submitPfam(){
       var target = document.getElementById('tabs-2');
       spinner = new Spinner(opts).spin(target);
-      Dajaxice.databaseInput.sauceFunc(fillBox, {'sequence':jQuery('#id_dnaSequence').val()});
+      jQuery.post("{% url 'sauceFunc' %}", {'sequence':jQuery('#id_dnaSequence').val()}, undefined, "text").done(fillBox);
     };
 
       function fillBox(data){
-      mySeq = data.graphic
-      generate(mySeq);
+      generate(data);
       spinner.stop();
     }
     </script>
@@ -179,7 +178,7 @@ var spinner;
         <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
         {{ form.dnaSequence }} <br/>
     <div class="btn-group">
-        <input type="button" class="btn" onclick="dajaxiceFunc()" value="Send to Pfam!"/>
+        <input type="button" class="btn" onclick="submitPfam()" value="Send to Pfam!"/>
 
           <input type="button" class="btn" id="clear" value="Clear!"/>
     </div>

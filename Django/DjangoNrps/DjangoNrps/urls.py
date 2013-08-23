@@ -1,10 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from databaseInput.views import PfamView, UserDetailView, HomeTemplateView, ProfileTemplateView
-from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from databaseInput.views import PfamView, UserDetailView, HomeTemplateView, ProfileTemplateView, sauceFunc
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-dajaxice_autodiscover()
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -13,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 	url(r'^$', HomeTemplateView.as_view()),
 	url(r'^admin/', include(admin.site.urls)),
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+    url(r'^pfam/submit/', sauceFunc, name="sauceFunc"),
     url(r'^pfam/', PfamView.as_view(), name="pfam"),
     url(r'^user/profile', ProfileTemplateView.as_view()),
     url(r'^user/', include('registration.backends.simple.urls')),

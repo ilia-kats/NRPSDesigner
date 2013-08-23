@@ -92,7 +92,7 @@
     }
     function submit(e)
     {
-        Dajaxice.designerGui.submitNrp(function(d){alert(d.xml);}, {nrp: JSON.stringify(getMonomers())});
+        jQuery.post("{% url 'submitNRP' %}", {as: getMonomers()}, undefined, "text").done(function(data){alert(data);}).fail(function(){alert("failed");});
     }
 
     jQuery(function() {
@@ -109,7 +109,6 @@
             jQuery("#submit").button().click(submit).parent().buttonset();
             jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
             jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("option", "contain", ui.value > 1 ? "invert" : true).panzoom("zoom", ui.value);}});
-            jQuery("#structimg").data("__pz__")._buildContain(); // update panzoom dimensions
             jQuery("#structimg").load(function(e){
                 var structimg = jQuery(e.delegateTarget);
                structimg.data("__pz__")._buildContain(); // update panzoom dimensions
