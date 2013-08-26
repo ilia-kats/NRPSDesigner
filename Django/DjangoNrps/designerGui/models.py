@@ -10,3 +10,5 @@ class Species(models.Model):
     class Meta:
         verbose_name = "Species"
         verbose_name_plural = "Species"
+        verbose_name = "Modifications"
+        verbose_name_plural = "Modifications"
