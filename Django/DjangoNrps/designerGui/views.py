@@ -1,6 +1,6 @@
 from designerGui.models import Species
-from databaseInput.models import Substrate
-from databaseInput.forms import SubstrateFormSet
+from databaseInput.models import Substrate, Modification
+from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from django.views.generic import ListView, CreateView
 from django.http import HttpResponse
 
@@ -17,6 +17,11 @@ class SpeciesListView(ListView):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
         context['myFormSet'] = SubstrateFormSet()
+        
+        modfs = Modification.objects.all()
+        context['modifications'] = modfs.values()
+        #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
+        
         
         aas = Substrate.objects.all()
         names = {}

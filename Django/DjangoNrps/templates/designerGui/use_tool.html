@@ -7,6 +7,11 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
+    var modifis = [
+        {% for mods in modifications %}
+            {id: {{ forloop.counter0 }}, text: '{{ mods.name }}', mod_id:'{{key}}'}
+        {% endfor %}
+    ];
     var monomers = [
         {% for aa in substrates %}
             {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did: {% firstof aa.D aa.L %}},
@@ -22,6 +27,15 @@
             ids[i] = jQuery(selected[i]).attr("value");
         }
         return ids;
+    }
+    function specifyModifications(e)
+    {
+//         var curM = jQuery(jQuery("#e23").data("currMonomer"));
+//         var selectaa = jQuery('#e23');
+        //var dataM = selectaa.select2("data");
+        //alert(dataM.text);
+        //var aa_id;
+        
     }
     function makeStruct()
     {
@@ -99,11 +113,16 @@
             var zoomMin = .1;
             var zoomMax = 5;
             var zoomStep = .1;
+             jQuery("#e11").select2({
+              data: modifis,
+              placeholder: "No modification selected",
+              allowClear: true,
+              });
             jQuery("#organisms").select2();
             jQuery("#e23").select2({data: monomers,
              formatResult: formatAA,
              dropdownCssClass: "bigdrop",
-             escapeMarkup: function(m) { return m; }}).change(applyMonomer);
+             escapeMarkup: function(m) { return m; }}).change(function(e){specifyModifications(e); applyMonomer(e);});
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
             jQuery("#submit").button().click(submit).parent().buttonset();
@@ -186,9 +205,16 @@
 
         <div id="e23" style="width:100%"></div>
         <div id="monomer_chirality">
+            </br>
             <input type="radio" name="chirality" value="L" id="monomer_chirality_L" checked="checked"/><label for="monomer_chirality_L">L-configuration</label>
             <input type="radio" name="chirality" value="D" id="monomer_chirality_D"/><label for="monomer_chirality_D">D-configuration</label>
         </div>
+        
+        <div>
+            </br>
+            <p>Select a possible amino acid modification, if you like!</p> 
+            <div id="e11" style="width:100%"></div>
+        </div> 
 
         <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
         <div>
