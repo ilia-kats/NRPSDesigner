@@ -19,8 +19,12 @@ class SpeciesListView(ListView):
         context['myFormSet'] = SubstrateFormSet()
         
         aas = Substrate.objects.all()
-        names = {}
+        realAas = []
         for aa in aas:
+            if not hasattr(aa.parent, 'name'):
+                realAas.append(aa)
+        names = {}
+        for aa in realAas:
             name = aa.name
             if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
                 name = aa.name[2:]
