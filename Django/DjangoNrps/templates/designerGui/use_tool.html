@@ -14,7 +14,17 @@
     ];
     var monomers = [
         {% for aa in substrates %}
-            {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did: {% firstof aa.D aa.L %}},
+            {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did:  
+                {% firstof aa.D aa.L %}, LChildren : [
+                {% for child in aa.LChildren %}
+                    {text : '{{ child.name }}', id : '{{child.pk}}'},
+                {% endfor %}
+            ],
+            DChildren : [
+                {% for child in aa.DChildren %}
+                    {text : '{{ child.name }}', id : '{{child.pk}}'},
+                {% endfor %}
+            ]},
         {% endfor %}
     ];
     var animationDuration = 300;
@@ -61,16 +71,24 @@
         var btn = jQuery(jQuery("#e23").data("currMonomer"));
         var select = jQuery('#e23');
         var data = select.select2("data");
+        var chiralityChildren;
         btn.button("option", "label", data.text);
         if (jQuery("#monomer_chirality :checked").val() == 'L') {
             btn.attr("value", data.lid);
+            chiralityChildren = 'LChildren'
         } else {
             btn.attr("value", data.did);
+            chiralityChildren = 'DChildren'
         }
         btn.data("selectid", data.id);
 
         jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
         makeStruct();
+        jQuery("#e11").select2({
+              data: monomers[data.id][chiralityChildren],
+              placeholder: "No modification selected",
+              allowClear: true,
+              });
     }
     function removeMonomer(e)
     {
@@ -114,7 +132,7 @@
             var zoomMax = 5;
             var zoomStep = .1;
              jQuery("#e11").select2({
-              data: modifis,
+              data: [],
               placeholder: "No modification selected",
               allowClear: true,
               });
