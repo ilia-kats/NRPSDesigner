@@ -38,7 +38,7 @@ class SpeciesListView(ListView):
                 names[name][aa.chirality+'Children'] = aa.child.all()
                 #names[name]['name'] = name
             else:
-                tmp = aa.child.all()
+                tmp = aa.child.all()    
                 names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
         context['substrates'] = names.values()
         context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))

@@ -4,8 +4,6 @@
 {% block js-include %}
 <script src="{% static 'js/jquery.formset.js' %}"></script>
 <script src="{% static 'js/jquery.panzoom.min.js' %}"></script>
-
-
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
@@ -187,19 +185,6 @@
             var zoomMin = .1;
             var zoomMax = 5;
             var zoomStep = .1;
-<<<<<<< HEAD
-             jQuery("#e11").select2({
-              data: [],
-              placeholder: "No modification selected",
-              allowClear: true,
-              });
-           jQuery("#e33").click(function(e){ jQuery('#basic-modal-content').modal();
-                                 
-                                 return false;
-                                 });
-           
-=======
->>>>>>> 4d61e1f4565dc86828052bf5b0ab1d8cab9319bb
             jQuery("#organisms").select2();
             jQuery("#e23").select2({data: monomers,
              formatResult: formatAA,
@@ -283,14 +268,7 @@
 <div class="row-fluid">
 <div class="span8" id="params">
     <div class="box">
-        <div id='basic-modal'>
-        <p>Please choose an organism to express your non-ribosomal peptide!
-            <a id="e33" href='#' style='color:#0040FF'>?</a></p>
-        </div>
-        <!-- modal content -->
-        <div id="basic-modal-content">
-            <h2>Basic Modal Dialog</h2>
-        </div>
+        <p>Please choose an organism to express your non-ribosomal peptide!</p>
         <select id="organisms" size="1" style="width:100%">
             {% for origin in object_list %}
                 <option value={{origin.source}}>{{origin.species}}</option>
@@ -326,6 +304,5 @@
             </div>
     </div>
 </div>
-    
 
 {% endblock %}

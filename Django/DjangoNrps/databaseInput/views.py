@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth import get_user_model
 from databaseInput.models import Origin, Cds
 from databaseInput.forms import CdsFormSet, DomainFormSet, CdsForm, OriginForm
+import pdb
 
 import json
 import requests
@@ -20,20 +21,21 @@ from Bio.Alphabet import IUPAC
 
 # Create your views here.
 
-class PfamView(CreateView):
+class PfamView(TemplateView):
     template_name = 'databaseInput/pfam.html'
-    form_class = CdsForm
-    success_url = reverse_lazy("pfam")
+    #form_class = CdsForm(prefix = 'cds')
+    #success_url = reverse_lazy("pfam")
 
     def get_context_data(self, **kwargs):
         context = super(PfamView, self).get_context_data(**kwargs)
+        context['form'] = CdsForm(prefix='cds')
         context['originSet'] = DomainFormSet()
         context['originForm'] = OriginForm(prefix='origin')
         return context
 
 
     def post(self,request,*args ,**kwargs):
-        if 'originSubmit' in request.POST:
+        if 'originSubmit' in request.POST:  #allow user to submit origin, if his is not already in db
             originForm = OriginForm(request.POST, prefix = 'origin')
             if originForm.is_valid():
                 originForm.save()
@@ -41,7 +43,18 @@ class PfamView(CreateView):
             else:
                 return HttpResponseRedirect(reverse_lazy("pfam"))
         else:
-            return super(PfamView, self).post(request, *args, **kwargs)
+            cdsForm = CdsForm(request.POST, prefix= 'cds')
+            if cdsForm.is_valid():
+                cds = cdsForm.save(commit=False)
+                domainFormSet = DomainFormSet(request.POST, instance = cds)
+                if domainFormSet.is_valid():
+                    cds.save()
+                    domainFormSet.save()
+                    return HttpResponseRedirect("http://www.google.com")
+                else:
+                    return HttpResponseRedirect("http://www.yahoo.com")
+
+            return HttpResponseRedirect(reverse_lazy("pfam"))
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'

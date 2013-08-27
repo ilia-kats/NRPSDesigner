@@ -5,7 +5,7 @@ from django.forms import ModelForm, HiddenInput, ModelChoiceField, Form
 from django.forms.widgets import TextInput
 
 CdsFormSet = inlineformset_factory(Origin, Cds, extra=1)
-DomainFormSet = inlineformset_factory(Cds, Domain, extra=5)
+DomainFormSet = inlineformset_factory(Cds, Domain, extra=1)
 
 
 class SubstrateListForm(Form):
