@@ -40,72 +40,120 @@
         }
         return ids;
     }
-    function specifyModifications(e)
-    {
-//         var curM = jQuery(jQuery("#e23").data("currMonomer"));
-//         var selectaa = jQuery('#e23');
-        //var dataM = selectaa.select2("data");
-        //alert(dataM.text);
-        //var aa_id;
-        
-    }
+
     function makeStruct()
-    {
-        var ids = "?as=" + getMonomers().join("&as=");
-        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+    {   
+       var ids = "?as=" + getMonomers().join("&as=");
+       jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
     }
     function editMonomer(e)
     {
         jQuery("#selected_monomers input[type=checkbox]:checked").prop("checked", false).button("refresh");
-        jQuery(e.delegateTarget).prop("checked", true).button("refresh");
+        jQuery(e.delegateTarget).prop("checked", true).button("refresh"); 
         jQuery('#e23').select2("val", jQuery(e.delegateTarget).data("selectid"));
         jQuery("#e23").data("currMonomer", e.delegateTarget);
         var data = jQuery('#e23').select2("data");
+        var chiralityChildren;
         if (jQuery(e.target).attr("value") == data.lid) {
             jQuery("#monomer_chirality_L").click();
+            chiralityChildren = "LChildren";
         } else {
             jQuery("#monomer_chirality_D").click();
+            chiralityChildren = "DChildren";
         }
         jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
+        refreshModificationList();
+        jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
+    }
+
+    function refreshModificationList(e) {
+        jQuery("#e11").select2("val",null);
+        var btn = jQuery(jQuery("#e23").data("currMonomer"));
+        var select = jQuery('#e23');
+        var data = select.select2("data");
+        var chiralityChildren;
+        if (jQuery("#monomer_chirality :checked").val() == 'L') {
+            chiralityChildren = 'LChildren';
+        } else {
+            chiralityChildren = 'DChildren';
+        }
+        availableChildren = monomers[data.id][chiralityChildren];
+        if (availableChildren.length > 0) {
+            jQuery("#e11").select2({
+               data: availableChildren,
+               placeholder: "No modification selected",
+               allowClear: true,
+               formatResult: formatAAChild,
+               dropdownCssClass: "bigdrop",
+               escapeMarkup: function(m) { return m; }
+               }).change(function(e){applyMonomerChild(e);}); 
+            jQuery("#e11").select2("enable",true);
+
+        } else {
+            jQuery("#e11").select2({
+               data: availableChildren,
+               placeholder: "No modification available",
+              });
+            jQuery("#e11").select2("enable",false);
+        }
+
+       
     }
     function applyMonomer(e)
     {
         var btn = jQuery(jQuery("#e23").data("currMonomer"));
         var select = jQuery('#e23');
         var data = select.select2("data");
-        var chiralityChildren;
-        btn.button("option", "label", data.text);
+        var prefix;
         if (jQuery("#monomer_chirality :checked").val() == 'L') {
             btn.attr("value", data.lid);
-            chiralityChildren = 'LChildren'
+            prefix = "L-"
         } else {
             btn.attr("value", data.did);
-            chiralityChildren = 'DChildren'
+            prefix = "D-"
+        }
+        //clickable button should show if L- or D- except for glycine
+        if (data.lid == data.did) {
+            btn.button("option", "label", data.text);
+        } else {
+            btn.button("option", "label", prefix + data.text);
         }
         btn.data("selectid", data.id);
 
         jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
         makeStruct();
-        jQuery("#e11").select2({
-              data: monomers[data.id][chiralityChildren],
-              placeholder: "No modification selected",
-              allowClear: true,
-              });
+        refreshModificationList();
+    } 
+
+    function applyMonomerChild(e)
+    {
+        var btn = jQuery(jQuery("#e23").data("currMonomer"));
+        var select = jQuery('#e11');
+        if (select.select2('val') == "") {
+            applyMonomer();
+            btn.data("modId", "");
+        } else {
+            var data = select.select2("data");
+            btn.button("option", "label", data.text);
+            btn.attr("value", data.id);
+            btn.data("modId", data.id);
+        }
+        makeStruct();
     }
     function removeMonomer(e)
     {
         var monomer = jQuery(e.delegateTarget).parent();
-        monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();});
-        makeStruct();
-    }
+        monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();makeStruct();});
+    }   
     function addMonomer(e)
-    {
-        var dflt = monomers[0];
+    {  
+        var dflt = monomers[0]; //monomer selected by default is glycine
         var close = jQuery("<button>", {html: 'delete'});
         var id =  new Date().getTime();
         var aa = jQuery('<input type="checkbox" value="' + dflt['lid'] + '" id="' + id + '"/>');
         var label = jQuery('<label for="' + id + '" style="margin-bottom:0px"/>'); //margin: conflict with bootstrap
         aa.data("selectid", dflt.id);
+        aa.data("modId", "");
         var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").append(close).append(aa).append(label);
         close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
         aa.button({label: dflt['text']}).click(editMonomer);
@@ -124,6 +172,12 @@
         kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + aminoAcid.lid + "'/>" + aminoAcid.text;
         return kek;
     }
+
+    function formatAAChild(aminoAcid) {
+        // if (!aminoAcid.id) return aminoAcid.text; // optgroup
+        kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + aminoAcid.id + "'/>" + aminoAcid.text;
+        return kek;
+    }
     function submit(e)
     {
         jQuery.post("{% url 'submitNRP' %}", {as: getMonomers()}, undefined, "text").done(function(data){alert(data);}).fail(function(){alert("failed");});
@@ -133,6 +187,7 @@
             var zoomMin = .1;
             var zoomMax = 5;
             var zoomStep = .1;
+<<<<<<< HEAD
              jQuery("#e11").select2({
               data: [],
               placeholder: "No modification selected",
@@ -143,11 +198,21 @@
                                  return false;
                                  });
            
+=======
+>>>>>>> 4d61e1f4565dc86828052bf5b0ab1d8cab9319bb
             jQuery("#organisms").select2();
             jQuery("#e23").select2({data: monomers,
              formatResult: formatAA,
              dropdownCssClass: "bigdrop",
-             escapeMarkup: function(m) { return m; }}).change(function(e){specifyModifications(e); applyMonomer(e);});
+             escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
+            jQuery("#e11").select2({
+              data : [],
+              placeholder: "No modification selected",
+              allowClear: true,
+              formatResult: formatAAChild,
+              dropdownCssClass: "bigdrop",
+              escapeMarkup: function(m) { return m; }
+              }).change(function(e){applyMonomerChild(e);}); 
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
             jQuery("#submit").button().click(submit).parent().buttonset();
@@ -257,7 +322,7 @@
     <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
-                <img id="structimg" style="height:100%;">
+                <img id="structimg" alt="Fair winds!" style="height:100%;">
             </div>
     </div>
 </div>
