@@ -1,0 +1,2 @@
+/Users/theinemann/private/NRPSDesigner/NRPS library/build/lib/nrpsdesigner/CMakeFiles/nrpsdesigner.dir
+/Users/theinemann/private/NRPSDesigner/NRPS library/build/ui/cli/CMakeFiles/nrpsdesigner-bin.dir
