@@ -55,40 +55,85 @@
     function editMonomer(e)
     {
         jQuery("#selected_monomers input[type=checkbox]:checked").prop("checked", false).button("refresh");
-        jQuery(e.delegateTarget).prop("checked", true).button("refresh");
+        jQuery(e.delegateTarget).prop("checked", true).button("refresh"); 
         jQuery('#e23').select2("val", jQuery(e.delegateTarget).data("selectid"));
         jQuery("#e23").data("currMonomer", e.delegateTarget);
         var data = jQuery('#e23').select2("data");
+        var chiralityChildren;
         if (jQuery(e.target).attr("value") == data.lid) {
             jQuery("#monomer_chirality_L").click();
+            chiralityChildren = "LChildren";
         } else {
             jQuery("#monomer_chirality_D").click();
+            chiralityChildren = "DChildren";
         }
         jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
+        refreshModificationList();
+        jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
+    }
+
+    function refreshModificationList(e) {
+        jQuery("#e11").select2("val",null);
+        var btn = jQuery(jQuery("#e23").data("currMonomer"));
+        var select = jQuery('#e23');
+        var data = select.select2("data");
+        var chiralityChildren;
+        if (jQuery("#monomer_chirality :checked").val() == 'L') {
+            chiralityChildren = 'LChildren';
+        } else {
+            chiralityChildren = 'DChildren';
+        }
+        availableChildren = monomers[data.id][chiralityChildren];
+        if (availableChildren.length > 0) {
+            jQuery("#e11").select2({
+               data: availableChildren,
+               placeholder: "No modification selected",
+               allowClear: true
+              }).change(function(e){applyMonomerChild(e);}); 
+            jQuery("#e11").select2("enable",true);
+
+        } else {
+            jQuery("#e11").select2({
+               data: availableChildren,
+               placeholder: "No modification available",
+              });
+            jQuery("#e11").select2("enable",false);
+        }
+
+       
     }
     function applyMonomer(e)
     {
         var btn = jQuery(jQuery("#e23").data("currMonomer"));
         var select = jQuery('#e23');
         var data = select.select2("data");
-        var chiralityChildren;
         btn.button("option", "label", data.text);
         if (jQuery("#monomer_chirality :checked").val() == 'L') {
             btn.attr("value", data.lid);
-            chiralityChildren = 'LChildren'
         } else {
             btn.attr("value", data.did);
-            chiralityChildren = 'DChildren'
         }
         btn.data("selectid", data.id);
 
         jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
         makeStruct();
-        jQuery("#e11").select2({
-              data: monomers[data.id][chiralityChildren],
-              placeholder: "No modification selected",
-              allowClear: true,
-              });
+        refreshModificationList();
+    }
+
+    function applyMonomerChild(e)
+    {
+        var btn = jQuery(jQuery("#e23").data("currMonomer"));
+        var select = jQuery('#e11');
+        if (select.select2('val') == "") {
+            applyMonomer();
+            btn.data("modId", "");
+        } else {
+            var data = select.select2("data");
+            btn.button("option", "label", data.text);
+            btn.attr("value", data.id);
+            btn.data("modId", data.id);
+        }
+        makeStruct();
     }
     function removeMonomer(e)
     {
@@ -97,13 +142,14 @@
         makeStruct();
     }
     function addMonomer(e)
-    {
+    {  
         var dflt = monomers[0];
         var close = jQuery("<button>", {html: 'delete'});
         var id =  new Date().getTime();
         var aa = jQuery('<input type="checkbox" value="' + dflt['lid'] + '" id="' + id + '"/>');
         var label = jQuery('<label for="' + id + '" style="margin-bottom:0px"/>'); //margin: conflict with bootstrap
         aa.data("selectid", dflt.id);
+        aa.data("modId", "");
         var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").append(close).append(aa).append(label);
         close.button({icons: {primary: "ui-icon-close"}, text: false}).click(removeMonomer);
         aa.button({label: dflt['text']}).click(editMonomer);
@@ -131,16 +177,16 @@
             var zoomMin = .1;
             var zoomMax = 5;
             var zoomStep = .1;
-             jQuery("#e11").select2({
-              data: [],
-              placeholder: "No modification selected",
-              allowClear: true,
-              });
             jQuery("#organisms").select2();
             jQuery("#e23").select2({data: monomers,
              formatResult: formatAA,
              dropdownCssClass: "bigdrop",
-             escapeMarkup: function(m) { return m; }}).change(function(e){specifyModifications(e); applyMonomer(e);});
+             escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
+            jQuery("#e11").select2({
+              data : [],
+              placeholder: "No modification selected",
+              allowClear: true,
+              }).change(function(e){applyMonomerChild(e);}); 
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
             jQuery("#submit").button().click(submit).parent().buttonset();
