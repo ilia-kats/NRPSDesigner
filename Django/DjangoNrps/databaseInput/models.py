@@ -1,34 +1,34 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Remove `managed = False` lines for those models you wish to give write DB access
-# Feel free to rename the models, but don't rename db_table values or field names.
-#
-# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
-# into your database.
 from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from databaseInput.validators import validate_coding_seq
 
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     geneName = models.CharField(max_length=100) 
-    dnaSequence = models.TextField()
+    dnaSequence = models.TextField(validators = [validate_coding_seq])
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
    
     def __unicode__(self):
         return str(self.origin) + self.geneName
 
+    def length(self):
+        return len(self.dnaSequence)
+
     class Meta:
         verbose_name = "Coding sequence"
         verbose_name_plural = "Coding sequences"
 
 class Origin(models.Model):
-    sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('DNA','DNA')))
+    ORIGIN_CHOICES = (
+        ('Species', 'Species'),
+        ('BB', 'BioBrick'),
+        ('DNA', 'Other DNA source') 
+    )
+    sourceType = models.CharField(max_length=10, choices= ORIGIN_CHOICES)
     source = models.CharField(max_length=20) #usually taxon ID, can also be biobrick or plasmid identifier
     species = models.CharField(max_length = 100, blank=True, null= True)
     product = models.CharField(max_length=20, blank=True, null=True)
