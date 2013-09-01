@@ -69,7 +69,7 @@ DATABASES = {
        #'NAME': os.path.join(BASE_DIR, 'nrps_designer'),
         'NAME': 'nrps_designer',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'root',
         'HOST': '127.0.0.1',
     }
 }
