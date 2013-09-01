@@ -20,41 +20,9 @@
 
 {% endblock %}
 
-{% block app-menu %}
-<a href="/gibthon/" id="constructs">Constructs</a>|
-<a href="{{ construct.name }}.gb" id="download">Download</a>
-<button id="delete_btn">Delete</button>
-{% endblock %}
 
 {% block content %}
 <div>
-	<div class="center fixed-width content">
-        <div class='ui-state-highlight ui-corner-all' style='margin-bottom:1em;'>
-            <h4>First time using the designer?</h4>
-            <p>
-                Click 
-                <a id='walkthrough_lnk' href='#'>here</a> for a quick walkthrough.
-            </p>
-        </div>
-		<div id="meta-box" class="ui-widget-content ui-corner-all left">
-			<form id='meta_form' action='saveMeta/' method='POST' onsubmit='return false;'>
-				{% csrf_token %}
-				<div id='name' class="ui-widget-header ui-corner-top magic-item" style="padding:10px;height:1.6em;">
-					<h3 id='c_name' class='magic-text' style="display:inline-block;">{{ construct.name }}</h3>
-					<div style="float:right; padding-right:10px;">
-						<button id="info_btn" class='magic-button'>Edit</button>
-						<button id="cancel_btn" class='magic-button-cancel'>Cancel</button>
-					</div>
-				</div>	
-				<div id='desc' class='magic-item'>
-					<div id='desc_text' class='magic-text'>{{ construct.description }}</div>
-					<textarea name='desc' class='magic-input' cols=80 rows=4 ></textarea>
-				</div>
-				<div id='meta_error'></div>
-				<p id="status">{{ construct.last_modified }}</p>
-			</form>
-		</div>	
-	</div>
 	
 	<div class="content center full-width">
 		<div id='tabs' class='left'>
