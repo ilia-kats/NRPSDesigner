@@ -41,7 +41,9 @@ INSTALLED_APPS = (
     'registration',
     'designerGui',
     'django_evolution',
-    'annoying'
+    'annoying',
+    'fragment',
+    'gibson'
 )
 
 MIDDLEWARE_CLASSES = (

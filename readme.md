@@ -26,9 +26,11 @@ sudo pip install django-dajax
 
 sudo pip install django-dajaxice
 
-* __django-registration: Handles user login etc.
+* __django-registration__: Handles user login etc.
 
 sudo pip install django-registration
+
+* __django-annoying__: Gibthon uses it...
 
 
 Other stuff that is loaded by some of our python functions:
@@ -40,4 +42,8 @@ sudo pip install requests
 * __Biopython__: Just like bioperl but not in a crappy language!
 
 sudo apt-get install python-biopython
+
+* __xhtml2pdf__: Also necessary for Gibthon..
+
+* __BeautifulSoup__: Beautiful soup!
 
