@@ -14,11 +14,11 @@
 
 
 {% block content %}
-  <button id="addc">Add new Construct</button>
+  <button id="addc">Add new Peptide</button>
   <button id="delete_btn">Delete</button>
 
 <div>
-	<table id="construct_table">
+	<table id="peptide_table">
 		<thead class="ui-widget-content">
 			<tr>
 				<th>Name</th>
@@ -29,16 +29,16 @@
 			</tr>
 		</thead>		
 		<tbody class="ui-widget-content">
-			{% for construct in construct_list %}
+			{% for nrp in nrpList %}
 				<tr>
 					<td>
-						<a href="{{ construct.id }}/">{{ construct.name }}</a>
+						<a href="{{ nrp.pk }}/">{{ nrp.name }}</a>
 					</td>
 					<td>
-						{{ construct.description|truncatewords:10 }}
+						{{ nrp.description|truncatewords:10 }}
 					</td>
 					<td>
-						<input class="selected-check" id="{{construct.id}}-checkbox" type="checkbox" name="selected" value="{{construct.id}}"/>
+						<input class="selected-check" id="{{nrp.pk}}-checkbox" type="checkbox" name="selected" value="{{nrp.pk}}"/>
 					</td>
 				</tr>
 			{% endfor %}
@@ -49,11 +49,11 @@
 {% endblock %}
 
 {% block dialog %}
-<div id="construct_add">
+<div id="peptide_add">
 	<form action="add" method="post">
 		{% csrf_token %}
-        <div id='construct_form_wrap'>
-		{% include "gibson/constructform.html" %}
+        <div id='peptide_form_wrap'>
+		{% include "designerGui/peptideform.html" %}
         </div>
 	</form>
 	<div style="float:right; padding-right:10px;"><button id="add">Add</button></div>
@@ -97,32 +97,32 @@ var delete_html = '<div style="text-align:center;margin-top:1.5em;">' +
 '</div>';
 
 var show_delete_dialog = function(){
-	var num = jQuery('#construct_table').fragmentList('getNumSelected');
+	var num = jQuery('#peptide_table').fragmentList('getNumSelected');
 	var s = ''
 	if(num > 1)
 		s = 's'
-	var text = num + " construct" + s;
-	$('#delete_contents').html(delete_html)
+	var text = num + " peptide" + s;
+	jQuery('#delete_contents').html(delete_html)
 		.find('#num-del')
 			.text(text);
 	
-	$('#cancel-delete').button({
+	jQuery('#cancel-delete').button({
 		label:"Cancel",
 		icons:{primary:'ui-icon-cancel'}
 	}).click(function() {
-		$('#confirm_delete').dialog('close');
+		jQuery('#confirm_delete').dialog('close');
 	});
 	
-	$('#delete-form').submit(function() {
+	jQuery('#delete-form').submit(function() {
 		return false;
 	});
 	
-	$('#confirm-delete').button({
+	jQuery('#confirm-delete').button({
 		label:"Delete",
 		icons:{primary:'ui-icon-trash'}
 	}).click(function() {
 		var commands = new Array();
-		var ids = $('#construct_table').fragmentList('getList');
+		var ids = jQuery('#peptide_table').fragmentList('getList');
 		for(i in ids)
 		{
 			var id = ids[i];
@@ -132,7 +132,7 @@ var show_delete_dialog = function(){
 							'type': 'POST',});
 		}
 
-		$('#confirm_delete').loader({	'commands': commands,
+		jQuery('#confirm_delete').loader({	'commands': commands,
 										'autoStart': true,
 										'done': function(errors) {location.reload();},
 										'title': 'Deleting Constructs...',});
@@ -152,18 +152,18 @@ jQuery(document).ready(function() {
                     console.log('window.location = ' + data[1].url);
                     window.location = data[1].url;
                 }
-			    jQuery('#construct_form_wrap').html(data[1].html);	
+			    jQuery('#peptide_form_wrap').html(data[1].html);	
 			});
 		})
 		.button({
 			icons:{primary:'ui-icon-plusthick'}
 		});
 	
-	$('#construct_table').fragmentList({
+	$('#peptide_table').fragmentList({
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
 	});
 	
-	jQuery('#construct_table').dataTable({
+	jQuery('#peptide_table').dataTable({
 		bAutoWidth: false,
 		bJQueryUI: true,
 		bFilter: false,
@@ -180,25 +180,25 @@ jQuery(document).ready(function() {
 			},
 		],
 		oLanguage:{
-			sEmptyTable: '<button id="addc">Add new Construct</button>'
+			sEmptyTable: '<button id="addc">Add new Peptide</button>'
 		}
 	});
 	jQuery('button[id="addc"]')
 		.click(function(event){
-			$('#construct_add').dialog('open');
+			$('#peptide_add').dialog('open');
 		})
 		.button({
 			icons:{primary:'ui-icon-plusthick'}
 		});
-	jQuery('#construct_add').dialog({
+	jQuery('#peptide_add').dialog({
 		autoOpen:false,
 		resizable:false,
 		modal:true,
-		title:'Add new Construct',
+		title:'Add new Peptide',
 		width:400
 	});
 	
-	$('#delete_btn').button({
+	jQuery('#delete_btn').button({
 		label:"Delete Selection",
 		icons:{primary:'ui-icon-trash'},
 		disabled: true,
@@ -206,7 +206,7 @@ jQuery(document).ready(function() {
 		show_delete_dialog();
 	});
 
-	$('#confirm_delete').dialog({
+	jQuery('#confirm_delete').dialog({
 		autoOpen:false,
 		resizable:false,
 		modal:true,

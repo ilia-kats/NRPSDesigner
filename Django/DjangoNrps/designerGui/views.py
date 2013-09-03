@@ -1,13 +1,61 @@
-from designerGui.models import Species
+from designerGui.models import Species, NRP
 from databaseInput.models import Substrate, Modification
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
-from django.views.generic import ListView, CreateView
-from django.http import HttpResponse
+from designerGui.forms import NRPForm
+from gibson.jsonresponses import JsonResponse, ERROR
+
+from django.views.generic import ListView, CreateView, TemplateView
+from django.http import HttpResponse, HttpResponseNotFound
+from django.contrib.auth.decorators import login_required
+from django.template import Context, loader, RequestContext
+
 
 import math
 import json
 import xml.etree.ElementTree as x
 import openbabel as ob
+
+
+
+@login_required 
+def peptide_add(request):
+    if request.method == 'POST':
+        form = NRPForm(request.POST, prefix='nrp')
+        if form.is_valid():
+            c = form.save(commit=False)
+            c.owner = request.user
+            c.save()
+            return JsonResponse({'url': '/tool/peptides' })
+        t = loader.get_template('designerGui/peptideform.html')
+        con = NRP.objects.all().filter(owner=request.user)
+        c = RequestContext(request, {
+            'NRPForm':form,
+        })
+        return JsonResponse({'html': t.render(c),}, ERROR)
+    else:
+        return HttpResponseNotFound()
+
+@login_required
+def peptide_delete(request, cid):
+    peptide = NRP.objects.get(owner = request.user, pk = cid)
+    if peptide:
+        peptide.delete()
+        if request.is_ajax():
+            return JsonResponse('/peptides') 
+        return HttpResponseRedirect('/peptides')
+    else:
+        return HttpResponseNotFound()
+
+class NRPListView(TemplateView):
+    template_name = 'designerGui/peptides.html'
+   
+    def get_context_data(self, **kwargs):
+        context = super(NRPListView, self).get_context_data(**kwargs)
+        context['NRPform'] = NRPForm(prefix='nrp')
+        context['title'] = 'NRPS Designer'
+        context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
+        return context
+
 
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
