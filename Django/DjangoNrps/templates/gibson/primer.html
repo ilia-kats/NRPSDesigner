@@ -1,0 +1,85 @@
+<div>
+    <p>
+        <strong>Primer {{ primer.name }}</strong>
+    </p>
+    <table style="padding-left:15px;">
+        <tr>
+            <td style="width:100px;">
+                <em>Section:</em>
+            </td>
+            <td style="width:100px;">
+                <em>Full</em>
+            </td>
+            <td style="width:100px;">
+                <em>Anneal</em>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <em>Length:</em>
+            </td>
+            <td>
+                {{ primer.length }} bp
+            </td>
+            <td>
+                {{ primer.stick.length }} bp
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <em>Tm:</em>
+            </td>
+            <td>
+                {{ primer.tm|floatformat }}&deg;C
+            </td>
+            <td>
+                {{ primer.stick.tm|floatformat }}&deg;C
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <em>Sequence:</em>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <p style="font-family:monospace;">
+        {% for b in primer.seq_pretty %}
+            {{ b }}
+        {% endfor %}
+    </p>
+
+    <div style='margin:50px;'>
+        <div id='detail_fragment' class='join'>
+            <div id='primer-71' class='primer fwd-primer'>
+                <div class='pmark'>
+                    <div class='pbody'></div>
+                    <div class='parrow'></div>
+                    <div class='pbase'></div>
+                </div>
+            </div>
+
+            <div id='left_seq' class='seq'></div>
+            <div id='right_seq' class='seq'></div>
+
+            <div style='clear:both;'></div>
+        </div>
+        <div style='clear:both'></div>
+    </div>
+
+    {% if primer.warning.all %}
+        <div class='ui-state-highlight ui-corner-all primer-warnings'>
+            <ul>
+            {% for w in primer.warning.all %}
+                <li>{{ w.text|safe }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div style='text-align:center;margin:1em;'>
+        <button class='boxplot-btn' pid='{{ primer.id }}'>Show Boxplot</button> 
+    </div>
+</div>
+

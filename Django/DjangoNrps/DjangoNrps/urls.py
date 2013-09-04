@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^user/', include('registration.backends.simple.urls')),
     url(r'^user/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
     url(r'^tool/', include('designerGui.urls')),
+    url(r'^gibthon/', include('gibson.urls')),
+    url(r'^fragment/', include('fragment.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()

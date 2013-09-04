@@ -1,0 +1,29 @@
+	
+<div class="pad">
+	<div class="pad-content" style="padding:.2em;">
+		<div id='canvas_holder'>
+			<canvas id="cdesigner" style="display:block; height:100%; width:100%;"></canvas>
+					
+			<div id="fragment_clipping" style='display:none;'></div>
+			
+			<div class="fragment-info ui-corner-all" style='display:none;'>
+				<div class="fragment-data">
+					<h3 id="fragment_name">Name</h3>
+					<p id="fragment_desc">Description</p>
+				</div>
+				<div>
+					<button id="fragment_clip">Clipping</button>
+					<button id="fragment_remove">Remove</button>
+				</div>
+			</div>
+			
+		</div>
+        <div id='frag_select_holder'>
+            <div id='frag_select'>
+                {%include 'fragment/jFragmentSelector.html' %}
+            </div>
+        </div>
+        <div style="clear:both"></div>
+	</div>
+</div>
+

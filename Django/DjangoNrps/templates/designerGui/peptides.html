@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block css-include %}
+-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/datatable.css" />
+{% endblock %}
+
+
+{% block js-include %}
+<script src="{{ STATIC_URL }}/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}/js/fragmentlist.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}/js/importer.js" type="text/javascript"></script>
+{% endblock %}
+
+
+
+{% block content %}
+  <button id="addc">Add new Peptide</button>
+  <button id="delete_btn">Delete</button>
+
+<div>
+	<table id="peptide_table">
+		<thead class="ui-widget-content">
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th> Last modified </th>
+				<th>
+					<input class="all-selected" type="checkbox" name="select-all" value="select-all"/>
+				</th>
+			</tr>
+		</thead>		
+		<tbody class="ui-widget-content">
+			{% for nrp in nrpList %}
+				<tr>
+					<td>
+						<a href={% url 'guiTool' nrp.pk %}>{{ nrp.name }}</a>
+					</td>
+					<td>
+						{{ nrp.description|truncatewords:10 }}
+					</td>
+					<td>
+						{{ nrp.modified}}
+					</td>
+					<td>
+						<input class="selected-check" id="{{nrp.pk}}-checkbox" type="checkbox" name="selected" value="{{nrp.pk}}"/>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+</div>
+{% endblock %}
+
+{% block dialog %}
+<div id="peptide_add">
+	<form action="add" method="post">
+		{% csrf_token %}
+        <div id='peptide_form_wrap'>
+		{% include "designerGui/peptideform.html" %}
+        </div>
+	</form>
+	<div style="float:right; padding-right:10px;"><button id="add">Add</button></div>
+</div>
+
+<div id='confirm_delete'>
+	<div id='delete_contents'>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+
+var handle_updated_selection = function(event, data){
+	if( data['selected'] != 0 )
+	{
+		jQuery('#delete_btn').button('enable');
+		//$('#download_btn').button('enable');
+	}
+	else
+	{
+		jQuery('#delete_btn').button('disable');
+		//$('#download_btn').button('disable');
+	}
+}
+
+var delete_html = '<div style="text-align:center;margin-top:1.5em;">' +
+'<p>' +
+'	Are you sure you want to delete the' +
+'	<span id="num-del"></span>' +
+'	you selected?' +
+'</p>' +
+'<div>' +
+'	<form id="delete-form">' +
+'		<button id="cancel-delete"></button>' +
+'		<button id="confirm-delete"></button>' +
+'	</form>' +
+'</div>' +
+'</div>';
+
+var show_delete_dialog = function(){
+	var num = jQuery('#peptide_table').fragmentList('getNumSelected');
+	var s = ''
+	if(num > 1)
+		s = 's'
+	var text = num + " peptide" + s;
+	jQuery('#delete_contents').html(delete_html)
+		.find('#num-del')
+			.text(text);
+	
+	jQuery('#cancel-delete').button({
+		label:"Cancel",
+		icons:{primary:'ui-icon-cancel'}
+	}).click(function() {
+		jQuery('#confirm_delete').dialog('close');
+	});
+	
+	jQuery('#delete-form').submit(function() {
+		return false;
+	});
+	
+	jQuery('#confirm-delete').button({
+		label:"Delete",
+		icons:{primary:'ui-icon-trash'}
+	}).click(function() {
+		var commands = new Array();
+		var ids = jQuery('#peptide_table').fragmentList('getList');
+		for(i in ids)
+		{
+			var id = ids[i];
+			commands.push( {'desc': "Deleting id '" + id + "'",
+							'url': '' + id + "/delete/",
+							'data': {'selected': id},
+							'type': 'POST',});
+		}
+
+		jQuery('#confirm_delete').loader({	'commands': commands,
+										'autoStart': true,
+										'done': function(errors) {location.reload();},
+										'title': 'Deleting Constructs...',});
+
+	});
+	
+	jQuery('#confirm_delete').dialog('open');
+};
+	
+jQuery(document).ready(function() {
+	jQuery('button[id="add"]')
+		.click(function(event){
+			jQuery.post('add', $('form[action^="add"]').serialize(), function(data){
+				console.log(data[1].html)
+                if(data[0] == 0)
+                {
+                    console.log('window.location = ' + data[1].url);
+                    window.location = data[1].url;
+                }
+			    jQuery('#peptide_form_wrap').html(data[1].html);	
+			});
+		})
+		.button({
+			icons:{primary:'ui-icon-plusthick'}
+		});
+	
+	$('#peptide_table').fragmentList({
+		selectChanged: function(event, data) {handle_updated_selection(event, data);},
+	});
+	
+	jQuery('#peptide_table').dataTable({
+		bAutoWidth: false,
+		bJQueryUI: true,
+		bFilter: false,
+		bLengthChange: false,
+		aoColumns: [
+			{
+				sWidth:"20%"
+			},
+			{
+				sWidth:"45%",
+			},
+			{
+				sWidth:"30%",
+			},
+			{
+				sWidth:"5%"
+			},
+		],
+		oLanguage:{
+			sEmptyTable: '<button id="addc">Add new Peptide</button>'
+		}
+	});
+	jQuery('button[id="addc"]')
+		.click(function(event){
+			$('#peptide_add').dialog('open');
+		})
+		.button({
+			icons:{primary:'ui-icon-plusthick'}
+		});
+	jQuery('#peptide_add').dialog({
+		autoOpen:false,
+		resizable:false,
+		modal:true,
+		title:'Add new Peptide',
+		width:400
+	});
+	
+	jQuery('#delete_btn').button({
+		label:"Delete Selection",
+		icons:{primary:'ui-icon-trash'},
+		disabled: true,
+	}).click(function() {
+		show_delete_dialog();
+	});
+
+	jQuery('#confirm_delete').dialog({
+		autoOpen:false,
+		resizable:false,
+		modal:true,
+		title:"Confirm Deletion",
+		close:function () {
+		},
+		height:"auto",
+		width:"580"
+	});
+
+});
+</script>
+{% endblock %}

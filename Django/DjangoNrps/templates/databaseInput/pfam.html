@@ -1,259 +1,331 @@
-{% extends "base.html" %}
+  {% extends "base.html" %}
 
 
 
 
-	
- 
-
-
-    <!-- the following libraries are all hosted on the Pfam site, but can obviously be
-         retrieved and served locally -->
-
-    <!-- the domain graphics library -->
-    
-
-    <!-- stylesheets. We only really need the rules that are specific to the tooltips -->
-    <link rel="stylesheet" href="http://pfam.sanger.ac.uk/static/css/pfam.css" type="text/css" />
-
-
-    <!-- IE, being IE, needs extra help. In particular we need to add an extra library
-         that implements <canvas> using the VML drawing layer in IE. And, so that 
-         "console.log" calls don't screw everything up, we include the firebug-lite 
-         script -->
-    <!--[if IE]>
-      <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/excanvas.js"></script>
-      <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
-    <![endif]-->
 
 
 
- {% block content %}
 
-     <link rel="stylesheet" href="http://pfam.sanger.ac.uk/shared/css/prototip.css" type="text/css" />
-    <style type="text/css">
-      #dg canvas { 
-        margin: 2em;
-      }
-      #errors {
-        border: 1px solid red;
-        margin: 1em 0;
-        padding: 0.4em;
-      }
-    </style>
+      <!-- the following libraries are all hosted on the Pfam site, but can obviously be
+      retrieved and served locally -->
 
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-<script type="text/javascript">google.load("prototype", "1.7");</script>
-{% load staticfiles %}
+      <!-- the domain graphics library -->
+      
 
-<script src="{% static "js/domain_graphics.js" %}" type="text/javascript"></script>
-<script src="{% static "js/spin.js" %}" type="text/javascript"></script>
+      <!-- stylesheets. We only really need the rules that are specific to the tooltips -->
+      <link rel="stylesheet" href="http://pfam.sanger.ac.uk/static/css/pfam.css" type="text/css" />
 
 
-    <!-- in order to standardize the look of text, and in order to make it work at
-         all in older browsers (and IE), we need the canvas text library. And, in turn,
-         that library uses a font description in a separate javascript file -->
-    <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/canvas.text.js?dontUseMoz=true&amp;reimplement=true"></script>
-    <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/faces/optimer-bold-normal.js"></script>
-
-    <!-- we use the (non-free) prototip2 library to add tooltips. It's not free, but
-         nearly. The domain graphics code should cope if it's not loaded, so you
-         could just omit the prototip load -->
-    <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/prototip.js"></script>
-    <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/styles.js"></script>
+      <!-- IE, being IE, needs extra help. In particular we need to add an extra library
+           that implements <canvas> using the VML drawing layer in IE. And, so that 
+           "console.log" calls don't screw everything up, we include the firebug-lite 
+           script -->
+      <!--[if IE]>
+        <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/excanvas.js"></script>
+        <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+        <![endif]-->
 
 
 
-    <!-- this will hold the canvas element -->
-     <script>
-jQuery(function() {
-jQuery( "#tabs" ).tabs();
-})
+        {% block content %}
 
-jQuery(function() {
-jQuery( document ).tooltip();
-});
+        <link rel="stylesheet" href="http://pfam.sanger.ac.uk/shared/css/prototip.css" type="text/css" />
+        <style type="text/css">
+          #dg canvas { 
+            margin: 2em;
+          }
+          #errors {
+            border: 1px solid red;
+            margin: 1em 0;
+            padding: 0.4em;
+          }
+        </style>
 
-jQuery(function() {
-jQuery( "#accordion" ).accordion({
-heightStyle: "content",
-collapsible: true
-});
-});
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">google.load("prototype", "1.7");</script>
+        {% load staticfiles %}
 
-var opts = {
-  lines: 13, // The number of lines to draw
-  length: 20, // The length of each line
-  width: 10, // The line thickness
-  radius: 30, // The radius of the inner circle
-  corners: 1, // Corner roundness (0..1)
-  rotate: 0, // The rotation offset
-  direction: 1, // 1: clockwise, -1: counterclockwise
-  color: '#000', // #rgb or #rrggbb
-  speed: 1, // Rounds per second
-  trail: 60, // Afterglow percentage
-  shadow: false, // Whether to render a shadow
-  hwaccel: false, // Whether to use hardware acceleration
-  className: 'spinner', // The CSS class to assign to the spinner
-  zIndex: 2e9, // The z-index (defaults to 2000000000)
-  top: 'auto', // Top position relative to parent in px
-  left: 'auto' // Left position relative to parent in px
-};
+        <script src="{% static "js/domain_graphics.js" %}" type="text/javascript"></script>
+        <script src="{% static "js/spin.js" %}" type="text/javascript"></script>
 
-var spinner;
-</script>
 
-    <script>
+      <!-- in order to standardize the look of text, and in order to make it work at
+           all in older browsers (and IE), we need the canvas text library. And, in turn,
+           that library uses a font description in a separate javascript file -->
+           <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/canvas.text.js?dontUseMoz=true&amp;reimplement=true"></script>
+           <script type="text/javascript" src="http://pfam.sanger.ac.uk/static/javascripts/faces/optimer-bold-normal.js"></script>
+
+      <!-- we use the (non-free) prototip2 library to add tooltips. It's not free, but
+           nearly. The domain graphics code should cope if it's not loaded, so you
+           could just omit the prototip load -->
+           <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/prototip.js"></script>
+           <script type="text/javascript" src="http://pfam.sanger.ac.uk/shared/javascripts/styles.js"></script>
+
+
+
+           <!-- this will hold the canvas element -->
+           <script>
+            jQuery(function() {
+              jQuery( "#tabs" ).tabs();
+            })
+
+            jQuery(function() {
+              jQuery( document ).tooltip();
+            });
+
+            jQuery(function() {
+              jQuery( "#accordion" ).accordion({
+                heightStyle: "content",
+                collapsible: true
+              });
+            });
+
+            var opts = {
+    lines: 13, // The number of lines to draw
+    length: 20, // The length of each line
+    width: 10, // The line thickness
+    radius: 30, // The radius of the inner circle
+    corners: 1, // Corner roundness (0..1)
+    rotate: 0, // The rotation offset
+    direction: 1, // 1: clockwise, -1: counterclockwise
+    color: '#000', // #rgb or #rrggbb
+    speed: 1, // Rounds per second
+    trail: 60, // Afterglow percentage
+    shadow: false, // Whether to render a shadow
+    hwaccel: false, // Whether to use hardware acceleration
+    className: 'spinner', // The CSS class to assign to the spinner
+    zIndex: 2e9, // The z-index (defaults to 2000000000)
+    top: 'auto', // Top position relative to parent in px
+    left: 'auto' // Left position relative to parent in px
+  };
+
+  var spinner;
+  </script>
+
+  <script>
     function submitPfam(){
       var target = document.getElementById('tabs-2');
       spinner = new Spinner(opts).spin(target);
       jQuery.post("{% url 'sauceFunc' %}", {'sequence':jQuery('#id_dnaSequence').val()}, undefined, "text").done(fillBox);
     };
 
-      function fillBox(data){
+    function fillBox(data){
       generate(data);
       spinner.stop();
     }
-    </script>
+  </script>
 
-    <div id="dg"></div>
+  <div id="dg"></div>
 
-     <form method="post">{% csrf_token %}
-<div id = "tabs">
-<ul>
-<li><a href="#tabs-1">Origin</a></li>
-<li><a href="#tabs-2">Coding Sequence</a></li>
-<li><a href="#tabs-3">Domains</a></li>
-</ul>
+  <form method="post">{% csrf_token %}
+    <div id = "tabs">
+      <ul>
+        <li><a href="#tabs-1">Origin</a></li>
+        <li><a href="#tabs-2">Coding Sequence</a></li>
+        <li><a href="#tabs-3">Domains</a></li>
+      </ul>
 
- <div id="tabs-1">
- <div class="row">
- <div class="span3">
-     <div class="fieldWrapper">
-        {{ form.origin.errors }}
-        <label for="id_subject"></label>
-        <div id="originChosenWrapper" class = "chosenWrapper">
-        {{ form.origin }}
+      <div id="tabs-1">
+       <div class="row">
+         <div class="span3">
+           <div class="fieldWrapper">
+            {{ form.origin.errors }}
+            <label for="id_subject"></label>
+            <div id="originChosenWrapper" class = "chosenWrapper">
+              {{ form.origin }}
+            </div>
+          </div>
         </div>
-    </div>
-  </div>
 
-<div class="span1">
-<p class="text-center"> or</p>
-</div>
-  <div class="span3">
+        <div class="span1">
+          <p class="text-center"> or</p>
+        </div>
+        <div class="span3">
 
-    <a href="#newOriginModal" role="button" class="btn btn-large" data-toggle="modal">    Add new Origin</a>
+          <a href="#newOriginModal" role="button" class="btn btn-large" data-toggle="modal">    Add new Origin</a>
 
 
-<!-- Modal -->
-<div id="newOriginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-<h3 id="myModalLabel">Add new origin</h3>
-</div>
-<div class="modal-body">
-<form action="" method="post">{% csrf_token %}
-{{ originForm.as_p }}
+          <!-- Modal -->
+          <div id="newOriginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">Add new origin</h3>
+            </div>
+            <div class="modal-body">
+              <form action="" method="post">{% csrf_token %}
+                {{ originForm.as_p }}
 
-</div>
-<div class="modal-footer">
-<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-<input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/></div>
-</div>
- 
-</form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/></div>
+              </div>
 
- </div>
-</div>
-</div>
+            </form>
 
- <div id="tabs-2">
-    {{ form.non_field_errors }}
+          </div>
+        </div>
+      </div>
+
+      <div id="tabs-2">
+        {{ form.non_field_errors }}
 
         <div class="row">
-        <div class="span3">
-      <div class="fieldWrapper">
-        {{ form.dnaSequence.errors }}
-        <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
-        {{ form.dnaSequence }} <br/>
-    <div class="btn-group">
-        <input type="button" class="btn" onclick="submitPfam()" value="Send to Pfam!"/>
+          <div class="span3">
+            <div class="fieldWrapper">
+              {{ form.dnaSequence.errors }}
+              <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
+              {{ form.dnaSequence }} <br/>
+              <div class="btn-group">
+                <input type="button" class="btn" onclick="submitPfam()" value="Send to Pfam!"/>
 
-          <input type="button" class="btn" id="clear" value="Clear!"/>
-    </div>
-      
-    </div>
-    </div>
+                <input type="button" class="btn" id="clear" value="Clear!"/>
+              </div>
 
-    <div class="span6">
-    <div class="fieldWrapper">
-        {{ form.geneName.errors }}
-        <label for="id_message">Gene Name:<br/> </label>
-        {{ form.geneName }}
-    </div>
-    <div class="fieldWrapper">
-        {{ form.description.errors }}
-        <label for="id_sender">Description:<br/> </label>
-        {{ form.description }}
-    </div>
-    </div>
-    </div>
-  </div>
+            </div>
+          </div>
 
-
-
-<div id="tabs-3">
-<div id="accordion">
-{% for domainForm in originSet %}
-
-<h3> Domain {{ forloop.counter }} </h3>
-<div>
-    {{ domainForm.non_field_errors }}
-    <div class="row">
-    <div class="span3">
-      <div class="fieldWrapper">
-        {{ domainForm.module.errors }}
-        <label for="id_module">Module: <br/> </label>
-        {{ domainForm.module }}
-    </div>
-
-    <div class="fieldWrapper">
-        {{ domainForm.domainType.errors }}
-        <label for="id_domainType">Domain Type: <br/> </label>
-        {{ domainForm.domainType }}
-    </div>
-    </div>
-    <div class="span3">
+          <div class="span6">
+            <div class="fieldWrapper">
+              {{ form.geneName.errors }}
+              <label for="id_message">Gene Name:<br/> </label>
+              {{ form.geneName }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.description.errors }}
+              <label for="id_sender">Description:<br/> </label>
+              {{ form.description }}
+            </div>
+          </div>
+        </div>
+      </div>
 
 
-      <div class="fieldWrapper">
-        {{ domainForm.substrateSpecificity.errors }}
-        <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
+
+      <div id="tabs-3">
+        <div id="accordion">
+
+          {% for domainForm in originSet %}
+
+          <h3> Domain {{ forloop.counter }} </h3>
+          <div>
+                    {{originSet.management_form}}
+
+            {{ domainForm.non_field_errors }}
+            <div class="row">
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.module.errors }}
+                  <label for="id_module">Module: <br/> </label>
+                  {{ domainForm.module }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.domainType.errors }}
+                  <label for="id_domainType">Domain Type: <br/> </label>
+                  {{ domainForm.domainType }}
+                </div>
+              </div>
+              <div class="span3">
+
+
+                <div class="fieldWrapper">
+                  {{ domainForm.substrateSpecificity.errors }}
+                  <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
                   <div class = "chosenWrapper multipleChosenWrapper">
 
-        {{ domainForm.substrateSpecificity }}
+                    {{ domainForm.substrateSpecificity }}
+                  </div>
+
+
+
+
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.chirality.errors }}
+                  <label for="id_substrateSpecificity">Chirality: <br/> </label>
+                  {{ domainForm.chirality }}
+                </div>
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamLinkerStart.errors }}
+                  <label for="id_module">Pfam Linker Start: <br/> </label>
+                  {{ domainForm.pfamLinkerStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamLinkerStop.errors }}
+                  <label for="id_domainType">Pfam Linker Stop: <br/> </label>
+                  {{ domainForm.pfamLinkerStop }}
+                </div>
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamStart.errors }}
+                  <label for="id_module">Pfam Start: <br/> </label>
+                  {{ domainForm.pfamStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamStop.errors }}
+                  <label for="id_domainType">Pfam Stop: <br/> </label>
+                  {{ domainForm.pfamStop }}
+                </div>
+              </div>
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.definedLinkerStart.errors }}
+                  <label for="id_module">definedLinkerStart: <br/> </label>
+                  {{ domainForm.definedLinkerStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.definedLinkerStop.errors }}
+                  <label for="id_domainType">definedLinkerStop: <br/> </label>
+                  {{ domainForm.definedLinkerStop}}
+                </div>
+              </div>
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.definedStart.errors }}
+                  <label for="id_module">definedStart: <br/> </label>
+                  {{ domainForm.definedStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.definedStop.errors }}
+                  <label for="id_domainType">definedStop: <br/> </label>
+                  {{ domainForm.definedStop}}
+                </div>
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.description.errors }}
+                  <label for="id_module">Description: <br/> </label>
+                  {{ domainForm.description }}
+                </div>
+
+      
+
+
+
+
+            </div>
+          </div>
+          {% endfor %}
+
+        <p><input type="submit" value="Send message" /></p>
+
         </div>
 
- 
-
-
-    </div>
-
-     <div class="fieldWrapper">
-        {{ domainForm.chirality.errors }}
-        <label for="id_substrateSpecificity">Chirality: <br/> </label>
-        {{ domainForm.chirality }}
-    </div>
-    </div>
-    </div>
-    </div>
-{% endfor %}
-</div>
-    <p><input type="submit" value="Send message" /></p>
-
- </div>
-</form>
+      </div>
+    </form>
 
 
 
@@ -261,104 +333,104 @@ var spinner;
     <div id="errors" style="display: none"></div>
 
     <div id="form" style="visibility: hidden">
-    
+
 
       <label for="xscale">X-scale: <input id="xscale" value="1.0"></input></label><br />
       <label for="yscale">Y-scale: <input id="yscale" value="1.0"></input></label><br />
 
     </div>  
 
-    
-    <!-- This is the script tag that is responsible for controlling the page. 
-         We define a function that's will actually generate the domain graphic,
-         based on the content of the form field above. -->
 
- <script type="text/javascript">
-      // <![CDATA[
+      <!-- This is the script tag that is responsible for controlling the page. 
+           We define a function that's will actually generate the domain graphic,
+           based on the content of the form field above. -->
+
+           <script type="text/javascript">
+        // <![CDATA[
 
 
-      // instantiate an object
-      var pg = new PfamGraphic();
+        // instantiate an object
+        var pg = new PfamGraphic();
 
-      // the function that gets called when the "submit" button is clicked
-      var generate = function(mySeq) {
+        // the function that gets called when the "submit" button is clicked
+        var generate = function(mySeq) {
 
-        // start by getting hiding any previous error messages and then 
-        // delete the old canvas element. We could effectively blank the
-        // old canvas by overwriting it with a big white rectangle, but 
-        // here we're just removing it and letting the domain graphics
-        // library generate a new one
-        $("errors").hide();
-        if ( $("dg").select("canvas").size() > 0 ) {
-          $("dg").select("canvas").first().remove();
-        }
+          // start by getting hiding any previous error messages and then 
+          // delete the old canvas element. We could effectively blank the
+          // old canvas by overwriting it with a big white rectangle, but 
+          // here we're just removing it and letting the domain graphics
+          // library generate a new one
+          $("errors").hide();
+          if ( $("dg").select("canvas").size() > 0 ) {
+            $("dg").select("canvas").first().remove();
+          }
 
-        // see if we can turn the contents of the text area into a valid
-        // javascript data structure. If not, display an error message.
-        try {
-          sequence = eval( "sequence = " + mySeq);
-        } catch ( e ) {
-          $("errors").update( e ).show();
-          return;
-        }
+          // see if we can turn the contents of the text area into a valid
+          // javascript data structure. If not, display an error message.
+          try {
+            sequence = eval( "sequence = " + mySeq);
+          } catch ( e ) {
+            $("errors").update( e ).show();
+            return;
+          }
 
-        // give the object the ID of the container that will hold the canvas.
-        // We could have specified this when we instantiated the object instead.
-        // We could also have supplied a reference to the element itself, rather
-        // than it's ID; the libary doesn't care.
-        pg.setParent( "dg" );
+          // give the object the ID of the container that will hold the canvas.
+          // We could have specified this when we instantiated the object instead.
+          // We could also have supplied a reference to the element itself, rather
+          // than it's ID; the libary doesn't care.
+          pg.setParent( "dg" );
 
-        // get the values of X-scale and Y-scale from the form and set them
-        // on the object. These two values can be used to scale the domain
-        // graphics. Set them large to see how the domain graphic looks in detail,
-        // but ignore the drawing errors...
-        pg.setImageParams( {
-          xscale: $F("xscale"),
-          yscale: $F("yscale")
-        } );
+          // get the values of X-scale and Y-scale from the form and set them
+          // on the object. These two values can be used to scale the domain
+          // graphics. Set them large to see how the domain graphic looks in detail,
+          // but ignore the drawing errors...
+          pg.setImageParams( {
+            xscale: $F("xscale"),
+            yscale: $F("yscale")
+          } );
 
-        // hand the domain graphics description to the domain graphics object. It
-        // will throw an exception (hopefully with a meaningful error message 
-        // embedded) if it can't parse the data structure or if there's a problem, 
-        // such as a start value that's greater than an end value. If there's an 
-        // error, show it in the error div.
-        try {
-          pg.setSequence( sequence );
-          pg.render();
-        } catch ( e ) {
-          $("errors").update( e ).show();
-          return;
-        }
-      };
+          // hand the domain graphics description to the domain graphics object. It
+          // will throw an exception (hopefully with a meaningful error message 
+          // embedded) if it can't parse the data structure or if there's a problem, 
+          // such as a start value that's greater than an end value. If there's an 
+          // error, show it in the error div.
+          try {
+            pg.setSequence( sequence );
+            pg.render();
+          } catch ( e ) {
+            $("errors").update( e ).show();
+            return;
+          }
+        };
 
-      // a function to blank everything and start again
-      var clear = function() {
-        jQuery('#errors').hide();
-        jQuery('#id_dnaSequence').val("");
-        jQuery('#dg').val("");
-      };
+        // a function to blank everything and start again
+        var clear = function() {
+          jQuery('#errors').hide();
+          jQuery('#id_dnaSequence').val("");
+          jQuery('#dg').val("");
+        };
 
-      // when the DOM is loaded, add listeners to the clear button
+        // when the DOM is loaded, add listeners to the clear button
 
         jQuery('#clear').bind( "click", clear );
 
 
-      // ]]>
-    </script>
+        // ]]>
+      </script>
 
 
-   <script type="text/javascript">
+      <script type="text/javascript">
 
 
 
-jQuery(document).ready(function() {
-  jQuery('#originChosenWrapper > select > option').filter(':first').html('');
-  jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
-  jQuery('.multipleChosenWrapper').children().select2();
+        jQuery(document).ready(function() {
+          jQuery('#originChosenWrapper > select > option').filter(':first').html('');
+          jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
+          jQuery('.multipleChosenWrapper').children().select2();
 
-  });
-</script>
+        });
+      </script>
 
-{% endblock %}
+      {% endblock %}
 
 

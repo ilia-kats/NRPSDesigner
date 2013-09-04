@@ -1,13 +1,64 @@
-from designerGui.models import Species
-from databaseInput.models import Substrate
-from databaseInput.forms import SubstrateFormSet
-from django.views.generic import ListView, CreateView
-from django.http import HttpResponse
+from designerGui.models import Species, NRP, SubstrateOrder
+from databaseInput.models import Substrate, Modification
+from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
+from designerGui.forms import NRPForm
+from gibson.jsonresponses import JsonResponse, ERROR
+
+from django.views.generic import ListView, CreateView, TemplateView
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.template import Context, loader, RequestContext
+from django.core.urlresolvers import reverse
+
 
 import math
 import json
 import xml.etree.ElementTree as x
 import openbabel as ob
+
+
+def nrpDesign(request, cid):
+    return HttpResponse(str(cid))
+
+@login_required 
+def peptide_add(request):
+    if request.method == 'POST':
+        form = NRPForm(request.POST, prefix='nrp')
+        if form.is_valid():
+            c = form.save(commit=False)
+            c.owner = request.user
+            c.save()
+            return JsonResponse({'url': reverse('peptides') })
+        t = loader.get_template('designerGui/peptideform.html')
+        con = NRP.objects.all().filter(owner=request.user)
+        c = RequestContext(request, {
+            'NRPform':form,
+        })
+        return JsonResponse({'html': t.render(c),}, ERROR)
+    else:
+        return HttpResponseNotFound()
+
+@login_required
+def peptide_delete(request, cid):
+    peptide = NRP.objects.get(owner = request.user, pk = cid)
+    if peptide:
+        peptide.delete()
+        if request.is_ajax():
+            return JsonResponse('/peptides') 
+        return HttpResponseRedirect('/peptides')
+    else:
+        return HttpResponseNotFound()
+
+class NRPListView(TemplateView):
+    template_name = 'designerGui/peptides.html'
+   
+    def get_context_data(self, **kwargs):
+        context = super(NRPListView, self).get_context_data(**kwargs)
+        context['NRPform'] = NRPForm(prefix='nrp')
+        context['title'] = 'NRPS Designer'
+        context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
+        return context
+
 
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
@@ -16,21 +67,38 @@ class SpeciesListView(ListView):
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
+        pid  = self.kwargs["pid"]
+        context['pid'] = pid
         context['myFormSet'] = SubstrateFormSet()
         
+        modfs = Modification.objects.all()
+        context['modifications'] = modfs.values()
+        #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
+        
+        
         aas = Substrate.objects.all()
-        names = {}
+        realAas = []
         for aa in aas:
+            if not hasattr(aa.parent, 'name'):
+                realAas.append(aa)
+        names = {}
+        for aa in realAas:
             name = aa.name
             if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
                 name = aa.name[2:]
             if name in names:
                 names[name][aa.chirality] = aa.pk
-                names[name]['name'] = name
+                names[name][aa.chirality+'Children'] = aa.child.all()
+                #names[name]['name'] = name
             else:
-                names[name] = {aa.chirality: aa.pk, 'name': name}
+                tmp = aa.child.all()    
+                names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
         context['substrates'] = names.values()
         context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
+
+        nrp = NRP.objects.get(pk= pid)
+        substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+        context['substrateOrder'] = substrateOrder
         return context
 
 def submit_nrp(request):

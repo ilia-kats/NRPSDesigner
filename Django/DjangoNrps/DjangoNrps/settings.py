@@ -40,7 +40,10 @@ INSTALLED_APPS = (
     'databaseInput',
     'registration',
     'designerGui',
-    'django_evolution'
+    'django_evolution',
+    'annoying',
+    'fragment',
+    'gibson'
 )
 
 MIDDLEWARE_CLASSES = (
