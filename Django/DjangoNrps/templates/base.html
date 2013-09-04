@@ -35,6 +35,7 @@
 {% block js-include %}{% endblock %}
 
 <script type="text/javascript">
+
 var STATIC_URL = "{{ STATIC_URL }}";
 
 jQuery.ajaxSetup({
@@ -49,6 +50,16 @@ jQuery.ajaxSetup({
 </script>
 
 {% block js %}{% endblock %}
+<style type="text/css">
+
+	.footer {
+    	position:fixed;
+    	left:50px;
+    	bottom:0px;
+	}
+
+</style>
+
 </head>
 
 <body>
@@ -125,5 +136,9 @@ jQuery.ajaxSetup({
 <div id="prompt2"></div>
 
 
+<div class="footer">
+	<a href="https://www.facebook.com/pages/IGEM-Team-Heidelberg-2013/265102553624765" target="_blank"><img src="{% static "img/facebook_button.png" %}" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd"/></a>
+	<a href="https://twitter.com/igem_heidelberg" target="_blank"><img src="{% static "img/twitter_pink.png" %}" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
+</div>
 </body>
 </html>
