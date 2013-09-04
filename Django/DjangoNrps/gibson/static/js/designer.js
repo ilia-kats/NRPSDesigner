@@ -1,4 +1,4 @@
-/*
+-/*
  * designer.js, Haydn King - hjking734@gmail.com - 2012
  * 
  * */
@@ -845,7 +845,7 @@ var df = DisplayFragment.prototype = new Container();
 	 df._area = null;
 	
 	/**
-	 * The angle between the start and the postion at which the mouse was clicked
+	 * The angle between the start and the position at which the mouse was clicked
 	 * @property _mouse_offset
 	 * @private
 	 * @type float

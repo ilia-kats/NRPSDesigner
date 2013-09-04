@@ -1,13 +1,14 @@
-from designerGui.models import Species, NRP
+from designerGui.models import Species, NRP, SubstrateOrder
 from databaseInput.models import Substrate, Modification
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
 
 from django.views.generic import ListView, CreateView, TemplateView
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
+from django.core.urlresolvers import reverse
 
 
 import math
@@ -16,6 +17,8 @@ import xml.etree.ElementTree as x
 import openbabel as ob
 
 
+def nrpDesign(request, cid):
+    return HttpResponse(str(cid))
 
 @login_required 
 def peptide_add(request):
@@ -25,11 +28,11 @@ def peptide_add(request):
             c = form.save(commit=False)
             c.owner = request.user
             c.save()
-            return JsonResponse({'url': '/tool/peptides' })
+            return JsonResponse({'url': reverse('peptides') })
         t = loader.get_template('designerGui/peptideform.html')
         con = NRP.objects.all().filter(owner=request.user)
         c = RequestContext(request, {
-            'NRPForm':form,
+            'NRPform':form,
         })
         return JsonResponse({'html': t.render(c),}, ERROR)
     else:
@@ -64,6 +67,8 @@ class SpeciesListView(ListView):
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
+        pid  = self.kwargs["pid"]
+        context['pid'] = pid
         context['myFormSet'] = SubstrateFormSet()
         
         modfs = Modification.objects.all()
@@ -90,6 +95,10 @@ class SpeciesListView(ListView):
                 names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
         context['substrates'] = names.values()
         context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
+
+        nrp = NRP.objects.get(pk= pid)
+        substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+        context['substrateOrder'] = substrateOrder
         return context
 
 def submit_nrp(request):

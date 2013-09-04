@@ -23,6 +23,7 @@
 			<tr>
 				<th>Name</th>
 				<th>Description</th>
+				<th> Last modified </th>
 				<th>
 					<input class="all-selected" type="checkbox" name="select-all" value="select-all"/>
 				</th>
@@ -32,10 +33,13 @@
 			{% for nrp in nrpList %}
 				<tr>
 					<td>
-						<a href="{{ nrp.pk }}/">{{ nrp.name }}</a>
+						<a href={% url 'guiTool' nrp.pk %}>{{ nrp.name }}</a>
 					</td>
 					<td>
 						{{ nrp.description|truncatewords:10 }}
+					</td>
+					<td>
+						{{ nrp.modified}}
 					</td>
 					<td>
 						<input class="selected-check" id="{{nrp.pk}}-checkbox" type="checkbox" name="selected" value="{{nrp.pk}}"/>
@@ -139,7 +143,7 @@ var show_delete_dialog = function(){
 
 	});
 	
-	$('#confirm_delete').dialog('open');
+	jQuery('#confirm_delete').dialog('open');
 };
 	
 jQuery(document).ready(function() {
@@ -170,10 +174,13 @@ jQuery(document).ready(function() {
 		bLengthChange: false,
 		aoColumns: [
 			{
-				sWidth:"25%"
+				sWidth:"20%"
 			},
 			{
-				sWidth:"70%",
+				sWidth:"45%",
+			},
+			{
+				sWidth:"30%",
 			},
 			{
 				sWidth:"5%"

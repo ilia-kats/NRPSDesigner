@@ -5,7 +5,7 @@ from django.forms.widgets import TextInput
 
 
 class NRPForm(ModelForm):
-	description = CharField(widget=Textarea)
+	description = CharField(widget=Textarea, required=False)
 	class Meta:
 		model = NRP
 		exclude = ['monomers','owner','designed','construct','designerDomains']

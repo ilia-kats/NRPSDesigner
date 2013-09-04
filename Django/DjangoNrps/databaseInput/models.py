@@ -72,6 +72,9 @@ class Substrate(models.Model):
     def __unicode__(self):
         return self.name
 
+    def hasParent(self):
+        return self.parent != None
+
 class Modification(models.Model):
     name = models.CharField(max_length=100)
     domainType =  models.ForeignKey('Type', blank=True, null=True, related_name='modificationAdded')
