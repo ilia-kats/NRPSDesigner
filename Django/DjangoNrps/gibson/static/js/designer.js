@@ -1,4 +1,4 @@
--/*
+/*
  * designer.js, Haydn King - hjking734@gmail.com - 2012
  * 
  * */
