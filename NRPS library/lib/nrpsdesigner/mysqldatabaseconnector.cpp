@@ -206,9 +206,10 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(const Mon
     sql::ResultSet *res = m_stmtCoreDomains->executeQuery();
     while (res->next()) {
         D *d = new D(res->getUInt("did"));
-        d->setOrigin(res->getUInt("orid"));
+        Origin *ori = d->setOrigin(res->getUInt("orid"));
         f(d, res);
         vec.emplace_back(d);
+        fillOrigin(ori);
     }
     delete res;
     return vec;
