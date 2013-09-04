@@ -16,7 +16,6 @@
 
 namespace nrps
 {
-
 class NRPSDESIGNER_EXPORT Taxon
 {
 public:

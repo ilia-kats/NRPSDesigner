@@ -7,19 +7,22 @@ include_directories(
 
 set(SRCS
     monomer.cpp
-    nrp.cpp
+    #nrp.cpp
 
-    abstractdomaintype.cpp
+    #abstractdomaintype.cpp
     domains/domaintypea.cpp
-    domains/domaintypeac.cpp
+    domains/domaintypec.cpp
+    #domains/domaintypeac.cpp
     domains/domaintypet.cpp
     domains/domaintypee.cpp
     domains/domaintypete.cpp
 
+    global_enums.cpp
+
     domain.cpp
 
-    generalpathway.cpp
-    pathway.cpp
+    #generalpathway.cpp
+    origin.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
     taxon.cpp

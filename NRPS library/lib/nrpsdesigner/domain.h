@@ -3,7 +3,6 @@
 
 #include "nrpsdesigner_export.h"
 #include "abstractdomaintype.h"
-#include "pathway.h"
 #include "global_enums.h"
 
 #include <cstdint>
@@ -11,68 +10,87 @@
 #include <memory>
 #include <unordered_map>
 
+#include <libxml/xmlwriter.h>
+
 namespace nrps
 {
-class NRPSDESIGNER_EXPORT Domain : public AbstractDomainType
+class Origin;
+class NRPSDESIGNER_EXPORT Domain
 {
 public:
     virtual std::size_t hash() const;
-    virtual bool full() const;
 
-    uint32_t domainId() const;
-    uint32_t moduleId() const;
-    const std::shared_ptr<Pathway>& pathway() const;
-    const std::string& bioBrickId() const;
+    DomainType type() const;
+    uint32_t id() const;
+    uint32_t module() const;
+    Origin* origin() const;
     const std::string& description() const;
-    const std::string& dnaSequence() const;
-    const std::string& nativeLinkerBefore() const;
-    const std::string& nativeLinkerAfter() const;
-    const std::string& refSeqId() const;
-    const std::string& uniProtId() const;
+    const std::string& dnaSequencePfam() const;
+    const std::string& dnaSequenceDefined() const;
+    const std::string& geneName() const;
+    const std::string& geneDescription() const;
+    const std::string& nativePfamLinkerBefore() const;
+    const std::string& nativePfamLinkerAfter() const;
+    const std::string& nativeDefinedLinkerBefore() const;
+    const std::string& nativeDefinedLinkerAfter() const;
 
-    void setDomainId(uint32_t);
-    void setModuleId(uint32_t);
-    const std::shared_ptr<Pathway>& setPathway(uint32_t);
-    void setBioBrickId(const std::string&);
-    void setBioBrickId(std::string&&);
+    void toXml(xmlTextWriterPtr) const;
+
+    void setId(uint32_t);
+    void setModule(uint32_t);
+    Origin* setOrigin(uint32_t);
     void setDescription(const std::string&);
     void setDescription(std::string&&);
-    void setDnaSequence(const std::string&);
-    void setDnaSequence(std::string&&);
-    void setNativeLinkerBefore(const std::string&);
-    void setNativeLinkerBefore(std::string&&);
-    void setNativeLinkerAfter(const std::string&);
-    void setNativeLinkerAfter(std::string&&);
-    void setRefSeqId(const std::string&);
-    void setRefSeqId(std::string&&);
-    void setUniProtId(const std::string&);
-    void setUniProtId(std::string&&);
-
+    void setDnaSequencePfam(const std::string&);
+    void setDnaSequencePfam(std::string&&);
+    void setDnaSequenceDefined(const std::string&);
+    void setDnaSequenceDefined(std::string&&);
+    void setGeneDescription(const std::string&);
+    void setGeneDescription(std::string&&);
+    void setGeneName(const std::string&);
+    void setGeneName(std::string&&);
+    void setNativePfamLinkerBefore(const std::string&);
+    void setNativePfamLinkerBefore(std::string&&);
+    void setNativePfamLinkerAfter(const std::string&);
+    void setNativePfamLinkerAfter(std::string&&);
+    void setNativeDefinedLinkerBefore(const std::string&);
+    void setNativeDefinedLinkerBefore(std::string&&);
+    void setNativeDefinedLinkerAfter(const std::string&);
+    void setNativeDefinedLinkerAfter(std::string&&);
 
 protected:
-    Domain(DomainType type);
+    Domain(DomainType, uint32_t);
+    virtual void writeXml(xmlTextWriterPtr) const;
+
 
 private:
-    uint32_t m_domainId;
-    uint32_t m_moduleId;
-    uint32_t m_pathway;
-    std::string m_bioBrickId;
+    void startXml(xmlTextWriterPtr) const;
+    void endXml(xmlTextWriterPtr) const;
+
+    DomainType m_type;
+    uint32_t m_id;
+    uint32_t m_module;
+    Origin *m_origin;
     std::string m_description;
-    std::string m_dnaSeq;
-    std::string m_nativeLinkerBefore;
-    std::string m_nativeLinkerAfter;
-    std::string m_refSeqId;
-    std::string m_uniProtId;
-
-    static std::unordered_map<uint32_t, std::shared_ptr<Pathway>> s_pathways;
+    std::string m_dnaSeqPfam;
+    std::string m_dnaSeqDefined;
+    std::string m_geneDescription;
+    std::string m_geneName;
+    std::string m_nativePfamLinkerBefore;
+    std::string m_nativePfamLinkerAfter;
+    std::string m_nativeDefinedLinkerBefore;
+    std::string m_nativeDefinedLinkerAfter;
 };
+}
 
-template<bool full>
-class DomainBaseType
+namespace std
 {
-public:
-    typedef typename std::conditional<full, Domain, AbstractDomainType>::type type;
-};
+    template<>
+    struct NRPSDESIGNER_EXPORT hash<nrps::Domain>
+    {
+    public:
+        std::size_t operator()(const nrps::Domain &d) const;
+    };
 }
 
 #endif

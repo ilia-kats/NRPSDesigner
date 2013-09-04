@@ -1,35 +1,32 @@
 #include "domaintypet.h"
 
+#define POSITION_NODE "position"
+
 using namespace nrps;
 
-template<bool full>
-DomainTypeT<full>::DomainTypeT(DomainTPosition pos)
-: DomainBaseType<full>::type(DomainType::T), m_position(pos)
+DomainTypeT::DomainTypeT(uint32_t id)
+: Domain(DomainType::T, id)
 {}
 
-template<bool full>
-DomainTypeT<full>::~DomainTypeT()
+DomainTypeT::DomainTypeT(uint32_t id, DomainTPosition pos)
+: Domain(DomainType::T, id), m_position(pos)
 {}
 
-template<bool full>
-DomainTPosition DomainTypeT<full>::position() const
+DomainTypeT::~DomainTypeT()
+{}
+
+DomainTPosition DomainTypeT::position() const
 {
     return m_position;
 }
 
-template<>
-std::size_t DomainTypeT<false>::hash() const
+void DomainTypeT::setPosition(DomainTPosition p)
 {
-    return std::hash<int>()(static_cast<int>(type())) ^ std::hash<int>()(static_cast<int>(position()));
-}
-template<>
-std::size_t DomainTypeT<true>::hash() const
-{
-    return DomainBaseType<true>::type::hash();
+    m_position = p;
 }
 
-namespace nrps
+void DomainTypeT::writeXml(xmlTextWriterPtr writer) const
 {
-    template class DomainTypeT<true>;
-    template class DomainTypeT<false>;
+    Domain::writeXml(writer);
+    xmlTextWriterWriteElement(writer, BAD_CAST POSITION_NODE, BAD_CAST toString(position()).c_str());
 }

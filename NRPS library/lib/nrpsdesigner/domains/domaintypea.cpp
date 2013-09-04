@@ -1,42 +1,33 @@
 #include "domaintypea.h"
 
+#define SUBSTRATE_NODE "substrate"
+
 using namespace nrps;
 
-template<bool full>
-DomainTypeA<full>::DomainTypeA(uint32_t substrate)
-: DomainBaseType<full>::type(DomainType::A), m_substrate(substrate)
+DomainTypeA::DomainTypeA(uint32_t id)
+: Domain(DomainType::A, id)
 {}
 
-template<bool full>
-DomainTypeA<full>::DomainTypeA(uint32_t substrate, DomainType type)
-: DomainBaseType<full>::type(type), m_substrate(substrate)
+DomainTypeA::DomainTypeA(uint32_t id, uint32_t substrate)
+: Domain(DomainType::A, id), m_substrate(substrate)
 {}
 
-template<bool full>
-DomainTypeA<full>::~DomainTypeA()
+DomainTypeA::~DomainTypeA()
 {}
 
-template<bool full>
-uint32_t DomainTypeA<full>::substrate() const
+uint32_t DomainTypeA::substrate() const
 {
     return m_substrate;
 }
 
-template<>
-std::size_t DomainTypeA<false>::hash() const
+void DomainTypeA::setSubstrate(uint32_t s)
 {
-    return std::hash<int>()(static_cast<int>(this->type())) ^ std::hash<uint32_t>()(this->substrate());
+    m_substrate = s;
 }
 
-template<>
-std::size_t DomainTypeA<true>::hash() const
+void DomainTypeA::writeXml(xmlTextWriterPtr writer) const
 {
-    return DomainBaseType<true>::type::hash();
-}
-
-namespace nrps
-{
-    template class DomainTypeA<true>;
-    template class DomainTypeA<false>;
+    Domain::writeXml(writer);
+    xmlTextWriterWriteElement(writer, BAD_CAST SUBSTRATE_NODE, BAD_CAST std::to_string(substrate()).c_str());
 }
 
