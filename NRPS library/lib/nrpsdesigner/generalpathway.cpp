@@ -27,9 +27,9 @@ void GeneralPathway::processMonomer(const Monomer &monomer, bool initial)
     m_lastConfiguration = monomer.configuration();
 
     // tailoring before T
-    if (monomer.hasModification(Monomer::Modification::Nmethyl)) {
+    /*if (monomer.hasModification(Monomer::Modification::Nmethyl)) {
         // add NMT-Domain
-    }
+    }*/
 
     emplace_back(new DomainTypeT<>(m_lastConfiguration == Configuration::L ? DomainTPosition::BeforeC : DomainTPosition::BeforeE));
 

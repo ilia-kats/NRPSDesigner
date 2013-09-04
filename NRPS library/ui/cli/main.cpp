@@ -1,18 +1,22 @@
-#include <nrp.h>
+#include <monomer.h>
 #include <generalpathway.h>
 #include <abstractdatabaseconnector.h>
 #include <taxon.h>
 #include <nrps.h>
+#include <origin.h>
 
 #include <iostream>
 
 #include <curl/curl.h>
 #include <string>
+#include <cstring>
+#include <cstdlib>
 
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
 
 using namespace nrps;
 
@@ -24,36 +28,52 @@ size_t write_fun (char *ptr, size_t size, size_t nmemb, void *userdata)
 
 int main(int argc, char *argv[])
 {
-    Nrp nrp(argv[1]);
-
-    std::cout << "Type: " << (nrp.type() == Nrp::Type::Linear ? "linear" : "circular") << std::endl;
-    for (const Monomer &monomer : nrp) {
-        std::cout << std::endl
-        << "ID: " << monomer.id() << std::endl
-        << "name: " << monomer.name() << std::endl
-        << "configuration:" << (monomer.configuration() == Configuration::L ? "L" : "D") << std::endl
-        << "modification:" << std::endl;
-        if (monomer.hasModification(Monomer::Modification::Nmethyl))
-            std::cout << "\tN-methylation" << std::endl;
-    }
-
-    GeneralPathway pathway(nrp);
-    for (const std::shared_ptr<AbstractDomainType> &ptr : pathway) {
-        std::cout << static_cast<int>(ptr->type()) << std::endl;
-    }
     auto dbConn = AbstractDatabaseConnector::getInstance();
     dbConn->initialize();
-    auto possiblePathway = dbConn->getPotentialDomains(pathway);
-    for (const auto &position : possiblePathway) {
-        if (!position->empty()) {
-            for (const auto &domain : *position) {
-                std::cout << domain->domainId() << "\t";
-            }
-        }
-        std::cout << std::endl;
+
+    std::vector<Monomer> monomers;
+    char *ptr = std::strtok(argv[1], ",");
+    while (ptr != nullptr) {
+        monomers.push_back(dbConn->getMonomer(std::atoi(ptr)));
+        ptr = std::strtok(nullptr, ",");
     }
 
-    //Nrps nrps(possiblePathway); database empty as of now
+    for (const Monomer &m : monomers) {
+        std::cout << m.name() << std::endl
+        << "\tid: " << m.id() << std::endl
+        << "\tparentId: " << m.parentId() << std::endl
+        << "\tenantiomerId:" << m.enantiomerId() << std::endl
+        << "\tconfiguration:" << (int)m.configuration() << std::endl
+        << "\tmodifications:" << std::endl;
+        for (const uint32_t &mod : m.modifications()) {
+            std::cout << "\t\t" << mod << std::endl;
+        }
+    }
+
+    try {
+        uint32_t id = 8;
+        Origin *ori = Origin::makeOrigin(id);
+        dbConn->fillOrigin(ori);
+        while (ori != nullptr) {
+            std::cout << "Origin: id: " << ori->id() << std::endl
+            << "\tsourceType: " << toString(ori->sourceType()) << std::endl
+            << "\tsource: " << ori->source() << std::endl
+            << "\tspecies: " << ori->species() << std::endl
+            << "\tproduct: " << ori->product() << std::endl
+            << "\tdesc: " << ori->description() << std::endl
+            << "\ttaxid: " << ori->taxId() << std::endl;
+            ori = ori->parent();
+        }
+
+    } catch (sql::SQLException &e) {
+        std::cout << "# ERR: SQLException in " << __FILE__;
+        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+        std::cout << "# ERR: " << e.what();
+        std::cout << " (MySQL error code: " << e.getErrorCode();
+        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+    }
+    Nrps nrps(monomers);
+    nrps.toXml(std::cout);
 
     Taxon taxon(562);
     char time[100];
@@ -84,30 +104,34 @@ int main(int argc, char *argv[])
     curl_global_cleanup();
     std::cout << xml << std::endl;*/
 
-    try {
-        sql::Driver *driver = get_driver_instance();
-        sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "root", "");
-        con->setSchema("nrps_designer");
-        sql::Statement *stmt = con->createStatement();
-        sql::ResultSet *res = stmt->executeQuery("SELECT * FROM `main`");
-        sql::ResultSetMetaData *resMeta = res->getMetaData();
-        for (unsigned int i = 1; i <= resMeta->getColumnCount(); ++i)
-            std::cout << resMeta->getColumnName(i) << "\t";
-        std::cout << std::endl;
-        while (res->next()) {
-            for (unsigned int i = 1; i <= resMeta->getColumnCount(); ++i)
-                std::cout << res->getString(i) << "\t";
-            std::cout << std::endl;
-        }
-        con->close();
-        delete res;
-        delete stmt;
-        delete con;
-    } catch (sql::SQLException &e) {
-        std::cout << "# ERR: SQLException in " << __FILE__;
-        std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
-        std::cout << "# ERR: " << e.what();
-        std::cout << " (MySQL error code: " << e.getErrorCode();
-        std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
-    }
+//     try {
+//         sql::Driver *driver = get_driver_instance();
+//         sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "root", "");
+//         con->setSchema("nrps_designer");
+//         //sql::PreparedStatement *stmt = con->prepareStatement("SELECT @id:=16, @enant_id:=17, domain.id AS did, substr_xref.substrate_id AS sid, origin.id AS orid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype) ON (domain.id = substr_xref.id AND domain.cds_id = cds.id AND cds.origin_id = origin.id AND domain.domainType_id = dtype.id) WHERE (0 OR substr_xref.substrate_id = @id OR substr_xref.substrate_id = @enant_id) AND dtype.name = 'A' AND domain.chirality = 'N' ORDER BY IF(substr_xref.substrate_id = @id, 0, 1) ASC;");
+//         //stmt->setUInt(1, 16);
+//         //stmt->setUInt(2, 17);
+//         //stmt->setString(2, std::string("A"));
+//         sql::Statement *stmt = con->createStatement();
+//         /*sql::ResultSet *res = */stmt->execute("SET @id:=16; SET @enant_id:=17; SELECT domain.id AS did, substr_xref.substrate_id AS sid, origin.id AS orid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype) ON (domain.id = substr_xref.id AND domain.cds_id = cds.id AND cds.origin_id = origin.id AND domain.domainType_id = dtype.id) WHERE (0 OR substr_xref.substrate_id = @id OR substr_xref.substrate_id = @enant_id) AND dtype.name = 'A' AND domain.chirality = 'N' ORDER BY IF(substr_xref.substrate_id = @id, 0, 1) ASC;");
+//         /*sql::ResultSetMetaData *resMeta = res->getMetaData();
+//         for (unsigned int i = 1; i <= resMeta->getColumnCount(); ++i)
+//             std::cout << resMeta->getColumnName(i) << "\t";
+//         std::cout << std::endl;
+//         while (res->next()) {
+//             for (unsigned int i = 1; i <= resMeta->getColumnCount(); ++i)
+//                 std::cout << res->getString(i) << "\t";
+//             std::cout << std::endl;
+//         }*/
+//         con->close();
+//         //delete res;
+//         delete stmt;
+//         delete con;
+//     } catch (sql::SQLException &e) {
+//         std::cout << "# ERR: SQLException in " << __FILE__;
+//         std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+//         std::cout << "# ERR: " << e.what();
+//         std::cout << " (MySQL error code: " << e.getErrorCode();
+//         std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+//     }
 }

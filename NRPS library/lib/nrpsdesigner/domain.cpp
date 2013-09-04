@@ -1,70 +1,67 @@
 #include "domain.h"
+#include "origin.h"
+
+#define NRPS_NODE "nrps"
+#define DOMAIN_NODE "domain"
+#define TYPE_NODE "type"
+#define ID_NODE "id"
+#define MODULE_NODE "module"
+#define DESCRIPTION_NODE "description"
+#define GENENAME_NODE "genename"
+#define GENEDESCRIPTION_NODE "genedescription"
+#define SEQUENCEPFAM_NODE "sequencepfam"
+#define SEQUENCEDEFINED_NODE "sequencedefined"
+#define NATIVEPFAMLINKERBEFORE_NODE "nativepfamlinkerbefore"
+#define NATIVEPFAMLINKERAFTER_NODE "nativepfamlinkerafter"
+#define NATIVEDEFINEDLINKERBEFORE_NODE "nativedefinedlinkerbefore"
+#define NATIVEDEFINEDLINKERAFTER_NODE "nativedefinedlinkerafter"
+#define ORIGINID_NODE "originid"
 
 using namespace nrps;
 
-std::unordered_map<uint32_t, std::shared_ptr<Pathway>> Domain::s_pathways = std::unordered_map<uint32_t, std::shared_ptr<Pathway>>();
-
-Domain::Domain(DomainType type)
-: AbstractDomainType(type)
+Domain::Domain(DomainType t, uint32_t id)
+: m_type(t), m_id(id)
 {}
 
 std::size_t Domain::hash() const
 {
-    return static_cast<std::size_t>(domainId());
+    return static_cast<std::size_t>(id());
 }
 
-bool Domain::full() const
+DomainType Domain::type() const
 {
-    return true;
+    return m_type;
 }
 
-uint32_t Domain::domainId() const
+uint32_t Domain::id() const
 {
-    return m_domainId;
+    return m_id;
 }
 
-void Domain::setDomainId(uint32_t id)
+void Domain::setId(uint32_t id)
 {
-    m_domainId = id;
+    m_id = id;
 }
 
-uint32_t Domain::moduleId() const
+uint32_t Domain::module() const
 {
-    return m_moduleId;
+    return m_module;
 }
 
-void Domain::setModuleId(uint32_t id)
+void Domain::setModule(uint32_t id)
 {
-    m_moduleId = id;
+    m_module = id;
 }
 
-const std::shared_ptr<Pathway>& Domain::pathway() const
+Origin* Domain::origin() const
 {
-    return s_pathways[m_pathway];
+    return m_origin;
 }
 
-const std::shared_ptr<Pathway>& Domain::setPathway(uint32_t pathwayid)
+Origin* Domain::setOrigin(uint32_t originId)
 {
-    if (s_pathways.count(pathwayid) == 0) {
-        s_pathways.emplace(pathwayid, std::shared_ptr<Pathway>(new Pathway(pathwayid)));
-    }
-    m_pathway = pathwayid;
-    return s_pathways[m_pathway];
-}
-
-const std::string& Domain::bioBrickId() const
-{
-    return m_bioBrickId;
-}
-
-void Domain::setBioBrickId(const std::string &id)
-{
-    m_bioBrickId = id;
-}
-
-void Domain::setBioBrickId(std::string &&id)
-{
-    m_bioBrickId = std::move(id);
+    m_origin = Origin::makeOrigin(originId);
+    return m_origin;
 }
 
 const std::string& Domain::description() const
@@ -82,78 +79,156 @@ void Domain::setDescription(std::string &&description)
     m_description = std::move(description);
 }
 
-const std::string& Domain::dnaSequence() const
+const std::string& Domain::dnaSequencePfam() const
 {
-    return m_dnaSeq;
+    return m_dnaSeqPfam;
 }
 
-void Domain::setDnaSequence(const std::string &seq)
+void Domain::setDnaSequencePfam(const std::string &seq)
 {
-    m_dnaSeq = seq;
+    m_dnaSeqPfam = seq;
 }
 
-void Domain::setDnaSequence(std::string &&seq)
+void Domain::setDnaSequencePfam(std::string &&seq)
 {
-    m_dnaSeq = std::move(seq);
+    m_dnaSeqPfam = std::move(seq);
 }
 
-const std::string& Domain::nativeLinkerBefore() const
+const std::string& Domain::dnaSequenceDefined() const
 {
-    return m_nativeLinkerBefore;
+    return m_dnaSeqDefined;
 }
 
-void Domain::setNativeLinkerBefore(const std::string &linker)
+void Domain::setDnaSequenceDefined(const std::string &seq)
 {
-    m_nativeLinkerBefore = linker;
+    m_dnaSeqDefined = seq;
 }
 
-void Domain::setNativeLinkerBefore(std::string &&linker)
+void Domain::setDnaSequenceDefined(std::string &&seq)
 {
-    m_nativeLinkerBefore = std::move(linker);
+    m_dnaSeqDefined = std::move(seq);
 }
 
-const std::string& Domain::nativeLinkerAfter() const
+const std::string& Domain::geneDescription() const
 {
-    return m_nativeLinkerAfter;
+    return m_geneDescription;
 }
 
-void Domain::setNativeLinkerAfter(const std::string &linker)
+void Domain::setGeneDescription(const std::string &description)
 {
-    m_nativeLinkerAfter = linker;
+    m_geneDescription = description;
 }
 
-void Domain::setNativeLinkerAfter(std::string &&linker)
+void Domain::setGeneDescription(std::string &&description)
 {
-    m_nativeLinkerAfter = std::move(linker);
+    m_geneDescription = std::move(description);
 }
 
-const std::string& Domain::refSeqId() const
+const std::string& Domain::geneName() const
 {
-    return m_refSeqId;
+    return m_geneName;
 }
 
-void Domain::setRefSeqId(const std::string &id)
+void Domain::setGeneName(const std::string &name)
 {
-    m_refSeqId = id;
+    m_geneName = name;
 }
 
-void Domain::setRefSeqId(std::string &&id)
+void Domain::setGeneName(std::string &&name)
 {
-    m_refSeqId = std::move(id);
+    m_geneName = std::move(name);
 }
 
-const std::string& Domain::uniProtId() const
+const std::string& Domain::nativePfamLinkerBefore() const
 {
-    return m_uniProtId;
+    return m_nativePfamLinkerBefore;
 }
 
-void Domain::setUniProtId(const std::string &id)
+void Domain::setNativePfamLinkerBefore(const std::string &linker)
 {
-    m_uniProtId = id;
+    m_nativePfamLinkerBefore = linker;
 }
 
-void Domain::setUniProtId(std::string &&id)
+void Domain::setNativePfamLinkerBefore(std::string &&linker)
 {
-    m_uniProtId = std::move(id);
+    m_nativePfamLinkerBefore = std::move(linker);
 }
 
+const std::string& Domain::nativePfamLinkerAfter() const
+{
+    return m_nativePfamLinkerAfter;
+}
+
+void Domain::setNativePfamLinkerAfter(const std::string &linker)
+{
+    m_nativePfamLinkerAfter = linker;
+}
+
+void Domain::setNativePfamLinkerAfter(std::string &&linker)
+{
+    m_nativePfamLinkerAfter = std::move(linker);
+}
+
+const std::string& Domain::nativeDefinedLinkerBefore() const
+{
+    return m_nativeDefinedLinkerBefore;
+}
+
+void Domain::setNativeDefinedLinkerBefore(const std::string &linker)
+{
+    m_nativeDefinedLinkerBefore = linker;
+}
+
+void Domain::setNativeDefinedLinkerBefore(std::string &&linker)
+{
+    m_nativeDefinedLinkerBefore = std::move(linker);
+}
+
+const std::string& Domain::nativeDefinedLinkerAfter() const
+{
+    return m_nativeDefinedLinkerAfter;
+}
+
+void Domain::setNativeDefinedLinkerAfter(const std::string &linker)
+{
+    m_nativeDefinedLinkerAfter = linker;
+}
+
+void Domain::setNativeDefinedLinkerAfter(std::string &&linker)
+{
+    m_nativeDefinedLinkerAfter = std::move(linker);
+}
+
+void Domain::toXml(xmlTextWriterPtr writer) const
+{
+    startXml(writer);
+    writeXml(writer);
+    endXml(writer);
+}
+
+void Domain::startXml(xmlTextWriterPtr writer) const
+{
+    xmlTextWriterStartElement(writer, BAD_CAST DOMAIN_NODE);
+}
+
+void Domain::writeXml(xmlTextWriterPtr writer) const
+{
+    xmlTextWriterWriteElement(writer, BAD_CAST ID_NODE, BAD_CAST std::to_string(id()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST TYPE_NODE, BAD_CAST toString(type()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST MODULE_NODE, BAD_CAST std::to_string(module()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST GENEDESCRIPTION_NODE, BAD_CAST geneDescription().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST GENENAME_NODE, BAD_CAST geneName().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST SEQUENCEPFAM_NODE, BAD_CAST dnaSequencePfam().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST SEQUENCEDEFINED_NODE, BAD_CAST dnaSequenceDefined().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEPFAMLINKERBEFORE_NODE, BAD_CAST nativePfamLinkerBefore().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEPFAMLINKERAFTER_NODE, BAD_CAST nativePfamLinkerAfter().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERBEFORE_NODE, BAD_CAST nativeDefinedLinkerBefore().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERAFTER_NODE, BAD_CAST nativeDefinedLinkerAfter().c_str());
+}
+
+void Domain::endXml(xmlTextWriterPtr writer) const
+{
+    xmlTextWriterEndElement(writer);
+}

@@ -3,17 +3,9 @@
 
 using namespace nrps;
 
-template<bool full>
-DomainTypeE<full>::DomainTypeE()
-: DomainBaseType<full>::type(DomainType::E)
+DomainTypeE::DomainTypeE(uint32_t id)
+: Domain(DomainType::E, id)
 {}
 
-template<bool full>
-DomainTypeE<full>::~DomainTypeE()
+DomainTypeE::~DomainTypeE()
 {}
-
-namespace nrps
-{
-    template class DomainTypeE<true>;
-    template class DomainTypeE<false>;
-}
