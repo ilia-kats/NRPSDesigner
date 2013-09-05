@@ -1,8 +1,8 @@
 #include <monomer.h>
-#include <generalpathway.h>
 #include <abstractdatabaseconnector.h>
 #include <taxon.h>
 #include <nrps.h>
+#include <nrpsbuilder.h>
 #include <origin.h>
 
 #include <iostream>
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         std::cout << " (MySQL error code: " << e.getErrorCode();
         std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
     }
-    Nrps nrps(monomers);
+    Nrps nrps = NrpsBuilder().build(monomers);
     nrps.toXml(std::cout);
 
     Taxon taxon(562);

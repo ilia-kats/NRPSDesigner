@@ -28,7 +28,6 @@ public:
     virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition);
     virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains();
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains();
-    virtual std::vector<std::shared_ptr<std::vector<std::shared_ptr<Domain>>>> getPotentialDomains(const GeneralPathway &pathway);
     virtual void fillDomain(std::shared_ptr<Domain>);
     virtual void fillOrigin(Origin*);
 
@@ -37,18 +36,6 @@ private:
     template<class D, class initFunc>
     std::vector<std::shared_ptr<D>> getCoreDomains(const Monomer&, bool, DomainType, Configuration, const initFunc&);
 
-    /*template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getADomains(const AbstractDomainType*);
-    template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getACDomains(const AbstractDomainType*);
-    template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getTDomains(const AbstractDomainType*);
-    template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getEDomains(const AbstractDomainType*);
-    template <bool full>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> getTeDomains(const AbstractDomainType*);
-    template<template<bool> class D, typename... Args>
-    std::shared_ptr<std::vector<std::shared_ptr<Domain>>> populateInitialDomains(sql::ResultSet *res, const Args&... args);*/
     sql::Connection *m_connection;
     sql::PreparedStatement *m_stmtMonomer;
     sql::PreparedStatement *m_stmtCoreDomainsId;
@@ -56,11 +43,6 @@ private:
     sql::PreparedStatement *m_stmtCoreDomains;
     sql::PreparedStatement *m_stmtDomain;
     sql::Statement *m_stmtOrigin;
-    sql::PreparedStatement *m_stmtInitiationADomains;
-    sql::PreparedStatement *m_stmtElongationACDomains;
-    sql::PreparedStatement *m_stmtTDomains;
-    sql::PreparedStatement *m_stmtEDomains;
-    sql::PreparedStatement *m_stmtTeDomains;
 };
 }
 
