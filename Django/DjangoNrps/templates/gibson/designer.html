@@ -27,10 +27,17 @@
 	<div class="content center full-width">
 		<div id='tabs' class='left'>
 			<ul>
+
 				<li>
 					<a href="#design-tab" class='tab-link'>
 						<span class='ui-icon ui-icon-pencil tab-icon'></span>
 						Designer
+					</a>
+				</li>
+				<li>
+					<a href="{% url 'guiTool' 5 %}" class='tab-link'>
+						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
+						SAUCE
 					</a>
 				</li>
 				<li>
@@ -52,6 +59,7 @@
 						Primers
 					</a>
 				</li>
+	
 			</ul>
             <div id='design-tab'>
                 {% include 'gibson/designtab.html' %}

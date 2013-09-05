@@ -14,7 +14,7 @@ def saveNrpMonomers(request,pid):
 		# now add the new list
 		for count, monomerId in enumerate(request.POST.getlist('as[]')):
 			monomer = Substrate.objects.get(pk=int(monomerId))
-			so = SubstrateOrder.objects.create(nrp= nrp, substrate = monomer, order = count+1)
+			so = SubstrateOrder.objects.create(nrp= nrp, substrate = monomer, order = count)
 		nrp.designed = False
 		nrp.save()
 		return HttpResponse()

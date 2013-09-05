@@ -1,4 +1,3 @@
-{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block js-include %}
@@ -6,7 +5,7 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
-
+    var nrpEnabledEffects = false
     var monomers = [
         {% for aa in substrates %}
             {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did:  
@@ -37,9 +36,11 @@
     }
 
     function makeStruct()
-    {   
+    {  if (nrpEnabledEffects){
        var ids = "?as=" + getMonomers().join("&as=");
        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+       }
+       
     }
     function editMonomer(e)
     {
@@ -138,7 +139,12 @@
     function removeMonomer(e)
     {
         var monomer = jQuery(e.delegateTarget).parent();
+        if (nrpEnabledEffects) {
         monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();makeStruct();});
+        } else {
+            monomer.remove();
+        }
+ 
     }   
     function addMonomer(e)
     {  
@@ -155,9 +161,11 @@
         div.buttonset();
         div.hide();
         var selected = jQuery("#selected_monomers");
-        selected.append(div);
+        selected.append(div); 
         div.fadeIn(animationDuration);
-        selected.animate({scrollLeft: selected[0].scrollWidth}, animationDuration);
+        if (nrpEnabledEffects) {
+            selected.animate({scrollLeft: selected[0].scrollWidth}, animationDuration);
+        }
         aa.click();
         jQuery("#struct").height(jQuery("#params").height());
         applyMonomer();
@@ -250,7 +258,8 @@
         {% endif %}
         {% endfor %}
         {% endif %} 
-
+        nrpEnabledEffects = true;
+        makeStruct();
         });
 
 </script>
@@ -348,7 +357,7 @@
     <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
-                <img id="structimg" alt="Fair winds!" style="height:100%;">
+                <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" + idsstyle="height:100%;">
             </div>
     </div>
 </div>

@@ -8,6 +8,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import condition
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq

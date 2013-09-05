@@ -548,9 +548,9 @@ class ConstructFragment(models.Model):
 	)
 	direction = models.CharField(max_length=1, choices=DIRECTION_CHOICES)
 	start_feature = models.ForeignKey('fragment.Feature', related_name='start_feature', blank=True, null=True) #if blank, assume relative to fragment not feature
-	start_offset = models.IntegerField() #positive in direction of sequence
+	start_offset = models.IntegerField(default=0) #positive in direction of sequence
 	end_feature = models.ForeignKey('fragment.Feature', related_name='end_feature', blank=True, null=True) #if blank, assume relative to fragment not feature
-	end_offset = models.IntegerField() #positive in direction of sequence
+	end_offset = models.IntegerField(default=0) #positive in direction of sequence
 	concentration = models.DecimalField(default=100, max_digits=4, decimal_places=1)
 
 	class Meta:

@@ -105,6 +105,6 @@ def sauceFunc(request):
     #for match in pfamResultMatches:
     #   pfamDomains.append(match.attributes["id"].value)
     pfamResultRequest = requests.get(pfamGraphicUrl)
-    #pdb.set_trace()
+    import pdb; pdb.set_trace()
     return HttpResponse(pfamResultRequest.text[1:-1], mimetype="text/plain")
 
