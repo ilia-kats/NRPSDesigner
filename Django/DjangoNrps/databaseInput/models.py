@@ -1,43 +1,51 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Remove `managed = False` lines for those models you wish to give write DB access
+# Feel free to rename the models, but don't rename db_table values or field names.
+#
+# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
+# into your database.
 from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from databaseInput.validators import validate_coding_seq
 
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
+    product = models.ForeignKey('Product', blank=True, null=True)
     geneName = models.CharField(max_length=100) 
-    dnaSequence = models.TextField(validators = [validate_coding_seq])
+    dnaSequence = models.TextField()
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
    
     def __unicode__(self):
         return str(self.origin) + self.geneName
 
-    def length(self):
-        return len(self.dnaSequence)
-
     class Meta:
         verbose_name = "Coding sequence"
         verbose_name_plural = "Coding sequences"
 
 class Origin(models.Model):
-    ORIGIN_CHOICES = (
-        ('Species', 'Species'),
-        ('BB', 'BioBrick'),
-        ('DNA', 'Other DNA source') 
-    )
-    sourceType = models.CharField(max_length=10, choices= ORIGIN_CHOICES)
+    sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('DNA','DNA')))
     source = models.CharField(max_length=20) #usually taxon ID, can also be biobrick or plasmid identifier
     species = models.CharField(max_length = 100, blank=True, null= True)
-    product = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
     linkout =  generic.GenericRelation('Linkout')
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
 
     def __unicode__(self):
         return self.species
+
+class Product(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    linkout = generic.GenericRelation('Linkout')
+
+    def __unicode__(self):
+       return self.name
 
 class Domain(models.Model):
     module = models.IntegerField()
@@ -72,9 +80,6 @@ class Substrate(models.Model):
     def __unicode__(self):
         return self.name
 
-    def hasParent(self):
-        return self.parent != None
-
 class Modification(models.Model):
     name = models.CharField(max_length=100)
     domainType =  models.ForeignKey('Type', blank=True, null=True, related_name='modificationAdded')
@@ -95,7 +100,7 @@ class Type(models.Model):
 class Linkout(models.Model):
     linkoutType = models.ForeignKey('LinkoutType')
     identifier = models.CharField(max_length=50)
-    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds')
+    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product')
     content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
