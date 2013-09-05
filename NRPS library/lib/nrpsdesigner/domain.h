@@ -15,6 +15,7 @@
 namespace nrps
 {
 class Origin;
+class Product;
 class NRPSDESIGNER_EXPORT Domain
 {
 public:
@@ -24,6 +25,7 @@ public:
     uint32_t id() const;
     uint32_t module() const;
     Origin* origin() const;
+    Product* product() const;
     const std::string& description() const;
     const std::string& dnaSequencePfam() const;
     const std::string& dnaSequenceDefined() const;
@@ -39,6 +41,7 @@ public:
     void setId(uint32_t);
     void setModule(uint32_t);
     Origin* setOrigin(uint32_t);
+    Product* setProduct(uint32_t);
     void setDescription(const std::string&);
     void setDescription(std::string&&);
     void setDnaSequencePfam(const std::string&);
@@ -71,6 +74,7 @@ private:
     uint32_t m_id;
     uint32_t m_module;
     Origin *m_origin;
+    Product *m_product;
     std::string m_description;
     std::string m_dnaSeqPfam;
     std::string m_dnaSeqDefined;

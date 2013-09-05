@@ -21,7 +21,6 @@ public:
     OriginSourceType sourceType() const;
     const std::string& source() const;
     const std::string& species() const;
-    const std::string& product() const;
     const std::string& description() const;
     uint32_t taxId() const;
     Origin* parent() const;
@@ -32,8 +31,6 @@ public:
     void setSource(std::string&&);
     void setSpecies(const std::string&);
     void setSpecies(std::string&&);
-    void setProduct(const std::string&);
-    void setProduct(std::string&&);
     void setDescription(const std::string&);
     void setDescription(std::string&&);
     void setParent(Origin*);

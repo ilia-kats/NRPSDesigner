@@ -7,7 +7,6 @@
 #define SOURCETYPE_NODE "sourcetype"
 #define SOURCE_NODE "source"
 #define SPECIES_NODE "species"
-#define PRODUCT_NODE "product"
 #define DESCRIPTION_NODE "description"
 #define TAXID_NODE "taxid"
 #define PARENT_NODE "parent"
@@ -93,21 +92,6 @@ void Origin::setSpecies(std::string &&species)
     m_species = std::move(species);
 }
 
-const std::string& Origin::product() const
-{
-    return m_product;
-}
-
-void Origin::setProduct(const std::string &prod)
-{
-    m_product = prod;
-}
-
-void Origin::setProduct(std::string &&prod)
-{
-    m_product = std::move(prod);
-}
-
 const std::string& Origin::description() const
 {
     return m_description;
@@ -162,7 +146,6 @@ void Origin::toXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST SOURCETYPE_NODE, BAD_CAST toString(sourceType()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST SOURCE_NODE, BAD_CAST source().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST SPECIES_NODE, BAD_CAST species().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST PRODUCT_NODE, BAD_CAST product().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST TAXID_NODE, BAD_CAST std::to_string(taxId()).c_str());
     if (parent() != nullptr)

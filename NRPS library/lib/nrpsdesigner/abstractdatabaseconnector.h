@@ -9,7 +9,6 @@
 #include "domains/domaintypet.h"
 #include "domains/domaintypee.h"
 #include "domains/domaintypete.h"
-#include "generalpathway.h"
 #include "monomer.h"
 
 #include <vector>
@@ -27,7 +26,6 @@ public:
     virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() = 0;
     virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() = 0;
-    virtual std::vector<std::shared_ptr<std::vector<std::shared_ptr<Domain>>>> getPotentialDomains(const GeneralPathway &pathway) = 0;
     virtual void fillDomain(std::shared_ptr<Domain>) = 0;
     virtual void fillOrigin(Origin*) = 0;
 

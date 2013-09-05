@@ -7,12 +7,9 @@ include_directories(
 
 set(SRCS
     monomer.cpp
-    #nrp.cpp
 
-    #abstractdomaintype.cpp
     domains/domaintypea.cpp
     domains/domaintypec.cpp
-    #domains/domaintypeac.cpp
     domains/domaintypet.cpp
     domains/domaintypee.cpp
     domains/domaintypete.cpp
@@ -21,12 +18,13 @@ set(SRCS
 
     domain.cpp
 
-    #generalpathway.cpp
     origin.cpp
+    product.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
     taxon.cpp
     nrps.cpp
+    nrpsbuilder.cpp
 )
 
 if (UNIX)
