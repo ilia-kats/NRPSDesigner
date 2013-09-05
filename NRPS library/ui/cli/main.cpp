@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
             << "\tsourceType: " << toString(ori->sourceType()) << std::endl
             << "\tsource: " << ori->source() << std::endl
             << "\tspecies: " << ori->species() << std::endl
-            << "\tproduct: " << ori->product() << std::endl
             << "\tdesc: " << ori->description() << std::endl
             << "\ttaxid: " << ori->taxId() << std::endl;
             ori = ori->parent();

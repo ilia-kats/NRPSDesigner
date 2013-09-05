@@ -19,6 +19,7 @@ set(SRCS
     domain.cpp
 
     origin.cpp
+    product.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
     taxon.cpp

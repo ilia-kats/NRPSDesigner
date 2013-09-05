@@ -42,6 +42,7 @@ private:
     sql::PreparedStatement *m_stmtCoreDomainsEnantId;
     sql::PreparedStatement *m_stmtCoreDomains;
     sql::PreparedStatement *m_stmtDomain;
+    sql::PreparedStatement *m_stmtProduct;
     sql::Statement *m_stmtOrigin;
 };
 }

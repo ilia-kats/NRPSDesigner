@@ -1,5 +1,6 @@
 #include "domain.h"
 #include "origin.h"
+#include "product.h"
 
 #define NRPS_NODE "nrps"
 #define DOMAIN_NODE "domain"
@@ -16,6 +17,7 @@
 #define NATIVEDEFINEDLINKERBEFORE_NODE "nativedefinedlinkerbefore"
 #define NATIVEDEFINEDLINKERAFTER_NODE "nativedefinedlinkerafter"
 #define ORIGINID_NODE "originid"
+#define PRODUCTID_NODE "productid"
 
 using namespace nrps;
 
@@ -58,10 +60,21 @@ Origin* Domain::origin() const
     return m_origin;
 }
 
-Origin* Domain::setOrigin(uint32_t originId)
+Origin* Domain::setOrigin(uint32_t id)
 {
-    m_origin = Origin::makeOrigin(originId);
+    m_origin = Origin::makeOrigin(id);
     return m_origin;
+}
+
+Product* Domain::product() const
+{
+    return m_product;
+}
+
+Product* Domain::setProduct(uint32_t id)
+{
+    m_product = Product::makeProduct(id);
+    return m_product;
 }
 
 const std::string& Domain::description() const
@@ -217,6 +230,7 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST TYPE_NODE, BAD_CAST toString(type()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST MODULE_NODE, BAD_CAST std::to_string(module()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST PRODUCTID_NODE, BAD_CAST std::to_string(product()->id()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST GENEDESCRIPTION_NODE, BAD_CAST geneDescription().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST GENENAME_NODE, BAD_CAST geneName().c_str());

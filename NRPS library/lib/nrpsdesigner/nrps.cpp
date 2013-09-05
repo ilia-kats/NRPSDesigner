@@ -1,6 +1,7 @@
 #include "nrps.h"
 #include "taxon.h"
 #include "origin.h"
+#include "product.h"
 #include "abstractdatabaseconnector.h"
 
 #include <unordered_set>
@@ -10,6 +11,7 @@
 #define NRPS_NODE "nrps"
 #define DOMAINS_NODE "domains"
 #define ORIGINS_NODE "origins"
+#define PRODUCTS_NODE "products"
 
 using namespace nrps;
 
@@ -63,6 +65,7 @@ void Nrps::toXml(int fd) const
 void Nrps::toXml(xmlTextWriterPtr writer) const
 {
     std::unordered_set<Origin*> seenOrigins;
+    std::unordered_set<Product*> seenProducts;
     std::vector<Origin*> originsToWrite;
     xmlTextWriterSetIndent(writer, 1);
     xmlTextWriterSetIndentString(writer, BAD_CAST "    ");
@@ -73,6 +76,7 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
     for (const auto &domain : *this) {
         dbconn->fillDomain(domain);
         originsToWrite.push_back(domain->origin());
+        seenProducts.insert(domain->product());
         domain->toXml(writer);
     }
     xmlTextWriterEndElement(writer);
@@ -86,6 +90,12 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
             }
         }
     }
+    xmlTextWriterEndElement(writer);
+    xmlTextWriterStartElement(writer, BAD_CAST PRODUCTS_NODE);
+    for (Product *pr : seenProducts) {
+        pr->toXml(writer);
+    }
+    xmlTextWriterEndElement(writer);
     xmlTextWriterEndElement(writer);
     xmlTextWriterEndDocument(writer);
 }
