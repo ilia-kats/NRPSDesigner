@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'django_evolution',
     'annoying',
     'fragment',
-    'gibson'
+    'gibson',
+    'south'
 )
 
 MIDDLEWARE_CLASSES = (
