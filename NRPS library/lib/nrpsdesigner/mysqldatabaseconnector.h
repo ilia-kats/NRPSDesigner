@@ -21,6 +21,7 @@ class MySQLDatabaseConnector : public AbstractDatabaseConnector
 public:
     MySQLDatabaseConnector();
     virtual ~MySQLDatabaseConnector();
+    virtual boost::program_options::options_description options();
     virtual void initialize();
     virtual Monomer getMonomer(uint32_t);
     virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&);
@@ -44,6 +45,11 @@ private:
     sql::PreparedStatement *m_stmtDomain;
     sql::PreparedStatement *m_stmtProduct;
     sql::Statement *m_stmtOrigin;
+
+    std::string m_host;
+    uint16_t m_port;
+    std::string m_user;
+    std::string m_password;
 };
 }
 

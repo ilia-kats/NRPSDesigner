@@ -13,13 +13,16 @@
 
 #include <vector>
 
+#include <boost/program_options/options_description.hpp>
+
 namespace nrps
 {
 class NRPSDESIGNER_EXPORT AbstractDatabaseConnector
 {
 public:
     virtual ~AbstractDatabaseConnector();
-    virtual void initialize() = 0; // TODO: write class for parameters (host, user, pw)
+    virtual boost::program_options::options_description options() = 0;
+    virtual void initialize() = 0;
     virtual Monomer getMonomer(uint32_t) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeC>> getCDomains(const Monomer&, Configuration) = 0;

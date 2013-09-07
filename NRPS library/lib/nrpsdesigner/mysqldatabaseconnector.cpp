@@ -17,6 +17,7 @@
 #include <cppconn/prepared_statement.h>
 
 using namespace nrps;
+namespace po = boost::program_options;
 
 MySQLDatabaseConnector::MySQLDatabaseConnector()
 : AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomer(nullptr), m_stmtCoreDomains(nullptr), m_stmtCoreDomainsId(nullptr), m_stmtCoreDomainsEnantId(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtOrigin(nullptr)
@@ -51,12 +52,26 @@ MySQLDatabaseConnector::~MySQLDatabaseConnector()
     }
 }
 
+po::options_description MySQLDatabaseConnector::options()
+{
+    po::options_description options("MySQL options");
+    options.add_options()("mysql-host", po::value<std::string>(&m_host)->default_value("127.0.0.1"), "host address")
+                         ("mysql-port", po::value<uint16_t>(&m_port)->default_value(3306), "Port number to use for connection.")
+                         ("mysql-user", po::value<std::string>(&m_user)->default_value("root"), "User for login.")
+                         ("mysql-password", po::value<std::string>(&m_password), "Password to use when connecting to server.");
+    return options;
+}
+
 void MySQLDatabaseConnector::initialize()
 {
     if (testInitialized(false))
         return;
+    if (m_host.empty() || m_user.empty())
+        throw std::invalid_argument("MySQL database options not valid.");
     sql::Driver *driver = get_driver_instance();
-    m_connection = driver->connect("tcp://127.0.0.1:3306", "root", "");
+    std::string server("tcp://");
+    server.append(m_host).append(":").append(std::to_string(m_port));
+    m_connection = driver->connect(server, m_user, m_password);
     m_connection->setSchema("nrps_designer");
     m_stmtMonomer = m_connection->prepareStatement("SELECT name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE id = ?;");
     m_stmtCoreDomainsId = m_connection->prepareStatement("SET @id := ?;");
