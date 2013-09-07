@@ -99,6 +99,9 @@ class SpeciesListView(ListView):
         nrp = NRP.objects.get(pk= pid)
         substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
         context['substrateOrder'] = substrateOrder
+
+        initialPic = nrp.getPeptideSequenceForStructView()
+        context['initialPic'] = initialPic
         return context
 
 def submit_nrp(request):
