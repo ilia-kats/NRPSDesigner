@@ -1,5 +1,6 @@
 #include "taxon.h"
 #include "global_enums.h"
+#include "networkoptions.h"
 
 #include <system_error>
 #include <stdexcept>
@@ -54,13 +55,13 @@ using namespace nrps;
 void *Taxon::s_handle = nullptr;
 std::string Taxon::s_url = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&rettype=xml&id=";
 
-Taxon::Taxon(uint32_t id)
+Taxon::Taxon(uint32_t id) throw (NCBITaxonomyError, std::logic_error, std::system_error)
 : m_id(id), m_parentId(0), m_full(false)
 {
     fetch();
 }
 
-Taxon::Taxon(xmlNodePtr node)
+Taxon::Taxon(xmlNodePtr node) throw (std::logic_error)
 : m_id(0), m_parentId(0), m_full(false)
 {
     parseTaxon(node);
@@ -141,12 +142,12 @@ std::chrono::system_clock::time_point Taxon::pubDate() const
     return m_pubDate;
 }
 
-void Taxon::fetch()
+void Taxon::fetch() throw (NCBITaxonomyError, std::logic_error, std::system_error)
 {
     if (s_handle == nullptr) {
         CURLcode init = curl_global_init(CURL_GLOBAL_DEFAULT);
         if (init != CURLE_OK)
-            throw std::system_error(init, std::system_category(), "curl intialization failed!");
+            throw std::system_error(init, std::system_category(), "curl initialization failed!");
         else
             s_handle = curl_easy_init( );
     }
@@ -154,20 +155,28 @@ void Taxon::fetch()
     xmlParserCtxtPtr ctxt = xmlCreatePushParserCtxt(nullptr, nullptr, nullptr, 0, url.c_str());
 
     CURLcode ret = curl_easy_setopt(s_handle, CURLOPT_URL, url.c_str());
+    ret = curl_easy_setopt(s_handle, CURLOPT_NOSIGNAL, 1);
+    ret = curl_easy_setopt(s_handle, CURLOPT_TIMEOUT, NetworkOptions::getInstance()->timeout());
     ret = curl_easy_setopt(s_handle, CURLOPT_WRITEFUNCTION, static_cast<size_t (*)( char*, size_t, size_t, void*)>([](char *ptr, size_t size, size_t nmemb, void *userdata){xmlParseChunk((xmlParserCtxtPtr)userdata, ptr, size * nmemb, 0);return size * nmemb;}));
     ret = curl_easy_setopt(s_handle, CURLOPT_WRITEDATA, ctxt);
     ret = curl_easy_perform(s_handle);
+    long httpcode;
+    curl_easy_getinfo(s_handle, CURLINFO_RESPONSE_CODE, &httpcode);
+    if (ret > 0)
+        throw NCBITaxonomyError(std::string("Something went wrong when fetching the NCBI taxonomy information. Error code: ") + std::to_string(ret) + std::string(";    ") + curl_easy_strerror(ret));
+    if (httpcode != 200 && ret != CURLE_ABORTED_BY_CALLBACK)
+        throw NCBITaxonomyError("The NCBI taxonomy database seems to be experiencing problems.");
     xmlParseChunk(ctxt, nullptr, 0, 1);
     xmlDocPtr doc = ctxt->myDoc;
     xmlFreeParserCtxt(ctxt);
     xmlNodePtr node = xmlDocGetRootElement(doc);
     if (node == nullptr || XMLCMP(node, TAXASET_NODE)) {
         xmlFreeDoc(doc);
-        throw std::invalid_argument("Invalid taxonomy XML");
+        throw NCBITaxonomyError("Invalid taxonomy XML");
     }
     if (xmlChildElementCount(node) > 1) {
         xmlFreeDoc(doc);
-        throw std::invalid_argument("More than 1 taxon in taxaset");
+        throw NCBITaxonomyError("More than 1 taxon in taxaset");
     }
     node = xmlFirstElementChild(node);
     try {
@@ -180,10 +189,10 @@ void Taxon::fetch()
     m_full = true;
 }
 
-void Taxon::parseTaxon(xmlNodePtr node)
+void Taxon::parseTaxon(xmlNodePtr node) throw (std::logic_error)
 {
     if (XMLCMP(node, TAXON_NODE))
-        throw std::invalid_argument("Not a taxon node.");
+        throw NCBITaxonomyError("Not a taxon node.");
     node = xmlFirstElementChild(node);
     while (node != nullptr) {
         if (!XMLCMP(node, TAXID_NODE)) {

@@ -2,6 +2,7 @@
 #define NRPSDESIGNER_TAXON_H
 
 #include "nrpsdesigner_export.h"
+#include "exceptions.h"
 
 #include <vector>
 #include <string>
@@ -11,6 +12,7 @@
 #ifdef _CXX_CLANG // Clang has std::array defined in tuple header
 #include <tuple>
 #endif
+#include <system_error>
 
 #include <libxml/tree.h>
 
@@ -33,7 +35,7 @@ public:
     };
     enum class Rank {NoRank, Superkingdom, Phylum, Class, Order, Family, Genus, Species};
 
-    Taxon(uint32_t);
+    Taxon(uint32_t) throw (NCBITaxonomyError, std::logic_error, std::system_error);
 
     bool full() const;
     uint32_t id() const;
@@ -51,15 +53,15 @@ public:
     std::chrono::system_clock::time_point updateDate() const;
     std::chrono::system_clock::time_point pubDate() const;
 
-    void fetch();
+    void fetch() throw (NCBITaxonomyError, std::logic_error, std::system_error);
 
     std::array<uint8_t, 2> operator-(const Taxon&) const;
     std::array<uint8_t, 2> diff(const Taxon&, Rank r = Rank::Species) const;
 
 private:
-    Taxon(xmlNodePtr);
+    Taxon(xmlNodePtr) throw (std::logic_error);
 
-    void parseTaxon(xmlNodePtr);
+    void parseTaxon(xmlNodePtr) throw (std::logic_error);
     void parseOtherNames(xmlNodePtr);
     Rank parseRank(xmlChar*);
     std::chrono::system_clock::time_point parseDate(xmlNodePtr);

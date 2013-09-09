@@ -1,7 +1,9 @@
 #include <monomer.h>
 #include <abstractdatabaseconnector.h>
 #include <nrps.h>
+#include <exceptions.h>
 #include <nrpsbuilder.h>
+#include <networkoptions.h>
 
 #include <curl/curl.h>
 
@@ -32,38 +34,60 @@ int main(int argc, char *argv[])
     auto dbConn = AbstractDatabaseConnector::getInstance();
 
     po::options_description alloptions;
-    alloptions.add(options).add(dbConn->options());
+    alloptions.add(options).add(dbConn->options()).add(NetworkOptions::getInstance()->options());
 
     po::variables_map vm;
     po::store(po::command_line_parser(argc, argv).options(alloptions).run(), vm);
 
-    if (vm.count("help")) {
+    if (argc == 1 || vm.count("help")) {
         std::cout << alloptions;
         delete dbConn;
         return 0;
     }
     po::notify(vm);
 
-    dbConn->initialize();
+    try {
+        dbConn->initialize();
 
-    std::vector<Monomer> monomers;
-    char *monomersch = (char*)std::malloc((monomersopt.length() + 1) * sizeof(char));
-    std::strncpy(monomersch, monomersopt.c_str(), monomersopt.length());
-    monomersch[monomersopt.length()] = '\0';
-    char *ptr = std::strtok(monomersch, ",");
-    while (ptr != nullptr) {
-        monomers.push_back(dbConn->getMonomer(std::atoi(ptr)));
-        ptr = std::strtok(nullptr, ",");
+        std::vector<Monomer> monomers;
+        char *monomersch = (char*)std::malloc((monomersopt.length() + 1) * sizeof(char));
+        std::strncpy(monomersch, monomersopt.c_str(), monomersopt.length());
+        monomersch[monomersopt.length()] = '\0';
+        char *ptr = std::strtok(monomersch, ",");
+        while (ptr != nullptr) {
+            monomers.push_back(dbConn->getMonomer(std::atoi(ptr)));
+            ptr = std::strtok(nullptr, ",");
+        }
+        std::free(monomersch);
+
+        Nrps nrps = NrpsBuilder().build(monomers);
+
+        if (outfile == "-")
+            nrps.toXml(std::cout);
+        else
+            nrps.toXml(outfile);
+
+        delete dbConn;
+        return 0;
+    } catch (const NCBITaxonomyError &e) {
+        delete dbConn;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    } catch (const NetworkError &e) {
+        delete dbConn;
+        std::cerr << e.what() << std::endl;
+        return 2;
+    } catch (const DatabaseError &e) {
+        delete dbConn;
+        std::cerr << e.what() << std::endl;
+        return 3;
+    } catch (const std::logic_error &e) {
+        delete dbConn;
+        std::cerr << e.what() << std::endl;
+        return 4;
+    } catch (const std::system_error &e) {
+        delete dbConn;
+        std::cerr << e.what() << std::endl;
+        return 5;
     }
-    std::free(monomersch);
-
-    Nrps nrps = NrpsBuilder().build(monomers);
-
-    if (outfile == "-")
-        nrps.toXml(std::cout);
-    else
-        nrps.toXml(outfile);
-    
-    delete dbConn;
-    return 0;
 }
