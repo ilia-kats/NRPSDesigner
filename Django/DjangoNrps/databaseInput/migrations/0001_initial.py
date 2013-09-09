@@ -15,6 +15,7 @@ class Migration(SchemaMigration):
             ('geneName', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('dnaSequence', self.gf('django.db.models.fields.TextField')()),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('product_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['databaseInput.Product'])),
         ))
         db.send_create_signal(u'databaseInput', ['Cds'])
 
@@ -24,7 +25,6 @@ class Migration(SchemaMigration):
             ('sourceType', self.gf('django.db.models.fields.CharField')(max_length=10)),
             ('source', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('species', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('product', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name=u'child', null=True, to=orm['databaseInput.Origin'])),
         ))
@@ -163,7 +163,8 @@ class Migration(SchemaMigration):
             'dnaSequence': ('django.db.models.fields.TextField', [], {}),
             'geneName': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'origin': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['databaseInput.Origin']"})
+            'origin': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['databaseInput.Origin']"}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['databaseInput.Product']"})
         },
         u'databaseInput.domain': {
             'Meta': {'object_name': 'Domain'},
@@ -209,7 +210,6 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'child'", 'null': 'True', 'to': u"orm['databaseInput.Origin']"}),
-            'product': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'sourceType': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'species': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})

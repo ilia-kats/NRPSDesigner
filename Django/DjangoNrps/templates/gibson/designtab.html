@@ -1,4 +1,4 @@
-	
+<div id='design-tab'>
 <div class="pad">
 	<div class="pad-content" style="padding:.2em;">
 		<div id='canvas_holder'>
@@ -26,4 +26,31 @@
         <div style="clear:both"></div>
 	</div>
 </div>
+</div>
+
+
+<script type='text/javascript'>
+    var g_designer = null;
+
+
+	jQuery(window).ready( function($) {
+		//tabs
+
+        //load designer
+        g_designer = new Designer($('#cdesigner'),{{construct.id}});
+        //Make the selector and equalise the height
+        $('#frag_select').jFragmentSelector({
+            containment: $('.pad-content'),
+        }).jFragmentSelector('height', $('#cdesigner').height());
+	});
+
+
+        var update = function(modified){
+			if(modified != undefined) {
+		jQuery('#status').text(modified);
+		}
+		}
+
+</script>
+
 

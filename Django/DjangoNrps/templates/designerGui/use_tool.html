@@ -187,6 +187,24 @@
         jQuery.post("{% url 'submitNRP' %}", {as: getMonomers()}, undefined, "text").done(function(data){alert(data);}).fail(function(){alert("failed");});
     }
 
+    function makeConstruct(){
+      jQuery.post("{% url 'makeConstruct' pid %}").done(activateTabs);
+    }
+
+    function activateTabs(data){
+        console.log(data);
+        data = jQuery.parseJSON(data);
+        constructId =  data["constructId"];
+        if (constructId != 0) {
+       jQuery("#primerTab").attr("href", data["primerTabLink"]);
+       jQuery("#constructTab").attr("href", data["designTabLink"]);
+       jQuery("#tabs").tabs("enable",1);
+       jQuery("#tabs").tabs("enable",2);
+        } else {
+            alert("ERROR");
+        }
+    }
+
 
     function save(e)
     {   
@@ -218,7 +236,7 @@
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
             jQuery("#save").button().click(save).parent().buttonset();
-            jQuery("#submit").button().click(submit).parent().buttonset();
+            jQuery("#submit").button().click(makeConstruct).parent().buttonset();
             jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
             jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("option", "contain", ui.value > 1 ? "invert" : true).panzoom("zoom", ui.value);}});
             jQuery("#structimg").load(function(e){
@@ -349,7 +367,7 @@
 
         <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
         <div>
-        <button id="monomer_add">Add monomer</button><button id="save"> Save </button><button id="submit">Submit</button></div>
+        <button id="monomer_add">Add monomer</button><button id="save"> Save </button><button id="submit">Design construct</button></div>
     </div>
 </div>
 

@@ -33,7 +33,7 @@
 			{% for nrp in nrpList %}
 				<tr>
 					<td>
-						<a href={% url 'guiTool' nrp.pk %}>{{ nrp.name }}</a>
+						<a href={% url 'nrpDesigner' nrp.pk %}>{{ nrp.name }}</a>
 					</td>
 					<td>
 						{{ nrp.description|truncatewords:10 }}
