@@ -34,6 +34,16 @@ class NRP(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	def fullDelete(self):
+		for gene in [x.gene for x in self.domainOrder.all()]:
+			if gene != None:
+				ConstructFragment.objects.filter(fragment = gene).delete()
+				gene.delete()
+		self.construct.delete()
+		self.delete()
+
+
+
 	def makeConstruct(self):
 		if (not self.designed):
 			self.designDomains()
@@ -63,6 +73,10 @@ class NRP(models.Model):
 				direction = 'f'
 				)
 
+			domainOrder = DomainOrder.objects.get(nrp = self, domain=domain, order = count )
+			domainOrder.gene = domainGene
+			domainOrder.save()
+
 		self.construct = nrpConstruct
 		self.save()
 
@@ -85,7 +99,7 @@ class NRP(models.Model):
 
 	def designDomains(self):
 		# call NRPS Designer C++ program
-		rawXmlOutput = subprocess.check_output('nrpsdesigner '+self.getPeptideSequenceAsString(), shell=True)
+		rawXmlOutput = subprocess.check_output('nrpsdesigner -m '+self.getPeptideSequenceAsString(), shell=True)
 
 		# parse xml to extract domain list
 		designerDom = parseString(rawXmlOutput)
@@ -113,5 +127,6 @@ class DomainOrder(models.Model):
 	order = models.PositiveIntegerField()
 	designerStart = models.IntegerField(blank=True, null=True)
 	designerStop = models.IntegerField(blank=True, null=True)
+	gene = models.ForeignKey('fragment.gene', null=True, blank=True)
 
 

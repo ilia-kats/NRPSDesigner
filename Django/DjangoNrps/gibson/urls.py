@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 
 primerpatterns = patterns('gibson.views',
-	(r'^$', 'primers'),
+	url(r'^$', 'primers', name='primers'),
 	(r'^download$', 'primer_download'),
 	(r'^pdf$', 'pdf'),
 	(r'^save$', 'primer_save'),
@@ -18,8 +18,8 @@ primerpatterns = patterns('gibson.views',
 )
 
 constructpatterns = patterns('gibson.designer',
-	(r'^$', 'designer'),
-	(r'^design/$', 'design_tab'),
+	#(r'^$', 'designer'),
+	url(r'^design/$', 'design_tab', name='design_tab'),
 	(r'^settings/$', 'construct_settings'),
 )
 
@@ -38,7 +38,7 @@ urlpatterns = patterns('gibson.views',
 	(r'^(?P<cid>\d+)/\w+\.gb', 'download'),
 	(r'^(?P<cid>\d+)/delete/$', 'construct_delete'),
 	(r'^(?P<cid>\d+)/fragments/$', 'construct_fragment'),
-	(r'^(?P<cid>\d+)/process/$', 'process'),
+	url(r'^(?P<cid>\d+)/process/$', 'process', name = 'process'),
 	(r'^(?P<cid>\d+)/clipping/(?P<cfid>\d+)/$', 'fragment_clipping'),
 	(r'^(?P<cid>\d+)/clipping/(?P<cfid>\d+)/apply/$', 'apply_clipping'),
 	(r'^(?P<cid>\d+)/summary/$', 'summary'),

@@ -15,10 +15,37 @@ import math
 import json
 import xml.etree.ElementTree as x
 import openbabel as ob
+import simplejson
 
+@login_required
+def makeConstruct(request,pid):
+    nrp = NRP.objects.get(pk=pid)
+    nrp.designed = False
+    #import pdb; pdb.set_trace()
+    nrp.makeConstruct()
+    con = nrp.construct
+    constructId = con.pk
+    designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
+    primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
+    jsonOutput = simplejson.dumps({"constructId": constructId,
+        'designTabLink': designTabLink,
+        'primerTabLink': primerTabLink})
+    #construct
+    return HttpResponse(jsonOutput)
 
-def nrpDesign(request, cid):
-    return HttpResponse(str(cid))
+@login_required
+def nrpDesigner(request, pid):
+    nrp = NRP.objects.get(pk=pid)
+    if nrp:
+        t = loader.get_template('gibson/designer.html')
+        c = RequestContext(request,{
+            'nrp':nrp,
+            #'id': cid,
+            #'construct':con,
+        })
+        return HttpResponse(t.render(c))
+    else:
+        raise Http404()
 
 @login_required 
 def peptide_add(request):
@@ -42,7 +69,7 @@ def peptide_add(request):
 def peptide_delete(request, cid):
     peptide = NRP.objects.get(owner = request.user, pk = cid)
     if peptide:
-        peptide.delete()
+        peptide.fullDelete()
         if request.is_ajax():
             return JsonResponse('/peptides') 
         return HttpResponseRedirect('/peptides')

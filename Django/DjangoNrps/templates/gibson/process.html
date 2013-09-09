@@ -46,12 +46,14 @@ $(window).ready( function() {
         $('#processing').css('visibility', 'visible');
 
 		var h = makeHttpObject();
-		h.open('GET', 'process/', true)
+		h.open('GET', "{% url 'process' construct.pk %}", true)
 		h.onreadystatechange = function (){
 			p = parseInt(this.responseText.split(':').pop());
 			$('#process_progress').progressbar('value', p);
 			if (p==100){
-				$('#tabs').tabs('load', 3);
+				//location.reload()
+				//$( "#tabs" ).tabs( "option", "active", 4 );
+				jQuery("#tabs").tabs("load","primerTab")
 			}
 		}
 		h.send(null);

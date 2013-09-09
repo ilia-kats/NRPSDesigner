@@ -28,42 +28,42 @@
 		<div id='tabs' class='left'>
 			<ul>
 
+		
 				<li>
-					<a href="#design-tab" class='tab-link'>
+					<a href="{% url 'guiTool' nrp.pk %}" class='tab-link'>
+						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
+						NRP
+					</a>
+				</li>
+						<li>
+
+					<a id="constructTab"
+					{% if nrp.construct %}
+					href="{% url 'design_tab' cid=nrp.construct.pk %}"
+					{% else %}
+					href = ""
+					{% endif %}
+					class='tab-link'>
 						<span class='ui-icon ui-icon-pencil tab-icon'></span>
 						Designer
 					</a>
 				</li>
+
 				<li>
-					<a href="{% url 'guiTool' 5 %}" class='tab-link'>
-						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
-						SAUCE
-					</a>
-				</li>
-				<li>
-					<a href="settings/" class='tab-link'>
-						<span class='ui-icon ui-icon-wrench tab-icon'></span>
-						Settings
-					</a>
-				</li>
-				<li>
-					<a href="summary/" class='tab-link'>
-						<span class='ui-icon ui-icon-script tab-icon'></span>
-						Summary
-					</a>
-					
-				</li>
-				<li>
-					<a href="primers/" class='tab-link'>
+					<a id="primerTab"
+						{% if nrp.construct %}
+					href="{% url 'primers' cid=nrp.construct.pk %}"
+						{% else %}
+					href = ""
+						{% endif %}
+					class = 'tab-link'>
 						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
 						Primers
 					</a>
 				</li>
 	
 			</ul>
-            <div id='design-tab'>
-                {% include 'gibson/designtab.html' %}
-            </div>
+            
 		</div>
 	</div>
 </div>
@@ -84,132 +84,54 @@
 
 <div id='primer_dlg' style='display:none'></div>
 
-<div id='walkthrough_dlg' style='display:none'></div>
 
 {% endblock %}
 
 {% block js %}
 <script type='text/javascript'>
 
-    //global designer
-    var g_designer = null;
+
 
 	jQuery(window).ready( function($) {
 		//tabs
 		$( "#tabs" ).tabs({
+			beforeLoad: function( event, ui ) {
+			    if ( (ui.tab.index() == 1 || ui.tab.index() ==0) && ui.tab.data( "loaded" ) ) {
+			      event.preventDefault();
+			      return;
+			    }
+
+			    ui.jqXHR.success(function() {
+			      ui.tab.data( "loaded", true );
+		    });}, 
 			ajaxOptions: {
 				error: function( xhr, status, index, anchor ) {
 					$( anchor.hash ).html(
 						"<p>ERROR: Failed to load this tab, status: " + status + " </p>");
 				}
-			}
-		});
-		
-		$('#confirm_delete').dialog({
-			autoOpen:false,
-			resizable:false,
-			modal:true,
-			title:"Confirm Deletion",
-			close:function () {
 			},
-			height:"auto",
-			width:"580",
-		});
 
-        $('#walkthrough_dlg').dialog({
-            autoOpen:false,
-            modal:true,
-            title:"A Quick Tour of the GCD",
-            resizable: false,
-            draggable: false,
-            width: 800,
-        });
+			{% if not nrp.construct %}
+			disabled: [ 1, 2 ],
+			{% endif %}
 
-        $('#walkthrough_lnk').mousedown(function(){
-            $('#walkthrough_dlg')
-                .load('/gibthon/walkthrough/')
-                .dialog('option', 'height', 
-                    0.9 * $(window).height())
-                .dialog('option', 'position', 
-                    ['center', 0.05 * $(window).height()])
-                .dialog('open');
-            return false;
-        });
-		
-		$('a#download').button({
-			icons:{primary:'ui-icon-link'}
-		});
-		$('a#constructs').button({
-			icons:{primary:'ui-icon-note'}
-		});
-		$('#delete_btn').button({
-			icons:{primary:'ui-icon-trash'}
-		}).click( function() {
-			$('#confirm_delete').dialog('open');
+
+			//make sure to include a comma between the ajaxoptions, and the load options
+    		//this is the bit that makes all a link with the class of 'thisPane' stay within the tab
+    		//a href tags that are not of the class 'thisPane' will open outside the tab
+    load: function(event, ui) {
+    $(ui.panel).delegate('a.thisPane', 'click', function(event) {
+        $(ui.panel).load(this.href);
+        event.preventDefault();
+    });
+    }
 		});
 		
-		$('#cancel-delete').button({
-			icons: {primary: 'ui-icon-cancel'},
-		}).click( function() {$('#confirm_delete').dialog('close');});
-		$('#confirm-delete').button({
-			icons: {primary: 'ui-icon-trash'},
-		}).click( function() {
-			window.location = 'delete/';
-		});
-		
-		$('#meta_form').magicForm({
-            //don't automatically submit
-            submit_on_save: false,
-			save: function(e, data) {
-                var name = $('#c_name').text();
-                var desc = $('#desc_text').text();
-                g_designer.setName(name);
-                g_designer.updateStage();
-                g_designer.getConstruct().saveMeta(name, desc);
-                console.log('setMeta('+name+', '+desc+')');
-			},
-		});
-		
-        //load designer
-        g_designer = new Designer($('#cdesigner'),{{construct.id}});
-        //Make the selector and equalise the height
-        $('#frag_select').jFragmentSelector({
-            containment: $('.pad-content'),
-        }).jFragmentSelector('height', $('#cdesigner').height());
-	/*Process tab*/
-	/*	$('#progress_bar').progressbar({ value: 0 });
+
 	
-		$('#process').button({
-			icons: {primary: 'ui-icon-wrench'},
-		}).click( function() {
-			$('#process').button('disable');
-			$('#tabs').tabs('disable');
-			
-			$.ajax( {
-				url: 'process/',
-				success: function(data){
-					
-					console.log('success...');
-					
-					var prog = parseInt(/:\d{1,3}/.match(data)[0].substr(1));
-					
-					console.log('  prog: ' + prog);
-					$('#progress_bar').progressbar('value', prog);
-					if(prog == 100)
-					{
-						$('#tabs').tabs('load', 3);
-					}
-				},
-			});
-			
-		});*/
 	});
 
-var update = function(modified){
-	if(modified != undefined) {
-		jQuery('#status').text(modified);
-	}
-}
+
 
 </script>
 {% endblock %}

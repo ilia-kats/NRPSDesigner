@@ -62,7 +62,7 @@ class Gene(models.Model):
 		('H', 'Hidden')
 	)
 
-	viewable = models.CharField(max_length=1, choices = VIEWABLE_CHOICES, default = "L")
+	viewable = models	.CharField(max_length=1, choices = VIEWABLE_CHOICES, default = "L")
 
 	def __unicode__(self):
 		return self.name

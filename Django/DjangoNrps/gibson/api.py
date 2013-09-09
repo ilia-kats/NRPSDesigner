@@ -192,7 +192,8 @@ def save_order(request, cid):
 	if con:
 		dirs = []
 		for d in direction:
-			dirs.append(directions.get(d, ' '))
+			dirs.append(directions.get(int(d), ' '))
+		#import pdb; pdb.set_trace()
 		con.reorder_cfragments(cfid, dirs)
 		return JsonResponse({'modified': con.last_modified(),});
 	else:
