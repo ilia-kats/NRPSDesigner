@@ -3,23 +3,15 @@
 using namespace nrps;
 
 Monomer::Monomer()
-: m_id(-1), m_name(), m_configuration(Configuration::L), m_modifications(static_cast<modification_type>(Modification::None))
-{}
-
-Monomer::Monomer(Monomer&& other)
-: m_id(other.m_id), m_name(std::move(other.m_name)), m_configuration(other.m_configuration), m_modifications(other.m_modifications)
+: m_id(0), m_parentId(0), m_enantiomerId(0), m_name(), m_configuration(Configuration::L)
 {}
 
 Monomer::Monomer(uint32_t id)
-: m_id(id), m_name(), m_configuration(Configuration::L), m_modifications(static_cast<modification_type>(Modification::None))
+: m_id(id), m_parentId(0), m_enantiomerId(0), m_name(), m_configuration(Configuration::L)
 {}
 
-Monomer::Monomer(uint32_t id, const std::string &name, Configuration conf, modification_type mod)
-: m_id(id), m_name(name), m_configuration(conf), m_modifications(mod)
-{}
-
-Monomer::Monomer(uint32_t id, std::string&& name, Configuration conf, modification_type mod)
-: m_id(id), m_name(std::move(name)), m_configuration(conf), m_modifications(mod)
+Monomer::Monomer(Monomer&& other)
+: m_id(other.m_id), m_parentId(other.m_parentId), m_enantiomerId(other.m_enantiomerId), m_name(std::move(other.m_name)), m_configuration(other.m_configuration), m_modifications(other.m_modifications)
 {}
 
 Monomer::~Monomer()
@@ -33,6 +25,26 @@ uint32_t Monomer::id() const
 void Monomer::setId(uint32_t id)
 {
     m_id = id;
+}
+
+uint32_t Monomer::parentId() const
+{
+    return m_parentId;
+}
+
+void Monomer::setParentId(uint32_t id)
+{
+    m_parentId = id;
+}
+
+uint32_t Monomer::enantiomerId() const
+{
+    return m_enantiomerId;
+}
+
+void Monomer::setEnantiomerId(uint32_t id)
+{
+    m_enantiomerId = id;
 }
 
 const std::string& Monomer::name() const
@@ -60,31 +72,32 @@ void Monomer::setConfiguration(Configuration conf)
     m_configuration = conf;
 }
 
-Monomer::modification_type Monomer::modifications() const
+const std::unordered_set<uint32_t>& Monomer::modifications() const
 {
     return m_modifications;
 }
 
-void Monomer::setModifications(modification_type mods)
+void Monomer::setModifications(const std::unordered_set<uint32_t>& mods)
 {
     m_modifications = mods;
 }
 
-void Monomer::addModification(Monomer::Modification mod)
+void Monomer::setModifications(std::unordered_set<uint32_t>&& mods)
 {
-    m_modifications |= static_cast<modification_type>(mod);
+    m_modifications = std::move(mods);
 }
 
-bool Monomer::removeModification(Monomer::Modification mod)
+void Monomer::addModification(uint32_t mod)
 {
-    modification_type modi = static_cast<modification_type>(mod);
-    bool ret = m_modifications & modi;
-    m_modifications &= ~modi;
-    return ret;
+    m_modifications.insert(mod);
 }
 
-bool Monomer::hasModification(Monomer::Modification mod) const
+bool Monomer::removeModification(uint32_t mod)
 {
-    modification_type modi = static_cast<modification_type>(mod);
-    return m_modifications & modi;
+    return m_modifications.erase(mod) > 0;
+}
+
+bool Monomer::hasModification(uint32_t mod) const
+{
+    return m_modifications.count(mod) > 0;
 }

@@ -2,34 +2,23 @@
 
 using namespace nrps;
 
-template<bool full>
-DomainTypeTe<full>::DomainTypeTe(bool circularizing)
-: DomainBaseType<full>::type(DomainType::Te), m_circularizing(circularizing)
+DomainTypeTe::DomainTypeTe(uint32_t id)
+: Domain(DomainType::Te, id), m_circularizing(false)
 {}
 
-template<bool full>
-DomainTypeTe<full>::~DomainTypeTe()
+DomainTypeTe::DomainTypeTe(uint32_t id, bool circularizing)
+: Domain(DomainType::Te, id), m_circularizing(circularizing)
 {}
 
-template<bool full>
-bool DomainTypeTe<full>::circularizing() const
+DomainTypeTe::~DomainTypeTe()
+{}
+
+bool DomainTypeTe::circularizing() const
 {
     return m_circularizing;
 }
 
-template<>
-std::size_t DomainTypeTe<false>::hash() const
+void DomainTypeTe::setCircularizing(bool c)
 {
-    return std::hash<int>()(static_cast<int>(type())) ^ std::hash<bool>()(circularizing());
-}
-template<>
-std::size_t DomainTypeTe<true>::hash() const
-{
-    return DomainBaseType<true>::type::hash();
-}
-
-namespace nrps
-{
-    template class DomainTypeTe<true>;
-    template class DomainTypeTe<false>;
+    m_circularizing = c;
 }

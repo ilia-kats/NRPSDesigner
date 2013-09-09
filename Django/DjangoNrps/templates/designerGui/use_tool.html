@@ -1,17 +1,11 @@
-{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block js-include %}
-<script src="{% static 'js/jquery.formset.js' %}"></script>
 <script src="{% static 'js/jquery.panzoom.min.js' %}"></script>
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
-    var modifis = [
-        {% for mods in modifications %}
-            {id: {{ forloop.counter0 }}, text: '{{ mods.name }}', mod_id:'{{key}}'}
-        {% endfor %}
-    ];
+    var nrpEnabledEffects = false
     var monomers = [
         {% for aa in substrates %}
             {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did:  
@@ -29,6 +23,8 @@
     ];
     var animationDuration = 300;
     var structAR = 16 / 9;
+    var pid = {{pid}}
+
     function getMonomers()
     {
         var ids = Array();
@@ -40,9 +36,11 @@
     }
 
     function makeStruct()
-    {   
+    {  if (nrpEnabledEffects){
        var ids = "?as=" + getMonomers().join("&as=");
        jQuery('#structimg').attr('src',"{% url 'Structure' %}" + ids);
+       }
+       
     }
     function editMonomer(e)
     {
@@ -51,13 +49,13 @@
         jQuery('#e23').select2("val", jQuery(e.delegateTarget).data("selectid"));
         jQuery("#e23").data("currMonomer", e.delegateTarget);
         var data = jQuery('#e23').select2("data");
-        var chiralityChildren;
-        if (jQuery(e.target).attr("value") == data.lid) {
+        var monomerId = jQuery(e.target).attr("value");
+        if (monomerId == data.lid || data.LChildren.filter(function(value) {return value.id == monomerId}).length > 0) {
+            jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
             jQuery("#monomer_chirality_L").click();
-            chiralityChildren = "LChildren";
         } else {
+            jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
             jQuery("#monomer_chirality_D").click();
-            chiralityChildren = "DChildren";
         }
         jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
         refreshModificationList();
@@ -141,7 +139,12 @@
     function removeMonomer(e)
     {
         var monomer = jQuery(e.delegateTarget).parent();
+        if (nrpEnabledEffects) {
         monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();makeStruct();});
+        } else {
+            monomer.remove();
+        }
+ 
     }   
     function addMonomer(e)
     {  
@@ -158,12 +161,15 @@
         div.buttonset();
         div.hide();
         var selected = jQuery("#selected_monomers");
-        selected.append(div);
+        selected.append(div); 
         div.fadeIn(animationDuration);
-        selected.animate({scrollLeft: selected[0].scrollWidth}, animationDuration);
+        if (nrpEnabledEffects) {
+            selected.animate({scrollLeft: selected[0].scrollWidth}, animationDuration);
+        }
         aa.click();
         jQuery("#struct").height(jQuery("#params").height());
         applyMonomer();
+        return aa;
     }
     function formatAA(aminoAcid) {
         // if (!aminoAcid.id) return aminoAcid.text; // optgroup
@@ -180,6 +186,31 @@
     {
         jQuery.post("{% url 'submitNRP' %}", {as: getMonomers()}, undefined, "text").done(function(data){alert(data);}).fail(function(){alert("failed");});
     }
+
+    function makeConstruct(){
+      jQuery.post("{% url 'makeConstruct' pid %}").done(activateTabs);
+    }
+
+    function activateTabs(data){
+        console.log(data);
+        data = jQuery.parseJSON(data);
+        constructId =  data["constructId"];
+        if (constructId != 0) {
+       jQuery("#primerTab").attr("href", data["primerTabLink"]);
+       jQuery("#constructTab").attr("href", data["designTabLink"]);
+       jQuery("#tabs").tabs("enable",1);
+       jQuery("#tabs").tabs("enable",2);
+        } else {
+            alert("ERROR");
+        }
+    }
+
+
+    function save(e)
+    {   
+        jQuery.post("{% url 'saveNrpMonomers' pid %}", {as: getMonomers()}, undefined, "text").fail(function(){alert("failed");});
+    }
+
 
     jQuery(function() {
             var zoomMin = .1;
@@ -204,14 +235,51 @@
               }).change(function(e){applyMonomerChild(e);}); 
             jQuery("#monomer_chirality").buttonset().change(applyMonomer);
             jQuery("#monomer_add").button().click(addMonomer).click();
-            jQuery("#submit").button().click(submit).parent().buttonset();
+            jQuery("#save").button().click(save).parent().buttonset();
+            jQuery("#submit").button().click(makeConstruct).parent().buttonset();
             jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
             jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("option", "contain", ui.value > 1 ? "invert" : true).panzoom("zoom", ui.value);}});
             jQuery("#structimg").load(function(e){
                 var structimg = jQuery(e.delegateTarget);
                structimg.data("__pz__")._buildContain(); // update panzoom dimensions
             });
+
+        {% if substrateOrder %}
+        jQuery('[title="delete"]').click();
+        {% for monomer in substrateOrder|dictsort:"order" %}
+        addMonomer();
+        {% if monomer.substrate.hasParent %}
+        tmpId = {{monomer.substrate.parent.pk}};
+        selectId = monomers.filter(function(value) {return value.lid == tmpId || value.did == tmpId;})[0];
+        jQuery('#e23').select2("val", selectId.id, triggerChange = true);
+        if (tmpId == selectId.lid) {
+                jQuery("#monomer_chirality_L").click();
+        } else {
+                jQuery("#monomer_chirality_D").click();
+
+        }
+
+        refreshModificationList();
+        tmpId = {{monomer.substrate.pk}};
+        jQuery('#e11').select2("val", tmpId, triggerChange=true);
+        {% else %}
+        tmpId = {{monomer.substrate.pk}};
+        selectId = monomers.filter(function(value) {return value.lid == tmpId || value.did == tmpId;})[0];
+        jQuery('#e23').select2("val", selectId.id, triggerChange = true);
+        if (tmpId == selectId.lid) {
+                jQuery("#monomer_chirality_L").click();
+        } else {
+                jQuery("#monomer_chirality_D").click();
+
+        }
+
+        {% endif %}
+        {% endfor %}
+        {% endif %} 
+        nrpEnabledEffects = true;
+        makeStruct();
         });
+
 </script>
 {% endblock %}
 
@@ -264,11 +332,14 @@
         position:relative;
         right:-20px;
     }
+
 </style>
 {% endblock %}
 {% block content %}
 <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
 </br>
+
+
 <div class="row-fluid">
 <div class="span8" id="params">
     <div class="box">
@@ -296,7 +367,7 @@
 
         <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
         <div>
-        <button id="monomer_add">Add monomer</button><button id="submit">Submit</button></div>
+        <button id="monomer_add">Add monomer</button><button id="save"> Save </button><button id="submit">Design construct</button></div>
     </div>
 </div>
 
@@ -304,9 +375,12 @@
     <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
-                <img id="structimg" alt="Fair winds!" style="height:100%;">
+                <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" + idsstyle="height:100%;">
             </div>
     </div>
 </div>
+<!--<div class="span2">-->
+    <img src="facebook_button.png">
+<!--</div>-->
 
 {% endblock %}

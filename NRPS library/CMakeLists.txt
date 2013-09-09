@@ -8,8 +8,9 @@ set(CMAKE_MODULE_PATH
 )
 
 find_package(LibXml2 REQUIRED)
-find_package(MySQLcpp REQUIRED)
 find_package(MySQL REQUIRED)
+find_package(MySQLcpp REQUIRED)
+find_package(Boost REQUIRED COMPONENTS program_options)
 
 set(CMAKE_CXX_FLAGS
 "${CMAKE_CXX_FLAGS} -std=c++11"

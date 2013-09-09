@@ -12,9 +12,9 @@ def designer(request,cid):
 	if con:
 		t = loader.get_template('gibson/designer.html')
 		c = RequestContext(request,{
-			'title':'Construct Designer',
-			'id': cid,
-			'construct':con,
+			#'title':'Construct Designer',
+			#'id': cid,
+			#'construct':con,
 		})
 		return HttpResponse(t.render(c))
 	else:
@@ -26,7 +26,7 @@ def design_tab(request, cid):
 	if con:
 		t = loader.get_template('gibson/designtab.html')
 		c = RequestContext(request,{
-			'id': cid,
+			#'id': cid,
 			'construct':con,
 		})
 		return HttpResponse(t.render(c))

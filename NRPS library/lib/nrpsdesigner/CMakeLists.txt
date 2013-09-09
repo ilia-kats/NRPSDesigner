@@ -7,23 +7,24 @@ include_directories(
 
 set(SRCS
     monomer.cpp
-    nrp.cpp
 
-    abstractdomaintype.cpp
     domains/domaintypea.cpp
-    domains/domaintypeac.cpp
+    domains/domaintypec.cpp
     domains/domaintypet.cpp
     domains/domaintypee.cpp
     domains/domaintypete.cpp
 
+    global_enums.cpp
+
     domain.cpp
 
-    generalpathway.cpp
-    pathway.cpp
+    origin.cpp
+    product.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
     taxon.cpp
     nrps.cpp
+    nrpsbuilder.cpp
 )
 
 if (UNIX)
@@ -33,4 +34,4 @@ endif(UNIX)
 
 add_library(nrpsdesigner ${SRCS})
 generate_export_header(nrpsdesigner)
-target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${CURL_LIBRARIES} ${MYSQL_LIBRARIES} ${MYSQLCPP_LIBRARIES})
+target_link_libraries(nrpsdesigner ${LIBXML2_LIBRARIES} ${CURL_LIBRARIES} ${MYSQL_LIBRARIES} ${MYSQLCPP_LIBRARIES} ${Boost_PROGRAM_OPTIONS_LIBRARY})

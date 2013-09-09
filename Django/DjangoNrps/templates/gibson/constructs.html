@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block css-include %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/datatable.css" />
+-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/datatable.css" />
 {% endblock %}
 
 
@@ -11,15 +11,15 @@
 <script src="{{ STATIC_URL }}/js/importer.js" type="text/javascript"></script>
 {% endblock %}
 
-{% block app-menu %}
-<button id="addc">Add new Construct</button>
-<button id="delete_btn">Delete</button>
-{% endblock %}
+
 
 {% block content %}
-<div class="content fixed-width">
+  <button id="addc">Add new Construct</button>
+  <button id="delete_btn">Delete</button>
+
+<div>
 	<table id="construct_table">
-		<thead>
+		<thead class="ui-widget-content">
 			<tr>
 				<th>Name</th>
 				<th>Description</th>
@@ -27,8 +27,8 @@
 					<input class="all-selected" type="checkbox" name="select-all" value="select-all"/>
 				</th>
 			</tr>
-		</thead>
-		<tbody>
+		</thead>		
+		<tbody class="ui-widget-content">
 			{% for construct in construct_list %}
 				<tr>
 					<td>
@@ -44,6 +44,7 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
 </div>
 {% endblock %}
 
@@ -71,12 +72,12 @@
 var handle_updated_selection = function(event, data){
 	if( data['selected'] != 0 )
 	{
-		$('#delete_btn').button('enable');
+		jQuery('#delete_btn').button('enable');
 		//$('#download_btn').button('enable');
 	}
 	else
 	{
-		$('#delete_btn').button('disable');
+		jQuery('#delete_btn').button('disable');
 		//$('#download_btn').button('disable');
 	}
 }
@@ -96,7 +97,7 @@ var delete_html = '<div style="text-align:center;margin-top:1.5em;">' +
 '</div>';
 
 var show_delete_dialog = function(){
-	var num = $('#construct_table').fragmentList('getNumSelected');
+	var num = jQuery('#construct_table').fragmentList('getNumSelected');
 	var s = ''
 	if(num > 1)
 		s = 's'
@@ -141,17 +142,17 @@ var show_delete_dialog = function(){
 	$('#confirm_delete').dialog('open');
 };
 	
-$(document).ready(function() {
-	$('button[id="add"]')
+jQuery(document).ready(function() {
+	jQuery('button[id="add"]')
 		.click(function(event){
-			$.post('add', $('form[action^="add"]').serialize(), function(data){
+			jQuery.post('add', $('form[action^="add"]').serialize(), function(data){
+				console.log(data[1].html)
                 if(data[0] == 0)
                 {
                     console.log('window.location = ' + data[1].url);
                     window.location = data[1].url;
                 }
-                
-			    $('#construct_form_wrap').html(data[1].html);	
+			    jQuery('#construct_form_wrap').html(data[1].html);	
 			});
 		})
 		.button({
@@ -162,9 +163,11 @@ $(document).ready(function() {
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
 	});
 	
-	$('#construct_table').dataTable({
+	jQuery('#construct_table').dataTable({
 		bAutoWidth: false,
 		bJQueryUI: true,
+		bFilter: false,
+		bLengthChange: false,
 		aoColumns: [
 			{
 				sWidth:"25%"
@@ -180,14 +183,14 @@ $(document).ready(function() {
 			sEmptyTable: '<button id="addc">Add new Construct</button>'
 		}
 	});
-	$('button[id="addc"]')
+	jQuery('button[id="addc"]')
 		.click(function(event){
 			$('#construct_add').dialog('open');
 		})
 		.button({
 			icons:{primary:'ui-icon-plusthick'}
 		});
-	$('#construct_add').dialog({
+	jQuery('#construct_add').dialog({
 		autoOpen:false,
 		resizable:false,
 		modal:true,

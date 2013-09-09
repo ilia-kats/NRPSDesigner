@@ -52,8 +52,17 @@ class Gene(models.Model):
 		('UL', 'Upload'),
 		('GC', 'Gibthon Construct'),
 		('MN', 'Manual'),
+		('ND', 'Nrps Designer')
 	)
 	origin = models.CharField(max_length=2, choices=ORIGIN_CHOICES)
+
+	VIEWABLE_CHOICES = (
+		('L','Local'),
+		('G','Global'),
+		('H', 'Hidden')
+	)
+
+	viewable = models	.CharField(max_length=1, choices = VIEWABLE_CHOICES, default = "L")
 
 	def __unicode__(self):
 		return self.name

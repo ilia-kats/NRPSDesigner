@@ -1,13 +1,91 @@
-from designerGui.models import Species
+from designerGui.models import Species, NRP, SubstrateOrder
 from databaseInput.models import Substrate, Modification
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
-from django.views.generic import ListView, CreateView
-from django.http import HttpResponse
+from designerGui.forms import NRPForm
+from gibson.jsonresponses import JsonResponse, ERROR
+
+from django.views.generic import ListView, CreateView, TemplateView
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.template import Context, loader, RequestContext
+from django.core.urlresolvers import reverse
+
 
 import math
 import json
 import xml.etree.ElementTree as x
 import openbabel as ob
+import simplejson
+
+@login_required
+def makeConstruct(request,pid):
+    nrp = NRP.objects.get(pk=pid)
+    nrp.designed = False
+    #import pdb; pdb.set_trace()
+    nrp.makeConstruct()
+    con = nrp.construct
+    constructId = con.pk
+    designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
+    primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
+    jsonOutput = simplejson.dumps({"constructId": constructId,
+        'designTabLink': designTabLink,
+        'primerTabLink': primerTabLink})
+    #construct
+    return HttpResponse(jsonOutput)
+
+@login_required
+def nrpDesigner(request, pid):
+    nrp = NRP.objects.get(pk=pid)
+    if nrp:
+        t = loader.get_template('gibson/designer.html')
+        c = RequestContext(request,{
+            'nrp':nrp,
+            #'id': cid,
+            #'construct':con,
+        })
+        return HttpResponse(t.render(c))
+    else:
+        raise Http404()
+
+@login_required 
+def peptide_add(request):
+    if request.method == 'POST':
+        form = NRPForm(request.POST, prefix='nrp')
+        if form.is_valid():
+            c = form.save(commit=False)
+            c.owner = request.user
+            c.save()
+            return JsonResponse({'url': reverse('peptides') })
+        t = loader.get_template('designerGui/peptideform.html')
+        con = NRP.objects.all().filter(owner=request.user)
+        c = RequestContext(request, {
+            'NRPform':form,
+        })
+        return JsonResponse({'html': t.render(c),}, ERROR)
+    else:
+        return HttpResponseNotFound()
+
+@login_required
+def peptide_delete(request, cid):
+    peptide = NRP.objects.get(owner = request.user, pk = cid)
+    if peptide:
+        peptide.fullDelete()
+        if request.is_ajax():
+            return JsonResponse('/peptides') 
+        return HttpResponseRedirect('/peptides')
+    else:
+        return HttpResponseNotFound()
+
+class NRPListView(TemplateView):
+    template_name = 'designerGui/peptides.html'
+   
+    def get_context_data(self, **kwargs):
+        context = super(NRPListView, self).get_context_data(**kwargs)
+        context['NRPform'] = NRPForm(prefix='nrp')
+        context['title'] = 'NRPS Designer'
+        context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
+        return context
+
 
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
@@ -16,6 +94,8 @@ class SpeciesListView(ListView):
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
+        pid  = self.kwargs["pid"]
+        context['pid'] = pid
         context['myFormSet'] = SubstrateFormSet()
         
         modfs = Modification.objects.all()
@@ -42,6 +122,13 @@ class SpeciesListView(ListView):
                 names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
         context['substrates'] = names.values()
         context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
+
+        nrp = NRP.objects.get(pk= pid)
+        substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+        context['substrateOrder'] = substrateOrder
+
+        initialPic = nrp.getPeptideSequenceForStructView()
+        context['initialPic'] = initialPic
         return context
 
 def submit_nrp(request):

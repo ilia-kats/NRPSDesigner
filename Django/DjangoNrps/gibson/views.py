@@ -104,7 +104,7 @@ def load_primer(request, cid, pid):
 			return HttpResponseNotFound()
 	else:
 		return HttpResponseNotFound()
-		
+
 @login_required
 def primers(request, cid):
 	con = get_construct(request.user, cid)

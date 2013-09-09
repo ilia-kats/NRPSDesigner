@@ -5,6 +5,7 @@
 #include "global_enums.h"
 
 #include <string>
+#include <unordered_set>
 #include <cstdint>
 
 namespace nrps
@@ -12,18 +13,19 @@ namespace nrps
 class NRPSDESIGNER_EXPORT Monomer
 {
 public:
-    typedef uint16_t modification_type;
-    enum class Modification : modification_type {None = 0x0, Nmethyl = 0x1};
-
     Monomer();
     Monomer(Monomer&&);
     Monomer(uint32_t);
-    Monomer(uint32_t, const std::string&, Configuration = Configuration::L, modification_type mod = static_cast<modification_type>(Modification::None));
-    Monomer(uint32_t, std::string&&, Configuration = Configuration::L, modification_type mod = static_cast<modification_type>(Modification::None));
     ~Monomer();
 
     uint32_t id() const;
     void setId(uint32_t);
+
+    uint32_t parentId() const;
+    void setParentId(uint32_t);
+
+    uint32_t enantiomerId() const;
+    void setEnantiomerId(uint32_t);
 
     const std::string& name() const;
     void setName(const std::string&);
@@ -32,17 +34,20 @@ public:
     Configuration configuration() const;
     void setConfiguration(Configuration);
 
-    modification_type modifications() const;
-    void setModifications(modification_type);
-    void addModification(Modification);
-    bool removeModification(Modification);
-    bool hasModification(Modification) const;
+    const std::unordered_set<uint32_t>& modifications() const;
+    void setModifications(const std::unordered_set<uint32_t>&);
+    void setModifications(std::unordered_set<uint32_t>&&);
+    void addModification(uint32_t);
+    bool removeModification(uint32_t);
+    bool hasModification(uint32_t) const;
 
 private:
     uint32_t m_id;
+    uint32_t m_parentId;
+    uint32_t m_enantiomerId;
     std::string m_name;
     Configuration m_configuration;
-    modification_type m_modifications;
+    std::unordered_set<uint32_t> m_modifications;
 };
 }
 

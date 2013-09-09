@@ -2,32 +2,26 @@
 #define NRPSDESIGNER_DOMAINTYPETE_H
 
 #include "nrpsdesigner_export.h"
-#include "abstractdomaintype.h"
 #include "domain.h"
 
 namespace nrps
 {
-template <bool full = false>
-class DomainTypeTe : public DomainBaseType<full>::type
+class DomainTypeTe : public Domain
 {
 public:
-    DomainTypeTe(bool);
+    DomainTypeTe(uint32_t);
+    DomainTypeTe(uint32_t, bool);
     virtual ~DomainTypeTe();
 
-    virtual std::size_t hash() const;
     bool circularizing() const;
+    void setCircularizing(bool);
+
+// protected:
+//     virtual void writeXml(xmlTextWriterPtr) const;
 
 private:
     bool m_circularizing;
 };
-
-template<>
-std::size_t NRPSDESIGNER_EXPORT DomainTypeTe<false>::hash() const;
-template<>
-std::size_t NRPSDESIGNER_EXPORT DomainTypeTe<true>::hash() const;
-
-extern template class NRPSDESIGNER_EXPORT DomainTypeTe<true>;
-extern template class NRPSDESIGNER_EXPORT DomainTypeTe<false>;
 }
 
 #endif
