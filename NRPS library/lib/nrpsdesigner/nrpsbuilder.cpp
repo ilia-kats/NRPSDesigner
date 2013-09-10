@@ -43,7 +43,7 @@ public:
 };
 }
 
-Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp)
+Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp) throw (NetworkError, NCBITaxonomyError, DatabaseError)
 {
     AbstractDatabaseConnector *db = AbstractDatabaseConnector::getInstance();
     Nrps nrps(nrp);

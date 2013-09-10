@@ -22,6 +22,7 @@ set(SRCS
     product.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
+    networkoptions.cpp
     taxon.cpp
     nrps.cpp
     nrpsbuilder.cpp

@@ -6,6 +6,7 @@
 #include "taxon.h"
 #include "domain.h"
 #include "nrps.h"
+#include "exceptions.h"
 
 #include <unordered_map>
 
@@ -25,7 +26,7 @@ class Node;
 class NRPSDESIGNER_EXPORT NrpsBuilder
 {
 public:
-    Nrps build(const std::vector<Monomer>&);
+    Nrps build(const std::vector<Monomer>&) throw (NetworkError, NCBITaxonomyError, DatabaseError);
 
 private:
     float makeWeight(Node*, Node*);

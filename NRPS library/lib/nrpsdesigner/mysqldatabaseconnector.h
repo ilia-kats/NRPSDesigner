@@ -5,6 +5,10 @@
 #include "global_enums.h"
 #include "abstractdatabaseconnector.h"
 
+#include <stdexcept>
+
+#include <cppconn/exception.h>
+
 namespace sql
 {
 class Connection;
@@ -16,26 +20,27 @@ class ResultSet;
 namespace nrps
 {
 class Origin;
-class MySQLDatabaseConnector : public AbstractDatabaseConnector
+class NRPSDESIGNER_EXPORT MySQLDatabaseConnector : public AbstractDatabaseConnector
 {
 public:
     MySQLDatabaseConnector();
     virtual ~MySQLDatabaseConnector();
     virtual boost::program_options::options_description options();
-    virtual void initialize();
-    virtual Monomer getMonomer(uint32_t);
-    virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&);
-    virtual std::vector<std::shared_ptr<DomainTypeC>> getCDomains(const Monomer&, Configuration);
-    virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition);
-    virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains();
-    virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains();
-    virtual void fillDomain(std::shared_ptr<Domain>);
-    virtual void fillOrigin(Origin*);
+    virtual void initialize() throw (DatabaseError);
+    virtual Monomer getMonomer(uint32_t) throw (DatabaseError);
+    virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&) throw (DatabaseError);
+    virtual std::vector<std::shared_ptr<DomainTypeC>> getCDomains(const Monomer&, Configuration) throw (DatabaseError);
+    virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) throw (DatabaseError);
+    virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() throw (DatabaseError);
+    virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError);
+    virtual void fillDomain(std::shared_ptr<Domain>) throw (DatabaseError);
+    virtual void fillOrigin(Origin*) throw (DatabaseError);
 
 private:
-    bool testInitialized(bool except = true);
+    bool testInitialized(bool except = true) throw (DatabaseError);
     template<class D, class initFunc>
-    std::vector<std::shared_ptr<D>> getCoreDomains(const Monomer&, bool, DomainType, Configuration, const initFunc&);
+    std::vector<std::shared_ptr<D>> getCoreDomains(const Monomer&, bool, DomainType, Configuration, const initFunc&) throw (DatabaseError);
+    DatabaseError makeException(const sql::SQLException &e) const;
 
     sql::Connection *m_connection;
     sql::PreparedStatement *m_stmtMonomer;
