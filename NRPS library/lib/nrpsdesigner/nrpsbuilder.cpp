@@ -43,7 +43,7 @@ public:
 };
 }
 
-Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp)
+Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError)
 {
     AbstractDatabaseConnector *db = AbstractDatabaseConnector::getInstance();
     Nrps nrps(nrp);
@@ -152,6 +152,7 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp)
         n->neighbors = tedomainnodes;
 
     graph.push_back(m_endn);
+    TaxonBuilder::getInstance()->process();
 
     std::priority_queue<dijkstra_weight, std::vector<dijkstra_weight>, std::greater<dijkstra_weight>> heap;
     std::unordered_map<Node*, Node*> parents;
@@ -188,7 +189,7 @@ Node* NrpsBuilder::makeNode(std::shared_ptr<Domain> d)
 {
     Node *n = new Node(d);
     if (m_taxonCache.count(d->origin()->taxId()) == 0) {
-        m_taxonCache.emplace(d->origin()->taxId(), Taxon(d->origin()->taxId()));
+        m_taxonCache.emplace(d->origin()->taxId(), TaxonBuilder::getInstance()->buildMany(d->origin()->taxId()));
     }
     return n;
 }
@@ -201,7 +202,7 @@ float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
     std::pair<uint32_t, uint32_t> key(std::min(taxid1, taxid2), std::max(taxid1, taxid2));
     float weight;
     if (m_weightCache.count(key) == 0) {
-        auto dist = m_taxonCache.at(taxid1) - m_taxonCache.at(taxid2);
+        auto dist = *m_taxonCache.at(taxid1) - *m_taxonCache.at(taxid2);
         weight = dist[0] + dist[1];
         m_weightCache.emplace(key, weight);
     } else

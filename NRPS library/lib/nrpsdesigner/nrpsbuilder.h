@@ -6,8 +6,11 @@
 #include "taxon.h"
 #include "domain.h"
 #include "nrps.h"
+#include "exceptions.h"
+#include "taxonbuilder.h"
 
 #include <unordered_map>
+#include <memory>
 
 namespace std
 {
@@ -25,13 +28,13 @@ class Node;
 class NRPSDESIGNER_EXPORT NrpsBuilder
 {
 public:
-    Nrps build(const std::vector<Monomer>&);
+    Nrps build(const std::vector<Monomer>&) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError);
 
 private:
     float makeWeight(Node*, Node*);
     Node* makeNode(std::shared_ptr<Domain>);
 
-    std::unordered_map<uint32_t, Taxon> m_taxonCache;
+    std::unordered_map<uint32_t, std::shared_ptr<Taxon>> m_taxonCache;
     std::unordered_map<std::pair<uint32_t, uint32_t>, float> m_weightCache;
     Node *m_startn;
     Node *m_endn;

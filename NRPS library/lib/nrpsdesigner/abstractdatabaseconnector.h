@@ -10,6 +10,7 @@
 #include "domains/domaintypee.h"
 #include "domains/domaintypete.h"
 #include "monomer.h"
+#include "exceptions.h"
 
 #include <vector>
 
@@ -22,15 +23,15 @@ class NRPSDESIGNER_EXPORT AbstractDatabaseConnector
 public:
     virtual ~AbstractDatabaseConnector();
     virtual boost::program_options::options_description options() = 0;
-    virtual void initialize() = 0;
-    virtual Monomer getMonomer(uint32_t) = 0;
-    virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&) = 0;
-    virtual std::vector<std::shared_ptr<DomainTypeC>> getCDomains(const Monomer&, Configuration) = 0;
-    virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) = 0;
-    virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() = 0;
-    virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() = 0;
-    virtual void fillDomain(std::shared_ptr<Domain>) = 0;
-    virtual void fillOrigin(Origin*) = 0;
+    virtual void initialize() throw (DatabaseError) = 0;
+    virtual Monomer getMonomer(uint32_t) throw (DatabaseError) = 0;
+    virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&) throw (DatabaseError) = 0;
+    virtual std::vector<std::shared_ptr<DomainTypeC>> getCDomains(const Monomer&, Configuration) throw (DatabaseError) = 0;
+    virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) throw (DatabaseError) = 0;
+    virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError) = 0;
+    virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() throw (DatabaseError) = 0;
+    virtual void fillDomain(std::shared_ptr<Domain>) throw (DatabaseError) = 0;
+    virtual void fillOrigin(Origin*) throw (DatabaseError) = 0;
 
     static AbstractDatabaseConnector* getInstance();
 
