@@ -3,6 +3,7 @@
 #include <nrps.h>
 #include <exceptions.h>
 #include <nrpsbuilder.h>
+#include <taxonbuilder.h>
 #include <networkoptions.h>
 
 #include <curl/curl.h>
@@ -33,11 +34,13 @@ int main(int argc, char *argv[])
                          ("outfile,o", po::value<std::string>(&outfile)->default_value("-"), "Output file. Use - for stdout.");
     auto dbConn = AbstractDatabaseConnector::getInstance();
 
+    TaxonBuilder *tb = TaxonBuilder::getInstance();
     po::options_description alloptions;
-    alloptions.add(options).add(dbConn->options()).add(NetworkOptions::getInstance()->options());
+    alloptions.add(options).add(dbConn->options()).add(NetworkOptions::getInstance()->options()).add(tb->options());
 
     po::variables_map vm;
     po::store(po::command_line_parser(argc, argv).options(alloptions).run(), vm);
+    po::store(po::parse_environment(tb->options(), [&tb](std::string s){return tb->mapEnvironment(s);}), vm);
 
     if (argc == 1 || vm.count("help")) {
         std::cout << alloptions;
@@ -71,23 +74,31 @@ int main(int argc, char *argv[])
         return 0;
     } catch (const NCBITaxonomyError &e) {
         delete dbConn;
-        std::cerr << e.what() << std::endl;
+        std::cerr << "ERROR: " << e.what() << std::endl;
         return 1;
+    } catch(const TaxonomyDumpError &e) {
+        delete dbConn;
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return 2;
     } catch (const NetworkError &e) {
         delete dbConn;
-        std::cerr << e.what() << std::endl;
-        return 2;
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return 3;
     } catch (const DatabaseError &e) {
         delete dbConn;
-        std::cerr << e.what() << std::endl;
-        return 3;
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return 4;
     } catch (const std::logic_error &e) {
         delete dbConn;
-        std::cerr << e.what() << std::endl;
-        return 4;
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return 5;
     } catch (const std::system_error &e) {
         delete dbConn;
-        std::cerr << e.what() << std::endl;
-        return 5;
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return 6;
+    } catch (const std::exception &e) {
+        delete dbConn;
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return -1;
     }
 }

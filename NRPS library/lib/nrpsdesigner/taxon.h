@@ -2,6 +2,7 @@
 #define NRPSDESIGNER_TAXON_H
 
 #include "nrpsdesigner_export.h"
+//#include "taxonbuilder.h"
 #include "exceptions.h"
 
 #include <vector>
@@ -20,6 +21,7 @@ namespace nrps
 {
 class NRPSDESIGNER_EXPORT Taxon
 {
+friend class TaxonBuilder;
 public:
     struct Name
     {
@@ -34,8 +36,6 @@ public:
         std::string name;
     };
     enum class Rank {NoRank, Superkingdom, Phylum, Class, Order, Family, Genus, Species};
-
-    Taxon(uint32_t) throw (NCBITaxonomyError, std::logic_error, std::system_error);
 
     bool full() const;
     uint32_t id() const;
@@ -59,12 +59,8 @@ public:
     std::array<uint8_t, 2> diff(const Taxon&, Rank r = Rank::Species) const;
 
 private:
-    Taxon(xmlNodePtr) throw (std::logic_error);
-
-    void parseTaxon(xmlNodePtr) throw (std::logic_error);
-    void parseOtherNames(xmlNodePtr);
-    Rank parseRank(xmlChar*);
-    std::chrono::system_clock::time_point parseDate(xmlNodePtr);
+    Taxon();
+    Taxon(uint32_t);
 
     uint32_t m_id;
     uint32_t m_parentId;
@@ -81,9 +77,6 @@ private:
     std::chrono::system_clock::time_point m_createDate;
     std::chrono::system_clock::time_point m_updateDate;
     std::chrono::system_clock::time_point m_pubDate;
-
-    static void *s_handle;
-    static std::string s_url;
 };
 }
 

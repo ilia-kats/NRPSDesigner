@@ -24,6 +24,7 @@ set(SRCS
     mysqldatabaseconnector.cpp
     networkoptions.cpp
     taxon.cpp
+    taxonbuilder.cpp
     nrps.cpp
     nrpsbuilder.cpp
 )
