@@ -1,1 +1,0 @@
-/usr/bin/c++    -std=c++11 -fvisibility=hidden -fvisibility-inlines-hidden    CMakeFiles/nrpsdesigner-bin.dir/main.cpp.o  -o nrpsdesigner -rdynamic ../../lib/nrpsdesigner/libnrpsdesigner.a -lcurl -lmysqlcppconn -lboost_program_options -lxml2 -lmysqlclient -lmysqlcppconn -lboost_program_options 

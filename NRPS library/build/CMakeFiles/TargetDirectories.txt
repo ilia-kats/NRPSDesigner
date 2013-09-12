@@ -1,2 +1,0 @@
-/home/nils/NRPSDesigner/NRPS library/build/lib/nrpsdesigner/CMakeFiles/nrpsdesigner.dir
-/home/nils/NRPSDesigner/NRPS library/build/ui/cli/CMakeFiles/nrpsdesigner-bin.dir
