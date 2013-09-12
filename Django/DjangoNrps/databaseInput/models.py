@@ -98,6 +98,7 @@ class Type(models.Model):
     pfamName = models.CharField(max_length=100, blank=True, null=True)
     pfamId   = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
+    pfamGraphic = models.TextField()
 
     def __unicode__(self):
         return self.name

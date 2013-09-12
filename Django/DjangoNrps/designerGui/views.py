@@ -1,5 +1,5 @@
 from designerGui.models import Species, NRP, SubstrateOrder
-from databaseInput.models import Substrate, Modification
+from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
@@ -232,3 +232,24 @@ def make_structure(request):
     svgend = svg.rfind("</g>")
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
+
+def generatePfamGraphic(request):
+    domainList = [4,5,6]
+    domain_origins = []
+    graphic_length = 400*len(domainList)
+    regions = []
+    i = 1
+
+    for did in domainList:
+        start = i*100
+        end = start+200
+        i += 3
+        x_domain = Domain.objects.get(pk=did)
+        domain_origins.append(x_domain.cds.origin)
+        #context['domain_origins'] = domain_origins
+        region_def = json.loads(x_domain.domainType.pfamGraphic)
+        region_def.update({"start" : str(start), "end" : str(end)})
+        regions.append(region_def)
+    
+
+    return HttpResponse(json.dumps({"length" : graphic_length, "regions": regions}), mimetype="application/json")
