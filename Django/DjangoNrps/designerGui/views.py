@@ -232,3 +232,23 @@ def make_structure(request):
     svgend = svg.rfind("</g>")
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
+
+def generatePfamGraphic(request):
+    domainList = [4,5,6]
+    domain_origins = []
+    graphic_length = 400*len(domainList)
+    regions = []
+    i = 1
+
+    for did in domainList:
+        start = i*100
+        end = start+200
+        i += 3
+        domain_origins.append(x_domain.cds.origin)
+        x_domain = Domain.objects.get(pk=did)
+        region_def = json.loads(x_domain.pfamGraphics)
+        region_def.update({"start" : start, "end" : end})
+        regions.append(region_def)
+    
+
+    pfam_graphic = json.dumps({"length" : graphic_length, "regions": regions}, indent=4)
