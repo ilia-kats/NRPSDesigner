@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 4.0.5deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 12. Sep 2013 um 12:26
--- Server Version: 5.6.12
--- PHP-Version: 5.5.0
+-- Generation Time: Sep 12, 2013 at 03:20 PM
+-- Server version: 5.5.31-1
+-- PHP Version: 5.5.3-1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,14 +17,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `nrps_designer`
+-- Database: `nrps_designer`
 --
-CREATE DATABASE IF NOT EXISTS `nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `nrps_designer`;
 
 DELIMITER $$
 --
--- Prozeduren
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_origin_hierarchy`(IN `id` INT)
     READS SQL DATA
@@ -39,7 +37,7 @@ JOIN    databaseInput_origin ori
 ON      ori.id = vars.id ORDER BY level DESC$$
 
 --
--- Funktionen
+-- Functions
 --
 CREATE DEFINER=`root`@`localhost` FUNCTION `get_origin_parent`(`value` INT) RETURNS int(11)
     READS SQL DATA
@@ -65,7 +63,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_group`
+-- Table structure for table `auth_group`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_group` (
@@ -78,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `auth_group` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_group_permissions`
+-- Table structure for table `auth_group_permissions`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
@@ -94,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_permission`
+-- Table structure for table `auth_permission`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_permission` (
@@ -108,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `auth_permission` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=106 ;
 
 --
--- Daten für Tabelle `auth_permission`
+-- Dumping data for table `auth_permission`
 --
 
 INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
@@ -221,7 +219,7 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_user`
+-- Table structure for table `auth_user`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_user` (
@@ -241,11 +239,11 @@ CREATE TABLE IF NOT EXISTS `auth_user` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
--- Daten für Tabelle `auth_user`
+-- Dumping data for table `auth_user`
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$10000$dfTARToC5O0k$mgczGseuKQVcTZzkansY8mLQTogR7dnsm3cMDzUtAhs=', '2013-09-09 08:36:14', 1, 'nikos', '', '', '', 1, 1, '2013-08-26 09:39:06'),
+(1, 'pbkdf2_sha256$10000$dfTARToC5O0k$mgczGseuKQVcTZzkansY8mLQTogR7dnsm3cMDzUtAhs=', '2013-09-12 13:30:47', 1, 'nikos', '', '', '', 1, 1, '2013-08-26 09:39:06'),
 (2, 'pbkdf2_sha256$10000$T2upQRGX5Fxj$HTMi+Gems/n9Q0Ngm6XQUhX3ayR+5s+F5O5pemytDuQ=', '2013-09-05 17:28:21', 1, 'anja', '', '', '', 1, 1, '2013-08-15 13:28:42'),
 (3, 'pbkdf2_sha256$10000$haMbidPNfL2C$5h/rEkR+IOrOLN3TxiAVkOEaGfIHbcpERdl14JFpAVI=', '2013-09-05 11:23:54', 1, 'julia', '', '', '', 1, 1, '2013-08-15 13:28:50'),
 (4, 'pbkdf2_sha256$10000$Acb07Ad78Fmc$foIbtrYMfldCuwSpLMQ+ydCF8N/BflBIOYwYlm6l1TU=', '2013-08-19 16:45:52', 1, 'philipp', '', '', '', 1, 1, '2013-08-15 13:29:00');
@@ -253,7 +251,7 @@ INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `userna
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_user_groups`
+-- Table structure for table `auth_user_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_user_groups` (
@@ -269,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `auth_user_groups` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_user_user_permissions`
+-- Table structure for table `auth_user_user_permissions`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
@@ -285,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_cds`
+-- Table structure for table `databaseInput_cds`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_cds` (
@@ -303,7 +301,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_cds` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=41 ;
 
 --
--- Daten für Tabelle `databaseInput_cds`
+-- Dumping data for table `databaseInput_cds`
 --
 
 INSERT INTO `databaseInput_cds` (`id`, `origin_id`, `geneName`, `dnaSequence`, `description`, `product_id`, `user_id`) VALUES
@@ -351,7 +349,7 @@ INSERT INTO `databaseInput_cds` (`id`, `origin_id`, `geneName`, `dnaSequence`, `
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_domain`
+-- Table structure for table `databaseInput_domain`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_domain` (
@@ -377,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_domain` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=36 ;
 
 --
--- Daten für Tabelle `databaseInput_domain`
+-- Dumping data for table `databaseInput_domain`
 --
 
 INSERT INTO `databaseInput_domain` (`id`, `module`, `cds_id`, `domainType_id`, `chirality`, `description`, `pfamLinkerStart`, `pfamLinkerStop`, `definedLinkerStart`, `definedLinkerStop`, `pfamStart`, `pfamStop`, `definedStart`, `definedStop`, `user_id`) VALUES
@@ -417,7 +415,7 @@ INSERT INTO `databaseInput_domain` (`id`, `module`, `cds_id`, `domainType_id`, `
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_domain_substrateSpecificity`
+-- Table structure for table `databaseInput_domain_substrateSpecificity`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_domain_substrateSpecificity` (
@@ -431,7 +429,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_domain_substrateSpecificity` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=41 ;
 
 --
--- Daten für Tabelle `databaseInput_domain_substrateSpecificity`
+-- Dumping data for table `databaseInput_domain_substrateSpecificity`
 --
 
 INSERT INTO `databaseInput_domain_substrateSpecificity` (`id`, `domain_id`, `substrate_id`) VALUES
@@ -468,7 +466,7 @@ INSERT INTO `databaseInput_domain_substrateSpecificity` (`id`, `domain_id`, `sub
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_linkout`
+-- Table structure for table `databaseInput_linkout`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_linkout` (
@@ -485,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_linkout` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=77 ;
 
 --
--- Daten für Tabelle `databaseInput_linkout`
+-- Dumping data for table `databaseInput_linkout`
 --
 
 INSERT INTO `databaseInput_linkout` (`id`, `linkoutType_id`, `identifier`, `content_type_id`, `object_id`, `user_id`) VALUES
@@ -569,7 +567,7 @@ INSERT INTO `databaseInput_linkout` (`id`, `linkoutType_id`, `identifier`, `cont
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_linkouttype`
+-- Table structure for table `databaseInput_linkouttype`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_linkouttype` (
@@ -581,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_linkouttype` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
--- Daten für Tabelle `databaseInput_linkouttype`
+-- Dumping data for table `databaseInput_linkouttype`
 --
 
 INSERT INTO `databaseInput_linkouttype` (`id`, `shortcut`, `url`, `description`) VALUES
@@ -596,7 +594,7 @@ INSERT INTO `databaseInput_linkouttype` (`id`, `shortcut`, `url`, `description`)
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_modification`
+-- Table structure for table `databaseInput_modification`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_modification` (
@@ -608,7 +606,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_modification` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
--- Daten für Tabelle `databaseInput_modification`
+-- Dumping data for table `databaseInput_modification`
 --
 
 INSERT INTO `databaseInput_modification` (`id`, `name`, `domainType_id`) VALUES
@@ -617,7 +615,7 @@ INSERT INTO `databaseInput_modification` (`id`, `name`, `domainType_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_origin`
+-- Table structure for table `databaseInput_origin`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_origin` (
@@ -634,7 +632,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_origin` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=36 ;
 
 --
--- Daten für Tabelle `databaseInput_origin`
+-- Dumping data for table `databaseInput_origin`
 --
 
 INSERT INTO `databaseInput_origin` (`id`, `sourceType`, `source`, `species`, `description`, `parent_id`, `user_id`) VALUES
@@ -675,7 +673,7 @@ INSERT INTO `databaseInput_origin` (`id`, `sourceType`, `source`, `species`, `de
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_product`
+-- Table structure for table `databaseInput_product`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_product` (
@@ -688,7 +686,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_product` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=35 ;
 
 --
--- Daten für Tabelle `databaseInput_product`
+-- Dumping data for table `databaseInput_product`
 --
 
 INSERT INTO `databaseInput_product` (`id`, `name`, `description`, `user_id`) VALUES
@@ -730,7 +728,7 @@ INSERT INTO `databaseInput_product` (`id`, `name`, `description`, `user_id`) VAL
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_substrate`
+-- Table structure for table `databaseInput_substrate`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_substrate` (
@@ -748,7 +746,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_substrate` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=43 ;
 
 --
--- Daten für Tabelle `databaseInput_substrate`
+-- Dumping data for table `databaseInput_substrate`
 --
 
 INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`) VALUES
@@ -801,7 +799,7 @@ INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_substrate_modification`
+-- Table structure for table `databaseInput_substrate_modification`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_substrate_modification` (
@@ -817,7 +815,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_substrate_modification` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_type`
+-- Table structure for table `databaseInput_type`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_type` (
@@ -827,24 +825,25 @@ CREATE TABLE IF NOT EXISTS `databaseInput_type` (
   `pfamName` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `pfamId` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `pfamGraphic` longtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
--- Daten für Tabelle `databaseInput_type`
+-- Dumping data for table `databaseInput_type`
 --
 
-INSERT INTO `databaseInput_type` (`id`, `name`, `isModification`, `pfamName`, `pfamId`, `description`) VALUES
-(1, 'A', 0, 'AMP-binding (+ AMP-binding C)', 'PF00501', 'Adenylation-Domain\r\nSpecific activation of amino acid by adenylation\r\nPfam recognises different domains even though it''s only one.'),
-(2, 'C', 0, 'Condensation', 'PF00668', 'Condensation Domain\r\nBuilds peptide bond between two amino acids, each covalenty bound to a thiolation domain. It has a specificity for the chirality of the donor amino acid and for the acceptor amino acid. Thus the latter specificity is the same as that of the following adenylation domain.\r\nPfam also recognises epimerisation domains as condensation domains.'),
-(3, 'T', 0, 'PP-binding', 'PF00550', 'Thiolation Domain\r\nDomain covalently carrying amino acids and peptides via thioester bond.'),
-(4, 'TE', 0, '', '', 'Thioesterase Domain\r\nSynthesis terminating domain, which can introduce a heterocycle depending on the amino acid sequence.'),
-(5, 'E', 0, 'Condensation', 'PF00668', 'Epimerisation Domain\r\nRacemises the amino acid to be introduced. Specificity for chirality given by condensation domain.\r\nAny sole condensation domain at the end of a synthesase in Pfam is an epimerisation domain.');
+INSERT INTO `databaseInput_type` (`id`, `name`, `isModification`, `pfamName`, `pfamId`, `description`, `pfamGraphic`) VALUES
+(1, 'A', 0, 'AMP-binding (+ AMP-binding C)', 'PF00501', 'Adenylation-Domain\r\nSpecific activation of amino acid by adenylation\r\nPfam recognises different domains even though it''s only one.', '{"type" : "pfama","text" : "A-Domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}'),
+(2, 'C', 0, 'Condensation', 'PF00668', 'Condensation Domain\r\nBuilds peptide bond between two amino acids, each covalenty bound to a thiolation domain. It has a specificity for the chirality of the donor amino acid and for the acceptor amino acid. Thus the latter specificity is the same as that of the following adenylation domain.\r\nPfam also recognises epimerisation domains as condensation domains.', '{"type" : "pfama","text" : "C-Domain","colour" : "#ff5353","display": "true","startStyle" : "curved","endStyle" : "curved"}'),
+(3, 'T', 0, 'PP-binding', 'PF00550', 'Thiolation Domain\r\nDomain covalently carrying amino acids and peptides via thioester bond.', '{"type" : "pfama","text" : "T-Domain","colour" : "#FF00FF","display" : "true","startStyle" : "curved","endStyle" : "curved"}'),
+(4, 'TE', 0, '', '', 'Thioesterase Domain\r\nSynthesis terminating domain, which can introduce a heterocycle depending on the amino acid sequence.', '{"type" : "pfama","text" : "TE-Domain","colour" : "#0040FF","display" : "true",\r\n"startStyle" : "curved","endStyle" : "curved"}'),
+(5, 'E', 0, 'Condensation', 'PF00668', 'Epimerisation Domain\r\nRacemises the amino acid to be introduced. Specificity for chirality given by condensation domain.\r\nAny sole condensation domain at the end of a synthesase in Pfam is an epimerisation domain.', '{"type" : "pfama","text" : "E-Domain","colour" : "#F4FA58","display" : "true","startStyle" : "curved","endStyle" : "curved"}');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_domainorder`
+-- Table structure for table `designerGui_domainorder`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_domainorder` (
@@ -859,10 +858,10 @@ CREATE TABLE IF NOT EXISTS `designerGui_domainorder` (
   KEY `designerGui_domainorder_e881bc5b` (`nrp_id`),
   KEY `designerGui_domainorder_e8b327e7` (`domain_id`),
   KEY `designerGui_domainorder_041b603f` (`gene_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=73 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=82 ;
 
 --
--- Daten für Tabelle `designerGui_domainorder`
+-- Dumping data for table `designerGui_domainorder`
 --
 
 INSERT INTO `designerGui_domainorder` (`id`, `nrp_id`, `domain_id`, `order`, `designerStart`, `designerStop`, `gene_id`) VALUES
@@ -871,12 +870,18 @@ INSERT INTO `designerGui_domainorder` (`id`, `nrp_id`, `domain_id`, `order`, `de
 (69, 17, 25, 2, NULL, NULL, 78),
 (70, 17, 26, 3, NULL, NULL, 79),
 (71, 17, 24, 4, NULL, NULL, 80),
-(72, 17, 29, 5, NULL, NULL, 81);
+(72, 17, 29, 5, NULL, NULL, 81),
+(76, 2, 11, 0, NULL, NULL, 85),
+(77, 2, 13, 1, NULL, NULL, 86),
+(78, 2, 12, 2, NULL, NULL, 87),
+(79, 2, 11, 3, NULL, NULL, 88),
+(80, 2, 24, 4, NULL, NULL, 89),
+(81, 2, 29, 5, NULL, NULL, 90);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_nrp`
+-- Table structure for table `designerGui_nrp`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_nrp` (
@@ -894,18 +899,18 @@ CREATE TABLE IF NOT EXISTS `designerGui_nrp` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
 
 --
--- Daten für Tabelle `designerGui_nrp`
+-- Dumping data for table `designerGui_nrp`
 --
 
 INSERT INTO `designerGui_nrp` (`id`, `owner_id`, `name`, `description`, `created`, `modified`, `designed`, `construct_id`) VALUES
-(2, 1, 'test', 'test', '2013-09-04 14:21:36', '2013-09-04 14:21:36', 0, NULL),
+(2, 1, 'test', 'test', '2013-09-04 14:21:36', '2013-09-12 13:52:46', 0, 22),
 (3, 1, 'camille', 'helloooo', '2013-09-04 21:22:02', '2013-09-04 21:22:53', 0, NULL),
 (17, 1, 'hanna', 'bablabla', '2013-09-09 20:05:33', '2013-09-09 20:05:56', 1, 20);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_species`
+-- Table structure for table `designerGui_species`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_species` (
@@ -918,7 +923,7 @@ CREATE TABLE IF NOT EXISTS `designerGui_species` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_substrateorder`
+-- Table structure for table `designerGui_substrateorder`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_substrateorder` (
@@ -929,10 +934,10 @@ CREATE TABLE IF NOT EXISTS `designerGui_substrateorder` (
   PRIMARY KEY (`id`),
   KEY `designerGui_substrateorder_e881bc5b` (`nrp_id`),
   KEY `designerGui_substrateorder_d3ae637d` (`substrate_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=58 ;
 
 --
--- Daten für Tabelle `designerGui_substrateorder`
+-- Dumping data for table `designerGui_substrateorder`
 --
 
 INSERT INTO `designerGui_substrateorder` (`id`, `nrp_id`, `substrate_id`, `order`) VALUES
@@ -940,12 +945,15 @@ INSERT INTO `designerGui_substrateorder` (`id`, `nrp_id`, `substrate_id`, `order
 (2, 3, 34, 2),
 (3, 3, 20, 3),
 (30, 17, 16, 0),
-(31, 17, 18, 1);
+(31, 17, 18, 1),
+(55, 2, 16, 0),
+(56, 2, 16, 1),
+(57, 2, 7, 2);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_admin_log`
+-- Table structure for table `django_admin_log`
 --
 
 CREATE TABLE IF NOT EXISTS `django_admin_log` (
@@ -963,7 +971,7 @@ CREATE TABLE IF NOT EXISTS `django_admin_log` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=220 ;
 
 --
--- Daten für Tabelle `django_admin_log`
+-- Dumping data for table `django_admin_log`
 --
 
 INSERT INTO `django_admin_log` (`id`, `action_time`, `user_id`, `content_type_id`, `object_id`, `object_repr`, `action_flag`, `change_message`) VALUES
@@ -1190,7 +1198,7 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `user_id`, `content_type_id
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_content_type`
+-- Table structure for table `django_content_type`
 --
 
 CREATE TABLE IF NOT EXISTS `django_content_type` (
@@ -1203,7 +1211,7 @@ CREATE TABLE IF NOT EXISTS `django_content_type` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=36 ;
 
 --
--- Daten für Tabelle `django_content_type`
+-- Dumping data for table `django_content_type`
 --
 
 INSERT INTO `django_content_type` (`id`, `name`, `app_label`, `model`) VALUES
@@ -1246,7 +1254,7 @@ INSERT INTO `django_content_type` (`id`, `name`, `app_label`, `model`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_evolution`
+-- Table structure for table `django_evolution`
 --
 
 CREATE TABLE IF NOT EXISTS `django_evolution` (
@@ -1259,7 +1267,7 @@ CREATE TABLE IF NOT EXISTS `django_evolution` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
--- Daten für Tabelle `django_evolution`
+-- Dumping data for table `django_evolution`
 --
 
 INSERT INTO `django_evolution` (`id`, `version_id`, `app_label`, `label`) VALUES
@@ -1269,7 +1277,7 @@ INSERT INTO `django_evolution` (`id`, `version_id`, `app_label`, `label`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_project_version`
+-- Table structure for table `django_project_version`
 --
 
 CREATE TABLE IF NOT EXISTS `django_project_version` (
@@ -1280,7 +1288,7 @@ CREATE TABLE IF NOT EXISTS `django_project_version` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
--- Daten für Tabelle `django_project_version`
+-- Dumping data for table `django_project_version`
 --
 
 INSERT INTO `django_project_version` (`id`, `signature`, `when`) VALUES
@@ -1294,7 +1302,7 @@ INSERT INTO `django_project_version` (`id`, `signature`, `when`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_session`
+-- Table structure for table `django_session`
 --
 
 CREATE TABLE IF NOT EXISTS `django_session` (
@@ -1306,12 +1314,13 @@ CREATE TABLE IF NOT EXISTS `django_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Daten für Tabelle `django_session`
+-- Dumping data for table `django_session`
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('1ollfkongkllk8weh35cx2vbf2a1kyla', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-23 08:36:14'),
 ('2iogxe5p1f0g57espinujeoijy9s2blm', 'MWEyNTcwOTUzOTc5YjJkNGJhMDMzNjdmNjZkNzk0ZDJhZDRiNWNjYjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQJ1Lg==', '2013-09-13 13:30:20'),
+('bcgg12r58exsxsdfgivf1cypj3b6jw1w', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-26 13:30:47'),
 ('hxna3pn0n0rhtc2ppdh5ds0db3hooyql', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-10 12:44:27'),
 ('k5sd7dmjzta0elmqdl9t3r04r7keis91', 'NTVkODViYTRmZTUxZmZjYTBiNmM0NThhNjA1MmE4MGQ3NTgzOTBiMzqAAn1xAS4=', '2013-09-19 14:30:54'),
 ('n5o5nzb9v44fryblfu7mpz8ktv66pf5q', 'YTZiZmYwZjg0MzkxNGI1OGJkMGIxMTdjZDY2YjU3YjgyNzY0MTc5NzqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQN1Lg==', '2013-09-14 17:14:05'),
@@ -1325,7 +1334,7 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_annotation`
+-- Table structure for table `fragment_annotation`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_annotation` (
@@ -1340,7 +1349,7 @@ CREATE TABLE IF NOT EXISTS `fragment_annotation` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_feature`
+-- Table structure for table `fragment_feature`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_feature` (
@@ -1357,7 +1366,7 @@ CREATE TABLE IF NOT EXISTS `fragment_feature` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_gene`
+-- Table structure for table `fragment_gene`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_gene` (
@@ -1370,10 +1379,10 @@ CREATE TABLE IF NOT EXISTS `fragment_gene` (
   `viewable` varchar(1) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fragment_gene_cb902d83` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=82 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=91 ;
 
 --
--- Daten für Tabelle `fragment_gene`
+-- Dumping data for table `fragment_gene`
 --
 
 INSERT INTO `fragment_gene` (`id`, `owner_id`, `name`, `description`, `sequence`, `origin`, `viewable`) VALUES
@@ -1392,12 +1401,21 @@ INSERT INTO `fragment_gene` (`id`, `owner_id`, `name`, `description`, `sequence`
 (78, 1, 'type:C id:25', 'NRPS designer', 'AAGCAAGCGTACTATCCGGTCTCCTCGGCACAAAAGCGCATGTACATCCTCGATCAATTTGAGGGAGTCGGCATCAGCTACAACATGCCGTCGACTATGCTGATCGAAGGCAAGCTGGAGCGAACACGGGTAGAAGCGGCGTTCCAGCGCTTGATTGCGCGACATGAAAGCCTGCGCACTTCGTTTGCCGTCGTCAACGGAGAGCCTGTGCAAAACATTCACGAGGACGTTCCGTTTGCGCTTGCCTATTCGGAAGTCACAGAACAGGAGGCGCGCGAACTCGTTTCTTCTCTCGTGCAGCCGTTCGATCTGGAGGTCGCACCACTCATCCGCGTGTCGCTGCTGAAAATCGGCGAGGATCGTTACGTGCTCTTTACCGACATGCATCACAGCATTTCCGATGGCGTATCCTCCGGCATTCTTTTGGCAGAGTGGGTGCAGCTGTACCAGGGTGACGTTTTGCCGGAGCTGCGTATCCAGTACAAGGACTTTGCTGTGTGGCAACAAGAGTTTTCCCAGTCGGCTGCCTTCCACAAGCAGGAAGCGTACTGGTTGCAAACGTTTGCCGATGACATTCCTGTGCTGAACTTGCCGACCGATTTCACCCGCCCCAGCACCCAAAGCTTTGCCGGGGATCAGTGCACGATCGGCGCGGGCAAAGCGCTCACGGAAGGCTTGCACCAGTTGGCGCAGGCGACGGGAACGACTTTGTACATGGTTTTGCTCGCCGCGTACAACGTGCTGCTCGCCAAGTATGCCGGGCAGGAGGACATCATCGTCGGCACGCCGATTACAGGCAGATCCCATGCCGATCTCGAACCGATCGTCGGCATGTTCGTGAACACCTTGGCGATGCGAAACAAACCGCAGCGCGAAAAGACTTTTAGCGAGTTTTTGCAAGAAGTCAAGCAAAATGCGCTGGATGCGTAC', 'ND', 'H'),
 (79, 1, 'type:A id:26', 'NRPS designer', 'TTCGAAGAGCAGGTCGACAAAACACCGGATCAGGCAGCGCTTCTCTTTAGCGAGCAATCGCTGACGTACAGCGAACTGAACGAGCGAGCAAACAGACTGGCAAGGGTCCTGCGCGCAAAAGGAGTCGGACCGGACCGTCTGGTAGCGATCATGGCGGAGCGCTCGCCGGAAATGGTGATCGGTATTCTCGGTATTTTGAAGGCAGGCGGCGCTTATGTTCCCGTCGATCCCGGCTATCCGCAGGAGCGCATTCAGTACCTGCTCGAAGATAGCAACGCAGCCCTGCTGCTCAGCCAGGCGCATCTGTTGCCGCTGTTGGCCCAGGTGTCAAGCGAGCTGCCGGAGTGCCTTGATCTGAACGCTGAACTGGATGCCGGACTGAGCGGCTCCAACCTGCCAGCTGTCAACCAACCGACTGACCTTGCCTACGTCATCTATACATCCGGTACGACCGGCAAGCCGAAGGGTGTCATGATCCCGCATCAAGGAATCGTGAACTGCTTGCAGTGGAGAAGAGACGAATACGGGTTCGGGCCGAGTGACAAGGCGTTGCAAGTGTTCTCCTTTGCCTTCGACGGTTTTGTAGCCAGCTTGTTCGCTCCGCTGCTCGGAGGGGCAACGTGCGTGTTGCCGCAAGAAGCAGCTGCCAAAGACCCGGTCGCGCTGAAAAAACTGATGGCCGCAACGGAAGTCACCCATTACTACGGCGTACCGAGTCTGTTCCAGGCCATTCTCGATTGCTCGACGACAACCGACTTCAATCAGTTGCGTTGCGTCACTTTGGGCGGCGAGAAGCTGCCTGTGCAGCTTGTGCAAAAAACAAAAGAAAAGCATCCGGCAATCGAGATCAACAACGAGTACGGCCCGACGGAAAACAGCGTCGTCACCACCATCTCGCGCTCGATTGAAGCGGGGCAAGCGATCACGATTGGCCGACCGCTTGCGAACGTCCAAGTCTACATTGTAGATGAGCAGCATCACTTGCAGCCGATTGGCGTGGTCGGTGAGCTGTGCATCGGCGGAGCCGGGCTTGCCAGAGGCTATCTGAACAAACCGGAGCTGACCGCAGAGAAGTTTGTCGCAAATCCGTTCCGACCAGGCGAGCGCATGTACAAAACAGGCGACTTGGTAAAATGGCGGACGGATGGCACGATCGAGTACATCGGCCGCGCAGACGAACAGGTCAAGGTGAGAGGGTATCGCATCGAGATCGGCGAGATCGAGAGCGCCGTACTCGCTTACCAGGGCATCGATCAAGCGGTGGTCGTTGCGCGAGACGATGACGCTACGGCTGGTTCCTATCTTTGCGCCTACTTTGTCGCAGCAACAGCCGTGTCCGTATCCGGCTTGAGAAGCCATCTGGCCAAAGAGCTGCCTGCTTACATGATTCCGAGCTATTTCGTCGAGCTGGATCAGCTGCCGCTTTCCGCCAATGGAAAAGTGGATCGCAAAGCTTTGCCGAAGCCGCAACAGTCCGATGCGACCACGCGCGAATACGTGGCCCCGAGGAATGCGACCGAA', 'ND', 'H'),
 (80, 1, 'type:T id:24', 'NRPS designer', 'GCCCGATTGGCCCAAGTATGGGAGCAGGTGCTGAATGTTCCGCAAGTGGGTGCGCTAGACGACTTTTTCGCGCTCGGCGGTCACTCATTGCGTGCCATGCGCGTCCTTTCCAGCATGCACAACGAATACCAGGTCGACATCCCGCTGCGCATCTTGTTCGAAAAACCGACGATTCAGGAACTGGCGGCGTTCATCGAAGAGACAGCCAAAGGGAATGTCTTCTCGATCGAGCCTGTGCAA', 'ND', 'H'),
-(81, 1, 'type:TE id:29', 'NRPS designer', 'CGAAACGTATTTTGCTTCACGCCGATCGGCGCACAAAGCGTGTACTACCAGAAGCTTGCGGCGGAAATTCAAGGCGTCTCTTTGTACAGCTTTGATTTCATCCAGGATGACAACCGGATGGAGCAGTATATCGCGGCGATCACCGCAATTGATCCAAGCGGTCCGTACACGCTCATGGGCTACTCCTCGGGAGGCAATCTGGCTTTTGAAGTGGCGAAAGAACTGGAGGAGCGGGGCTATGGCGTCACCGACATCATCTTGTTCGACTCGTACTGGAAAGACAAGGCGATTGAGCGGACTGTCGCGGAAACAGAAAACGACATTGCCCAGCTATTCGCCGAGATTGGCGAAAACACCGAGATGTTCAACATGACGCAAGAAGACTTCCAGCTGTACGCCGCCAATGAGTTTGTCAAGCAAAGCTTCGTTCGCAAAACGGTCAGCTATGTGATGTTCCATAACAATCTGGTCAATACCGGAATGACCACTGCCGCGATCCACCTCATCCAATCCGAGCTGGAAGCAGACGAGGAAGCTCCGGTGGCAGCCAAGTGGAACGAATCAGCCTGGGCAAACGCAACGCAACGACTGCTGACGTACAGCGGGCACGGAATCCACTCGCGCATGCTGGCGGGCGATTACGCGTCGCAAAATGCTTCGATTTTGCAAAACATCCTGCAAGAACTGTTCATCCTGAAATAAGACGGCAAATGTGTAAGGGATTCCCCTTGGGAGAAAGCTGTTCCGAGGGGAGTCCATCCCTAACATCCTTGGAGAGGAGCCGCACATGATTGTTACCAAGCAAGATCCACAGACAAGGAAAAGGAAAAACGCCGTATTCGGCTGGGTATTGTCGTTTGTCAAGCCGTACCGAACTTG', 'ND', 'H');
+(81, 1, 'type:TE id:29', 'NRPS designer', 'CGAAACGTATTTTGCTTCACGCCGATCGGCGCACAAAGCGTGTACTACCAGAAGCTTGCGGCGGAAATTCAAGGCGTCTCTTTGTACAGCTTTGATTTCATCCAGGATGACAACCGGATGGAGCAGTATATCGCGGCGATCACCGCAATTGATCCAAGCGGTCCGTACACGCTCATGGGCTACTCCTCGGGAGGCAATCTGGCTTTTGAAGTGGCGAAAGAACTGGAGGAGCGGGGCTATGGCGTCACCGACATCATCTTGTTCGACTCGTACTGGAAAGACAAGGCGATTGAGCGGACTGTCGCGGAAACAGAAAACGACATTGCCCAGCTATTCGCCGAGATTGGCGAAAACACCGAGATGTTCAACATGACGCAAGAAGACTTCCAGCTGTACGCCGCCAATGAGTTTGTCAAGCAAAGCTTCGTTCGCAAAACGGTCAGCTATGTGATGTTCCATAACAATCTGGTCAATACCGGAATGACCACTGCCGCGATCCACCTCATCCAATCCGAGCTGGAAGCAGACGAGGAAGCTCCGGTGGCAGCCAAGTGGAACGAATCAGCCTGGGCAAACGCAACGCAACGACTGCTGACGTACAGCGGGCACGGAATCCACTCGCGCATGCTGGCGGGCGATTACGCGTCGCAAAATGCTTCGATTTTGCAAAACATCCTGCAAGAACTGTTCATCCTGAAATAAGACGGCAAATGTGTAAGGGATTCCCCTTGGGAGAAAGCTGTTCCGAGGGGAGTCCATCCCTAACATCCTTGGAGAGGAGCCGCACATGATTGTTACCAAGCAAGATCCACAGACAAGGAAAAGGAAAAACGCCGTATTCGGCTGGGTATTGTCGTTTGTCAAGCCGTACCGAACTTG', 'ND', 'H'),
+(82, 1, 'type:A id:11', 'NRPS designer', 'ATCGCGGAACAAGCGAGCCGGACACCAGCGAAAGCAGCAGTTGTTTGCGGCGAGGACACCCTGACCTATCAGGAGCTGATGGAGCGTTCTGCCCAGCTTGCCAATGCTTTGCGCGAAAAAGGAATCGCCAGCGGCAGCATCGTCTCGATTATGGCGGAACATTCACTGGAGCTGATCGTGGCGATCATGGCTGTCTTGCGGTCAGGTGCTGCCTACTTGCCGATTGATCCCGAGTACCCGCAAGATCGCATCCAGTATTTGCTCGATGACAGCCAGACCACGCTGCTGTTAACCCAGTCGCATCTGCAACCAAACATCCGGTTTGCAGGCAGCGTGCTTTATTTGGACGATCGTTCCTTGTACGAAGGCGGCAGCACATCCTTCGCACCCGAGAGCAAGCCTGATGATTTGGCGTACATGATCTACACTTCCGGTTCTACCGGCAATCCAAAAGGGGCGATGATTACTCATCAAGGCCTGGTCAATTACATCTGGTGGGCCAACAAGGTGTACGTCCAAGGCGAAGCGGTGGACTTTCCGCTGTACTCATCTATTTCGTTCGATTTGACCGTCACCTCGATCTTCACGCCGCTTCTGTCCGGCAACACGATTCATGTGTACAGAGGGGCAGACAAGGTACAGGTCATTTTGGACATCATCAAAGATAACAAAGTCGGGATCATCAAGCTGACGCCGACACACCTGAAGCTGATTGAACACATCGACGGCAAGGCCAGCAGCATCAGACGGTTCATCGTCGGCGGCGAGAACTTGCCGACAAAGCTGGCGAAGCAAATATACGACCATTTCGGAGAGAACGTGCAAATTTTCAACGAGTACGGACCGACCGAAACCGTTGTCGGTTGCATGATTTACTTGTATGACCCGCAAACAACGACCCAGGAGTCGGTGCCAATCGGTGTCCCGGCAGACAACGTCCAGCTTTATTTGCTCGATGCTTCCATGCAGCCGGTGCCCGTCGGCTCGCTTGGCGAAATGTACATAGCCGGAGACGGCGTAGCCAAAGGGTATTTCAACAGACCGGAGCTGACGAAGGAAAAGTTTATCGACAACCCGTTCCGTCCGGGAACCAAAATGTATCGAACAGGCGACCTGGCAAAATGGCTGCCTGATGGAAACATGGAGTATGCAGGCAGAATGGACTATCAAGTGAAGATTCGCGGCCATCGGATCGAGATGGGCGAAATCGAAACGCGCCTGACGCAGCATGAGGCGGTCAAGGAAGCGGTCGTGATCGTGGAAAAGGATGAGAGCGGCCAAAACGTGTTGTACGCGTACCTTGTTTCCGAGCGGGAACTGACGGTAGCTGAGCTGAGAGAATTTTTGGGGCGCACGCTGCCTTCCTATATGATTCCTTCCTTCTTTATTCGCTTGGCGGAAATTCCGCTGACCGCGAACGGAAAAGTAGAGCGAAAAAAATTGCCGAAGCCAGCTGGCGCAGTCGTTACAGGCACCGCGTATGCAGCTCCGCAAAATGAAATCGAG', 'ND', 'H'),
+(83, 1, 'type:T id:24', 'NRPS designer', 'GCCCGATTGGCCCAAGTATGGGAGCAGGTGCTGAATGTTCCGCAAGTGGGTGCGCTAGACGACTTTTTCGCGCTCGGCGGTCACTCATTGCGTGCCATGCGCGTCCTTTCCAGCATGCACAACGAATACCAGGTCGACATCCCGCTGCGCATCTTGTTCGAAAAACCGACGATTCAGGAACTGGCGGCGTTCATCGAAGAGACAGCCAAAGGGAATGTCTTCTCGATCGAGCCTGTGCAA', 'ND', 'H'),
+(84, 1, 'type:TE id:29', 'NRPS designer', 'CGAAACGTATTTTGCTTCACGCCGATCGGCGCACAAAGCGTGTACTACCAGAAGCTTGCGGCGGAAATTCAAGGCGTCTCTTTGTACAGCTTTGATTTCATCCAGGATGACAACCGGATGGAGCAGTATATCGCGGCGATCACCGCAATTGATCCAAGCGGTCCGTACACGCTCATGGGCTACTCCTCGGGAGGCAATCTGGCTTTTGAAGTGGCGAAAGAACTGGAGGAGCGGGGCTATGGCGTCACCGACATCATCTTGTTCGACTCGTACTGGAAAGACAAGGCGATTGAGCGGACTGTCGCGGAAACAGAAAACGACATTGCCCAGCTATTCGCCGAGATTGGCGAAAACACCGAGATGTTCAACATGACGCAAGAAGACTTCCAGCTGTACGCCGCCAATGAGTTTGTCAAGCAAAGCTTCGTTCGCAAAACGGTCAGCTATGTGATGTTCCATAACAATCTGGTCAATACCGGAATGACCACTGCCGCGATCCACCTCATCCAATCCGAGCTGGAAGCAGACGAGGAAGCTCCGGTGGCAGCCAAGTGGAACGAATCAGCCTGGGCAAACGCAACGCAACGACTGCTGACGTACAGCGGGCACGGAATCCACTCGCGCATGCTGGCGGGCGATTACGCGTCGCAAAATGCTTCGATTTTGCAAAACATCCTGCAAGAACTGTTCATCCTGAAATAAGACGGCAAATGTGTAAGGGATTCCCCTTGGGAGAAAGCTGTTCCGAGGGGAGTCCATCCCTAACATCCTTGGAGAGGAGCCGCACATGATTGTTACCAAGCAAGATCCACAGACAAGGAAAAGGAAAAACGCCGTATTCGGCTGGGTATTGTCGTTTGTCAAGCCGTACCGAACTTG', 'ND', 'H'),
+(85, 1, 'type:A id:11', 'NRPS designer', 'ATCGCGGAACAAGCGAGCCGGACACCAGCGAAAGCAGCAGTTGTTTGCGGCGAGGACACCCTGACCTATCAGGAGCTGATGGAGCGTTCTGCCCAGCTTGCCAATGCTTTGCGCGAAAAAGGAATCGCCAGCGGCAGCATCGTCTCGATTATGGCGGAACATTCACTGGAGCTGATCGTGGCGATCATGGCTGTCTTGCGGTCAGGTGCTGCCTACTTGCCGATTGATCCCGAGTACCCGCAAGATCGCATCCAGTATTTGCTCGATGACAGCCAGACCACGCTGCTGTTAACCCAGTCGCATCTGCAACCAAACATCCGGTTTGCAGGCAGCGTGCTTTATTTGGACGATCGTTCCTTGTACGAAGGCGGCAGCACATCCTTCGCACCCGAGAGCAAGCCTGATGATTTGGCGTACATGATCTACACTTCCGGTTCTACCGGCAATCCAAAAGGGGCGATGATTACTCATCAAGGCCTGGTCAATTACATCTGGTGGGCCAACAAGGTGTACGTCCAAGGCGAAGCGGTGGACTTTCCGCTGTACTCATCTATTTCGTTCGATTTGACCGTCACCTCGATCTTCACGCCGCTTCTGTCCGGCAACACGATTCATGTGTACAGAGGGGCAGACAAGGTACAGGTCATTTTGGACATCATCAAAGATAACAAAGTCGGGATCATCAAGCTGACGCCGACACACCTGAAGCTGATTGAACACATCGACGGCAAGGCCAGCAGCATCAGACGGTTCATCGTCGGCGGCGAGAACTTGCCGACAAAGCTGGCGAAGCAAATATACGACCATTTCGGAGAGAACGTGCAAATTTTCAACGAGTACGGACCGACCGAAACCGTTGTCGGTTGCATGATTTACTTGTATGACCCGCAAACAACGACCCAGGAGTCGGTGCCAATCGGTGTCCCGGCAGACAACGTCCAGCTTTATTTGCTCGATGCTTCCATGCAGCCGGTGCCCGTCGGCTCGCTTGGCGAAATGTACATAGCCGGAGACGGCGTAGCCAAAGGGTATTTCAACAGACCGGAGCTGACGAAGGAAAAGTTTATCGACAACCCGTTCCGTCCGGGAACCAAAATGTATCGAACAGGCGACCTGGCAAAATGGCTGCCTGATGGAAACATGGAGTATGCAGGCAGAATGGACTATCAAGTGAAGATTCGCGGCCATCGGATCGAGATGGGCGAAATCGAAACGCGCCTGACGCAGCATGAGGCGGTCAAGGAAGCGGTCGTGATCGTGGAAAAGGATGAGAGCGGCCAAAACGTGTTGTACGCGTACCTTGTTTCCGAGCGGGAACTGACGGTAGCTGAGCTGAGAGAATTTTTGGGGCGCACGCTGCCTTCCTATATGATTCCTTCCTTCTTTATTCGCTTGGCGGAAATTCCGCTGACCGCGAACGGAAAAGTAGAGCGAAAAAAATTGCCGAAGCCAGCTGGCGCAGTCGTTACAGGCACCGCGTATGCAGCTCCGCAAAATGAAATCGAG', 'ND', 'H'),
+(86, 1, 'type:T id:13', 'NRPS designer', 'GCAAAGCTGGCCGAGATATGGCAGCAAGTGCTGGGCATAAGCCAGGTAGGGATTCACGACGATTTCTTTGACTTGGGCGGACACTCGTTGAAGGCGATGACTGTCGTTTTCCAAGTCTCGAAAGCGCTGGAAGTGGAATTGCCCGTAAAGGCCTTGTTCGAACATCCAACCGTTGCGGAGCTGGCCCGCTTCCTTTCGCGGTCGGAAAAAACCGAGTACACCGCGATTCAACCCGTGGCA', 'ND', 'H'),
+(87, 1, 'type:C id:12', 'NRPS designer', 'GCGCAGGAGTTTTACCCGGTTTCATCTGCGCAAAAAAGAATGTATATCCTGCAACAGTTCGAAGGCAACGGAATCAGCTACAACATTTCGGGTGCGATTCTCCTGGAAGGAAAGCTGGACTACGCCCGGTTTGCCAGCGCTGTGCAACAGCTGGCAGAGCGCCACGAAGCTTTGCGCACCTCGTTCCACCGGATCGACGGCGAGCCTGTGCAAAAAGTGCACGAGGAAGTAGAAGTGCCGCTTTTCATGCTGGAGGCTCCCGAAGACCAGGCGGAGAAAATCATGCGCGAGTTTGTCCGTCCGTTTGATCTCGGGGTCGCTCCGCTGATGCGAACAGGTTTGCTCAAGCTGGGCAAAGACCGCCATTTGTTTTTGCTCGACATGCACCATATCATCTCGGACGGCGTTTCTTCGCAAATTTTGCTGCGTGAATTTGCCGAGTTGTACCAGGGAGCAGACTTGCAGCCGCTTTCGCTGCAATACAAAGATTTCGCTGCTTGGCAAAATGAGCTGTTTCAGACGGAGGCATACAAGAAGCAGGAGCAGCACTGGCTGAACACGTTTGCTGATGAAATTCCGCTCTTGAACCTGCCGACTGACTATCCGCGCCCTAGCGTGCAAAGCTTTGCAGGCGATCTCGTCCTTTTTGCCGCCGGAAAAGAACTGCTGGAGCGGTTGCAACAGGTAGCGTCAGAAACAGGCACCACCTTGTACATGATTTTGCTTGCCGCCTACAATGTGCTGCTGTCCAAGTATACCGGCCAGGAAGACATCATCGTCGGGACGCCTGTCGCTGGACGTTCCCATGCGGACGTGGAAAACATCATGGGCATATTCGTGAACACATTGGCGCTGCGCAACCAGCCTGCCAGCAGCAAAACGTTTGCGCAATTTTTGCAGGAAGTCAAGCAAAACGCGCTTGCAGCCTATGACCATCAAGATTATCCATTTGAAGAACTCGTGGAAAAACTGGCGATTCAGCGGGATATTAGCCGAAATCCGTTGTTTGACACGTTGTTTTCTTTGGAAAACGCGAACCAGCAGTCGCTTGCCATCGCCGAGCTGACAGCGTCGCCCTATGAGCTGTTCAACAAAATTTCCAAGTTTGATCTTGCTTTGAACGCAAGCGAATCGCCAGCGGACATTCAGTTCCAGCTCACATTCGCAACCAAGCTGTTCAAGAAAGAAACGGTCGAGCGAATGGCCCGGCATTACCTGGAAATTTTGCGCTGGATCAGTGAGCAGCCAACGGCAAGCCTCGCGGACATCGACATGATGACGGAAGCGGAAAAACGCACACTCCTTCTGAACGTGAACGATACGTTTGTCGAGCGGACTGCCGCGACCGCTTTGCATCAATTA', 'ND', 'H'),
+(88, 1, 'type:A id:11', 'NRPS designer', 'ATCGCGGAACAAGCGAGCCGGACACCAGCGAAAGCAGCAGTTGTTTGCGGCGAGGACACCCTGACCTATCAGGAGCTGATGGAGCGTTCTGCCCAGCTTGCCAATGCTTTGCGCGAAAAAGGAATCGCCAGCGGCAGCATCGTCTCGATTATGGCGGAACATTCACTGGAGCTGATCGTGGCGATCATGGCTGTCTTGCGGTCAGGTGCTGCCTACTTGCCGATTGATCCCGAGTACCCGCAAGATCGCATCCAGTATTTGCTCGATGACAGCCAGACCACGCTGCTGTTAACCCAGTCGCATCTGCAACCAAACATCCGGTTTGCAGGCAGCGTGCTTTATTTGGACGATCGTTCCTTGTACGAAGGCGGCAGCACATCCTTCGCACCCGAGAGCAAGCCTGATGATTTGGCGTACATGATCTACACTTCCGGTTCTACCGGCAATCCAAAAGGGGCGATGATTACTCATCAAGGCCTGGTCAATTACATCTGGTGGGCCAACAAGGTGTACGTCCAAGGCGAAGCGGTGGACTTTCCGCTGTACTCATCTATTTCGTTCGATTTGACCGTCACCTCGATCTTCACGCCGCTTCTGTCCGGCAACACGATTCATGTGTACAGAGGGGCAGACAAGGTACAGGTCATTTTGGACATCATCAAAGATAACAAAGTCGGGATCATCAAGCTGACGCCGACACACCTGAAGCTGATTGAACACATCGACGGCAAGGCCAGCAGCATCAGACGGTTCATCGTCGGCGGCGAGAACTTGCCGACAAAGCTGGCGAAGCAAATATACGACCATTTCGGAGAGAACGTGCAAATTTTCAACGAGTACGGACCGACCGAAACCGTTGTCGGTTGCATGATTTACTTGTATGACCCGCAAACAACGACCCAGGAGTCGGTGCCAATCGGTGTCCCGGCAGACAACGTCCAGCTTTATTTGCTCGATGCTTCCATGCAGCCGGTGCCCGTCGGCTCGCTTGGCGAAATGTACATAGCCGGAGACGGCGTAGCCAAAGGGTATTTCAACAGACCGGAGCTGACGAAGGAAAAGTTTATCGACAACCCGTTCCGTCCGGGAACCAAAATGTATCGAACAGGCGACCTGGCAAAATGGCTGCCTGATGGAAACATGGAGTATGCAGGCAGAATGGACTATCAAGTGAAGATTCGCGGCCATCGGATCGAGATGGGCGAAATCGAAACGCGCCTGACGCAGCATGAGGCGGTCAAGGAAGCGGTCGTGATCGTGGAAAAGGATGAGAGCGGCCAAAACGTGTTGTACGCGTACCTTGTTTCCGAGCGGGAACTGACGGTAGCTGAGCTGAGAGAATTTTTGGGGCGCACGCTGCCTTCCTATATGATTCCTTCCTTCTTTATTCGCTTGGCGGAAATTCCGCTGACCGCGAACGGAAAAGTAGAGCGAAAAAAATTGCCGAAGCCAGCTGGCGCAGTCGTTACAGGCACCGCGTATGCAGCTCCGCAAAATGAAATCGAG', 'ND', 'H'),
+(89, 1, 'type:T id:24', 'NRPS designer', 'GCCCGATTGGCCCAAGTATGGGAGCAGGTGCTGAATGTTCCGCAAGTGGGTGCGCTAGACGACTTTTTCGCGCTCGGCGGTCACTCATTGCGTGCCATGCGCGTCCTTTCCAGCATGCACAACGAATACCAGGTCGACATCCCGCTGCGCATCTTGTTCGAAAAACCGACGATTCAGGAACTGGCGGCGTTCATCGAAGAGACAGCCAAAGGGAATGTCTTCTCGATCGAGCCTGTGCAA', 'ND', 'H'),
+(90, 1, 'type:TE id:29', 'NRPS designer', 'CGAAACGTATTTTGCTTCACGCCGATCGGCGCACAAAGCGTGTACTACCAGAAGCTTGCGGCGGAAATTCAAGGCGTCTCTTTGTACAGCTTTGATTTCATCCAGGATGACAACCGGATGGAGCAGTATATCGCGGCGATCACCGCAATTGATCCAAGCGGTCCGTACACGCTCATGGGCTACTCCTCGGGAGGCAATCTGGCTTTTGAAGTGGCGAAAGAACTGGAGGAGCGGGGCTATGGCGTCACCGACATCATCTTGTTCGACTCGTACTGGAAAGACAAGGCGATTGAGCGGACTGTCGCGGAAACAGAAAACGACATTGCCCAGCTATTCGCCGAGATTGGCGAAAACACCGAGATGTTCAACATGACGCAAGAAGACTTCCAGCTGTACGCCGCCAATGAGTTTGTCAAGCAAAGCTTCGTTCGCAAAACGGTCAGCTATGTGATGTTCCATAACAATCTGGTCAATACCGGAATGACCACTGCCGCGATCCACCTCATCCAATCCGAGCTGGAAGCAGACGAGGAAGCTCCGGTGGCAGCCAAGTGGAACGAATCAGCCTGGGCAAACGCAACGCAACGACTGCTGACGTACAGCGGGCACGGAATCCACTCGCGCATGCTGGCGGGCGATTACGCGTCGCAAAATGCTTCGATTTTGCAAAACATCCTGCAAGAACTGTTCATCCTGAAATAAGACGGCAAATGTGTAAGGGATTCCCCTTGGGAGAAAGCTGTTCCGAGGGGAGTCCATCCCTAACATCCTTGGAGAGGAGCCGCACATGATTGTTACCAAGCAAGATCCACAGACAAGGAAAAGGAAAAACGCCGTATTCGGCTGGGTATTGTCGTTTGTCAAGCCGTACCGAACTTG', 'ND', 'H');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_qualifier`
+-- Table structure for table `fragment_qualifier`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_qualifier` (
@@ -1412,7 +1430,7 @@ CREATE TABLE IF NOT EXISTS `fragment_qualifier` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_reference`
+-- Table structure for table `fragment_reference`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_reference` (
@@ -1430,7 +1448,7 @@ CREATE TABLE IF NOT EXISTS `fragment_reference` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_construct`
+-- Table structure for table `gibson_construct`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_construct` (
@@ -1446,22 +1464,24 @@ CREATE TABLE IF NOT EXISTS `gibson_construct` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `genbank_id` (`genbank_id`),
   KEY `gibson_construct_cb902d83` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=23 ;
 
 --
--- Daten für Tabelle `gibson_construct`
+-- Dumping data for table `gibson_construct`
 --
 
 INSERT INTO `gibson_construct` (`id`, `owner_id`, `name`, `description`, `genbank_id`, `shape`, `created`, `modified`, `processed`) VALUES
 (3, 1, 'test_construct', 'test', NULL, 'c', '2013-09-04 13:02:15', '2013-09-04 13:11:25', 1),
 (4, 1, 'h', 'h', NULL, 'c', '2013-09-04 21:24:12', '2013-09-05 10:04:16', 1),
 (17, 1, 'tst Gibson Construct', 'NRPS designer', NULL, 'c', '2013-09-09 13:35:44', '2013-09-09 13:35:44', 0),
-(20, 1, 'hanna Gibson Construct', 'NRPS designer', NULL, 'c', '2013-09-09 20:05:54', '2013-09-09 20:08:05', 1);
+(20, 1, 'hanna Gibson Construct', 'NRPS designer', NULL, 'c', '2013-09-09 20:05:54', '2013-09-09 20:08:05', 1),
+(21, 1, 'test Gibson Construct', 'NRPS designer', NULL, 'c', '2013-09-12 13:51:15', '2013-09-12 13:51:15', 0),
+(22, 1, 'test Gibson Construct', 'NRPS designer', NULL, 'c', '2013-09-12 13:51:33', '2013-09-12 13:51:33', 0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_constructfragment`
+-- Table structure for table `gibson_constructfragment`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_constructfragment` (
@@ -1480,35 +1500,44 @@ CREATE TABLE IF NOT EXISTS `gibson_constructfragment` (
   KEY `gibson_constructfragment_2d4bfd31` (`fragment_id`),
   KEY `gibson_constructfragment_7187e15c` (`start_feature_id`),
   KEY `gibson_constructfragment_80b9d7d2` (`end_feature_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=106 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=115 ;
 
 --
--- Daten für Tabelle `gibson_constructfragment`
+-- Dumping data for table `gibson_constructfragment`
 --
 
 INSERT INTO `gibson_constructfragment` (`id`, `construct_id`, `fragment_id`, `order`, `direction`, `start_feature_id`, `start_offset`, `end_feature_id`, `end_offset`, `concentration`) VALUES
-(21, 3, 6, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(22, 3, 7, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(27, 4, 9, 2, 'r', NULL, 0, NULL, 0, '100.0'),
-(28, 4, 8, 0, 'r', NULL, 0, NULL, 0, '100.0'),
-(29, 4, 9, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(80, 17, 58, 0, 'f', NULL, 0, NULL, 0, '100.0'),
-(81, 17, 59, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(82, 17, 60, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(83, 17, 61, 3, 'f', NULL, 0, NULL, 0, '100.0'),
-(84, 17, 62, 4, 'f', NULL, 0, NULL, 0, '100.0'),
-(85, 17, 63, 5, 'f', NULL, 0, NULL, 0, '100.0'),
-(99, 20, 76, 0, 'f', NULL, 0, NULL, 0, '100.0'),
-(100, 20, 77, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(101, 20, 78, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(102, 20, 79, 3, 'f', NULL, 0, NULL, 0, '100.0'),
-(103, 20, 80, 4, 'f', NULL, 0, NULL, 0, '100.0'),
-(104, 20, 81, 5, 'f', NULL, 0, NULL, 0, '100.0');
+(21, 3, 6, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(22, 3, 7, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(27, 4, 9, 2, 'r', NULL, 0, NULL, 0, 100.0),
+(28, 4, 8, 0, 'r', NULL, 0, NULL, 0, 100.0),
+(29, 4, 9, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(80, 17, 58, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(81, 17, 59, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(82, 17, 60, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(83, 17, 61, 3, 'f', NULL, 0, NULL, 0, 100.0),
+(84, 17, 62, 4, 'f', NULL, 0, NULL, 0, 100.0),
+(85, 17, 63, 5, 'f', NULL, 0, NULL, 0, 100.0),
+(99, 20, 76, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(100, 20, 77, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(101, 20, 78, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(102, 20, 79, 3, 'f', NULL, 0, NULL, 0, 100.0),
+(103, 20, 80, 4, 'f', NULL, 0, NULL, 0, 100.0),
+(104, 20, 81, 5, 'f', NULL, 0, NULL, 0, 100.0),
+(106, 21, 82, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(107, 21, 83, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(108, 21, 84, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(109, 22, 85, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(110, 22, 86, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(111, 22, 87, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(112, 22, 88, 3, 'f', NULL, 0, NULL, 0, 100.0),
+(113, 22, 89, 4, 'f', NULL, 0, NULL, 0, 100.0),
+(114, 22, 90, 5, 'f', NULL, 0, NULL, 0, 100.0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_pcrsettings`
+-- Table structure for table `gibson_pcrsettings`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_pcrsettings` (
@@ -1530,18 +1559,18 @@ CREATE TABLE IF NOT EXISTS `gibson_pcrsettings` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
--- Daten für Tabelle `gibson_pcrsettings`
+-- Dumping data for table `gibson_pcrsettings`
 --
 
 INSERT INTO `gibson_pcrsettings` (`id`, `construct_id`, `repeats`, `volume_each`, `error_margin`, `buffer_s`, `buffer_d`, `dntp_s`, `dntp_d`, `enzyme_s`, `enzyme_d`, `primer_d`, `template_d`) VALUES
-(3, 3, 1, '12.5', 10, '10.0', '1.0', '10.0', '0.8', '2.5', '2.5', '0.4', '100.0'),
-(4, 4, 1, '12.5', 10, '10.0', '1.0', '10.0', '0.8', '2.5', '2.5', '0.4', '100.0'),
-(8, 20, 1, '12.5', 10, '10.0', '1.0', '10.0', '0.8', '2.5', '2.5', '0.4', '100.0');
+(3, 3, 1, 12.5, 10, 10.0, 1.0, 10.0, 0.8, 2.5, 2.5, 0.4, 100.0),
+(4, 4, 1, 12.5, 10, 10.0, 1.0, 10.0, 0.8, 2.5, 2.5, 0.4, 100.0),
+(8, 20, 1, 12.5, 10, 10.0, 1.0, 10.0, 0.8, 2.5, 2.5, 0.4, 100.0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_primer`
+-- Table structure for table `gibson_primer`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_primer` (
@@ -1559,35 +1588,35 @@ CREATE TABLE IF NOT EXISTS `gibson_primer` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=89 ;
 
 --
--- Daten für Tabelle `gibson_primer`
+-- Dumping data for table `gibson_primer`
 --
 
 INSERT INTO `gibson_primer` (`id`, `name`, `construct_id`, `flap_id`, `stick_id`, `boxplot`, `concentration`) VALUES
-(7, 'test_construct-nrp-rev', 3, 14, 13, '', '5.0'),
-(10, 'test_construct-LacI-fwd', 3, 20, 19, '', '5.0'),
-(15, 'h-p-rev', 4, 30, 29, '', '5.0'),
-(16, 'h-p-fwd', 4, 32, 31, '', '5.0'),
-(17, 'h-haaallo-rev', 4, 34, 33, '', '5.0'),
-(18, 'h-haaallo-fwd', 4, 36, 35, '', '5.0'),
-(19, 'h-haaallo-rev', 4, 38, 37, '', '5.0'),
-(20, 'h-haaallo-fwd', 4, 40, 39, '', '5.0'),
-(77, 'hanna Gibson Construct-type:A id:11-rev', 20, 154, 153, '', '5.0'),
-(78, 'hanna Gibson Construct-type:A id:11-fwd', 20, 156, 155, '', '5.0'),
-(79, 'hanna Gibson Construct-type:T id:13-rev', 20, 158, 157, '', '5.0'),
-(80, 'hanna Gibson Construct-type:T id:13-fwd', 20, 160, 159, '', '5.0'),
-(81, 'hanna Gibson Construct-type:C id:25-rev', 20, 162, 161, '', '5.0'),
-(82, 'hanna Gibson Construct-type:C id:25-fwd', 20, 164, 163, '', '5.0'),
-(83, 'hanna Gibson Construct-type:A id:26-rev', 20, 166, 165, '', '5.0'),
-(84, 'hanna Gibson Construct-type:A id:26-fwd', 20, 168, 167, '', '5.0'),
-(85, 'hanna Gibson Construct-type:T id:24-rev', 20, 170, 169, '', '5.0'),
-(86, 'hanna Gibson Construct-type:T id:24-fwd', 20, 172, 171, '', '5.0'),
-(87, 'hanna Gibson Construct-type:TE id:29-rev', 20, 174, 173, '', '5.0'),
-(88, 'hanna Gibson Construct-type:TE id:29-fwd', 20, 176, 175, '', '5.0');
+(7, 'test_construct-nrp-rev', 3, 14, 13, '', 5.0),
+(10, 'test_construct-LacI-fwd', 3, 20, 19, '', 5.0),
+(15, 'h-p-rev', 4, 30, 29, '', 5.0),
+(16, 'h-p-fwd', 4, 32, 31, '', 5.0),
+(17, 'h-haaallo-rev', 4, 34, 33, '', 5.0),
+(18, 'h-haaallo-fwd', 4, 36, 35, '', 5.0),
+(19, 'h-haaallo-rev', 4, 38, 37, '', 5.0),
+(20, 'h-haaallo-fwd', 4, 40, 39, '', 5.0),
+(77, 'hanna Gibson Construct-type:A id:11-rev', 20, 154, 153, '', 5.0),
+(78, 'hanna Gibson Construct-type:A id:11-fwd', 20, 156, 155, '', 5.0),
+(79, 'hanna Gibson Construct-type:T id:13-rev', 20, 158, 157, '', 5.0),
+(80, 'hanna Gibson Construct-type:T id:13-fwd', 20, 160, 159, '', 5.0),
+(81, 'hanna Gibson Construct-type:C id:25-rev', 20, 162, 161, '', 5.0),
+(82, 'hanna Gibson Construct-type:C id:25-fwd', 20, 164, 163, '', 5.0),
+(83, 'hanna Gibson Construct-type:A id:26-rev', 20, 166, 165, '', 5.0),
+(84, 'hanna Gibson Construct-type:A id:26-fwd', 20, 168, 167, '', 5.0),
+(85, 'hanna Gibson Construct-type:T id:24-rev', 20, 170, 169, '', 5.0),
+(86, 'hanna Gibson Construct-type:T id:24-fwd', 20, 172, 171, '', 5.0),
+(87, 'hanna Gibson Construct-type:TE id:29-rev', 20, 174, 173, '', 5.0),
+(88, 'hanna Gibson Construct-type:TE id:29-fwd', 20, 176, 175, '', 5.0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_primerhalf`
+-- Table structure for table `gibson_primerhalf`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_primerhalf` (
@@ -1600,7 +1629,7 @@ CREATE TABLE IF NOT EXISTS `gibson_primerhalf` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=177 ;
 
 --
--- Daten für Tabelle `gibson_primerhalf`
+-- Dumping data for table `gibson_primerhalf`
 --
 
 INSERT INTO `gibson_primerhalf` (`id`, `cfragment_id`, `top`, `length`) VALUES
@@ -1652,7 +1681,7 @@ INSERT INTO `gibson_primerhalf` (`id`, `cfragment_id`, `top`, `length`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_settings`
+-- Table structure for table `gibson_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_settings` (
@@ -1669,18 +1698,18 @@ CREATE TABLE IF NOT EXISTS `gibson_settings` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
--- Daten für Tabelle `gibson_settings`
+-- Dumping data for table `gibson_settings`
 --
 
 INSERT INTO `gibson_settings` (`id`, `construct_id`, `mg_salt`, `na_salt`, `ss_safety`, `min_anneal_tm`, `min_primer_tm`, `min_overlap`) VALUES
-(3, 3, '0.00', '0.050', 3, 50, 60, 20),
-(4, 4, '0.00', '0.050', 3, 50, 60, 20),
-(8, 20, '0.00', '0.050', 3, 50, 60, 20);
+(3, 3, 0.00, 0.050, 3, 50, 60, 20),
+(4, 4, 0.00, 0.050, 3, 50, 60, 20),
+(8, 20, 0.00, 0.050, 3, 50, 60, 20);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_warning`
+-- Table structure for table `gibson_warning`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_warning` (
@@ -1695,7 +1724,7 @@ CREATE TABLE IF NOT EXISTS `gibson_warning` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `registration_registrationprofile`
+-- Table structure for table `registration_registrationprofile`
 --
 
 CREATE TABLE IF NOT EXISTS `registration_registrationprofile` (
@@ -1709,7 +1738,7 @@ CREATE TABLE IF NOT EXISTS `registration_registrationprofile` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `south_migrationhistory`
+-- Table structure for table `south_migrationhistory`
 --
 
 CREATE TABLE IF NOT EXISTS `south_migrationhistory` (
@@ -1718,10 +1747,10 @@ CREATE TABLE IF NOT EXISTS `south_migrationhistory` (
   `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
 
 --
--- Daten für Tabelle `south_migrationhistory`
+-- Dumping data for table `south_migrationhistory`
 --
 
 INSERT INTO `south_migrationhistory` (`id`, `app_name`, `migration`, `applied`) VALUES
@@ -1733,41 +1762,42 @@ INSERT INTO `south_migrationhistory` (`id`, `app_name`, `migration`, `applied`) 
 (6, 'gibson', '0003_auto__chg_field_settings_na_salt', '2013-09-09 08:16:52'),
 (7, 'fragment', '0002_auto__add_field_gene_viewable', '2013-09-09 08:17:23'),
 (8, 'designerGui', '0002_auto__chg_field_nrp_construct__add_field_domainorder_gene', '2013-09-09 11:51:57'),
-(9, 'databaseInput', '0002_auto__add_field_substrate_user__add_field_origin_user__add_field_cds_u', '2013-09-11 19:34:16');
+(9, 'databaseInput', '0002_auto__add_field_substrate_user__add_field_origin_user__add_field_cds_u', '2013-09-11 19:34:16'),
+(10, 'databaseInput', '0003_auto__add_field_type_pfamGraphic', '2013-09-12 12:37:34');
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `auth_group_permissions`
+-- Constraints for table `auth_group_permissions`
 --
 ALTER TABLE `auth_group_permissions`
   ADD CONSTRAINT `group_id_refs_id_f4b32aac` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   ADD CONSTRAINT `permission_id_refs_id_6ba0f519` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`);
 
 --
--- Constraints der Tabelle `auth_permission`
+-- Constraints for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
   ADD CONSTRAINT `content_type_id_refs_id_d043b34a` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`);
 
 --
--- Constraints der Tabelle `auth_user_groups`
+-- Constraints for table `auth_user_groups`
 --
 ALTER TABLE `auth_user_groups`
   ADD CONSTRAINT `user_id_refs_id_40c41112` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `group_id_refs_id_274b862c` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`);
 
 --
--- Constraints der Tabelle `auth_user_user_permissions`
+-- Constraints for table `auth_user_user_permissions`
 --
 ALTER TABLE `auth_user_user_permissions`
   ADD CONSTRAINT `user_id_refs_id_4dc23c39` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `permission_id_refs_id_35d9ac25` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_cds`
+-- Constraints for table `databaseInput_cds`
 --
 ALTER TABLE `databaseInput_cds`
   ADD CONSTRAINT `user_id_refs_id_ee336d53` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -1775,7 +1805,7 @@ ALTER TABLE `databaseInput_cds`
   ADD CONSTRAINT `origin_id_refs_id_84c4703b` FOREIGN KEY (`origin_id`) REFERENCES `databaseInput_origin` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_domain`
+-- Constraints for table `databaseInput_domain`
 --
 ALTER TABLE `databaseInput_domain`
   ADD CONSTRAINT `user_id_refs_id_8a5a6f28` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -1783,14 +1813,14 @@ ALTER TABLE `databaseInput_domain`
   ADD CONSTRAINT `domainType_id_refs_id_19aecaa4` FOREIGN KEY (`domainType_id`) REFERENCES `databaseInput_type` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_domain_substrateSpecificity`
+-- Constraints for table `databaseInput_domain_substrateSpecificity`
 --
 ALTER TABLE `databaseInput_domain_substrateSpecificity`
   ADD CONSTRAINT `substrate_id_refs_id_1e8e4d24` FOREIGN KEY (`substrate_id`) REFERENCES `databaseInput_substrate` (`id`),
   ADD CONSTRAINT `domain_id_refs_id_a08cf1d5` FOREIGN KEY (`domain_id`) REFERENCES `databaseInput_domain` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_linkout`
+-- Constraints for table `databaseInput_linkout`
 --
 ALTER TABLE `databaseInput_linkout`
   ADD CONSTRAINT `user_id_refs_id_36052dc4` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -1798,26 +1828,26 @@ ALTER TABLE `databaseInput_linkout`
   ADD CONSTRAINT `linkoutType_id_refs_id_85a650b7` FOREIGN KEY (`linkoutType_id`) REFERENCES `databaseInput_linkouttype` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_modification`
+-- Constraints for table `databaseInput_modification`
 --
 ALTER TABLE `databaseInput_modification`
   ADD CONSTRAINT `domainType_id_refs_id_8a961dff` FOREIGN KEY (`domainType_id`) REFERENCES `databaseInput_type` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_origin`
+-- Constraints for table `databaseInput_origin`
 --
 ALTER TABLE `databaseInput_origin`
   ADD CONSTRAINT `user_id_refs_id_fddfc6bb` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `parent_id_refs_id_a1a829d3` FOREIGN KEY (`parent_id`) REFERENCES `databaseInput_origin` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_product`
+-- Constraints for table `databaseInput_product`
 --
 ALTER TABLE `databaseInput_product`
   ADD CONSTRAINT `user_id_refs_id_969d00c6` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_substrate`
+-- Constraints for table `databaseInput_substrate`
 --
 ALTER TABLE `databaseInput_substrate`
   ADD CONSTRAINT `user_id_refs_id_2a47e280` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -1825,14 +1855,14 @@ ALTER TABLE `databaseInput_substrate`
   ADD CONSTRAINT `parent_id_refs_id_80f9cfa5` FOREIGN KEY (`parent_id`) REFERENCES `databaseInput_substrate` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_substrate_modification`
+-- Constraints for table `databaseInput_substrate_modification`
 --
 ALTER TABLE `databaseInput_substrate_modification`
   ADD CONSTRAINT `modification_id_refs_id_7df1fd5c` FOREIGN KEY (`modification_id`) REFERENCES `databaseInput_modification` (`id`),
   ADD CONSTRAINT `substrate_id_refs_id_0fd5611a` FOREIGN KEY (`substrate_id`) REFERENCES `databaseInput_substrate` (`id`);
 
 --
--- Constraints der Tabelle `designerGui_domainorder`
+-- Constraints for table `designerGui_domainorder`
 --
 ALTER TABLE `designerGui_domainorder`
   ADD CONSTRAINT `gene_id_refs_id_f4397561` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`),
@@ -1840,71 +1870,71 @@ ALTER TABLE `designerGui_domainorder`
   ADD CONSTRAINT `nrp_id_refs_id_de0421e2` FOREIGN KEY (`nrp_id`) REFERENCES `designerGui_nrp` (`id`);
 
 --
--- Constraints der Tabelle `designerGui_nrp`
+-- Constraints for table `designerGui_nrp`
 --
 ALTER TABLE `designerGui_nrp`
   ADD CONSTRAINT `construct_id_refs_id_a1a08db0` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`),
   ADD CONSTRAINT `owner_id_refs_id_b0afa479` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `designerGui_substrateorder`
+-- Constraints for table `designerGui_substrateorder`
 --
 ALTER TABLE `designerGui_substrateorder`
   ADD CONSTRAINT `nrp_id_refs_id_82e72640` FOREIGN KEY (`nrp_id`) REFERENCES `designerGui_nrp` (`id`),
   ADD CONSTRAINT `substrate_id_refs_id_9eb8fd0a` FOREIGN KEY (`substrate_id`) REFERENCES `databaseInput_substrate` (`id`);
 
 --
--- Constraints der Tabelle `django_admin_log`
+-- Constraints for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   ADD CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `django_evolution`
+-- Constraints for table `django_evolution`
 --
 ALTER TABLE `django_evolution`
   ADD CONSTRAINT `version_id_refs_id_946f97c5` FOREIGN KEY (`version_id`) REFERENCES `django_project_version` (`id`);
 
 --
--- Constraints der Tabelle `fragment_annotation`
+-- Constraints for table `fragment_annotation`
 --
 ALTER TABLE `fragment_annotation`
   ADD CONSTRAINT `gene_id_refs_id_64b20c84` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`);
 
 --
--- Constraints der Tabelle `fragment_feature`
+-- Constraints for table `fragment_feature`
 --
 ALTER TABLE `fragment_feature`
   ADD CONSTRAINT `gene_id_refs_id_6b73cc15` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`);
 
 --
--- Constraints der Tabelle `fragment_gene`
+-- Constraints for table `fragment_gene`
 --
 ALTER TABLE `fragment_gene`
   ADD CONSTRAINT `owner_id_refs_id_97a6e397` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `fragment_qualifier`
+-- Constraints for table `fragment_qualifier`
 --
 ALTER TABLE `fragment_qualifier`
   ADD CONSTRAINT `feature_id_refs_id_90cf6677` FOREIGN KEY (`feature_id`) REFERENCES `fragment_feature` (`id`);
 
 --
--- Constraints der Tabelle `fragment_reference`
+-- Constraints for table `fragment_reference`
 --
 ALTER TABLE `fragment_reference`
   ADD CONSTRAINT `gene_id_refs_id_8c400d20` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`);
 
 --
--- Constraints der Tabelle `gibson_construct`
+-- Constraints for table `gibson_construct`
 --
 ALTER TABLE `gibson_construct`
   ADD CONSTRAINT `genbank_id_refs_id_12d92277` FOREIGN KEY (`genbank_id`) REFERENCES `fragment_gene` (`id`),
   ADD CONSTRAINT `owner_id_refs_id_be6da168` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `gibson_constructfragment`
+-- Constraints for table `gibson_constructfragment`
 --
 ALTER TABLE `gibson_constructfragment`
   ADD CONSTRAINT `construct_id_refs_id_4f15b550` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`),
@@ -1913,13 +1943,13 @@ ALTER TABLE `gibson_constructfragment`
   ADD CONSTRAINT `start_feature_id_refs_id_fe3ea4c3` FOREIGN KEY (`start_feature_id`) REFERENCES `fragment_feature` (`id`);
 
 --
--- Constraints der Tabelle `gibson_pcrsettings`
+-- Constraints for table `gibson_pcrsettings`
 --
 ALTER TABLE `gibson_pcrsettings`
   ADD CONSTRAINT `construct_id_refs_id_0d04e31b` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`);
 
 --
--- Constraints der Tabelle `gibson_primer`
+-- Constraints for table `gibson_primer`
 --
 ALTER TABLE `gibson_primer`
   ADD CONSTRAINT `construct_id_refs_id_31ba4b62` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`),
@@ -1927,25 +1957,25 @@ ALTER TABLE `gibson_primer`
   ADD CONSTRAINT `stick_id_refs_id_5a268703` FOREIGN KEY (`stick_id`) REFERENCES `gibson_primerhalf` (`id`);
 
 --
--- Constraints der Tabelle `gibson_primerhalf`
+-- Constraints for table `gibson_primerhalf`
 --
 ALTER TABLE `gibson_primerhalf`
   ADD CONSTRAINT `cfragment_id_refs_id_8044d746` FOREIGN KEY (`cfragment_id`) REFERENCES `gibson_constructfragment` (`id`);
 
 --
--- Constraints der Tabelle `gibson_settings`
+-- Constraints for table `gibson_settings`
 --
 ALTER TABLE `gibson_settings`
   ADD CONSTRAINT `construct_id_refs_id_fec4e6b3` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`);
 
 --
--- Constraints der Tabelle `gibson_warning`
+-- Constraints for table `gibson_warning`
 --
 ALTER TABLE `gibson_warning`
   ADD CONSTRAINT `primer_id_refs_id_5c9bedd8` FOREIGN KEY (`primer_id`) REFERENCES `gibson_primer` (`id`);
 
 --
--- Constraints der Tabelle `registration_registrationprofile`
+-- Constraints for table `registration_registrationprofile`
 --
 ALTER TABLE `registration_registrationprofile`
   ADD CONSTRAINT `user_id_refs_id_954d2985` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);

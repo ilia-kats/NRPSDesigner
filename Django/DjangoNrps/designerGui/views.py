@@ -1,5 +1,5 @@
 from designerGui.models import Species, NRP, SubstrateOrder
-from databaseInput.models import Substrate, Modification
+from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
@@ -244,11 +244,12 @@ def generatePfamGraphic(request):
         start = i*100
         end = start+200
         i += 3
-        domain_origins.append(x_domain.cds.origin)
         x_domain = Domain.objects.get(pk=did)
-        region_def = json.loads(x_domain.pfamGraphics)
-        region_def.update({"start" : start, "end" : end})
+        domain_origins.append(x_domain.cds.origin)
+        #context['domain_origins'] = domain_origins
+        region_def = json.loads(x_domain.domainType.pfamGraphic)
+        region_def.update({"start" : str(start), "end" : str(end)})
         regions.append(region_def)
     
 
-    pfam_graphic = json.dumps({"length" : graphic_length, "regions": regions}, indent=4)
+    return HttpResponse(json.dumps({"length" : graphic_length, "regions": regions}), mimetype="application/json")
