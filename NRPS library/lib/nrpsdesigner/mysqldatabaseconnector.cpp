@@ -18,7 +18,7 @@ using namespace nrps;
 namespace po = boost::program_options;
 
 MySQLDatabaseConnector::MySQLDatabaseConnector()
-: AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomer(nullptr), m_stmtCoreDomains(nullptr), m_stmtCoreDomainsId(nullptr), m_stmtCoreDomainsEnantId(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtOrigin(nullptr)
+: AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomer(nullptr), m_stmtCoreDomainsSubstrate(nullptr), m_stmtCoreDomainsNoSubstrate(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtOrigin(nullptr)
 {}
 
 MySQLDatabaseConnector::~MySQLDatabaseConnector()
@@ -30,14 +30,11 @@ MySQLDatabaseConnector::~MySQLDatabaseConnector()
     if (m_stmtMonomer != nullptr) {
         delete m_stmtMonomer;
     }
-    if (m_stmtCoreDomains != nullptr) {
-        delete m_stmtCoreDomains;
+    if (m_stmtCoreDomainsSubstrate != nullptr) {
+        delete m_stmtCoreDomainsSubstrate;
     }
-    if (m_stmtCoreDomainsId != nullptr) {
-        delete m_stmtCoreDomainsId;
-    }
-    if (m_stmtCoreDomainsEnantId != nullptr) {
-        delete m_stmtCoreDomainsEnantId;
+    if (m_stmtCoreDomainsNoSubstrate != nullptr) {
+        delete m_stmtCoreDomainsNoSubstrate;
     }
     if (m_stmtDomain != nullptr) {
         delete m_stmtDomain;
@@ -72,9 +69,8 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
     m_connection = driver->connect(server, m_user, m_password);
     m_connection->setSchema("nrps_designer");
     m_stmtMonomer = m_connection->prepareStatement("SELECT name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE id = ?;");
-    m_stmtCoreDomainsId = m_connection->prepareStatement("SET @id := ?;");
-    m_stmtCoreDomainsEnantId = m_connection->prepareStatement("SET @enant_id := ?;");
-    m_stmtCoreDomains = m_connection->prepareStatement("SELECT domain.id AS did, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product) ON (domain.id = substr_xref.id AND domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id) WHERE (? OR substr_xref.substrate_id = @id OR substr_xref.substrate_id = @enant_id) AND dtype.name = ? AND domain.chirality = ? ORDER BY IF(substr_xref.substrate_id = @id, 0, 1) ASC;");
+    m_stmtCoreDomainsSubstrate = m_connection->prepareStatement("SELECT domain.id AS did, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product) ON (domain.id = substr_xref.domain_id AND domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id) WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ? AND domain.chirality = ? ORDER BY IF(substr_xref.substrate_id = ?, 0, 1) ASC;");
+    m_stmtCoreDomainsNoSubstrate = m_connection->prepareStatement("SELECT domain.id AS did, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product) ON (domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id) WHERE dtype.name = ?;");
 
     m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc FROM databaseInput_domain AS d INNER JOIN databaseInput_cds AS c ON d.cds_id = c.id WHERE d.id = ?;");
     m_stmtProduct = m_connection->prepareStatement("SELECT id, name, description FROM databaseInput_product WHERE id = ?;");
@@ -105,7 +101,7 @@ Monomer MySQLDatabaseConnector::getMonomer(uint32_t id) throw (DatabaseError)
 
 std::vector<std::shared_ptr<DomainTypeA>> MySQLDatabaseConnector::getADomains(const Monomer &m) throw (DatabaseError)
 {
-    return getCoreDomains<DomainTypeA>(m, false, DomainType::A, Configuration::None,
+    return getCoreDomains<DomainTypeA>(m, DomainType::A, Configuration::None,
                                        [](DomainTypeA *d, sql::ResultSet *res){
                                            d->setSubstrate(res->getUInt("sid"));
                                        });
@@ -113,7 +109,7 @@ std::vector<std::shared_ptr<DomainTypeA>> MySQLDatabaseConnector::getADomains(co
 
 std::vector<std::shared_ptr<DomainTypeC>> MySQLDatabaseConnector::getCDomains(const Monomer &m, Configuration c) throw (DatabaseError)
 {
-    return getCoreDomains<DomainTypeC>(m, false, DomainType::C, c,
+    return getCoreDomains<DomainTypeC>(m, DomainType::C, c,
                                        [&c](DomainTypeC *d, sql::ResultSet *res){
                                            d->setSubstrate(res->getUInt("sid"));
                                            d->setChirality(c);
@@ -122,7 +118,7 @@ std::vector<std::shared_ptr<DomainTypeC>> MySQLDatabaseConnector::getCDomains(co
 
 std::vector<std::shared_ptr<DomainTypeT>> MySQLDatabaseConnector::getTDomains(DomainTPosition p) throw (DatabaseError)
 {
-    return getCoreDomains<DomainTypeT>(Monomer(), true, DomainType::T, Configuration::None,
+    return getCoreDomains<DomainTypeT>(DomainType::T,
                                        [&p](DomainTypeT *d, sql::ResultSet *res){
                                            d->setPosition(p);
                                        });
@@ -130,19 +126,19 @@ std::vector<std::shared_ptr<DomainTypeT>> MySQLDatabaseConnector::getTDomains(Do
 
 std::vector<std::shared_ptr<DomainTypeE>> MySQLDatabaseConnector::getEDomains() throw (DatabaseError)
 {
-    return getCoreDomains<DomainTypeE>(Monomer(), true, DomainType::E, Configuration::None,
+    return getCoreDomains<DomainTypeE>(DomainType::E,
                                        [](DomainTypeE *d, sql::ResultSet *res){});
 }
 
 std::vector<std::shared_ptr<DomainTypeTe>> MySQLDatabaseConnector::getTeDomains() throw (DatabaseError)
 {
-    return getCoreDomains<DomainTypeTe>(Monomer(), true, DomainType::Te, Configuration::None,
+    return getCoreDomains<DomainTypeTe>(DomainType::Te,
                                        [](DomainTypeTe *d, sql::ResultSet *res){});
 }
 
 bool MySQLDatabaseConnector::testInitialized(bool except) throw (DatabaseError)
 {
-    if (m_connection == nullptr || m_stmtMonomer == nullptr || m_stmtCoreDomains == nullptr || m_stmtCoreDomainsId == nullptr || m_stmtCoreDomainsEnantId == nullptr || m_stmtDomain == nullptr || m_stmtProduct == nullptr || m_stmtOrigin == nullptr)
+    if (m_connection == nullptr || m_stmtMonomer == nullptr || m_stmtCoreDomainsSubstrate == nullptr || m_stmtCoreDomainsNoSubstrate == nullptr || m_stmtDomain == nullptr || m_stmtProduct == nullptr || m_stmtOrigin == nullptr)
         if (except)
             throw DatabaseError("Not initialized");
         else
@@ -151,21 +147,38 @@ bool MySQLDatabaseConnector::testInitialized(bool except) throw (DatabaseError)
 }
 
 template<class D, class initFunc>
-std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(const Monomer &m, bool substr, DomainType t, Configuration c, const initFunc &f) throw (DatabaseError)
+std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(DomainType t, const initFunc &f) throw (DatabaseError)
+{
+    testInitialized();
+    m_stmtCoreDomainsNoSubstrate->setString(1, toString(t));
+    return getCoreDomains<D>(m_stmtCoreDomainsNoSubstrate, f);
+}
+
+template<class D, class initFunc>
+std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(const Monomer &m, DomainType t, Configuration c, const initFunc &f) throw (DatabaseError)
+{
+    testInitialized();
+    try {
+        std::vector<std::shared_ptr<D>> vec;
+        m_stmtCoreDomainsSubstrate->setUInt(1, m.id());
+        m_stmtCoreDomainsSubstrate->setUInt(2, m.enantiomerId());
+        m_stmtCoreDomainsSubstrate->setString(3, toString(t));
+        m_stmtCoreDomainsSubstrate->setString(4, toString(c));
+        m_stmtCoreDomainsSubstrate->setUInt(5, m.id());
+        return getCoreDomains<D>(m_stmtCoreDomainsSubstrate, f);
+    } catch (const sql::SQLException &e) {
+        throw makeException(e);
+    }
+}
+
+template<class D, class initFunc>
+std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(sql::PreparedStatement *stmt, const initFunc &f) throw (DatabaseError)
 {
     testInitialized();
     sql::ResultSet *res = nullptr;
     try {
         std::vector<std::shared_ptr<D>> vec;
-        m_stmtCoreDomainsId->setUInt(1, m.id());
-        m_stmtCoreDomainsId->execute();
-        m_stmtCoreDomainsEnantId->setUInt(1, m.enantiomerId());
-        m_stmtCoreDomainsEnantId->execute();
-        m_stmtCoreDomains->setBoolean(1, substr);
-        m_stmtCoreDomains->setString(2, toString(t));
-        m_stmtCoreDomains->setString(3, toString(c));
-        //if (p != DomainTPosition::None)
-        res = m_stmtCoreDomains->executeQuery();
+        res = stmt->executeQuery();
         while (res->next()) {
             D *d = new D(res->getUInt("did"));
             Origin *ori = d->setOrigin(res->getUInt("orid"));
