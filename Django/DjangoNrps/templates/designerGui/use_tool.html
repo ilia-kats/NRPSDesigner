@@ -234,7 +234,7 @@
             escapeMarkup: function(m) { return m; }
             }).change(function(e){applyMonomerChild(e);});
         jQuery("#monomer_chirality").buttonset().change(applyMonomer);
-        jQuery("#monomer_add").button().click(addMonomer);
+        jQuery("#monomer_add").button().click(addMonomer).click();
         jQuery("#save").button().click(save).parent().buttonset();
         jQuery("#submit").button().click(makeConstruct).parent().buttonset();
         jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
