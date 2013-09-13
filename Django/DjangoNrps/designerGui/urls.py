@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, makeConstruct, generatePfamGraphic
+from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, makeConstruct, DomainSequenceView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -15,5 +15,5 @@ urlpatterns = patterns('',
 					url(r'^structure/', make_structure, name="Structure"),
 					url(r'^submit/', submit_nrp, name="submitNRP"),
 					url(r'^api/(?P<pid>\d+)', saveNrpMonomers, name = "saveNrpMonomers" ),
-					url(r'^pfamgraphics/', generatePfamGraphic, name="generatePfamGraphic")
+					url(r'^domainSequence/(?P<pid>\d+)', DomainSequenceView.as_view(), name="domainSequence")
 					)

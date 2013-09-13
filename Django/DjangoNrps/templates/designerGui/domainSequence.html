@@ -1,0 +1,150 @@
+{% load staticfiles %}
+{% block css-include %}
+<link rel="stylesheet" href="http://pfam.sanger.ac.uk/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="http://pfam.sanger.ac.uk/shared/css/prototip.css" type="text/css" />
+
+{% endblock %}
+
+{% block js-include %}
+
+        <script src="{% static "js/domain_graphics.js" %}" type="text/javascript"></script>
+        <script src="{% static "js/spin.js" %}" type="text/javascript"></script>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+
+{% block content %}
+
+        <style type="text/css">
+          #dg canvas { 
+            margin: 2em;
+          }
+          #errors {
+            border: 1px solid red;
+            margin: 1em 0;
+            padding: 0.4em;
+          }
+        </style>
+
+
+  <div id="dg"></div>
+
+
+    <div id="errors" style="display: none"></div>
+
+    <div id="form" style="visibility: hidden">
+
+
+      <label for="xscale">X-scale: <input id="xscale" value="1.0"></input></label><br />
+      <label for="yscale">Y-scale: <input id="yscale" value="1.0"></input></label><br />
+
+    </div>  
+
+<!-- bla -->
+<script>
+            var opts = {
+    lines: 13, // The number of lines to draw
+    length: 20, // The length of each line
+    width: 10, // The line thickness
+    radius: 30, // The radius of the inner circle
+    corners: 1, // Corner roundness (0..1)
+    rotate: 0, // The rotation offset
+    direction: 1, // 1: clockwise, -1: counterclockwise
+    color: '#000', // #rgb or #rrggbb
+    speed: 1, // Rounds per second
+    trail: 60, // Afterglow percentage
+    shadow: false, // Whether to render a shadow
+    hwaccel: false, // Whether to use hardware acceleration
+    className: 'spinner', // The CSS class to assign to the spinner
+    zIndex: 2e9, // The z-index (defaults to 2000000000)
+    top: 'auto', // Top position relative to parent in px
+    left: 'auto' // Left position relative to parent in px
+  };
+</script>
+
+           <script type="text/javascript">
+        // <![CDATA[
+
+
+        // instantiate an object
+        var pg = new PfamGraphic();
+
+        // the function that gets called when the "submit" button is clicked
+        var generate = function(mySeq) {
+
+          // start by getting hiding any previous error messages and then 
+          // delete the old canvas element. We could effectively blank the
+          // old canvas by overwriting it with a big white rectangle, but 
+          // here we're just removing it and letting the domain graphics
+          // library generate a new one
+          $("errors").hide();
+          if ( $("dg").select("canvas").size() > 0 ) {
+            $("dg").select("canvas").first().remove();
+          }
+
+          // see if we can turn the contents of the text area into a valid
+          // javascript data structure. If not, display an error message.
+          try {
+            sequence = eval( "sequence = " + mySeq);
+          } catch ( e ) {
+            $("errors").update( e ).show();
+            return;
+          }
+
+          // give the object the ID of the container that will hold the canvas.
+          // We could have specified this when we instantiated the object instead.
+          // We could also have supplied a reference to the element itself, rather
+          // than it's ID; the libary doesn't care.
+          pg.setParent( "dg" );
+
+          // get the values of X-scale and Y-scale from the form and set them
+          // on the object. These two values can be used to scale the domain
+          // graphics. Set them large to see how the domain graphic looks in detail,
+          // but ignore the drawing errors...
+          pg.setImageParams( {
+            xscale: $F("xscale"),
+            yscale: $F("yscale")
+          } );
+
+          // hand the domain graphics description to the domain graphics object. It
+          // will throw an exception (hopefully with a meaningful error message 
+          // embedded) if it can't parse the data structure or if there's a problem, 
+          // such as a start value that's greater than an end value. If there's an 
+          // error, show it in the error div.
+          try {
+            pg.setSequence( sequence );
+            pg.render();
+          } catch ( e ) {
+            $("errors").update( e ).show();
+            return;
+          }
+        };
+
+        // a function to blank everything and start again
+        var clear = function() {
+          jQuery('#errors').hide();
+          jQuery('#id_dnaSequence').val("");
+          jQuery('#dg').val("");
+        };
+
+        // when the DOM is loaded, add listeners to the clear button
+
+        jQuery('#clear').bind( "click", clear );
+
+
+        // ]]>
+        {% autoescape off %}
+          jQuery(document).ready(function() {
+          	        pfamGraphicJson = {{pfamGraphicJson}};
+        			generate(JSON.stringify(pfamGraphicJson));
+        });
+	{% endautoescape %}
+
+      </script>
+
+
+
+{% endblock %}

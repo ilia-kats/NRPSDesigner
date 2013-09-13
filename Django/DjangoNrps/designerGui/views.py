@@ -27,9 +27,11 @@ def makeConstruct(request,pid):
     constructId = con.pk
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
+    domainSequenceTabLink = reverse('domainSequence', kwargs = {'cid' : pid})
     jsonOutput = simplejson.dumps({"constructId": constructId,
         'designTabLink': designTabLink,
-        'primerTabLink': primerTabLink})
+        'primerTabLink': primerTabLink,
+        'domainSequenceTablLink': domainSequenceTabLink})
     #construct
     return HttpResponse(jsonOutput)
 
@@ -86,7 +88,7 @@ class NRPListView(TemplateView):
         context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
         return context
 
-
+ 
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
   model = Species
@@ -233,23 +235,20 @@ def make_structure(request):
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
 
-def generatePfamGraphic(request):
-    domainList = [4,5,6]
-    domain_origins = []
-    graphic_length = 400*len(domainList)
-    regions = []
-    i = 1
+def domainSequence(request, pid):
+    nrp = NRP.objects.get(pk=pid)
+    #pid  = self.kwargs["pid"]
 
-    for did in domainList:
-        start = i*100
-        end = start+200
-        i += 3
-        x_domain = Domain.objects.get(pk=did)
-        domain_origins.append(x_domain.cds.origin)
-        #context['domain_origins'] = domain_origins
-        region_def = json.loads(x_domain.domainType.pfamGraphic)
-        region_def.update({"start" : str(start), "end" : str(end)})
-        regions.append(region_def)
-    
+    tmp = nrp.generatePfamGraphicJson()
+    return HttpResponse(tmp)
 
-    return HttpResponse(json.dumps({"length" : graphic_length, "regions": regions}), mimetype="application/json")
+class DomainSequenceView(TemplateView):
+    template_name = 'designerGui/domainSequence.html'
+   
+    def get_context_data(self, **kwargs):
+        context = super(DomainSequenceView, self).get_context_data(**kwargs)
+        pid  = self.kwargs["pid"]
+        nrp = NRP.objects.get(pk=pid)
+        context['pfamGraphicJson'] = nrp.generatePfamGraphicJson()
+        return context
+

@@ -2,6 +2,7 @@ from django.db import models
 
 import subprocess
 from xml.dom.minidom import parseString
+import json
 
 from databaseInput.models import Substrate, Domain
 from gibson.models import Construct, ConstructFragment
@@ -60,7 +61,7 @@ class NRP(models.Model):
 			domainSequence = cdsSequence[domainStart:domainStop]
 
 			domainGene = Gene.objects.create(owner = self.owner,
-				name = 'type:' + str(domain.domainType) + ' id:' + str(domainId),
+				name = 'type:' + str(domain.domainType) + ' gene:' + str(domain.cds.geneName),
 				description = 'NRPS designer',
 				sequence = domainSequence,
 				origin = 'ND',
@@ -96,6 +97,25 @@ class NRP(models.Model):
 		domains = self.designerDomains.order_by('domainOrder').all()
 		orderedDomainIds = [int(domain.pk) for domain in domains]
 		return orderedDomainIds
+
+	def generatePfamGraphicJson(self):
+		domainList = self.getDomainSequence()
+		domain_origins = []
+		graphic_length = 350*len(domainList)
+		regions = []
+		i = 1
+		for did in domainList:
+			start = i*100
+			end = start+200
+			i += 3
+			x_domain = Domain.objects.get(pk=did)
+			domain_origins.append(x_domain.cds.origin)
+			region_def = json.loads(x_domain.domainType.pfamGraphic)
+			region_def.update({"start" : str(start), "end" : str(end)})
+			regions.append(region_def)
+		pfamJson = json.dumps({"length" : graphic_length, "regions": regions})
+		return pfamJson
+
 
 	def designDomains(self):
 		# call NRPS Designer C++ program
