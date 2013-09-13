@@ -1,0 +1,642 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/nrpsdesigner/abstractdomaintype.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/nrpsdesigner_export.h
+global_enums.h
+../lib/nrpsdesigner/global_enums.h
+cstddef
+-
+functional
+-
+
+../lib/nrpsdesigner/domain.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/nrpsdesigner_export.h
+abstractdomaintype.h
+../lib/nrpsdesigner/abstractdomaintype.h
+pathway.h
+../lib/nrpsdesigner/pathway.h
+global_enums.h
+../lib/nrpsdesigner/global_enums.h
+cstdint
+-
+string
+-
+memory
+-
+unordered_map
+-
+
+../lib/nrpsdesigner/domains/domaintypea.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/domains/nrpsdesigner_export.h
+abstractdomaintype.h
+../lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+../lib/nrpsdesigner/domains/domain.h
+cstdint
+-
+type_traits
+-
+
+../lib/nrpsdesigner/domains/domaintypeac.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/domains/nrpsdesigner_export.h
+domaintypea.h
+../lib/nrpsdesigner/domains/domaintypea.h
+global_enums.h
+../lib/nrpsdesigner/domains/global_enums.h
+
+../lib/nrpsdesigner/domains/domaintypee.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/domains/nrpsdesigner_export.h
+abstractdomaintype.h
+../lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+../lib/nrpsdesigner/domains/domain.h
+
+../lib/nrpsdesigner/domains/domaintypet.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/domains/nrpsdesigner_export.h
+global_enums.h
+../lib/nrpsdesigner/domains/global_enums.h
+abstractdomaintype.h
+../lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+../lib/nrpsdesigner/domains/domain.h
+
+../lib/nrpsdesigner/domains/domaintypete.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/domains/nrpsdesigner_export.h
+abstractdomaintype.h
+../lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+../lib/nrpsdesigner/domains/domain.h
+
+../lib/nrpsdesigner/global_enums.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/nrpsdesigner_export.h
+
+../lib/nrpsdesigner/pathway.h
+nrpsdesigner_export.h
+../lib/nrpsdesigner/nrpsdesigner_export.h
+cstdint
+-
+string
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdatabaseconnector.cpp
+abstractdatabaseconnector.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdatabaseconnector.h
+mysqldatabaseconnector.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/mysqldatabaseconnector.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdatabaseconnector.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domain.h
+generalpathway.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/generalpathway.h
+vector
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdomaintype.cpp
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdomaintype.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdomaintype.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+cstddef
+-
+functional
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domain.cpp
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domain.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domain.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdomaintype.h
+pathway.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/pathway.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+cstdint
+-
+string
+-
+memory
+-
+unordered_map
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypea.cpp
+domaintypea.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypea.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypea.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/nrpsdesigner_export.h
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domain.h
+cstdint
+-
+type_traits
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypeac.cpp
+domaintypeac.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypeac.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypeac.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/nrpsdesigner_export.h
+domaintypea.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypea.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/global_enums.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypee.cpp
+domaintypee.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypee.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/global_enums.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypee.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/nrpsdesigner_export.h
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domain.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypet.cpp
+domaintypet.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypet.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypet.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/nrpsdesigner_export.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/global_enums.h
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domain.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypete.cpp
+domaintypete.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypete.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domaintypete.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/nrpsdesigner_export.h
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/abstractdomaintype.h
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domains/domain.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/generalpathway.cpp
+generalpathway.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/generalpathway.h
+domaintypea.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypea.h
+domaintypeac.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypeac.h
+domaintypet.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypet.h
+domaintypee.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypee.h
+domaintypete.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypete.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/generalpathway.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+abstractdomaintype.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdomaintype.h
+monomer.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/monomer.h
+nrp.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrp.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+memory
+-
+vector
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/monomer.cpp
+monomer.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/monomer.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/monomer.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+string
+-
+cstdint
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/mysqldatabaseconnector.cpp
+mysqldatabaseconnector.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/mysqldatabaseconnector.h
+domaintypea.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypea.h
+domaintypeac.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypeac.h
+domaintypee.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypee.h
+domaintypet.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypet.h
+domaintypete.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domaintypete.h
+unordered_map
+-
+stdexcept
+-
+cppconn/driver.h
+-
+cppconn/exception.h
+-
+cppconn/resultset.h
+-
+cppconn/prepared_statement.h
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/mysqldatabaseconnector.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+abstractdatabaseconnector.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/abstractdatabaseconnector.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrp.cpp
+nrp.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrp.h
+monomer.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/monomer.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+ios
+-
+stdexcept
+-
+fcntl.h
+-
+unistd.h
+-
+cstdlib
+-
+libxml/xmlstring.h
+-
+libxml/xmlreader.h
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrp.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+monomer.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/monomer.h
+vector
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrps.cpp
+nrps.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrps.h
+taxon.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/taxon.h
+unordered_map
+-
+unordered_set
+-
+queue
+-
+algorithm
+-
+unistd.h
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrps.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+domain.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/domain.h
+vector
+-
+string
+-
+ostream
+-
+libxml/xmlwriter.h
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/pathway.cpp
+pathway.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/pathway.h
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/pathway.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+cstdint
+-
+string
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/taxon.cpp
+taxon.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/taxon.h
+global_enums.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/global_enums.h
+system_error
+-
+stdexcept
+-
+sstream
+-
+ctime
+-
+libxml/parser.h
+-
+curl/curl.h
+-
+
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/taxon.h
+nrpsdesigner_export.h
+/home/nils/NRPSDesigner/NRPS library/lib/nrpsdesigner/nrpsdesigner_export.h
+vector
+-
+string
+-
+chrono
+-
+memory
+-
+array
+-
+tuple
+-
+libxml/tree.h
+-
+
+/usr/include/libxml2/libxml/SAX.h
+stdio.h
+-
+stdlib.h
+-
+libxml/xmlversion.h
+-
+libxml/parser.h
+-
+libxml/xlink.h
+-
+
+/usr/include/libxml2/libxml/SAX2.h
+stdio.h
+-
+stdlib.h
+-
+libxml/xmlversion.h
+-
+libxml/parser.h
+-
+libxml/xlink.h
+-
+
+/usr/include/libxml2/libxml/dict.h
+limits.h
+-
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+
+/usr/include/libxml2/libxml/encoding.h
+libxml/xmlversion.h
+-
+iconv.h
+-
+unicode/ucnv.h
+-
+libxml/tree.h
+-
+
+/usr/include/libxml2/libxml/entities.h
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+
+/usr/include/libxml2/libxml/globals.h
+libxml/xmlversion.h
+-
+libxml/parser.h
+-
+libxml/xmlerror.h
+-
+libxml/SAX.h
+-
+libxml/SAX2.h
+-
+libxml/xmlmemory.h
+-
+libxml/threads.h
+-
+
+/usr/include/libxml2/libxml/hash.h
+libxml/xmlversion.h
+-
+libxml/parser.h
+-
+libxml/dict.h
+-
+
+/usr/include/libxml2/libxml/list.h
+libxml/xmlversion.h
+-
+
+/usr/include/libxml2/libxml/parser.h
+stdarg.h
+-
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+libxml/dict.h
+-
+libxml/hash.h
+-
+libxml/valid.h
+-
+libxml/entities.h
+-
+libxml/xmlerror.h
+-
+libxml/xmlstring.h
+-
+libxml/encoding.h
+-
+libxml/xmlIO.h
+-
+libxml/globals.h
+-
+
+/usr/include/libxml2/libxml/relaxng.h
+libxml/xmlversion.h
+-
+libxml/hash.h
+-
+libxml/xmlstring.h
+-
+
+/usr/include/libxml2/libxml/threads.h
+libxml/xmlversion.h
+-
+libxml/globals.h
+-
+
+/usr/include/libxml2/libxml/tree.h
+stdio.h
+-
+limits.h
+-
+libxml/xmlversion.h
+-
+libxml/xmlstring.h
+-
+libxml/xmlregexp.h
+-
+libxml/xmlmemory.h
+-
+
+/usr/include/libxml2/libxml/valid.h
+libxml/xmlversion.h
+-
+libxml/xmlerror.h
+-
+libxml/tree.h
+-
+libxml/list.h
+-
+libxml/xmlautomata.h
+-
+libxml/xmlregexp.h
+-
+
+/usr/include/libxml2/libxml/xlink.h
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+
+/usr/include/libxml2/libxml/xmlIO.h
+stdio.h
+-
+libxml/xmlversion.h
+-
+libxml/globals.h
+-
+libxml/tree.h
+-
+libxml/parser.h
+-
+libxml/encoding.h
+-
+
+/usr/include/libxml2/libxml/xmlautomata.h
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+libxml/xmlregexp.h
+-
+
+/usr/include/libxml2/libxml/xmlerror.h
+libxml/parser.h
+-
+
+/usr/include/libxml2/libxml/xmlexports.h
+
+/usr/include/libxml2/libxml/xmlmemory.h
+stdio.h
+-
+libxml/xmlversion.h
+-
+libxml/threads.h
+-
+libxml/globals.h
+-
+
+/usr/include/libxml2/libxml/xmlreader.h
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+libxml/xmlIO.h
+-
+libxml/relaxng.h
+-
+libxml/xmlschemas.h
+-
+
+/usr/include/libxml2/libxml/xmlregexp.h
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+libxml/dict.h
+-
+
+/usr/include/libxml2/libxml/xmlschemas.h
+libxml/xmlversion.h
+-
+libxml/tree.h
+-
+
+/usr/include/libxml2/libxml/xmlstring.h
+stdarg.h
+-
+libxml/xmlversion.h
+-
+
+/usr/include/libxml2/libxml/xmlversion.h
+libxml/xmlexports.h
+-
+ansidecl.h
+-
+
+/usr/include/libxml2/libxml/xmlwriter.h
+libxml/xmlversion.h
+-
+stdarg.h
+-
+libxml/xmlIO.h
+-
+libxml/list.h
+-
+libxml/xmlstring.h
+-
+
+lib/nrpsdesigner/nrpsdesigner_export.h
+
