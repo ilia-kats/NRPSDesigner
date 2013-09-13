@@ -213,36 +213,36 @@
 
 
     jQuery(function() {
-            var zoomMin = .1;
-            var zoomMax = 5;
-            var zoomStep = .1;
-           jQuery("#e33").click(function(e){ jQuery('#basic-modal-content').modal();
-                                 
-                                 return false;
-                                 });
-            jQuery("#organisms").select2();
-            jQuery("#e23").select2({data: monomers,
-             formatResult: formatAA,
-             dropdownCssClass: "bigdrop",
-             escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
-            jQuery("#e11").select2({
-              data : [],
-              placeholder: "No modification selected",
-              allowClear: true,
-              formatResult: formatAAChild,
-              dropdownCssClass: "bigdrop",
-              escapeMarkup: function(m) { return m; }
-              }).change(function(e){applyMonomerChild(e);}); 
-            jQuery("#monomer_chirality").buttonset().change(applyMonomer);
-            jQuery("#monomer_add").button().click(addMonomer).click();
-            jQuery("#save").button().click(save).parent().buttonset();
-            jQuery("#submit").button().click(makeConstruct).parent().buttonset();
-            jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
-            jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("option", "contain", ui.value > 1 ? "invert" : true).panzoom("zoom", ui.value);}});
-            jQuery("#structimg").load(function(e){
-                var structimg = jQuery(e.delegateTarget);
-               structimg.data("__pz__")._buildContain(); // update panzoom dimensions
-            });
+        var zoomMin = .1;
+        var zoomMax = 5;
+        var zoomStep = .1;
+        jQuery("#e33").click(function(e){ jQuery('#basic-modal-content').modal();
+
+                                return false;
+                                });
+        jQuery("#organisms").select2();
+        jQuery("#e23").select2({data: monomers,
+            formatResult: formatAA,
+            dropdownCssClass: "bigdrop",
+            escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
+        jQuery("#e11").select2({
+            data : [],
+            placeholder: "No modification selected",
+            allowClear: true,
+            formatResult: formatAAChild,
+            dropdownCssClass: "bigdrop",
+            escapeMarkup: function(m) { return m; }
+            }).change(function(e){applyMonomerChild(e);});
+        jQuery("#monomer_chirality").buttonset().change(applyMonomer);
+        jQuery("#monomer_add").button().click(addMonomer);
+        jQuery("#save").button().click(save).parent().buttonset();
+        jQuery("#submit").button().click(makeConstruct).parent().buttonset();
+        jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
+        jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("option", "contain", ui.value > 1 ? "invert" : true).panzoom("zoom", ui.value);}});
+        jQuery("#structimg").load(function(e){
+            var structimg = jQuery(e.delegateTarget);
+            structimg.data("__pz__")._buildContain(); // update panzoom dimensions
+        });
 
         {% if substrateOrder %}
         jQuery('[title="delete"]').click();
@@ -375,12 +375,8 @@
     <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
-                <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" + idsstyle="height:100%;">
+                <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" style="height:100%;">
             </div>
     </div>
 </div>
-<!--<div class="span2">-->
-    <img src="facebook_button.png">
-<!--</div>-->
-
 {% endblock %}

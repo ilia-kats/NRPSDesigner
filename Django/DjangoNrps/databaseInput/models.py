@@ -20,6 +20,7 @@ class Cds(models.Model):
     dnaSequence = models.TextField()
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
    
     def __unicode__(self):
         return str(self.origin) + self.geneName
@@ -35,6 +36,7 @@ class Origin(models.Model):
     description = models.TextField()
     linkout =  generic.GenericRelation('Linkout')
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
 
     def __unicode__(self):
         return self.species
@@ -43,6 +45,7 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     linkout = generic.GenericRelation('Linkout')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
 
     def __unicode__(self):
        return self.name
@@ -63,6 +66,7 @@ class Domain(models.Model):
     definedStart = models.IntegerField()
     definedStop = models.IntegerField()
     linkout =  generic.GenericRelation('Linkout')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
 
 
     def __unicode__(self):
@@ -76,6 +80,7 @@ class Substrate(models.Model):
     enantiomer = models.ForeignKey('self', blank=True, null=True)
     modification = models.ManyToManyField('Modification', blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -93,6 +98,7 @@ class Type(models.Model):
     pfamName = models.CharField(max_length=100, blank=True, null=True)
     pfamId   = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
+    pfamGraphic = models.TextField()
 
     def __unicode__(self):
         return self.name
@@ -104,6 +110,7 @@ class Linkout(models.Model):
     content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
 
     def __unicode__(self):
         return self.identifier

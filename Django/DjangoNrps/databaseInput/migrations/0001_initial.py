@@ -12,10 +12,10 @@ class Migration(SchemaMigration):
         db.create_table(u'databaseInput_cds', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('origin', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['databaseInput.Origin'])),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['databaseInput.Product'], null=True, blank=True)),
             ('geneName', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('dnaSequence', self.gf('django.db.models.fields.TextField')()),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('product_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['databaseInput.Product'])),
         ))
         db.send_create_signal(u'databaseInput', ['Cds'])
 
@@ -29,6 +29,14 @@ class Migration(SchemaMigration):
             ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name=u'child', null=True, to=orm['databaseInput.Origin'])),
         ))
         db.send_create_signal(u'databaseInput', ['Origin'])
+
+        # Adding model 'Product'
+        db.create_table(u'databaseInput_product', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('description', self.gf('django.db.models.fields.TextField')()),
+        ))
+        db.send_create_signal(u'databaseInput', ['Product'])
 
         # Adding model 'Domain'
         db.create_table(u'databaseInput_domain', (
@@ -124,6 +132,9 @@ class Migration(SchemaMigration):
         # Deleting model 'Origin'
         db.delete_table(u'databaseInput_origin')
 
+        # Deleting model 'Product'
+        db.delete_table(u'databaseInput_product')
+
         # Deleting model 'Domain'
         db.delete_table(u'databaseInput_domain')
 
@@ -164,7 +175,7 @@ class Migration(SchemaMigration):
             'geneName': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'origin': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['databaseInput.Origin']"}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['databaseInput.Product']"})
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['databaseInput.Product']", 'null': 'True', 'blank': 'True'})
         },
         u'databaseInput.domain': {
             'Meta': {'object_name': 'Domain'},
@@ -213,6 +224,12 @@ class Migration(SchemaMigration):
             'source': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'sourceType': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'species': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
+        },
+        u'databaseInput.product': {
+            'Meta': {'object_name': 'Product'},
+            'description': ('django.db.models.fields.TextField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         u'databaseInput.substrate': {
             'Meta': {'object_name': 'Substrate'},
