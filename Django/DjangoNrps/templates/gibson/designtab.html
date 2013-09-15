@@ -1,3 +1,5 @@
+
+
 <div id='design-tab'>
 <div class="pad">
 	<div class="pad-content" style="padding:.2em;">
@@ -33,15 +35,15 @@
     var g_designer = null;
 
 
-	jQuery(window).ready( function($) {
+	jQuery(window).ready( function() {
 		//tabs
 
         //load designer
-        g_designer = new Designer($('#cdesigner'),{{construct.id}});
+        g_designer = new Designer(jQuery('#cdesigner'),{{construct.id}});
         //Make the selector and equalise the height
-        $('#frag_select').jFragmentSelector({
-            containment: $('.pad-content'),
-        }).jFragmentSelector('height', $('#cdesigner').height());
+        jQuery('#frag_select').jFragmentSelector({
+            containment: jQuery('.pad-content'),
+        }).jFragmentSelector('height', jQuery('#cdesigner').height());
 	});
 
 

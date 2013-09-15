@@ -110,42 +110,42 @@ var primer_dlg_contents =
         "<img src='{{ STATIC_URL }}/images/spinner.gif'></img>" +
     "</div>";
 
-$(window).ready(function() {
-	$('button#save')
+jQuery(window).ready(function() {
+	jQuery('button#save')
 		.button({
 			icons:{primary:'ui-icon-disk'}
 		})
 		.click(function() {
 			forms = [];
-			$('.mixform').each(function(){
+			jQuery('.mixform').each(function(){
 				forms.push('{"id":"' + this.elements['id'].value + '","t_c":'+this.elements['temp_c'].value+',"p_t_c":'+this.elements['p_t_c'].value+',"p_b_c":'+this.elements['p_b_c'].value+'}');
 			});
 			settings = [];
-			$.each($('#pcrform')[0].elements, function (i,e) {
+			jQuery.each(jQuery('#pcrform')[0].elements, function (i,e) {
 				settings.push('"' + e.name + '":"' + e.value + '"');
 			});
-			$.post('primers/save', {"data":'[{"pcrsettings":{' + settings.join(',') + '},"fragments":[' + forms.join(',') + ']}]'});
+			jQuery.post('primers/save', {"data":'[{"pcrsettings":{' + settings.join(',') + '},"fragments":[' + forms.join(',') + ']}]'});
 		});
 
 	var downloadTimer;
-	$('button#download').button({
+	jQuery('button#download').button({
 		icons:{primary:'ui-icon-clipboard'},
         {% if not construct.fragments.all %}
         disabled: true,
         {% endif %}
 	}).click(function() {
-		$('#prompt').prompt({
+		jQuery('#prompt').prompt({
 			type:'wait',
 			title:'Generating Download',
 			message:''
 		});
 		var token = new Date().getTime();
 		downloadTimer = window.setInterval(function () {
-			var cookieValue = $.cookie('fileDownloadToken');
+			var cookieValue = jQuery.cookie('fileDownloadToken');
 			if (cookieValue == token) {
-				$('#prompt').prompt('close');
+				jQuery('#prompt').prompt('close');
 				window.clearInterval(downloadTimer);
-				$.cookie('fileDownloadToken', null);
+				jQuery.cookie('fileDownloadToken', null);
 			}
 		},500);
 		window.location.href='/gibthon/{{ construct.id }}/primers/download?tk='+token;

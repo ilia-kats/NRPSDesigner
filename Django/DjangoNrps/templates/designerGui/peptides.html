@@ -77,12 +77,12 @@ var handle_updated_selection = function(event, data){
 	if( data['selected'] != 0 )
 	{
 		jQuery('#delete_btn').button('enable');
-		//$('#download_btn').button('enable');
+		//jQuery('#download_btn').button('enable');
 	}
 	else
 	{
 		jQuery('#delete_btn').button('disable');
-		//$('#download_btn').button('disable');
+		//jQuery('#download_btn').button('disable');
 	}
 }
 
@@ -149,7 +149,7 @@ var show_delete_dialog = function(){
 jQuery(document).ready(function() {
 	jQuery('button[id="add"]')
 		.click(function(event){
-			jQuery.post('add', $('form[action^="add"]').serialize(), function(data){
+			jQuery.post('add', jQuery('form[action^="add"]').serialize(), function(data){
 				console.log(data[1].html)
                 if(data[0] == 0)
                 {
@@ -163,7 +163,7 @@ jQuery(document).ready(function() {
 			icons:{primary:'ui-icon-plusthick'}
 		});
 	
-	$('#peptide_table').fragmentList({
+	jQuery('#peptide_table').fragmentList({
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
 	});
 	
@@ -192,7 +192,7 @@ jQuery(document).ready(function() {
 	});
 	jQuery('button[id="addc"]')
 		.click(function(event){
-			$('#peptide_add').dialog('open');
+			jQuery('#peptide_add').dialog('open');
 		})
 		.button({
 			icons:{primary:'ui-icon-plusthick'}

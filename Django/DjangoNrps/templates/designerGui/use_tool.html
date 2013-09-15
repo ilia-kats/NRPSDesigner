@@ -198,8 +198,10 @@
         if (constructId != 0) {
        jQuery("#primerTab").attr("href", data["primerTabLink"]);
        jQuery("#constructTab").attr("href", data["designTabLink"]);
+       jQuery("#domainSequenceTab").attr("href", data["domainSequenceTabLink"]);
        jQuery("#tabs").tabs("enable",1);
        jQuery("#tabs").tabs("enable",2);
+       jQuery("#tabs").tabs("enable",3);
         } else {
             alert("ERROR");
         }
@@ -216,10 +218,7 @@
         var zoomMin = .1;
         var zoomMax = 5;
         var zoomStep = .1;
-        jQuery("#e33").click(function(e){ jQuery('#basic-modal-content').modal();
 
-                                return false;
-                                });
         jQuery("#organisms").select2();
         jQuery("#e23").select2({data: monomers,
             formatResult: formatAA,
@@ -234,7 +233,7 @@
             escapeMarkup: function(m) { return m; }
             }).change(function(e){applyMonomerChild(e);});
         jQuery("#monomer_chirality").buttonset().change(applyMonomer);
-        jQuery("#monomer_add").button().click(addMonomer);
+        jQuery("#monomer_add").button().click(addMonomer).click();
         jQuery("#save").button().click(save).parent().buttonset();
         jQuery("#submit").button().click(makeConstruct).parent().buttonset();
         jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
@@ -341,8 +340,9 @@
 
 
 <div class="row-fluid">
-<div class="span8" id="params">
-    <div class="box">
+<div class="container-narrow">
+<div class="span8" id="params" >
+    <div class="box" data-intro="Lorem ipsum..." data-step="2">
         <p>Please choose an organism to express your non-ribosomal peptide!</p>
         <select id="organisms" size="1" style="width:100%">
             {% for origin in object_list %}
@@ -350,7 +350,7 @@
             {% endfor %}
         </select>
     </div>
-    <div class="box">
+    <div class="box" data-intro="Lorem ipsum..." data-step="3">
         <p> Please choose amino acids you want to integrate into your peptide! </p>
         <div id="e23" style="width:100%"></div>
         <div id="monomer_chirality">
@@ -370,13 +370,18 @@
         <button id="monomer_add">Add monomer</button><button id="save"> Save </button><button id="submit">Design construct</button></div>
     </div>
 </div>
+</div>
 
 <div class="span4" id="struct">
-    <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;">
+    <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;" data-intro="Lorem ipsum..." data-step="4">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
                 <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" style="height:100%;">
             </div>
     </div>
+</div>
+<br>
+<div class="span8">
+<a class="btn" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how this works!</a>
 </div>
 {% endblock %}

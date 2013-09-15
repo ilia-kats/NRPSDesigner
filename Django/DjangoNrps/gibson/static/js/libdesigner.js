@@ -114,7 +114,7 @@ function Construct(data)
             url: '/gibthon/api/' + this.id + '/addFragment/', 
             data: {'fid': f.getID(), 'pos': position, 'dir':direction,}, 
             success: function(cf) {
-                if($.isFunction(_suc)) _suc(new ConstructFragment(cf, f));
+                if(jQuery.isFunction(_suc)) _suc(new ConstructFragment(cf, f));
             },
             error: function(jqXHR, textStatus, errorThrown)
             {
@@ -262,13 +262,13 @@ var libTm = new function() {
 /*
  * * jQuery widget for previewing the designed fragment
  * */
-$.widget('ui.constructPreview', {
+jQuery.widget('ui.constructPreview', {
     options: {
         primers: {},
     },
     _create: function() {
         var self = this;
-        var el = $(this.element[0]);
+        var el = jQuery(this.element[0]);
         this.el = el;
         this.pview = el.find('.primer-view');
         this.arrow = this.pview.find('.arrow');
@@ -277,15 +277,15 @@ $.widget('ui.constructPreview', {
         this.type = 'fwd';
 
         el.find('#overview .primer').click( function(){
-            if($(this).hasClass('sl'))
+            if(jQuery(this).hasClass('sl'))
             {
                 el.find('.primer.sl').removeClass('sl');
                 self.pview.slideUp();
                 return;
             }
             el.find('.primer.sl').removeClass('sl');
-            $(this).addClass('sl');
-            self.show($(this));
+            jQuery(this).addClass('sl');
+            self.show(jQuery(this));
         });
 
         this.boxplot.dialog({
@@ -302,11 +302,11 @@ $.widget('ui.constructPreview', {
         }).click( function() {
             self.boxplot.html('')
                 .dialog('open')
-                .load('primers/' + $(this).attr('pid') + '/boxplot/');
+                .load('primers/' + jQuery(this).attr('pid') + '/boxplot/');
         });
 
-        $(document).on('click', '.join .seq > .base', function() {
-            $(this)
+        jQuery(document).on('click', '.join .seq > .base', function() {
+            jQuery(this)
             .addClass('sl')
             .siblings()
             .removeClass('sl');
@@ -317,17 +317,17 @@ $.widget('ui.constructPreview', {
     },
     _init: function() {
         this.el.find('#overview .fragment:not(.bk-fragment)').each( function(i) {
-            $(this).find('.seq').css({
+            jQuery(this).find('.seq').css({
                 'background-color': libFrag.getNextColor(),
             });
         });
 
     },
-    show: function($p)
+    show: function(jQueryp)
     {
-        this.arrow.css({'left': this._get_center($p), });
-        $p.hasClass('fwd-primer') ? this.type='fwd' : this.type='rev';
-        var p = this.options.primers[$p.attr('id')];
+        this.arrow.css({'left': this._get_center(jQueryp), });
+        jQueryp.hasClass('fwd-primer') ? this.type='fwd' : this.type='rev';
+        var p = this.options.primers[jQueryp.attr('id')];
         this.pedit.find('#pname').text(p.name);
         this.pedit.find('#pseq').text(p.seq);
         
@@ -367,14 +367,14 @@ $.widget('ui.constructPreview', {
         this._show_warnings(p.warnings);
 
         this.pedit.find('.boxplot-btn').attr('pid', p.id);
-        this._set_colors($p);
+        this._set_colors(jQueryp);
         this.pview.slideDown();
         this._set_primer_pos();
     },
     _set_primer_pos: function()
     {
-        var l = $('#left_fragment .base.sl');
-        var r = $('#right_fragment .base.sl');
+        var l = jQuery('#left_fragment .base.sl');
+        var r = jQuery('#right_fragment .base.sl');
         if(this.type == 'fwd')
         {
             this.pview.find('.fwd-primer').css({
@@ -397,8 +397,8 @@ $.widget('ui.constructPreview', {
     _update_primer: function()
     {
         this._set_saving(true);
-        var l = $('#left_fragment .base.sl');
-        var r = $('#right_fragment .base.sl');
+        var l = jQuery('#left_fragment .base.sl');
+        var r = jQuery('#right_fragment .base.sl');
         p = this.options.primers[this.pedit.find('#pname').text()];
         var s = 10, f = 10;
         if(this.type == 'fwd')
@@ -412,7 +412,7 @@ $.widget('ui.constructPreview', {
             s = parseInt(l.attr('offset')) + 1;
         }
         var self = this;
-        $.ajax('primers/' + p.id + '/setLength/', {
+        jQuery.ajax('primers/' + p.id + '/setLength/', {
             'type': 'POST',
             'data': {
                 'flap_length': f,
@@ -429,7 +429,7 @@ $.widget('ui.constructPreview', {
                 self.pedit.find('#pseq').text(p.seq);
                 self.el.find('#'+p.name+'.primer .pwarn')
                     .text(p.warnings.length);
-                var tr = $('tr#tr-'+p.id);
+                var tr = jQuery('tr#tr-'+p.id);
                 tr.find('#length').text(p.length);
                 tr.find('#tm_stick').text(p.stick.tm);
                 tr.find('#tm').text(p.tm);
@@ -510,10 +510,10 @@ $.widget('ui.constructPreview', {
         var f = this.pedit.find('#left_fragment .fwd_seq');
 
         for(var i = 0; i < stick.length; i = i+1)
-            $("<div>").addClass('base').attr('offset', i)
+            jQuery("<div>").addClass('base').attr('offset', i)
                 .text(stick[i]).appendTo(s);
         for(var i = 0; i < flap.length; i=i+1)
-            $("<div>").addClass('base').attr('offset', i)
+            jQuery("<div>").addClass('base').attr('offset', i)
                 .text(flap[flap.length -1 - i]).appendTo(f);
 
     },
@@ -526,10 +526,10 @@ $.widget('ui.constructPreview', {
         var f = this.pedit.find('#right_fragment .rev_seq');
 
         for(var i = 0; i < stick.length; i = i+1)
-            $("<div>").addClass('base').attr('offset', i)
+            jQuery("<div>").addClass('base').attr('offset', i)
                 .text(stick[i]).appendTo(s);
         for(var i = 0; i < flap.length; i=i+1)
-            $("<div>").addClass('base').attr('offset', i)
+            jQuery("<div>").addClass('base').attr('offset', i)
                 .text(flap[flap.length - 1 -i]).appendTo(f);
     },
     _ruler_full: function(p)
@@ -550,7 +550,7 @@ $.widget('ui.constructPreview', {
             w.parent().show();
             for(var i = 0; i < warnings.length; i=i+1)
             {
-                $('<li>' + warnings[i] + '</li>').appendTo(w);
+                jQuery('<li>' + warnings[i] + '</li>').appendTo(w);
             }
         }
     },

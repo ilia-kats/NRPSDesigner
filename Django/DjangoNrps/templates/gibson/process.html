@@ -32,27 +32,27 @@ function makeHttpObject() {
 	throw new Error("Could not create HTTP request object.");
 }
 	
-$(window).ready( function() {
-	$('#process_progress').progressbar({'value': 0,});
+jQuery(window).ready( function() {
+	jQuery('#process_progress').progressbar({'value': 0,});
 	
-	$('#process_btn').button({
+	jQuery('#process_btn').button({
 		icons: {primary: 'ui-icon-gear',},
         {% if not construct.fragments.all %}
         disabled: true,
         {% endif %}
 	}).click( function() {
         //make sure there's an immidiate response - less frustration
-        $(this).button('disable');
-        $('#processing').css('visibility', 'visible');
+        jQuery(this).button('disable');
+        jQuery('#processing').css('visibility', 'visible');
 
 		var h = makeHttpObject();
 		h.open('GET', "{% url 'process' construct.pk %}", true)
 		h.onreadystatechange = function (){
 			p = parseInt(this.responseText.split(':').pop());
-			$('#process_progress').progressbar('value', p);
+			jQuery('#process_progress').progressbar('value', p);
 			if (p==100){
 				//location.reload()
-				//$( "#tabs" ).tabs( "option", "active", 4 );
+				//jQuery( "#tabs" ).tabs( "option", "active", 4 );
 				jQuery("#tabs").tabs("load","primerTab")
 			}
 		}

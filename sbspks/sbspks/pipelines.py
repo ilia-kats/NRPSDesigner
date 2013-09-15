@@ -5,7 +5,9 @@
 
 from sbspks.items import SbspksItem, DomainItem
 from databaseInput.models import *
+from django.contrib.auth.models import User
 
+import pdb
 class SbspksPipeline(object):
     spiders = 0
     data = []
@@ -18,24 +20,56 @@ class SbspksPipeline(object):
     def close_spider(cls, spider):
         cls.spiders -= 1
         if cls.spiders == 0:
-            for item in data:
-                prod = Product(name=item['name'])
+            dummyori = Origin.objects.get(pk=3)
+            user = User.objects.get(username='sbspks')
+            types = {}
+            for item in cls.data:
+                prod = Product(name=item['name'], user=user)
                 prod.save()
                 seqs = []
-                for i in xrange(item['sequences']):
-                    cds = Cds(product=prod)
+                for i in xrange(len(item['sequences'])):
+                    cds = Cds(product=prod, origin=dummyori, geneName=item['sequenceNames'][i][:100], user=user)
                     cds.save()
                     seqs.append(cds)
                 for i in xrange(len(item['domains'])):
                     d = item['domains'][i]
-                    domain = Domain(module=d['module'], cds=seqs[d['sequence']], domainType=d['dtype'], pfamLinkerStart=d['linkerbeforestart'], pfamLinkerStop=d['linkerafterstop'], pfamStart=d['start'], pfamStop=d['stop'])
+                    seq = item['sequences'][d['protnr']]
+                    try:
+                        linkerbeforestart = seq.index(d['linkerbeforeseq']) + 1
+                        linkerbeforestop = linkerbeforestart + len(d['linkerbeforeseq'])
+                        domainstart = seq.index(d['sequence']) + 1
+                        domainstop = domainstart + len(d['sequence'])
+                        linkerafterstart = seq.index(d['linkerafterseq']) + 1
+                        linkerafterstop = linkerafterstart + len(d['linkerafterseq'])
+                    except ValueError as e:
+                        print item
+                        print d
+                        raise e
+                    try:
+                        try:
+                            dtype = Type.objects.get(name=d['dtype'])
+                        except Type.DoesNotExist:
+                            dtype = Type(name=d['dtype'])
+                            dtype.save()
+                        domain = Domain(module=d['module'], cds=seqs[d['protnr']], domainType=dtype, pfamLinkerStart=linkerbeforestart, pfamLinkerStop=linkerafterstop, pfamStart=domainstart, pfamStop=domainstop, definedLinkerStart=linkerbeforestart, definedLinkerStop=linkerafterstop, definedStart=domainstart, definedStop=domainstop, user=user)
+                    except BaseException as e:
+                        print d
+                        print item
+                        raise e
+                    domain.save() # need pk for many-to-many
                     if d['dtype'] == 'A' or d['dtype'] == 'C':
                         try:
-                            s = Substrate.objects.get(name="L-%s" % d['substrate'])
-                        except Substrate.DoesNotExist:
-                            s = Substrate(name=d['substrate'], chirality='L')
-                            s.save()
-                        domain.substrateSpecificity.add(s)
+                            try:
+                                s = Substrate.objects.get(name="L-%s" % d['substrate'])
+                            except Substrate.DoesNotExist:
+                                s = Substrate(name=d['substrate'], chirality='L', user=user)
+                                s.save()
+                                domain.substrateSpecificity.add(s)
+                        except KeyError as e:
+                            print "KeyError:"
+                            print d
+                            print item
+
                     if d['dtype'] == 'C':
                         if item['domains'][i - 1]['dtype'] == 'E':
                             domain.chirality = 'D'

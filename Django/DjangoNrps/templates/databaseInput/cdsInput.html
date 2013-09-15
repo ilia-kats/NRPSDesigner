@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block css-include %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/designer.css" />
+
+{% endblock %}
+
+{% block js-include %}
+{% endblock %}
+
+
+{% block content %}
+
+
+	
+	<div class="content center full-width">
+		<div id='tabs' class='left'>
+			<ul>
+
+		
+				<li>
+					<a href="#cdsInputTab" class='tab-link' data-intro="This is a tab" data-step="1">
+						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
+						NRP
+					</a>
+					</li>
+				<li>
+					<a href="http://www.google.com" class = 'tab-link'>
+					<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
+					LOL
+					</a>
+				</li>
+
+	
+			</ul>
+				     <div id='cdsInputTab'>
+                {% include 'databaseInput/cdsInputTab.html' %}
+	</div>
+
+            
+		</div>
+	</div>
+
+
+{% endblock %}
+
+
+{% block js %}
+<script type='text/javascript'>
+
+
+
+	jQuery(window).ready( function($) {
+		//tabs
+		jQuery( "#tabs" ).tabs({
+			beforeLoad: function( event, ui ) {
+			    if ( (ui.tab.index() == 2 || ui.tab.index() ==0) && ui.tab.data( "loaded" ) ) {
+			      event.preventDefault();
+			      return;
+			    }
+
+			    ui.jqXHR.success(function() {
+			      ui.tab.data( "loaded", true );
+		    });}, 
+			ajaxOptions: {
+				error: function( xhr, status, index, anchor ) {
+					jQuery( anchor.hash ).html(
+						"<p>ERROR: Failed to load this tab, status: " + status + " </p>");
+				}
+			},
+
+			disabled: [ 1],
+
+
+			//make sure to include a comma between the ajaxoptions, and the load options
+    		//this is the bit that makes all a link with the class of 'thisPane' stay within the tab
+    		//a href tags that are not of the class 'thisPane' will open outside the tab
+    load: function(event, ui) {
+    $(ui.panel).delegate('a.thisPane', 'click', function(event) {
+        $(ui.panel).load(this.href);
+        event.preventDefault();
+    });
+    }
+		});
+		
+
+	
+	});
+
+
+
+</script>
+{% endblock %}

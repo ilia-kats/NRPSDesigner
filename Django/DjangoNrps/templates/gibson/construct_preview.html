@@ -11,8 +11,8 @@ var myPrimers = {
         '{{ p.name }}': {% include 'gibson/primer.json' with primer=p %},
     {% endfor %}
 };
-$(document).ready( function(){
-    $('.construct_overview').constructPreview({primers: myPrimers,});
+jQuery(document).ready( function(){
+    jQuery('.construct_overview').constructPreview({primers: myPrimers,});
 });
 </script>
 

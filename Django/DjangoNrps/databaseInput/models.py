@@ -30,7 +30,7 @@ class Cds(models.Model):
         verbose_name_plural = "Coding sequences"
 
 class Origin(models.Model):
-    sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('DNA','DNA')))
+    sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('Biobrick','Biobrick'), ('Other', 'Other DNA source')))
     source = models.CharField(max_length=20) #usually taxon ID, can also be biobrick or plasmid identifier
     species = models.CharField(max_length = 100, blank=True, null= True)
     description = models.TextField()
@@ -55,7 +55,7 @@ class Domain(models.Model):
     cds = models.ForeignKey('Cds')
     domainType = models.ForeignKey('Type')
     substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
-    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('N','None')), default='None')
+    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('N','None')), default='N')
     description = models.TextField()
     pfamLinkerStart = models.IntegerField()
     pfamLinkerStop = models.IntegerField()

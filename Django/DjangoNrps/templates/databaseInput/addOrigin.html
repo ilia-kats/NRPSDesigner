@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Add new origin</h3>
+</div>
+<div class="modal-body">
+  <form action="" method="post">{% csrf_token %}
+  {{ form.as_p }}
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/></div>
+  </div>
+
+</form>
+</div>

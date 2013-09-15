@@ -10,29 +10,29 @@ function makeHttpObject() {
 }
 
 var validate = function(input) {
-	re = /^\d+(?:\.\d*)?$/;
+	re = /^\d+(?:\.\d*)?jQuery/;
 	if(re.exec(input.value) === null){
-		$(input.parentNode).addClass("errorcell");
+		jQuery(input.parentNode).addClass("errorcell");
 		return false;
 	}else{
-		$(input.parentNode).removeClass("errorcell");
+		jQuery(input.parentNode).removeClass("errorcell");
 		return true;
 	}
 }
 
 var Mix = function () {
-	this.enz_d = $('#enzyme_desired')[0];
-	this.enz_s = $('#enzyme_stock')[0];
-	this.buff_d = $('#buffer_desired')[0];
-	this.buff_s = $('#buffer_stock')[0];
-	this.dntp_d = $('#dntp_desired')[0];
-	this.dntp_s = $('#dntp_stock')[0];
-	this.prim_d = $('#primer_desired')[0];
-	this.temp_d = $('#template_desired')[0];
-	this.repeats = $('#repeats')[0];
-	this.error = $('#error_margin')[0];
-	this.vol_e = $('#volume_each')[0];
-	var mixform = $('form.mixform');
+	this.enz_d = jQuery('#enzyme_desired')[0];
+	this.enz_s = jQuery('#enzyme_stock')[0];
+	this.buff_d = jQuery('#buffer_desired')[0];
+	this.buff_s = jQuery('#buffer_stock')[0];
+	this.dntp_d = jQuery('#dntp_desired')[0];
+	this.dntp_s = jQuery('#dntp_stock')[0];
+	this.prim_d = jQuery('#primer_desired')[0];
+	this.temp_d = jQuery('#template_desired')[0];
+	this.repeats = jQuery('#repeats')[0];
+	this.error = jQuery('#error_margin')[0];
+	this.vol_e = jQuery('#volume_each')[0];
+	var mixform = jQuery('form.mixform');
 	this.errors = 0;
 	this.warnings = 0;
 	this.fragments = []
@@ -71,9 +71,9 @@ Mix.prototype.go = function () {
 		this.fragments[f].warn();
 	}
 	if (this.warnings > 0) {
-		$('#warning').show();
+		jQuery('#warning').show();
 	} else {
-		$('#warning').hide();
+		jQuery('#warning').hide();
 	}
 }
 
@@ -116,26 +116,26 @@ MixFragment.prototype.warn = function () {
 	for (x in this){
 		if (this[x].constructor == HTMLInputElement && this[x].readOnly){
 			if (parseFloat(this[x].value) < 1 ){
-				$(this[x].parentNode).addClass("warningcell");
+				jQuery(this[x].parentNode).addClass("warningcell");
 				this.mix.warnings += 1;
 			} else {
-				$(this[x].parentNode).removeClass("warningcell");
+				jQuery(this[x].parentNode).removeClass("warningcell");
 			}
 		}
 	}
 }
 
-$('document').ready(function () {
-	$('#protocol-accordion').accordion({
+jQuery('document').ready(function () {
+	jQuery('#protocol-accordion').accordion({
 		collapsible:true,
 	});
-	$('#warning').hide();
-	$('.mix').change(function(){
+	jQuery('#warning').hide();
+	jQuery('.mix').change(function(){
 		validate(this);
-		if ($('.errorcell').size() > 0){
-			$('button#download_protocol').button('disable');
+		if (jQuery('.errorcell').size() > 0){
+			jQuery('button#download_protocol').button('disable');
 		} else {
-			$('button#download_protocol').button('enable');
+			jQuery('button#download_protocol').button('enable');
 		}
 	});
 });

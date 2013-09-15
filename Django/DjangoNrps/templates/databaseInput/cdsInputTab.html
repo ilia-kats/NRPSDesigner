@@ -1,0 +1,65 @@
+       <div class="row">
+         <div class="span3">
+           <div class="fieldWrapper">
+            {{ form.origin.errors }}
+            <label for="id_subject"></label>
+            <div id="originChosenWrapper" class = "chosenWrapper">
+              {{ form.origin }}
+            </div>
+          </div>
+        </div>
+
+        <div class="span1">
+          <p class="text-center"> or</p>
+        </div>
+        <div class="span3">
+<a href="{% url 'addOrigin' %}" role="button" class="btn btn-large" data-toggle="modal"  data-target="#myModal">    Add new Origin</a>
+
+<div class="modal fade" id="myModal"></div>
+
+
+
+
+        {{ form.non_field_errors }}
+
+        <div class="row">
+          <div class="span3">
+            <div class="fieldWrapper">
+              {{ form.dnaSequence.errors }}
+              <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
+              {{ form.dnaSequence }} <br/>
+              <div class="btn-group">
+                <input type="button" class="btn" onclick="submitPfam()" value="Send to Pfam!"/>
+
+                <input type="button" class="btn" id="clear" value="Clear!"/>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class="fieldWrapper">
+              {{ form.geneName.errors }}
+              <label for="id_message">Gene Name:<br/> </label>
+              {{ form.geneName }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.description.errors }}
+              <label for="id_sender">Description:<br/> </label>
+              {{ form.description }}
+            </div>
+          </div>
+        </div>
+
+
+<script>
+// code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/ 
+// adapted from coffeescript to javascript
+// enables use of Bootstrap modal to load other html pages
+    jQuery("a[data-toggle=modal]").click(function() {
+  var target, url;
+  target = jQuery(this).attr('data-target');
+  url = jQuery(this).attr('href');
+  return jQuery(target).load(url);
+});
+</script>

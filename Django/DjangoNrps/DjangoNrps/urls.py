@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from databaseInput.views import PfamView, UserDetailView, HomeTemplateView, ProfileTemplateView, sauceFunc
+from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView, sauceFunc, cdsInput
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 admin.autodiscover()
@@ -11,14 +11,13 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 	url(r'^$', HomeTemplateView.as_view()),
 	url(r'^admin/', include(admin.site.urls)),
-    url(r'^pfam/submit/', sauceFunc, name="sauceFunc"),
-    url(r'^pfam/', PfamView.as_view(), name="pfam"),
     url(r'^user/profile', ProfileTemplateView.as_view()),
     url(r'^user/', include('registration.backends.simple.urls')),
     url(r'^user/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
     url(r'^tool/', include('designerGui.urls')),
     url(r'^gibthon/', include('gibson.urls')),
     url(r'^fragment/', include('fragment.urls')),
+    url(r'^input/', include('databaseInput.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
