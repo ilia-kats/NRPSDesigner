@@ -3,8 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic import CreateView
 from django.core.urlresolvers import reverse_lazy
+from django.template import loader, RequestContext
 
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django.contrib.auth import get_user_model
 from databaseInput.models import Origin, Cds, Domain
 from databaseInput.forms import CdsFormSet, CdsForm, OriginForm
@@ -22,41 +24,56 @@ from Bio.Alphabet import IUPAC
 
 # Create your views here.
 
-class PfamView(TemplateView):
-    template_name = 'databaseInput/pfam.html'
-    #form_class = CdsForm(prefix = 'cds')
-    #success_url = reverse_lazy("pfam")
+# class PfamView(TemplateView):
+#     template_name = 'databaseInput/pfam.html'
+#     #form_class = CdsForm(prefix = 'cds')
+#     #success_url = reverse_lazy("pfam")
+#     DomainFormSet = inlineformset_factory(Cds, Domain, extra=3)
+
+#     def get_context_data(self, **kwargs):
+#         context = super(PfamView, self).get_context_data(**kwargs)
+#         context['form'] = CdsForm(prefix='cds')
+#         context['originSet'] = DomainFormSet()
+#         context['originForm'] = OriginForm(prefix='origin')
+#         return context
+
+
+#     def post(self,request,*args ,**kwargs):
+#         if 'originSubmit' in request.POST:  #allow user to submit origin, if his is not already in db
+#             originForm = OriginForm(request.POST, prefix = 'origin')
+#             if originForm.is_valid():
+#                 originForm.save()
+#                 return HttpResponseRedirect(reverse_lazy("pfam"))
+#             else:
+#                 return HttpResponseRedirect(reverse_lazy("pfam"))
+#         else:
+#             cdsForm = CdsForm(request.POST, prefix= 'cds')
+#             if cdsForm.is_valid():
+#                 cds = cdsForm.save(commit=False)
+#                 domainFormSet = DomainFormSet(request.POST, instance = cds)
+#                 if domainFormSet.is_valid():
+#                     cds.save()
+#                     domainFormSet.save()
+#                     return HttpResponseRedirect("http://www.google.com")
+#                 else:
+#                     return HttpResponseRedirect("http://www.yahoo.com")
+
+#             return HttpResponseRedirect(reverse_lazy("pfam"))
+
+class OriginCreateView(CreateView):
+    template_name = 'databaseInput/addOrigin.html'
+    form_class = OriginForm
+
+def cdsInput(request):
+    t = loader.get_template('databaseInput/cdsInput.html')
     DomainFormSet = inlineformset_factory(Cds, Domain, extra=3)
+    c = RequestContext(request, {
+        'form':CdsForm(prefix='cds'),
+        'originSet':DomainFormSet(),
+        'originForm':OriginForm(prefix='origin'),
+    })
+    return HttpResponse(t.render(c))
 
-    def get_context_data(self, **kwargs):
-        context = super(PfamView, self).get_context_data(**kwargs)
-        context['form'] = CdsForm(prefix='cds')
-        context['originSet'] = DomainFormSet()
-        context['originForm'] = OriginForm(prefix='origin')
-        return context
-
-
-    def post(self,request,*args ,**kwargs):
-        if 'originSubmit' in request.POST:  #allow user to submit origin, if his is not already in db
-            originForm = OriginForm(request.POST, prefix = 'origin')
-            if originForm.is_valid():
-                originForm.save()
-                return HttpResponseRedirect(reverse_lazy("pfam"))
-            else:
-                return HttpResponseRedirect(reverse_lazy("pfam"))
-        else:
-            cdsForm = CdsForm(request.POST, prefix= 'cds')
-            if cdsForm.is_valid():
-                cds = cdsForm.save(commit=False)
-                domainFormSet = DomainFormSet(request.POST, instance = cds)
-                if domainFormSet.is_valid():
-                    cds.save()
-                    domainFormSet.save()
-                    return HttpResponseRedirect("http://www.google.com")
-                else:
-                    return HttpResponseRedirect("http://www.yahoo.com")
-
-            return HttpResponseRedirect(reverse_lazy("pfam"))
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'

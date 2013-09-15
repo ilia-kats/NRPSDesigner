@@ -73,12 +73,12 @@ var handle_updated_selection = function(event, data){
 	if( data['selected'] != 0 )
 	{
 		jQuery('#delete_btn').button('enable');
-		//$('#download_btn').button('enable');
+		//jQuery('#download_btn').button('enable');
 	}
 	else
 	{
 		jQuery('#delete_btn').button('disable');
-		//$('#download_btn').button('disable');
+		//jQuery('#download_btn').button('disable');
 	}
 }
 
@@ -102,27 +102,27 @@ var show_delete_dialog = function(){
 	if(num > 1)
 		s = 's'
 	var text = num + " construct" + s;
-	$('#delete_contents').html(delete_html)
+	jQuery('#delete_contents').html(delete_html)
 		.find('#num-del')
 			.text(text);
 	
-	$('#cancel-delete').button({
+	jQuery('#cancel-delete').button({
 		label:"Cancel",
 		icons:{primary:'ui-icon-cancel'}
 	}).click(function() {
-		$('#confirm_delete').dialog('close');
+		jQuery('#confirm_delete').dialog('close');
 	});
 	
-	$('#delete-form').submit(function() {
+	jQuery('#delete-form').submit(function() {
 		return false;
 	});
 	
-	$('#confirm-delete').button({
+	jQuery('#confirm-delete').button({
 		label:"Delete",
 		icons:{primary:'ui-icon-trash'}
 	}).click(function() {
 		var commands = new Array();
-		var ids = $('#construct_table').fragmentList('getList');
+		var ids = jQuery('#construct_table').fragmentList('getList');
 		for(i in ids)
 		{
 			var id = ids[i];
@@ -132,20 +132,20 @@ var show_delete_dialog = function(){
 							'type': 'POST',});
 		}
 
-		$('#confirm_delete').loader({	'commands': commands,
+		jQuery('#confirm_delete').loader({	'commands': commands,
 										'autoStart': true,
 										'done': function(errors) {location.reload();},
 										'title': 'Deleting Constructs...',});
 
 	});
 	
-	$('#confirm_delete').dialog('open');
+	jQuery('#confirm_delete').dialog('open');
 };
 	
 jQuery(document).ready(function() {
 	jQuery('button[id="add"]')
 		.click(function(event){
-			jQuery.post('add', $('form[action^="add"]').serialize(), function(data){
+			jQuery.post('add', jQuery('form[action^="add"]').serialize(), function(data){
 				console.log(data[1].html)
                 if(data[0] == 0)
                 {
@@ -159,7 +159,7 @@ jQuery(document).ready(function() {
 			icons:{primary:'ui-icon-plusthick'}
 		});
 	
-	$('#construct_table').fragmentList({
+	jQuery('#construct_table').fragmentList({
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
 	});
 	
@@ -185,7 +185,7 @@ jQuery(document).ready(function() {
 	});
 	jQuery('button[id="addc"]')
 		.click(function(event){
-			$('#construct_add').dialog('open');
+			jQuery('#construct_add').dialog('open');
 		})
 		.button({
 			icons:{primary:'ui-icon-plusthick'}
@@ -198,7 +198,7 @@ jQuery(document).ready(function() {
 		width:400
 	});
 	
-	$('#delete_btn').button({
+	jQuery('#delete_btn').button({
 		label:"Delete Selection",
 		icons:{primary:'ui-icon-trash'},
 		disabled: true,
@@ -206,7 +206,7 @@ jQuery(document).ready(function() {
 		show_delete_dialog();
 	});
 
-	$('#confirm_delete').dialog({
+	jQuery('#confirm_delete').dialog({
 		autoOpen:false,
 		resizable:false,
 		modal:true,
