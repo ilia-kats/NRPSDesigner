@@ -12,7 +12,12 @@ from django.views.decorators.http import condition
 from django.core.exceptions import *
 from django.conf import settings
 
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    # python 2.6 or earlier, use backport
+    from ordereddict import OrderedDict
+
 import csv, time, json, zipfile
 from copy import copy
 from cStringIO import StringIO
