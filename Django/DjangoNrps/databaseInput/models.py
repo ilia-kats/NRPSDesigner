@@ -55,7 +55,7 @@ class Domain(models.Model):
     cds = models.ForeignKey('Cds')
     domainType = models.ForeignKey('Type')
     substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
-    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('N','None')), default='None')
+    chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('N','None')), default='N')
     description = models.TextField()
     pfamLinkerStart = models.IntegerField()
     pfamLinkerStop = models.IntegerField()

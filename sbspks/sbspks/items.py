@@ -7,15 +7,15 @@ from scrapy.item import Item, Field
 
 class DomainItem(Item):
     sequence = Field()
+    protnr = Field()
     dtype = Field()
     substrate = Field()
-    start = Field()
-    stop = Field()
-    linkerbeforestart = Field()
-    linkerafterstop = Field()
+    linkerbeforeseq = Field()
+    linkerafterseq = Field()
     module = Field()
 
 class SbspksItem(Item):
     name = Field()
     domains = Field()
     sequences = Field()
+    sequenceNames = Field()
