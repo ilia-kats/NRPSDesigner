@@ -65,6 +65,7 @@ jQuery.ajaxSetup({
     	right:50px;
     	bottom:0px;
     	color:white;
+    	z-index: 2;
 	}
 
 </style>
@@ -80,7 +81,7 @@ jQuery.ajaxSetup({
 		<div class="fixed-width">
 			<div id="primary-menu">
 				{% if user.is_authenticated %}
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="5">
+				<span class="user_tab drop">
 					<a href="/user/profile/" id="user_tab_profile" class="user_tab">Logged in as {{ user }}</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="/user/profile/">Profile</a></li>
@@ -91,21 +92,21 @@ jQuery.ajaxSetup({
 				<span class="user_tab"><a href="user/login/" id="user_tab_login" class="user_tab">Log in</a></span>
 				<span class="user_tab"><a href="user/register/" id="user_tab_register" class="user_tab">Register</a></span>
 				{% endif %}
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="4">
+				<span class="user_tab drop">
 					<a href="/help/" id="user_tab_help" class="user_tab">Help</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="/help/gibson/">NRPS Designer</a></li>
 						<li><a href="/help/primer/">Add NRPS into library</a></li>
 					</ul>
 				</span>
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="3">
+				<span class="user_tab drop">
 					<a href="/tools/" id="user_tab_tools" class="user_tab">Apps</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href={% url 'peptides' %}>NRPS Designer</a></li>
 						<li><a href={% url 'pfam' %}>Add NRPS into library</a></li>
 					</ul>
 				</span>
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="2">
+				<span class="user_tab drop">
 					<a href="/" id="user_tab_home" class="user_tab">Home</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="/">Home</a></li>
