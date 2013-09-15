@@ -7,7 +7,7 @@
 
 	//the stage
 	var stage;
-	var $c;
+	var jQueryc;
 	/**
 	 * Animation system.
 	 * */
@@ -43,12 +43,12 @@
 	var set_cursor = function(type)
 	{
 		if(type == undefined) type = 'auto';
-		$c.css('cursor', type);
+		jQueryc.css('cursor', type);
 	}
 
 	var get_cursor = function()
 	{
-		return $c.css('cursor');
+		return jQueryc.css('cursor');
 	}
 
 	// prevent text cursor when dragging
@@ -893,6 +893,7 @@ var df = DisplayFragment.prototype = new Container();
 				this._area = Area.CCW;
 		}
 
+
 		this._fl = new FragmentLabel(
             this._f.getName(), 
             F.radii[this._area] + F.ldelta[this._area], 
@@ -1465,7 +1466,7 @@ var fc = FragmentContainer.prototype = new Container();
 	 **/
 	fc.addFragAt = function(df, pos)
 	{
-		if(!$.isNumeric(pos))
+		if(!jQuery.isNumeric(pos))
 			(df._cf == undefined) ? pos = 0 : pos = df._cf.order;
 		else
 			pos = this._bound(pos);
@@ -1533,7 +1534,7 @@ var fc = FragmentContainer.prototype = new Container();
 		df.setAngle(_2PI*df.getLength()/this._eff_length);
 
 		//begin the dragging!
-		df.onDragStart($.Event('mousemove'));
+		df.onDragStart(jQuery.Event('mousemove'));
 	}
 	
 	/**
@@ -1901,7 +1902,7 @@ var s = Server.prototype = new Container();
         {
              self._con = c;
              self._hideMessage();
-             if($.isFunction(cb)) cb(c);
+             if(jQuery.isFunction(cb)) cb(c);
         });
 		return this;
 	}
@@ -1927,7 +1928,7 @@ var s = Server.prototype = new Container();
 		this._con.rmFragment(cfid, function(data)
 			{
 				self._hideMessage();
-				if($.isFunction(cb)) cb();
+				if(jQuery.isFunction(cb)) cb();
 			});
 	}
 
@@ -1946,7 +1947,7 @@ var s = Server.prototype = new Container();
         this._con.reorder(cfids,dirs,function()
           {
               self._hideMessage();
-              if($.isFunction(cb)) cb();
+              if(jQuery.isFunction(cb)) cb();
           });
     }
 
@@ -1994,14 +1995,14 @@ var s = Server.prototype = new Container();
 * @class Designer
 * @extends Container
 **/
-var Designer = function($canvas, cid)
+var Designer = function(jQuerycanvas, cid)
 {
-	this.initialize($canvas, cid);
+	this.initialize(jQuerycanvas, cid);
 }
 var d = Designer.prototype = new Container();
 	
-	d._$canvas = null;
-	d._$info = null;
+	d._jQuerycanvas = null;
+	d._jQueryinfo = null;
 	
 	d._cid = 0;
 	
@@ -2017,13 +2018,13 @@ var d = Designer.prototype = new Container();
 
 	//Constuctor
 	d._container_initialize = d.initialize;
-	d.initialize = function($canvas, cid)
+	d.initialize = function(jQuerycanvas, cid)
 	{
 		var self = this;
-		this._$canvas = $canvas;
-		$c = $canvas;
+		this._jQuerycanvas = jQuerycanvas;
+		jQueryc = jQuerycanvas;
 		this._cid = cid;
-		$(window).resize(function() {self._calcSize(); stage.update();});
+		jQuery(window).resize(function() {self._calcSize(); stage.update();});
 		
 		this._child = new Container();
 		this._tname = new Text('', FONT.LG, COL.BLACK);
@@ -2034,7 +2035,7 @@ var d = Designer.prototype = new Container();
 		this._tlen.maxWidth = 1000;
 		
 		this._fc = new FragmentContainer(this);
-//$(window).keypress(function() {self._fc.debug();});
+//jQuery(window).keypress(function() {self._fc.debug();});
 		
 		this._server = new Server();
 		
@@ -2047,7 +2048,7 @@ var d = Designer.prototype = new Container();
 		this.setLength(150);
 		
 		//setup the canvas
-		stage = new Stage(document.getElementById('cdesigner')); //$canvas.get());
+		stage = new Stage(document.getElementById('cdesigner')); //jQuerycanvas.get());
 		stage.addChild(this);
 		stage.enableMouseOver(15);
 		
@@ -2059,8 +2060,8 @@ var d = Designer.prototype = new Container();
 		stage.update();
 
         //listen for items being dragged into the canvas
-		var o = this._$canvas.parent().offset();
-        $canvas.droppable({
+		var o = this._jQuerycanvas.parent().offset();
+        jQuerycanvas.droppable({
             accept: '.jFragment',
             over: function(event, ui) {
                 var jf = ui.draggable;
@@ -2082,7 +2083,7 @@ var d = Designer.prototype = new Container();
                         }
                         self.join(jf);
                         //stop ui.mouse from getting confused...
-                        $(document).mouseup();
+                        jQuery(document).mouseup();
                         return false; //triggers 'stop'
                     }
                     return true;
@@ -2092,7 +2093,7 @@ var d = Designer.prototype = new Container();
 
 
         //debug
-        $canvas.on('mouseup', function(){ console.log('canvas mouseup');});
+        jQuerycanvas.on('mouseup', function(){ console.log('canvas mouseup');});
 
 	}
 	
@@ -2108,6 +2109,7 @@ var d = Designer.prototype = new Container();
 	{
 		return this._tname.text;
 	}
+
 	d.setName = function(name)
 	{
 		this._tname.text = name;
@@ -2127,10 +2129,10 @@ var d = Designer.prototype = new Container();
 	d.leave = function(df)
 	{
         console.log('leave('+df+')');
-		var o = this._$canvas.parent().offset();
+		var o = this._jQuerycanvas.parent().offset();
 		var self = this;
 		
-		var $jf = $('<div/>').jFragment({
+		var jQueryjf = jQuery('<div/>').jFragment({
 			'fragment':df.f(),
 			'containment':'parent',
 			'scroll':false,
@@ -2139,38 +2141,38 @@ var d = Designer.prototype = new Container();
 			
 		}).on('dragstop', function(event, ui) {
                 console.log('dragstop called');
-				$jf.remove();
+				jQueryjf.remove();
                 //Tell the server to remove the fragment
                 if(df._cf!=undefined)
                 {
                    self._server.rmFrag(df._cf.id);
                 }
-		}).appendTo(this._$canvas.parent());
+		}).appendTo(this._jQuerycanvas.parent());
 
         
-        $jf.data('cf', df._cf);
+        jQueryjf.data('cf', df._cf);
         
-		var l = stage.mouseX - 0.5 * $jf.outerWidth();
-		var t = stage.mouseY - 0.5 * $jf.height();
+		var l = stage.mouseX - 0.5 * jQueryjf.outerWidth();
+		var t = stage.mouseY - 0.5 * jQueryjf.height();
 
-		$jf.css({'position':'absolute', 'left':l, 'top':t,});
+		jQueryjf.css({'position':'absolute', 'left':l, 'top':t,});
 		
 		this._fc.rm(df);
 		
-		var jev = $.Event('mousedown', {
+		var jev = jQuery.Event('mousedown', {
             'which':1,
             'pageX':(o.left+stage.mouseX),
             'pageY':(o.top+stage.mouseY),
         });
 		console.log('firing mousedown event');
-		$jf.trigger(jev);
+		jQueryjf.trigger(jev);
     }
 	
-	d.join = function($jf)
+	d.join = function(jQueryjf)
 	{	
-		var f = $jf.jFragment('getFragment')
-        var c = $jf.jFragment('getColor');
-        var cf = $jf.data('cf');
+		var f = jQueryjf.jFragment('getFragment')
+        var c = jQueryjf.jFragment('getColor');
+        var cf = jQueryjf.data('cf');
 
         //add the fragment into the construct, with dragging
 		var df = new DisplayFragment(f,cf);
@@ -2182,14 +2184,14 @@ var d = Designer.prototype = new Container();
 	d._initInfo = function()
 	{
 		var self = this;
-		this._$info = $('.fragment-info');
+		this._jQueryinfo = jQuery('.fragment-info');
 		
 		//setup the buttons
-		this._$info.find('#fragment_remove')
+		this._jQueryinfo.find('#fragment_remove')
 			.button({label: 'Remove', icons: {primary:'ui-icon-trash',},})
 			.click(function() {self._hideInfo()});
 
-		this._$info.find('#fragment_clip')
+		this._jQueryinfo.find('#fragment_clip')
 			.button({label: 'Clipping', icons: {primary:'ui-icon-scissors'}, disabled:true,})
 			.click(function() {});
 	}
@@ -2197,41 +2199,41 @@ var d = Designer.prototype = new Container();
 	d.showInfo = function(df)
 	{
 		//set the title and description
-		this._$info.find('#fragment_name').text(df.f().getName());
-		this._$info.find('#fragment_desc').text(df.f().getDesc());
+		this._jQueryinfo.find('#fragment_name').text(df.f().getName());
+		this._jQueryinfo.find('#fragment_desc').text(df.f().getDesc());
 		
 		var loc = ra2xy(df.getRadius(), df.getMid());
 		loc = this._fc.localToGlobal(loc.x, loc.y);
 		
 		//set position
-		this._$info.css({position: 'absolute', zindex:100, left:loc.x - 33, top:loc.y - (this._$info.outerHeight() + 14),});
-		this._$info.css({display:'block',});
+		this._jQueryinfo.css({position: 'absolute', zindex:100, left:loc.x - 33, top:loc.y - (this._jQueryinfo.outerHeight() + 14),});
+		this._jQueryinfo.css({display:'block',});
 		
 		//set remove callback
 		var self = this;
-		this._$info.find('#fragment_remove')
+		this._jQueryinfo.find('#fragment_remove')
 			.unbind('click')
 			.click(function() {self.hideInfo();self._fc.rm(df);});
 		
 		//binding to click means it gets triggered immediately
-		this._$canvas.mousedown(function() {self.hideInfo();});
+		this._jQuerycanvas.mousedown(function() {self.hideInfo();});
 	}
 
 	d.hideInfo = function()
 	{
-		this._$info.css({display:'none',});
-		this._$canvas.unbind('mousedown', this.hideInfo);
+		this._jQueryinfo.css({display:'none',});
+		this._jQuerycanvas.unbind('mousedown', this.hideInfo);
 	}
 	
 	
 	d._calcSize = function()
 	{
-		var $c = this._$canvas;
-		this._width = $c.width();
+		var jQueryc = this._jQuerycanvas;
+		this._width = jQueryc.width();
 		this._height = (10.0 / 16.0) * this._width;
-		$c.height(this._height);
-		$c.prop('width', this._width);
-		$c.prop('height', this._height);
+		jQueryc.height(this._height);
+		jQueryc.prop('width', this._width);
+		jQueryc.prop('height', this._height);
 		
 		this._child.x = this._width / 2.0;
 		this._child.y = this._height / 2.0;

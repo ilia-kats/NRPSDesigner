@@ -6,8 +6,9 @@ from django.core.urlresolvers import reverse_lazy
 
 from django.views.generic.detail import DetailView
 from django.contrib.auth import get_user_model
-from databaseInput.models import Origin, Cds
-from databaseInput.forms import CdsFormSet, DomainFormSet, CdsForm, OriginForm
+from databaseInput.models import Origin, Cds, Domain
+from databaseInput.forms import CdsFormSet, CdsForm, OriginForm
+from django.forms.models import inlineformset_factory
 import pdb
 
 import json
@@ -25,6 +26,7 @@ class PfamView(TemplateView):
     template_name = 'databaseInput/pfam.html'
     #form_class = CdsForm(prefix = 'cds')
     #success_url = reverse_lazy("pfam")
+    DomainFormSet = inlineformset_factory(Cds, Domain, extra=3)
 
     def get_context_data(self, **kwargs):
         context = super(PfamView, self).get_context_data(**kwargs)

@@ -208,7 +208,7 @@ function Fragment(data)
             url: '/fragment/api/'+ id + '/crop/',
             data: cropsettings,
             success: function(data){
-                if($.isFunction(cb)) cb(data);
+                if(jQuery.isFunction(cb)) cb(data);
             },
             error: function() {
                 console.error('Error cropping fragment');
@@ -243,7 +243,7 @@ function Fragment(data)
  *  jFragment: draggable fragment
  *
  * */
-$.widget("ui.jFragment", $.ui.draggable, {
+jQuery.widget("ui.jFragment", jQuery.ui.draggable, {
     options: {
         fragment: null,
         color: 'red',
@@ -251,12 +251,12 @@ $.widget("ui.jFragment", $.ui.draggable, {
     },
     _create: function() {
         this.f = this.options.fragment;
-        this.$el = $(this.element[0])
+        this.jQueryel = jQuery(this.element[0])
         if(this.options.draggable)
-            this.$el.draggable(this.options);
-        this.$el.html("<p class='jf-name'>"+this.f.getName()+"</p>");
-        this.$el.addClass('jFragment');
-        this.$el.css({'background-color':this.options.color,
+            this.jQueryel.draggable(this.options);
+        this.jQueryel.html("<p class='jf-name'>"+this.f.getName()+"</p>");
+        this.jQueryel.addClass('jFragment');
+        this.jQueryel.css({'background-color':this.options.color,
                      'border-color':this.options.color,});
     },
     getFragment: function()
@@ -269,7 +269,7 @@ $.widget("ui.jFragment", $.ui.draggable, {
     },
     getColor: function()
     {
-        return this.$el.css('background-color');
+        return this.jQueryel.css('background-color');
     },
     option: function(name, value)
     {
@@ -286,7 +286,7 @@ $.widget("ui.jFragment", $.ui.draggable, {
  * using drag and drop
  *
  * */
-$.widget("ui.jFragmentSelector", {
+jQuery.widget("ui.jFragmentSelector", {
     options: {
         droptarget: null,
         containment: 'parent',
@@ -294,25 +294,25 @@ $.widget("ui.jFragmentSelector", {
     },
     _create: function() {
         var self = this;
-        var $e = this.$el = $(this.element[0]);
-        this.$fragView = $e.find('.JFS_fragView');
-        this.$filterHolder = $e.find('.JFS_filterHolder');
-        this.$filterHint = this.$filterHolder.find('p');
-        this.$filterInput = this.$filterHolder.find('input');
-        this.$numItems = $e.find('#JFS_num_items');
+        var jQuerye = this.jQueryel = jQuery(this.element[0]);
+        this.jQueryfragView = jQuerye.find('.JFS_fragView');
+        this.jQueryfilterHolder = jQuerye.find('.JFS_filterHolder');
+        this.jQueryfilterHint = this.jQueryfilterHolder.find('p');
+        this.jQueryfilterInput = this.jQueryfilterHolder.find('input');
+        this.jQuerynumItems = jQuerye.find('#JFS_num_items');
 
         this.filter_timeout = null;
         //if we click the hint, we select the input
-        this.$filterHint.on('click', function() {
-            self.$filterInput.focus();
+        this.jQueryfilterHint.on('click', function() {
+            self.jQueryfilterInput.focus();
         });
-        this.$filterInput.on('focus', function() {
+        this.jQueryfilterInput.on('focus', function() {
             self._onInputFocus();
         });
-        this.$filterInput.on('blur', function() {
+        this.jQueryfilterInput.on('blur', function() {
             self._onInputBlur();
         });
-        this.$filterInput.keypress( function(){
+        this.jQueryfilterInput.keypress( function(){
             if(self.filter_timeout != null){
                 clearTimeout(self.filter_timeout);
                 self.filter_timeout = null;
@@ -321,83 +321,83 @@ $.widget("ui.jFragmentSelector", {
                 self._filter();
             }, 350);
         });
-        this.$filterInput.hover(function() {
-            self.$filterHolder.addClass('ui-state-hover');   
+        this.jQueryfilterInput.hover(function() {
+            self.jQueryfilterHolder.addClass('ui-state-hover');   
         }, function() {
-            self.$filterHolder.removeClass('ui-state-hover');   
+            self.jQueryfilterHolder.removeClass('ui-state-hover');   
         });
 
         this.frags = new Array();
         //fetch the fragments
         libFrag.getAll(function(frags){
             //remove the loading screen
-            self.$fragView.empty();
+            self.jQueryfragView.empty();
             //add in the fragments one by one
             for(f in frags)
             {
                 self.frags.push(frags[f]);
-                $('<div/>').addClass('JFS_fragHolder')
-                .append( $('<div/>').jFragment({
+                jQuery('<div/>').addClass('JFS_fragHolder')
+                .append( jQuery('<div/>').jFragment({
                     fragment: frags[f], 
                     color: libFrag.getNextColor(),
                     helper: function(){
-                        return $('<div/>').jFragment({
+                        return jQuery('<div/>').jFragment({
                             draggable:false,
-                            fragment: $(this).jFragment('getFragment'),
-                        }).appendTo(self.$el);
+                            fragment: jQuery(this).jFragment('getFragment'),
+                        }).appendTo(self.jQueryel);
                     },
                     containment: self.options.containment,
                     zIndex:200,
                 }))
                 .data('f', f)
-                .appendTo(self.$fragView);
+                .appendTo(self.jQueryfragView);
             }
-            self.$numItems.text(frags.length);
+            self.jQuerynumItems.text(frags.length);
         });
 
 
     },
     //set height to fill the parent container
     height: function(h){
-        this.$fragView.height( h - 
-                              (this.$el.height() - this.$fragView.height()));
+        this.jQueryfragView.height( h - 
+                              (this.jQueryel.height() - this.jQueryfragView.height()));
     },
     _onInputFocus: function(){
-        this.$filterHint.hide();
-        this.$filterHolder.addClass('ui-state-focus');
+        this.jQueryfilterHint.hide();
+        this.jQueryfilterHolder.addClass('ui-state-focus');
     },
     _onInputBlur: function(){
-        if(!this.$filterInput.val())
-            this.$filterHint.show();
-        this.$filterHolder.removeClass('ui-state-focus');
+        if(!this.jQueryfilterInput.val())
+            this.jQueryfilterHint.show();
+        this.jQueryfilterHolder.removeClass('ui-state-focus');
     },
     _filter: function(){
-        var s = this.$filterInput.val();
+        var s = this.jQueryfilterInput.val();
         var self = this;
         var matches = 0;
         if(s){
-            this.$el.find('.JFS_fragHolder').each(function(index, el){
+            this.jQueryel.find('.JFS_fragHolder').each(function(index, el){
                 //hide the element if it doesn't match s
                 if( self.frags[index].getName().toLowerCase()
                    .indexOf(s.toLowerCase()) < 0)
                 {
-                    $(this).hide();
+                    jQuery(this).hide();
                 }
                 else
                 {
-                    $(this).show();
+                    jQuery(this).show();
                     matches = matches + 1;
                 }
             });
         }
         else{
-            this.$el.find('.JFS_fragHolder').each(function(index, el){
+            this.jQueryel.find('.JFS_fragHolder').each(function(index, el){
                 //show all if s is empty
-                $(this).show();
+                jQuery(this).show();
                 matches = matches + 1;
             });
         }
-        this.$numItems.text(matches);
+        this.jQuerynumItems.text(matches);
     },
     option: function(name, value)
     {
@@ -407,4 +407,5 @@ $.widget("ui.jFragmentSelector", {
         this.options[name] = value;
     },
 });
-      
+
+

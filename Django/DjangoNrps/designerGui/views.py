@@ -235,12 +235,7 @@ def make_structure(request):
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
 
-def domainSequence(request, pid):
-    nrp = NRP.objects.get(pk=pid)
-    #pid  = self.kwargs["pid"]
-
-    tmp = nrp.generatePfamGraphicJson()
-    return HttpResponse(tmp)
+    
 
 class DomainSequenceView(TemplateView):
     template_name = 'designerGui/domainSequence.html'

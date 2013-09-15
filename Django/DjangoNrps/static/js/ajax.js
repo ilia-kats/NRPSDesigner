@@ -87,20 +87,20 @@ var AJAX = new function()
 			if(data[0] == AJAX_ERROR)
 				{
 					//call the error callback, if it exists
-					if($.isFunction(args.error))
+					if(jQuery.isFunction(args.error))
 						args.error(jqXHR, data[1], 'ServerError');
 					else
 						console.error('AJAX Error: ' + data[1]);
 				}
 				else
-					if($.isFunction(s_fn)) s_fn(data[1]);
+					if(jQuery.isFunction(s_fn)) s_fn(data[1]);
 		}
 
 		//stringify the data correctly if it hasn't been already
 		//if(args.data!=undefined)
 			//args.data = JSON.stringify(args.data);
 
-		$.ajax(args);
+		jQuery.ajax(args);
 	}
 
 	var makeHttpRequest = function() 
@@ -140,7 +140,7 @@ var AJAX = new function()
  *
  */
 
-$(document).ajaxSend(function(event, xhr, settings) {
+jQuery(document).ajaxSend(function(event, xhr, settings) {
 	function getCookie(name) {
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
@@ -169,7 +169,7 @@ $(document).ajaxSend(function(event, xhr, settings) {
 			!(/^(\/\/|http:|https:).*/.test(url));
 	}
 	function safeMethod(method) {
-		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		return (/^(GET|HEAD|OPTIONS|TRACE)jQuery/.test(method));
 	}
 
 	if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
