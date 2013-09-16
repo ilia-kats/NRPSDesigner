@@ -1,6 +1,6 @@
 
         {{ form.non_field_errors }}
-
+        <form id="cdsFormForDomainPrediction">
         <div class="row">
           <div class="span3">
                    <div class="fieldWrapper">
@@ -41,6 +41,7 @@
             </div>
           </div>
         </div>
+        </form>
 
 
 <script type="text/javascript">
@@ -55,7 +56,7 @@
 });
 
 	predictDomains = function(){
-		jQuery.post("{% url "getDomainForm" %}", {'cdsId':1}, function(data){
+		jQuery.post("{% url "getDomainForm" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
 			jQuery("#domainInput").html( data);
 
               jQuery( "#accordion" ).accordion({

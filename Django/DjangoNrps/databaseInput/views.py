@@ -77,16 +77,16 @@ def cdsInput(request):
 
 def domainInput(request):
     if request.method == "POST":
-        cdsId = int(request.POST['cdsId'])
-        cds = Cds.objects.get(pk = cdsId)
-
-        initialDict = cds.predictDomains()
-        t = loader.get_template('databaseInput/domainInput.html')
-        DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
-        c = RequestContext(request, {
-        'originSet':DomainFormSet(initial = initialDict),
-        })
-        return HttpResponse(t.render(c))
+        cdsForm = CdsForm(request.POST, prefix='cds')
+        if cdsForm.is_valid():
+            cds = cdsForm.save(commit=False)
+            initialDict = cds.predictDomains()
+            t = loader.get_template('databaseInput/domainInput.html')
+            DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
+            c = RequestContext(request, {
+            'originSet':DomainFormSet(initial = initialDict),
+             })
+            return HttpResponse(t.render(c))
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
