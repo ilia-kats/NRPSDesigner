@@ -38,15 +38,9 @@
 					</li>
 						<li>
 
-					<a id="domainSequence"
-					{% if nrp.construct %}
-					href="{% url 'domainSequence' pid=nrp.pk %}"
-					{% else %}
-					href = ""
-					{% endif %}
-					class='tab-link'>
+					<a id="domainSequence" href="#domainSequenceIFrame" class='tab-link'>
 						<span class='ui-icon ui-icon-pencil tab-icon'></span>
-						Designer
+						Domains
 					</a>
 				</li>
 				</li>
@@ -78,10 +72,15 @@
 				</li>
 	
 			</ul>
+			<iframe id="domainSequenceIFrame" src="domainSequence" style="width:100%;">
+</iframe>
+
             
 		</div>
 	</div>
 </div>
+
+
 {% endblock %}
 
 {% block dialog %}
@@ -107,7 +106,7 @@
 
 
 
-	jQuery(window).ready( function($) {
+	jQuery(document).ready( function($) {
 		//tabs
 		jQuery( "#tabs" ).tabs({
 			beforeLoad: function( event, ui ) {
@@ -145,7 +144,6 @@
 
 	
 	});
-
 
 
 </script>

@@ -63,6 +63,7 @@ from Bio.Alphabet import IUPAC
 class OriginCreateView(CreateView):
     template_name = 'databaseInput/addOrigin.html'
     form_class = OriginForm
+    success_url=reverse_lazy('pfam')
 
 def cdsInput(request):
     t = loader.get_template('databaseInput/cdsInput.html')
