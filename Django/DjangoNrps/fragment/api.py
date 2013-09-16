@@ -13,7 +13,7 @@ from django.db.models import Q
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
-import simplejson as json
+import json
 from gibson.jsonresponses import JsonResponse, RawJsonResponse, ERROR
 
 ## Helpful functions
