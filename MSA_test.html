@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<title>Dokument zum Testen des Multiplen Sequence Alignments</title>
+	<script src="MSA_Test.js"></script>
+
+</head>
+<body onLoad="init();draw(0,0,0);">
+
+	Change color-scheme:<select onchange="change_scheme(this.value); draw(0,0,0); ">
+		<option value="0">Joshua</option>
+		<option value="1">Nikos</option>
+		<option value="2">Nils</option>
+		<option value="7">Konrad</option>
+		<option value="21">Ilia</option>
+		<option value="3">Julia</option>
+		<option value="4">Tania</option>
+                
+	</select>
+	<div><canvas id="alignment"></canvas></div>
+
+		<br /><footer>iGEM Team Heidelberg 2013</footer></body>
+    
+</body>
+</html>
+
