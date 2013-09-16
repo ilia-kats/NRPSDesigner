@@ -3,7 +3,7 @@ Classes for JSON responses
 """
 
 from django.http import HttpResponse
-import simplejson as json
+import json
 
 OK = 0
 ERROR = -1

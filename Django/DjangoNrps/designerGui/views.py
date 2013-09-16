@@ -15,7 +15,7 @@ import math
 import json
 import xml.etree.ElementTree as x
 import openbabel as ob
-import simplejson
+import json
 
 @login_required
 def makeConstruct(request,pid):
@@ -28,7 +28,7 @@ def makeConstruct(request,pid):
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
     domainSequenceTabLink = reverse('domainSequence', kwargs = {'cid' : pid})
-    jsonOutput = simplejson.dumps({"constructId": constructId,
+    jsonOutput = json.dumps({"constructId": constructId,
         'designTabLink': designTabLink,
         'primerTabLink': primerTabLink,
         'domainSequenceTablLink': domainSequenceTabLink})
