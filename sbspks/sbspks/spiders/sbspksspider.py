@@ -14,8 +14,6 @@ class SBSPKSSpider(BaseSpider):
         "http://www.nii.ac.in/~pksdb/DBASE/listALL4.html",
         ]
 
-    names = {'ala': 'alanine', 'gly': 'Glycine', 'ser': 'serine', 'phe': 'phenylalanine', 'leu': 'leucine', 'thr': 'threonine', 'tyr': 'tyrosine', 'gln': 'glutamine', 'asn': 'asparagine', 'orn': 'ornithine', 'asp': 'aspartic acid', 'glu': 'glutamic acid', 'val': 'valine', 'ile': 'isoleucine', 'trp': 'tryptophane', 'his': 'histidine', 'lys': 'lysine', 'arg': 'arginine', 'met': 'methionine', 'cys': 'cysteine', 'pro': 'proline'}
-
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
         nrpss = hxs.select('//h1[./font/text()="NRPS"]/following-sibling::p[1]/a')
@@ -63,11 +61,9 @@ class SBSPKSSpider(BaseSpider):
                         substr = domain.select('./following-sibling::text()[1]').extract()[0].strip()
                         if substr[-2:] == "-D":
                             substr = substr[:-2]
-                        if substr.lower() in self.names:
-                            substr = self.names[substr.lower()]
-                        ditem['substrate'] = substr
+                        ditem['substrate'] = substr.lower()
                         if len(item['domains']) > 0:
-                            item['domains'][-1]['substrate'] = substr # for C domain
+                            item['domains'][-1]['substrate'] = substr.lower() # for C domain
                     ditem['module'] = module
                     yield Request(link, callback=self.parseSequenceWindow, meta={'domain': ditem, 'callback': self.parseDomain})
                     if linker is not None:
