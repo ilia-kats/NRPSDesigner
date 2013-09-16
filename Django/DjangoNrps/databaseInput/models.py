@@ -1,17 +1,10 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Remove `managed = False` lines for those models you wish to give write DB access
-# Feel free to rename the models, but don't rename db_table values or field names.
-#
-# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
-# into your database.
 from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+
+from nrpsSMASH.analyzeNrpCds import nrpsSmash
 
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
@@ -28,6 +21,23 @@ class Cds(models.Model):
     class Meta:
         verbose_name = "Coding sequence"
         verbose_name_plural = "Coding sequences"
+
+    # uses nrpsSMASH stuff in order to generate initial input for formset  
+    def predictDomains(self):
+        initialDicts = []
+        allDomainTypes = [x.smashName for x in Type.objects.all()]
+        nrpsSmashResult = nrpsSmash(self.dnaSequence)
+        for predictedDomain in nrpsSmashResult.domaindict2['gene']:
+            if predictedDomain[0] in allDomainTypes:
+                domainDict = {}
+                domainDict['pfamStart'] = predictedDomain[1]
+                domainDict['pfamStop']  = predictedDomain[2]
+                domainType = Type.objects.get(smashName = predictedDomain[0])
+                domainDict['domainType'] = domainType
+                domainDict['user'] = self.user #possibly improve this afterwards..
+                initialDicts.append(domainDict)
+        return initialDicts
+
 
 class Origin(models.Model):
     sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('Biobrick','Biobrick'), ('Other', 'Other DNA source')))
@@ -56,15 +66,15 @@ class Domain(models.Model):
     domainType = models.ForeignKey('Type')
     substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('N','None')), default='N')
-    description = models.TextField()
-    pfamLinkerStart = models.IntegerField()
-    pfamLinkerStop = models.IntegerField()
-    definedLinkerStart = models.IntegerField()
-    definedLinkerStop = models.IntegerField()
+    description = models.TextField(blank=True, null=True)
+    pfamLinkerStart = models.IntegerField(blank=True, null=True)
+    pfamLinkerStop = models.IntegerField(blank=True, null=True)
+    definedLinkerStart = models.IntegerField(blank=True, null=True)
+    definedLinkerStop = models.IntegerField(blank=True, null=True)
     pfamStart = models.IntegerField()
     pfamStop = models.IntegerField()
-    definedStart = models.IntegerField()
-    definedStop = models.IntegerField()
+    definedStart = models.IntegerField(blank=True, null=True)
+    definedStop = models.IntegerField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
 
@@ -81,6 +91,7 @@ class Substrate(models.Model):
     modification = models.ManyToManyField('Modification', blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
     user = models.ForeignKey('auth.User', blank=True, null=True)
+    smashName = models.CharField(max_length=50, blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -99,6 +110,7 @@ class Type(models.Model):
     pfamId   = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
     pfamGraphic = models.TextField()
+    smashName = models.CharField(max_length=50, blank=True, null=True)
 
     def __unicode__(self):
         return self.name

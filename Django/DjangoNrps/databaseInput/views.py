@@ -8,8 +8,7 @@ from django.template import loader, RequestContext
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.contrib.auth import get_user_model
-from databaseInput.models import Origin, Cds, Domain
-from databaseInput.forms import CdsFormSet, CdsForm, OriginForm
+
 from django.forms.models import inlineformset_factory
 import pdb
 
@@ -21,6 +20,9 @@ from xml.dom.minidom import parseString
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+
+from databaseInput.models import Origin, Cds, Domain
+from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm
 
 # Create your views here.
 
@@ -67,14 +69,24 @@ class OriginCreateView(CreateView):
 
 def cdsInput(request):
     t = loader.get_template('databaseInput/cdsInput.html')
-    DomainFormSet = inlineformset_factory(Cds, Domain, extra=3)
+    
     c = RequestContext(request, {
         'form':CdsForm(prefix='cds'),
-        'originSet':DomainFormSet(),
-        'originForm':OriginForm(prefix='origin'),
     })
     return HttpResponse(t.render(c))
 
+def domainInput(request):
+    if request.method == "POST":
+        cdsId = int(request.POST['cdsId'])
+        cds = Cds.objects.get(pk = cdsId)
+
+        initialDict = cds.predictDomains()
+        t = loader.get_template('databaseInput/domainInput.html')
+        DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
+        c = RequestContext(request, {
+        'originSet':DomainFormSet(initial = initialDict),
+        })
+        return HttpResponse(t.render(c))
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'

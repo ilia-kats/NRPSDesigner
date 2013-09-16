@@ -1,7 +1,4 @@
 
-
-</div>
-
         {{ form.non_field_errors }}
 
         <div class="row">
@@ -18,9 +15,8 @@
               <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
               {{ form.dnaSequence }} <br/>
               <div class="btn-group">
-                <input type="button" class="btn" onclick="submitPfam()" value="Send to Pfam!"/>
+                <input type="button" class="btn" onclick="predictDomains()" value="Generate Domains!"/>
 
-                <input type="button" class="btn" id="clear" value="Clear!"/>
               </div>
 
             </div>
@@ -58,8 +54,19 @@
   return jQuery(target).load(url);
 });
 
+	predictDomains = function(){
+		jQuery.post("{% url "getDomainForm" %}", {'cdsId':1}, function(data){
+			jQuery("#domainInput").html( data);
 
+              jQuery( "#accordion" ).accordion({
+                heightStyle: "content",
+                collapsible: true
+              });
+			jQuery("#tabs").tabs("enable",1);
 
+		});
+		
+	};
 
 
 
@@ -71,24 +78,17 @@
         });
 
 
-    function generateDomainForm(){
-      jQuery.post("{% url 'makeConstruct' pid %}").done(activateTabs);
-    }
 
-    function activateTabs(data){
-        console.log(data);
-        data = jQuery.parseJSON(data);
-        constructId =  data["constructId"];
-        if (constructId != 0) {
-       jQuery("#primerTab").attr("href", data["primerTabLink"]);
-       jQuery("#constructTab").attr("href", data["designTabLink"]);
-       jQuery("#domainSequenceTab").attr("href", data["domainSequenceTabLink"]);
-       jQuery("#tabs").tabs("enable",1);
-       jQuery("#tabs").tabs("enable",2);
-       jQuery("#tabs").tabs("enable",3);
-        } else {
-            alert("ERROR");
-        }
-    }
+    // function activateTabs(data){
+    //     console.log(data);
+    //     data = jQuery.parseJSON(data);
+    //     constructId =  data["constructId"];
+    //     if (constructId != 0) {
+    //    jQuery("#tabs").tabs("enable",1);
+  
+    //     } else {
+    //         alert("ERROR");
+    //     }
+    // }
 
 </script>

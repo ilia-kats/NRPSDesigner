@@ -25,7 +25,7 @@
 					</a>
 					</li>
 				<li>
-					<a href="http://www.google.com" class = 'tab-link'>
+					<a href="#domainInput" class = 'tab-link'>
 					<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
 					LOL
 					</a>
@@ -34,8 +34,11 @@
 	
 			</ul>
 				     <div id='cdsInputTab'>
-                {% include 'databaseInput/cdsInputTab.html' %}
-	</div>
+                		{% include 'databaseInput/cdsInputTab.html' %}
+					</div>
+
+					 <div id='domainInput'>
+					</div>
 
             
 		</div>
@@ -50,7 +53,7 @@
 
 
 
-	jQuery(window).ready( function($) {
+	jQuery(document).ready( function($) {
 		//tabs
 		jQuery( "#tabs" ).tabs({
 			beforeLoad: function( event, ui ) {
