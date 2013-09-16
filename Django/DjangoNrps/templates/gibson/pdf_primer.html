@@ -55,7 +55,7 @@ h2.title {
 </head>
 <body style="font-size:1.2em;">
 <table>
-	<tr><td style="width:50%;"><h1 class="title">{{ construct.name }}</h1></td><td class="title" style="width:50%; text-align:right;">{% url 'gibthon' %}/{{ construct.id }}/{{ construct.name }}/</td>
+	<tr><td style="width:50%;"><h1 class="title">{{ construct.name }}</h1></td><td class="title" style="width:50%; text-align:right;">{% url 'gibson.views.constructs' %}/{{ construct.id }}/{{ construct.name }}/</td>
 	<tr><td style="vertical-align:top;">
 		{{ construct.description|linebreaks }}
 		<h4>Fragments: {{ construct.fragments.all.count }} </h4>

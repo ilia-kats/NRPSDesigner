@@ -47,7 +47,7 @@ var fragment_api_url = fragment_base_url + 'api/';
 							{% if fragment.construct_slave.all %}
 							<ul>
 								{% for construct in fragment.construct_slave.all %}
-									<li><a href="{% url 'gibthon' %}/{{ construct.id }}/">{{ construct.name }}</a></li>
+									<li><a href="{% url 'gibson.views.constructs' %}/{{ construct.id }}/">{{ construct.name }}</a></li>
 								{% endfor %}
 							</ul>
 							{% else %}

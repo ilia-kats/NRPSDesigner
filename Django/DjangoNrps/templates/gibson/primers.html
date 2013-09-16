@@ -149,7 +149,7 @@ jQuery(window).ready(function() {
 				jQuery.cookie('fileDownloadToken', null);
 			}
 		},500);
-		window.location.href='{% url 'gibthon' %}/{{ construct.id }}/primers/download?tk='+token;
+		window.location.href='{% url 'gibson.views.constructs' %}/{{ construct.id }}/primers/download?tk='+token;
 	});
 });
 </script>
