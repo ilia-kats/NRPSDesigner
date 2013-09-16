@@ -1,4 +1,4 @@
-import simplejson as json
+import json
 from jsonresponses import JsonResponse, ERROR
 
 from fragment.models import *
