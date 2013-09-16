@@ -1,4 +1,8 @@
 {% load staticfiles %}
+<script type="text/javascript">
+var fragment_base_url = '{% url 'fragment.views.fragments' %}';
+var fragment_api_url = fragment_base_url + 'api/';
+</script>
 <div class='JFS ui-widget-content ui-corner-all'>
     <div class='ui-widget-header ui-corner-top'>
         <h3>Available Fragments</h3>

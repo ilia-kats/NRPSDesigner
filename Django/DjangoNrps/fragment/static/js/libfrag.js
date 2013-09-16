@@ -15,7 +15,7 @@ var libFrag = new function()
 	this.getByID = function(id, _suc)
 	{
 		AJAX.post({
-			url: '/fragment/api/'+id+'/', 
+			url: fragment_api_url + id+'/',
 			success: function(data)
 			{
 				_suc(new Fragment(data));
@@ -27,7 +27,7 @@ var libFrag = new function()
 	this.getAll = function(_suc)
 	{
        AJAX.post({
-           url: '/fragment/api/listAll/',
+           url: fragment_api_url + 'listAll/',
            success: function(data)
            {
                var frags = new Array();
@@ -117,7 +117,7 @@ function Fragment(data)
 
 		//stream the sequence from the server
 		AJAX.stream({
-			url: '/fragment/api/' + id + '/getSeq/',
+			url: fragment_api_url + id + '/getSeq/',
 			success: function(data)
 			{
 				sequence = new String();
@@ -158,7 +158,7 @@ function Fragment(data)
 
 		//fetch the metadata from the server
 		AJAX.post({
-			url: '/fragment/api/' + id + '/getMeta/',
+			url: fragment_api_url + id + '/getMeta/',
 			success: function(ret){
 				meta = ret;
 				complete_fn(ret);
@@ -171,7 +171,7 @@ function Fragment(data)
 	{
 		metadata = new_meta;
 		AJAX.post({
-			url: '/fragment/api/' + id + '/setMeta/',
+			url: fragment_api_url + id + '/setMeta/',
 			success: success_cb,
 			error: fail_cb,
 			data: metadata,
@@ -181,7 +181,7 @@ function Fragment(data)
 	this.getFeats = function(success_fn)
 	{
 		AJAX.post({
-			url: '/fragment/api/' + id + '/getFeats/',
+			url: fragment_api_url + id + '/getFeats/',
 			success: success_fn,
 			error: function(err)
 			{
@@ -205,7 +205,7 @@ function Fragment(data)
     this.crop = function(cropsettings, cb)
     {
         AJAX.post({
-            url: '/fragment/api/'+ id + '/crop/',
+            url: fragment_api_url + id + '/crop/',
             data: cropsettings,
             success: function(data){
                 if(jQuery.isFunction(cb)) cb(data);

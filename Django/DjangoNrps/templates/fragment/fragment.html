@@ -3,6 +3,11 @@
 {% load staticfiles %}
 
 {% block js-include %}
+<script type="text/javascript">
+var fragment_base_url = '{% url 'fragment.views.fragments' %}';
+var fragment_api_url = fragment_base_url + 'api/';
+</script>
+
 <script src="{% static "js/cropform.js" %}" type="text/javascript"></script>
 <script src="{% static "js/jquery.ui.selectmenu.js" %}" type="text/javascript"></script>
 <script src="{% static "js/fragmentview.js" %}" type="text/javascript"></script>
