@@ -46,9 +46,6 @@ template<>
 std::string nrps::toString(Configuration c)
 {
     switch (c) {
-        case Configuration::None:
-            return "N";
-            break;
         case Configuration::L:
             return "L";
             break;
@@ -64,9 +61,7 @@ std::string nrps::toString(Configuration c)
 template<>
 Configuration NRPSDESIGNER_EXPORT nrps::fromString(const std::string &s)
 {
-    if (s == "N")
-        return Configuration::None;
-    else if (s == "L")
+    if (s == "L")
         return Configuration::L;
     else if (s == "D")
         return Configuration::D;
