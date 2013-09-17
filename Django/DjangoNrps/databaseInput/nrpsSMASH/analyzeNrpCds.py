@@ -1,4 +1,6 @@
 import utils
+import time
+import random
 from argparse import Namespace
 from os import path
 import os
@@ -23,7 +25,7 @@ from Bio.Alphabet import IUPAC
 
 def nrpsSmash(dnaSeq):
     options = Namespace()
-    options.outputfoldername = ""
+    options.outputfoldername = "/tmp/nrpspks_predictions_txt"
     options.record_idx = "" # used in NRPSPredictor2.nrpscodepred, check later what to set it to
     options.eukaryotic = 0
     tstFeature = SeqFeature(FeatureLocation(0, len(dnaSeq)), type="CDS", strand=1)
@@ -49,8 +51,10 @@ def create_pksnrpsvars_object():
 
 
 def create_rawoutput_storage_folder(options):
+    if not os.path.exists(options.outputfoldername):
+        os.mkdir(options.outputfoldername)
     #Make output folder for storing raw predictions
-    options.raw_predictions_outputfolder = path.abspath(path.join(options.outputfoldername, "nrpspks_predictions_txt"))
+    options.raw_predictions_outputfolder = path.abspath(path.join(options.outputfoldername, str(time.time()) + str(random.random())))
     if not os.path.exists(options.raw_predictions_outputfolder):
         os.mkdir(options.raw_predictions_outputfolder)
 
