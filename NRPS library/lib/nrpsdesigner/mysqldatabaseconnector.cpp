@@ -178,13 +178,18 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(sql::Prep
     try {
         std::vector<std::shared_ptr<D>> vec;
         res = stmt->executeQuery();
-        while (res->next()) {
-            D *d = new D(res->getUInt("did"));
-            Origin *ori = d->setOrigin(res->getUInt("orid"));
-            d->setProduct(res->getUInt("pid"));
-            f(d, res);
-            vec.emplace_back(d);
-            fillOrigin(ori);
+        if (res->rowsCount() == 0) {
+            vec.emplace_back(new D(0));
+        }
+        else {
+            while (res->next()) {
+                D *d = new D(res->getUInt("did"));
+                Origin *ori = d->setOrigin(res->getUInt("orid"));
+                d->setProduct(res->getUInt("pid"));
+                f(d, res);
+                vec.emplace_back(d);
+                fillOrigin(ori);
+            }
         }
         delete res;
         return vec;
@@ -197,6 +202,8 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(sql::Prep
 
 void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw (DatabaseError)
 {
+    if (d->id() == 0)
+        return;
     sql::ResultSet *res = nullptr;
     try {
         m_stmtDomain->setUInt(1, d->id());

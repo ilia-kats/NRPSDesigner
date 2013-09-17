@@ -188,7 +188,7 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp) throw (NetworkError, NC
 Node* NrpsBuilder::makeNode(std::shared_ptr<Domain> d)
 {
     Node *n = new Node(d);
-    if (m_taxonCache.count(d->origin()->taxId()) == 0) {
+    if (d->id() > 0 && m_taxonCache.count(d->origin()->taxId()) == 0) {
         m_taxonCache.emplace(d->origin()->taxId(), TaxonBuilder::getInstance()->buildMany(d->origin()->taxId()));
     }
     return n;
@@ -196,7 +196,7 @@ Node* NrpsBuilder::makeNode(std::shared_ptr<Domain> d)
 
 float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
 {
-    if (lhs == m_startn || rhs == m_endn)
+    if (lhs == m_startn || rhs == m_endn || lhs->data->id() == 0 || rhs->data->id() == 0)
         return 0;
     uint32_t taxid1 = lhs->data->origin()->taxId(), taxid2 = rhs->data->origin()->taxId();
     std::pair<uint32_t, uint32_t> key(std::min(taxid1, taxid2), std::max(taxid1, taxid2));
