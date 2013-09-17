@@ -2,7 +2,6 @@
 #define NRPSDESIGNER_DOMAIN_H
 
 #include "nrpsdesigner_export.h"
-#include "abstractdomaintype.h"
 #include "global_enums.h"
 
 #include <cstdint>

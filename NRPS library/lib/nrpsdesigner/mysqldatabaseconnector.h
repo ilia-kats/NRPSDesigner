@@ -39,9 +39,9 @@ public:
 private:
     bool testInitialized(bool except = true) throw (DatabaseError);
     template<class D, class initFunc>
-    std::vector<std::shared_ptr<D>> getCoreDomains(DomainType, const initFunc&) throw (DatabaseError);
+    std::vector<std::shared_ptr<D>> getCoreDomains(const std::string&, const initFunc&) throw (DatabaseError);
     template<class D, class initFunc>
-    std::vector<std::shared_ptr<D>> getCoreDomains(const Monomer&, DomainType, Configuration, const initFunc&) throw (DatabaseError);
+    std::vector<std::shared_ptr<D>> getCoreDomains(const Monomer&, const std::string&, const initFunc&) throw (DatabaseError);
     template<class D, class initFunc>
     std::vector<std::shared_ptr<D>> getCoreDomains(sql::PreparedStatement*, const initFunc&) throw (DatabaseError);
     DatabaseError makeException(const sql::SQLException &e) const;
