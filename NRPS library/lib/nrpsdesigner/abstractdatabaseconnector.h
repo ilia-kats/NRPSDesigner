@@ -30,7 +30,7 @@ public:
     virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) throw (DatabaseError) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() throw (DatabaseError) = 0;
-    virtual void fillDomain(std::shared_ptr<Domain>) throw (DatabaseError) = 0;
+    virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError) = 0;
     virtual void fillOrigin(Origin*) throw (DatabaseError) = 0;
 
     static AbstractDatabaseConnector* getInstance();

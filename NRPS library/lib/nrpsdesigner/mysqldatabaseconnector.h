@@ -33,7 +33,7 @@ public:
     virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) throw (DatabaseError);
     virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() throw (DatabaseError);
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError);
-    virtual void fillDomain(std::shared_ptr<Domain>) throw (DatabaseError);
+    virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError);
     virtual void fillOrigin(Origin*) throw (DatabaseError);
 
 private:

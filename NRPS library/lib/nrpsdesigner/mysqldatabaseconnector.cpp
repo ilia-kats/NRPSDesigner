@@ -195,7 +195,7 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(sql::Prep
     }
 }
 
-void MySQLDatabaseConnector::fillDomain(std::shared_ptr<Domain> d) throw (DatabaseError)
+void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw (DatabaseError)
 {
     sql::ResultSet *res = nullptr;
     try {
@@ -208,16 +208,24 @@ void MySQLDatabaseConnector::fillDomain(std::shared_ptr<Domain> d) throw (Databa
         d->setGeneDescription(res->getString("cdesc"));
         std::string seq = res->getString("cdnaseq");
         uint32_t lstart = res->getUInt("dpfamlinkerstart"), lstop = res->getUInt("dpfamlinkerstop"), start = res->getUInt("dpfamstart"), stop = res->getUInt("dpfamstop");
-        d->setDnaSequencePfam(seq.substr(start, stop - start + 1));
-        d->setNativePfamLinkerBefore(seq.substr(lstart, start - lstart));
-        d->setNativePfamLinkerAfter(seq.substr(stop + 1, lstop - stop));
-        lstart = res->getUInt("ddefinedlinkerstart");
-        lstop = res->getUInt("ddefinedlinkerstop");
-        start = res->getUInt("ddefinedstart");
-        stop = res->getUInt("ddefinedstop");
-        d->setDnaSequenceDefined(seq.substr(start, stop - start + 1));
-        d->setNativeDefinedLinkerBefore(seq.substr(lstart, start - lstart));
-        d->setNativeDefinedLinkerAfter(seq.substr(stop + 1, lstop - stop));
+        if (seq.size() > 0) {
+            if (stop <= seq.size())
+                d->setDnaSequencePfam(seq.substr(start, stop - start + 1));
+            if (start <= seq.size())
+                d->setNativePfamLinkerBefore(seq.substr(lstart, start - lstart));
+            if (lstop <= seq.size())
+                d->setNativePfamLinkerAfter(seq.substr(stop + 1, lstop - stop));
+            lstart = res->getUInt("ddefinedlinkerstart");
+            lstop = res->getUInt("ddefinedlinkerstop");
+            start = res->getUInt("ddefinedstart");
+            stop = res->getUInt("ddefinedstop");
+            if (stop <= seq.size())
+                d->setDnaSequenceDefined(seq.substr(start, stop - start + 1));
+            if (lstart <= seq.size())
+                d->setNativeDefinedLinkerBefore(seq.substr(lstart, start - lstart));
+            if (lstop <= seq.size())
+                d->setNativeDefinedLinkerAfter(seq.substr(stop + 1, lstop - stop));
+        }
         delete res;
     } catch (const sql::SQLException &e) {
         if (res != nullptr)
