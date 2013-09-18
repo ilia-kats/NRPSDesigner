@@ -6,11 +6,13 @@ from django.contrib.contenttypes import generic
 
 from nrpsSMASH.analyzeNrpCds import nrpsSmash
 
+from .validators import validateCodingSeq
+
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     product = models.ForeignKey('Product', blank=True, null=True)
     geneName = models.CharField(max_length=100) 
-    dnaSequence = models.TextField()
+    dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
