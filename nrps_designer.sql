@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 4.0.5deb1.quantal~ppa.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 15. Sep 2013 um 14:20
--- Server Version: 5.6.12
--- PHP-Version: 5.5.0
+-- Generation Time: Sep 16, 2013 at 06:01 PM
+-- Server version: 5.5.32-0ubuntu0.12.10.1
+-- PHP Version: 5.4.6-1ubuntu1.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,14 +17,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `nrps_designer`
+-- Database: `nrps_designer`
 --
-CREATE DATABASE IF NOT EXISTS `nrps_designer` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `nrps_designer`;
 
 DELIMITER $$
 --
--- Prozeduren
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_origin_hierarchy`(IN `id` INT)
     READS SQL DATA
@@ -39,7 +37,7 @@ JOIN    databaseInput_origin ori
 ON      ori.id = vars.id ORDER BY level DESC$$
 
 --
--- Funktionen
+-- Functions
 --
 CREATE DEFINER=`root`@`localhost` FUNCTION `get_origin_parent`(`value` INT) RETURNS int(11)
     READS SQL DATA
@@ -65,7 +63,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_group`
+-- Table structure for table `auth_group`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_group` (
@@ -78,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `auth_group` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_group_permissions`
+-- Table structure for table `auth_group_permissions`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
@@ -94,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_permission`
+-- Table structure for table `auth_permission`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_permission` (
@@ -108,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `auth_permission` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=106 ;
 
 --
--- Daten für Tabelle `auth_permission`
+-- Dumping data for table `auth_permission`
 --
 
 INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
@@ -221,7 +219,7 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_user`
+-- Table structure for table `auth_user`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_user` (
@@ -241,20 +239,20 @@ CREATE TABLE IF NOT EXISTS `auth_user` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
--- Daten für Tabelle `auth_user`
+-- Dumping data for table `auth_user`
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$10000$dfTARToC5O0k$mgczGseuKQVcTZzkansY8mLQTogR7dnsm3cMDzUtAhs=', '2013-09-15 12:16:37', 1, 'nikos', '', '', '', 1, 1, '2013-08-26 09:39:06'),
+(1, 'pbkdf2_sha256$10000$dfTARToC5O0k$mgczGseuKQVcTZzkansY8mLQTogR7dnsm3cMDzUtAhs=', '2013-09-16 12:38:18', 1, 'nikos', '', '', '', 1, 1, '2013-08-26 09:39:06'),
 (2, 'pbkdf2_sha256$10000$T2upQRGX5Fxj$HTMi+Gems/n9Q0Ngm6XQUhX3ayR+5s+F5O5pemytDuQ=', '2013-09-05 17:28:21', 1, 'anja', '', '', '', 1, 1, '2013-08-15 13:28:42'),
 (3, 'pbkdf2_sha256$10000$haMbidPNfL2C$5h/rEkR+IOrOLN3TxiAVkOEaGfIHbcpERdl14JFpAVI=', '2013-09-05 11:23:54', 1, 'julia', '', '', '', 1, 1, '2013-08-15 13:28:50'),
 (4, 'pbkdf2_sha256$10000$Acb07Ad78Fmc$foIbtrYMfldCuwSpLMQ+ydCF8N/BflBIOYwYlm6l1TU=', '2013-08-19 16:45:52', 1, 'philipp', '', '', '', 1, 1, '2013-08-15 13:29:00'),
-(5, 'pbkdf2_sha256$10000$cRcl2AWgjMKb$Hg8hnDDo3yddtmbc485uVixXGOzl4VwCq2Z9bgYaz5I=', '2013-09-15 12:16:54', 0, 'sbspks', '', '', '', 0, 0, '2013-09-15 12:16:54');
+(5, 'pbkdf2_sha256$10000$HxgrtEFgeMNC$pdzQavr6Yw8IEr2uTeDkwGsiV37DGFP210WI4cmiKy8=', '2013-09-16 10:21:55', 0, 'sbspks', '', '', '', 0, 0, '2013-09-16 10:21:55');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_user_groups`
+-- Table structure for table `auth_user_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_user_groups` (
@@ -270,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `auth_user_groups` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auth_user_user_permissions`
+-- Table structure for table `auth_user_user_permissions`
 --
 
 CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
@@ -286,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_cds`
+-- Table structure for table `databaseInput_cds`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_cds` (
@@ -304,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_cds` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=139 ;
 
 --
--- Daten für Tabelle `databaseInput_cds`
+-- Dumping data for table `databaseInput_cds`
 --
 
 INSERT INTO `databaseInput_cds` (`id`, `origin_id`, `geneName`, `dnaSequence`, `description`, `product_id`, `user_id`) VALUES
@@ -348,110 +346,110 @@ INSERT INTO `databaseInput_cds` (`id`, `origin_id`, `geneName`, `dnaSequence`, `
 (38, 9, 'dbv', 'A', '', 32, NULL),
 (39, 8, 'L-delta-(alpha-Aminoadipoyl)-L-cysteinyl-D-valine synthetase', 'A', '', 33, NULL),
 (40, 7, 'acm', 'A', '', 34, NULL),
-(41, 3, '>gi|7327886|emb|CAA79245.2| enniatin sythetase [Fusarium equiseti]', '', NULL, 35, 5),
-(42, 3, '>gi|7576265|emb|CAB87990.1| indigoidine synthase [Erwinia chrysanthemi]', '', NULL, 36, 5),
-(43, 3, '>gi|16080251|ref|NP_391078.1| 2,3-dihydroxybenzoate-AMP ligase (enterobactin synthetase component E)', '', NULL, 37, 5),
-(44, 3, '>gi|5919203|gb|AAD56240.1|AF184977_1 DhbF [Bacillus subtilis]', '', NULL, 37, 5),
-(45, 3, '>gi|16080251|ref|NP_391078.1| 2,3-dihydroxybenzoate-AMP ligase (enterobactin synthetase component E)', '', NULL, 38, 5),
-(46, 3, '>gi|145843|gb|AAA92015.1| enterobactin', '', NULL, 38, 5),
-(47, 3, '>gi|167219|gb|AAA33023.1| HC-toxin synthetase', '', NULL, 39, 5),
-(48, 3, '>gi|2894188|emb|CAA11794.1| PCZA363.3 [Amycolatopsis orientalis]', '', NULL, 40, 5),
-(49, 3, '>gi|2894189|emb|CAA11795.1| PCZA363.4 [Amycolatopsis orientalis]', '', NULL, 40, 5),
-(50, 3, '>gi|2894190|emb|CAA11796.1| PCZA363.5 [Amycolatopsis orientalis]', '', NULL, 40, 5),
-(51, 3, '>gi|3643187|gb|AAC36721.1| peptide synthetase [Bacillus subtilis]', '', NULL, 41, 5),
-(52, 3, '>gi|3724089|emb|CAA09819.1| fengycin synthetase [Bacillus subtilis]', '', NULL, 41, 5),
-(53, 3, '>gi|2522214|gb|AAB80956.1| fengycin synthetase FenE [Bacillus subtilis]', '', NULL, 41, 5),
-(54, 3, '>gi|2522212|gb|AAB80955.1| fengycin synthetase FenA [Bacillus subtilis]', '', NULL, 41, 5),
-(55, 3, '>gi|840624|gb|AAB00093.1| fengycin synthetase', '', NULL, 41, 5),
-(56, 3, '>gi|440169|emb|CAA82227.1| cyclosporine synthetase [Tolypocladium inflatum]', '', NULL, 42, 5),
-(57, 3, '>gi|216278|dbj|BAA00406.1| gramicidin S synthetase 1 [Brevibacillus brevis]', '', NULL, 43, 5),
-(58, 3, '>gi|39372|emb|CAA43838.1| grsB [Brevibacillus brevis]', '', NULL, 43, 5),
-(59, 3, '>gi|9715733|emb|CAC01603.1| peptide synthetase [Anabaena circinalis 90]', '', NULL, 44, 5),
-(60, 3, '>gi|9715734|emb|CAC01604.1| peptide synthetase [Anabaena circinalis 90]', '', NULL, 44, 5),
-(61, 3, '>gi|9715737|emb|CAC01607.1| putative methyltransferase [Anabaena circinalis 90]', '', NULL, 44, 5),
-(62, 3, '>gi|9715736|emb|CAC01606.1| peptide synthetase [Anabaena circinalis 90]', '', NULL, 44, 5),
-(63, 3, '>gi|21221664|ref|NP_627443.1| CDA peptide synthetase I [Streptomyces coelicolor A3(2)]', '', NULL, 45, 5),
-(64, 3, '>gi|21221665|ref|NP_627444.1| CDA peptide synthetase II [Streptomyces coelicolor A3(2)]', '', NULL, 45, 5),
-(65, 3, '>gi|24426512|emb|CAD55498.1| CDA peptide synthetase III [Streptomyces coelicolor A3(2)]', '', NULL, 45, 5),
-(66, 3, '>gi|5915760|sp|O68006|BACA_BACLI Bacitracin synthetase 1 (BA1) [Includes: ATP-dependent isoleucine a', '', NULL, 46, 5),
-(67, 3, '>gi|5915761|sp|O68007|BACB_BACLI Bacitracin synthetase 2 (BA2) [Includes: ATP-dependent lysine adeny', '', NULL, 46, 5),
-(68, 3, '>gi|5915762|sp|O68008|BACC_BACLI Bacitracin synthetase 3 (BA3) [Includes: ATP-dependent isoleucine a', '', NULL, 46, 5),
-(69, 3, '>gi|5869932|emb|CAB55600.1| peptide synthetase [Mycobacterium smegmatis]', '', NULL, 47, 5),
-(70, 3, '>gi|45580849|emb|CAG15009.1| peptide synthetase, module 1-2 [Actinoplanes teichomyceticus]', '', NULL, 48, 5),
-(71, 3, '>gi|45580850|emb|CAG15010.1| peptide synthetase, module 3 [Actinoplanes teichomyceticus]', '', NULL, 48, 5),
-(72, 3, '>gi|45580851|emb|CAG15011.1| peptide synthetase, module 4-6 [Actinoplanes teichomyceticus]', '', NULL, 48, 5),
-(73, 3, '>gi|45580852|emb|CAG15012.1| peptide synthetase, module 7 [Actinoplanes teichomyceticus]', '', NULL, 48, 5),
-(74, 3, '>gi|4809145|gb|AAD30111.1|AF134587_1 actinomycin synthetase I [Streptomyces chrysomallus]', '', NULL, 49, 5),
-(75, 3, '>gi|3114612|gb|AAC38442.1| actinomycin synthetase II [Streptomyces chrysomallus]', '', NULL, 49, 5),
-(76, 3, '>gi|7228478|gb|AAF42473.1|AF204401_1 actinomycin synthetase III [Streptomyces chrysomallus]', '', NULL, 49, 5),
-(77, 3, '>gi|3118|emb|CAA38195.1| ACV synthetase (AA 1 - 3746) [Penicillium chrysogenum]', '', NULL, 50, 5),
-(78, 3, '>gi|32487253|emb|CAD91220.1| putative non-ribosomal peptide synthetase, modules 1-2 [Nonomuraea sp. ', '', NULL, 51, 5),
-(79, 3, '>gi|32487254|emb|CAD91221.1| putative non-ribosomal peptide synthetase, module 3 [Nonomuraea sp. ATC', '', NULL, 51, 5),
-(80, 3, '>gi|32487245|emb|CAD91212.1| putative non-ribosomal peptide synthetase, modules 4-6 [Nonomuraea sp. ', '', NULL, 51, 5),
-(81, 3, '>gi|32487244|emb|CAD91211.1| putative non-ribosomal peptide synthetase, module 7 [Nonomuraea sp. ATC', '', NULL, 51, 5),
-(82, 3, '>gi|32487264|emb|CAD91231.1| putative type II thioesterase [Nonomuraea sp. ATCC 39727]', '', NULL, 51, 5),
-(83, 3, '>gi|3510629|gb|AAC80285.1| syringomycin synthetase [Pseudomonas syringae pv. syringae]', '', NULL, 52, 5),
-(84, 3, '>gi|5748807|gb|AAA85160.2| syringomycin biosynthesis enzyme 1 [Pseudomonas syringae pv. syringae]', '', NULL, 52, 5),
-(85, 3, '>gi|21911416|gb|AAM80539.1| StaA [Streptomyces toyocaensis]', '', NULL, 53, 5),
-(86, 3, '>gi|21911415|gb|AAM80538.1| StaB [Streptomyces toyocaensis]', '', NULL, 53, 5),
-(87, 3, '>gi|21911414|gb|AAM80537.1| StaC [Streptomyces toyocaensis]', '', NULL, 53, 5),
-(88, 3, '>gi|21911413|gb|AAM80536.1| StaD [Streptomyces toyocaensis]', '', NULL, 53, 5),
-(89, 3, '>gi|32968220|dbj|BAC67534.2| arthrofactin synthetase A [Pseudomonas sp. MIS38]', '', NULL, 54, 5),
-(90, 3, '>gi|29501267|dbj|BAC67535.1| arthrofactin synthetase B [Pseudomonas sp. MIS38]', '', NULL, 54, 5),
-(91, 3, '>gi|29501268|dbj|BAC67536.1| arthrofactin synthetase C [Pseudomonas sp. MIS38]', '', NULL, 54, 5),
-(92, 3, '>gi|9837411|gb|AAG00564.1|AF287253_1 2,3-dihydroxybenzoate-AMP ligase [Vibrio cholerae]', '', NULL, 55, 5),
-(93, 3, '>gi|9837409|gb|AAG00563.1|AF287252_1 isochorismate lyase-aryl carrier protein [Vibrio cholerae]', '', NULL, 55, 5),
-(94, 3, '>gi|9837413|gb|AAG00565.1|AF287254_1 amide synthase [Vibrio cholerae]', '', NULL, 55, 5),
-(95, 3, '>gi|9837415|gb|AAG00566.1|AF287255_1 six-domain nonribosomal peptide synthetase [Vibrio cholerae]', '', NULL, 55, 5),
-(96, 3, '>gi|3080742|gb|AAD04757.1| lichenysin synthetase A; LicA [Bacillus licheniformis]', '', NULL, 56, 5),
-(97, 3, '>gi|3080743|gb|AAD04758.1| lichenysin synthetase B; LicB [Bacillus licheniformis]', '', NULL, 56, 5),
-(98, 3, '>gi|3080744|gb|AAD04759.1| lichenysin synthetase C; LicC [Bacillus licheniformis]', '', NULL, 56, 5),
-(99, 3, '>gi|3080745|gb|AAD04760.1| thioesterase [Bacillus licheniformis]', '', NULL, 56, 5),
-(100, 3, '>gi|15131492|emb|CAC48360.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 57, 5),
-(101, 3, '>gi|15131493|emb|CAC48361.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 57, 5),
-(102, 3, '>gi|15131494|emb|CAC48362.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 57, 5),
-(103, 3, '>gi|15131501|emb|CAC48369.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 57, 5),
-(104, 3, '>gi|15029319|gb|AAK81824.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 58, 5),
-(105, 3, '>gi|15029320|gb|AAK81825.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 58, 5),
-(106, 3, '>gi|15029321|gb|AAK81826.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 58, 5),
-(107, 3, '>gi|15029322|gb|AAK81827.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 58, 5),
-(108, 3, '>gi|3560506|gb|AAC82549.1| FxbB [Mycobacterium smegmatis]', '', NULL, 59, 5),
-(109, 3, '>gi|3560507|gb|AAC82550.1| FxbC [Mycobacterium smegmatis]', '', NULL, 59, 5),
-(110, 3, '>gi|32967981|gb|AAP92496.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(111, 3, '>gi|32967976|gb|AAP92491.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(112, 3, '>gi|32967984|gb|AAP92499.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(113, 3, '>gi|32967982|gb|AAP92497.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(114, 3, '>gi|32967983|gb|AAP92498.1| type II thioesterase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(115, 3, '>gi|32967990|gb|AAP92505.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(116, 3, '>gi|32967988|gb|AAP92503.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 60, 5),
-(117, 3, '>gi|60279951|gb|AAX16297.1| PvdI [Pseudomonas aeruginosa]', '', NULL, 61, 5),
-(118, 3, '>gi|60279950|gb|AAX16296.1| PvdJ [Pseudomonas aeruginosa]', '', NULL, 61, 5),
-(119, 3, '>gi|60279949|gb|AAX16295.1| PvdD [Pseudomonas aeruginosa]', '', NULL, 61, 5),
-(120, 3, '>gi|28852579|gb|AAO55652.1| pyoverdine chromophore precursor synthetase [Pseudomonas syringae pv. to', '', NULL, 61, 5),
-(121, 3, '>gi|5911453|gb|AAD55799.1|AF184620_1 salicyl-AMP ligase PchD [Pseudomonas aeruginosa]', '', NULL, 62, 5),
-(122, 3, '>gi|5911455|gb|AAD55800.1|AF184621_1 pyochelin synthetase PchE [Pseudomonas aeruginosa]', '', NULL, 62, 5),
-(123, 3, '>gi|5911457|gb|AAD55801.1|AF184622_1 pyochelin synthetase PchF [Pseudomonas aeruginosa]', '', NULL, 62, 5),
-(124, 3, '>gi|1835254|emb|CAA67140.1| Pristinamycin I synthetase I [Streptomyces pristinaespiralis]', '', NULL, 63, 5),
-(125, 3, '>gi|7522106|pir||T30288 pristinamycin I synthase 2 [imported] - Streptomyces pristinaespiralis', '', NULL, 63, 5),
-(126, 3, '>gi|7522107|pir||T30289 pristinamycin I synthase 3 - Streptomyces pristinaespiralis', '', NULL, 63, 5),
-(127, 3, '>gi|396481|emb|CAA49816.1| srfA1 [Bacillus subtilis]', '', NULL, 64, 5),
-(128, 3, '>gi|396482|emb|CAA49817.1| srfA2 [Bacillus subtilis]', '', NULL, 64, 5),
-(129, 3, '>gi|396483|emb|CAA49818.1| srfA3 [Bacillus subtilis]', '', NULL, 64, 5);
+(41, 3, '>gi|3118|emb|CAA38195.1| ACV synthetase (AA 1 - 3746) [Penicillium chrysogenum]', '', NULL, 35, 5),
+(42, 3, '>gi|5869932|emb|CAB55600.1| peptide synthetase [Mycobacterium smegmatis]', '', NULL, 36, 5),
+(43, 3, '>gi|9837411|gb|AAG00564.1|AF287253_1 2,3-dihydroxybenzoate-AMP ligase [Vibrio cholerae]', '', NULL, 37, 5),
+(44, 3, '>gi|9837409|gb|AAG00563.1|AF287252_1 isochorismate lyase-aryl carrier protein [Vibrio cholerae]', '', NULL, 37, 5),
+(45, 3, '>gi|9837413|gb|AAG00565.1|AF287254_1 amide synthase [Vibrio cholerae]', '', NULL, 37, 5),
+(46, 3, '>gi|9837415|gb|AAG00566.1|AF287255_1 six-domain nonribosomal peptide synthetase [Vibrio cholerae]', '', NULL, 37, 5),
+(47, 3, '>gi|45580849|emb|CAG15009.1| peptide synthetase, module 1-2 [Actinoplanes teichomyceticus]', '', NULL, 38, 5),
+(48, 3, '>gi|45580850|emb|CAG15010.1| peptide synthetase, module 3 [Actinoplanes teichomyceticus]', '', NULL, 38, 5),
+(49, 3, '>gi|45580851|emb|CAG15011.1| peptide synthetase, module 4-6 [Actinoplanes teichomyceticus]', '', NULL, 38, 5),
+(50, 3, '>gi|45580852|emb|CAG15012.1| peptide synthetase, module 7 [Actinoplanes teichomyceticus]', '', NULL, 38, 5),
+(51, 3, '>gi|1835254|emb|CAA67140.1| Pristinamycin I synthetase I [Streptomyces pristinaespiralis]', '', NULL, 39, 5),
+(52, 3, '>gi|7522106|pir||T30288 pristinamycin I synthase 2 [imported] - Streptomyces pristinaespiralis', '', NULL, 39, 5),
+(53, 3, '>gi|7522107|pir||T30289 pristinamycin I synthase 3 - Streptomyces pristinaespiralis', '', NULL, 39, 5),
+(54, 3, '>gi|29825736|gb|AAO92359.1| putative vibriobactin-specific 2,3-dihydrobenzoate-AMP ligase [Listonell', '', NULL, 40, 5),
+(55, 3, '>gi|38155262|gb|AAR12561.1| ischorismate lyase [Listonella anguillarum]', '', NULL, 40, 5),
+(56, 3, '>gi|38155232|gb|AAR12531.1| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 40, 5),
+(57, 3, '>gi|38155229|gb|AAR12528.1| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 40, 5),
+(58, 3, '>gi|38230020|gb|AAA81775.2| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 40, 5),
+(59, 3, '>gi|38155230|gb|AAR12529.1| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 40, 5),
+(60, 3, '>gi|3560506|gb|AAC82549.1| FxbB [Mycobacterium smegmatis]', '', NULL, 41, 5),
+(61, 3, '>gi|3560507|gb|AAC82550.1| FxbC [Mycobacterium smegmatis]', '', NULL, 41, 5),
+(62, 3, '>gi|216278|dbj|BAA00406.1| gramicidin S synthetase 1 [Brevibacillus brevis]', '', NULL, 42, 5),
+(63, 3, '>gi|39372|emb|CAA43838.1| grsB [Brevibacillus brevis]', '', NULL, 42, 5),
+(64, 3, '>gi|32487253|emb|CAD91220.1| putative non-ribosomal peptide synthetase, modules 1-2 [Nonomuraea sp. ', '', NULL, 43, 5),
+(65, 3, '>gi|32487254|emb|CAD91221.1| putative non-ribosomal peptide synthetase, module 3 [Nonomuraea sp. ATC', '', NULL, 43, 5),
+(66, 3, '>gi|32487245|emb|CAD91212.1| putative non-ribosomal peptide synthetase, modules 4-6 [Nonomuraea sp. ', '', NULL, 43, 5),
+(67, 3, '>gi|32487244|emb|CAD91211.1| putative non-ribosomal peptide synthetase, module 7 [Nonomuraea sp. ATC', '', NULL, 43, 5),
+(68, 3, '>gi|32487264|emb|CAD91231.1| putative type II thioesterase [Nonomuraea sp. ATCC 39727]', '', NULL, 43, 5),
+(69, 3, '>gi|7327886|emb|CAA79245.2| enniatin sythetase [Fusarium equiseti]', '', NULL, 44, 5),
+(70, 3, '>gi|16080251|ref|NP_391078.1| 2,3-dihydroxybenzoate-AMP ligase (enterobactin synthetase component E)', '', NULL, 45, 5),
+(71, 3, '>gi|145843|gb|AAA92015.1| enterobactin', '', NULL, 45, 5),
+(72, 3, '>gi|16080251|ref|NP_391078.1| 2,3-dihydroxybenzoate-AMP ligase (enterobactin synthetase component E)', '', NULL, 46, 5),
+(73, 3, '>gi|5919203|gb|AAD56240.1|AF184977_1 DhbF [Bacillus subtilis]', '', NULL, 46, 5),
+(74, 3, '>gi|5915760|sp|O68006|BACA_BACLI Bacitracin synthetase 1 (BA1) [Includes: ATP-dependent isoleucine a', '', NULL, 47, 5),
+(75, 3, '>gi|5915761|sp|O68007|BACB_BACLI Bacitracin synthetase 2 (BA2) [Includes: ATP-dependent lysine adeny', '', NULL, 47, 5),
+(76, 3, '>gi|5915762|sp|O68008|BACC_BACLI Bacitracin synthetase 3 (BA3) [Includes: ATP-dependent isoleucine a', '', NULL, 47, 5),
+(77, 3, '>gi|440169|emb|CAA82227.1| cyclosporine synthetase [Tolypocladium inflatum]', '', NULL, 48, 5),
+(78, 3, '>gi|4809145|gb|AAD30111.1|AF134587_1 actinomycin synthetase I [Streptomyces chrysomallus]', '', NULL, 49, 5),
+(79, 3, '>gi|3114612|gb|AAC38442.1| actinomycin synthetase II [Streptomyces chrysomallus]', '', NULL, 49, 5),
+(80, 3, '>gi|7228478|gb|AAF42473.1|AF204401_1 actinomycin synthetase III [Streptomyces chrysomallus]', '', NULL, 49, 5),
+(81, 3, '>gi|7576265|emb|CAB87990.1| indigoidine synthase [Erwinia chrysanthemi]', '', NULL, 50, 5),
+(82, 3, '>gi|32967981|gb|AAP92496.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(83, 3, '>gi|32967976|gb|AAP92491.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(84, 3, '>gi|32967984|gb|AAP92499.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(85, 3, '>gi|32967982|gb|AAP92497.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(86, 3, '>gi|32967983|gb|AAP92498.1| type II thioesterase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(87, 3, '>gi|32967990|gb|AAP92505.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(88, 3, '>gi|32967988|gb|AAP92503.1| nonribosomal peptide synthetase [Streptomyces vinaceus]', '', NULL, 51, 5),
+(89, 3, '>gi|15029319|gb|AAK81824.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 52, 5),
+(90, 3, '>gi|15029320|gb|AAK81825.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 52, 5),
+(91, 3, '>gi|15029321|gb|AAK81826.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 52, 5),
+(92, 3, '>gi|15029322|gb|AAK81827.1| peptide synthetase [Streptomyces lavendulae]', '', NULL, 52, 5),
+(93, 3, '>gi|32968220|dbj|BAC67534.2| arthrofactin synthetase A [Pseudomonas sp. MIS38]', '', NULL, 53, 5),
+(94, 3, '>gi|29501267|dbj|BAC67535.1| arthrofactin synthetase B [Pseudomonas sp. MIS38]', '', NULL, 53, 5),
+(95, 3, '>gi|29501268|dbj|BAC67536.1| arthrofactin synthetase C [Pseudomonas sp. MIS38]', '', NULL, 53, 5),
+(96, 3, '>gi|11034798|gb|AAG27087.1|AF255732_1 thaxtomin synthetase A [Streptomyces acidiscabies]', '', NULL, 54, 5),
+(97, 3, '>gi|11034799|gb|AAG27088.1|AF255732_2 thaxtomin synthetase B [Streptomyces acidiscabies]', '', NULL, 54, 5),
+(98, 3, '>gi|167219|gb|AAA33023.1| HC-toxin synthetase', '', NULL, 55, 5),
+(99, 3, '>gi|60279951|gb|AAX16297.1| PvdI [Pseudomonas aeruginosa]', '', NULL, 56, 5),
+(100, 3, '>gi|60279950|gb|AAX16296.1| PvdJ [Pseudomonas aeruginosa]', '', NULL, 56, 5),
+(101, 3, '>gi|60279949|gb|AAX16295.1| PvdD [Pseudomonas aeruginosa]', '', NULL, 56, 5),
+(102, 3, '>gi|28852579|gb|AAO55652.1| pyoverdine chromophore precursor synthetase [Pseudomonas syringae pv. to', '', NULL, 56, 5),
+(103, 3, '>gi|21911416|gb|AAM80539.1| StaA [Streptomyces toyocaensis]', '', NULL, 57, 5),
+(104, 3, '>gi|21911415|gb|AAM80538.1| StaB [Streptomyces toyocaensis]', '', NULL, 57, 5),
+(105, 3, '>gi|21911414|gb|AAM80537.1| StaC [Streptomyces toyocaensis]', '', NULL, 57, 5),
+(106, 3, '>gi|21911413|gb|AAM80536.1| StaD [Streptomyces toyocaensis]', '', NULL, 57, 5),
+(107, 3, '>gi|5911453|gb|AAD55799.1|AF184620_1 salicyl-AMP ligase PchD [Pseudomonas aeruginosa]', '', NULL, 58, 5),
+(108, 3, '>gi|5911455|gb|AAD55800.1|AF184621_1 pyochelin synthetase PchE [Pseudomonas aeruginosa]', '', NULL, 58, 5),
+(109, 3, '>gi|5911457|gb|AAD55801.1|AF184622_1 pyochelin synthetase PchF [Pseudomonas aeruginosa]', '', NULL, 58, 5),
+(110, 3, '>gi|2894188|emb|CAA11794.1| PCZA363.3 [Amycolatopsis orientalis]', '', NULL, 59, 5),
+(111, 3, '>gi|2894189|emb|CAA11795.1| PCZA363.4 [Amycolatopsis orientalis]', '', NULL, 59, 5),
+(112, 3, '>gi|2894190|emb|CAA11796.1| PCZA363.5 [Amycolatopsis orientalis]', '', NULL, 59, 5),
+(113, 3, '>gi|9715733|emb|CAC01603.1| peptide synthetase [Anabaena circinalis 90]', '', NULL, 60, 5),
+(114, 3, '>gi|9715734|emb|CAC01604.1| peptide synthetase [Anabaena circinalis 90]', '', NULL, 60, 5),
+(115, 3, '>gi|9715737|emb|CAC01607.1| putative methyltransferase [Anabaena circinalis 90]', '', NULL, 60, 5),
+(116, 3, '>gi|9715736|emb|CAC01606.1| peptide synthetase [Anabaena circinalis 90]', '', NULL, 60, 5),
+(117, 3, '>gi|3080742|gb|AAD04757.1| lichenysin synthetase A; LicA [Bacillus licheniformis]', '', NULL, 61, 5),
+(118, 3, '>gi|3080743|gb|AAD04758.1| lichenysin synthetase B; LicB [Bacillus licheniformis]', '', NULL, 61, 5),
+(119, 3, '>gi|3080744|gb|AAD04759.1| lichenysin synthetase C; LicC [Bacillus licheniformis]', '', NULL, 61, 5),
+(120, 3, '>gi|3080745|gb|AAD04760.1| thioesterase [Bacillus licheniformis]', '', NULL, 61, 5),
+(121, 3, '>gi|21221664|ref|NP_627443.1| CDA peptide synthetase I [Streptomyces coelicolor A3(2)]', '', NULL, 62, 5),
+(122, 3, '>gi|21221665|ref|NP_627444.1| CDA peptide synthetase II [Streptomyces coelicolor A3(2)]', '', NULL, 62, 5),
+(123, 3, '>gi|24426512|emb|CAD55498.1| CDA peptide synthetase III [Streptomyces coelicolor A3(2)]', '', NULL, 62, 5),
+(124, 3, '>gi|15131492|emb|CAC48360.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 63, 5),
+(125, 3, '>gi|15131493|emb|CAC48361.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 63, 5),
+(126, 3, '>gi|15131494|emb|CAC48362.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 63, 5),
+(127, 3, '>gi|15131501|emb|CAC48369.1| peptide synthetase [Amycolatopsis balhimycina]', '', NULL, 63, 5),
+(128, 3, '>gi|396481|emb|CAA49816.1| srfA1 [Bacillus subtilis]', '', NULL, 64, 5);
 INSERT INTO `databaseInput_cds` (`id`, `origin_id`, `geneName`, `dnaSequence`, `description`, `product_id`, `user_id`) VALUES
-(130, 3, '>gi|396484|emb|CAA49819.1| srfA4 [Bacillus subtilis]', '', NULL, 64, 5),
-(131, 3, '>gi|11034798|gb|AAG27087.1|AF255732_1 thaxtomin synthetase A [Streptomyces acidiscabies]', '', NULL, 65, 5),
-(132, 3, '>gi|11034799|gb|AAG27088.1|AF255732_2 thaxtomin synthetase B [Streptomyces acidiscabies]', '', NULL, 65, 5),
-(133, 3, '>gi|29825736|gb|AAO92359.1| putative vibriobactin-specific 2,3-dihydrobenzoate-AMP ligase [Listonell', '', NULL, 66, 5),
-(134, 3, '>gi|38155262|gb|AAR12561.1| ischorismate lyase [Listonella anguillarum]', '', NULL, 66, 5),
-(135, 3, '>gi|38155232|gb|AAR12531.1| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 66, 5),
-(136, 3, '>gi|38155229|gb|AAR12528.1| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 66, 5),
-(137, 3, '>gi|38230020|gb|AAA81775.2| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 66, 5),
-(138, 3, '>gi|38155230|gb|AAR12529.1| non-ribosomal peptide synthetase [Listonella anguillarum]', '', NULL, 66, 5);
+(129, 3, '>gi|396482|emb|CAA49817.1| srfA2 [Bacillus subtilis]', '', NULL, 64, 5),
+(130, 3, '>gi|396483|emb|CAA49818.1| srfA3 [Bacillus subtilis]', '', NULL, 64, 5),
+(131, 3, '>gi|396484|emb|CAA49819.1| srfA4 [Bacillus subtilis]', '', NULL, 64, 5),
+(132, 3, '>gi|3510629|gb|AAC80285.1| syringomycin synthetase [Pseudomonas syringae pv. syringae]', '', NULL, 65, 5),
+(133, 3, '>gi|5748807|gb|AAA85160.2| syringomycin biosynthesis enzyme 1 [Pseudomonas syringae pv. syringae]', '', NULL, 65, 5),
+(134, 3, '>gi|3643187|gb|AAC36721.1| peptide synthetase [Bacillus subtilis]', '', NULL, 66, 5),
+(135, 3, '>gi|3724089|emb|CAA09819.1| fengycin synthetase [Bacillus subtilis]', '', NULL, 66, 5),
+(136, 3, '>gi|2522214|gb|AAB80956.1| fengycin synthetase FenE [Bacillus subtilis]', '', NULL, 66, 5),
+(137, 3, '>gi|2522212|gb|AAB80955.1| fengycin synthetase FenA [Bacillus subtilis]', '', NULL, 66, 5),
+(138, 3, '>gi|840624|gb|AAB00093.1| fengycin synthetase', '', NULL, 66, 5);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_domain`
+-- Table structure for table `databaseInput_domain`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_domain` (
@@ -460,15 +458,15 @@ CREATE TABLE IF NOT EXISTS `databaseInput_domain` (
   `cds_id` int(11) NOT NULL,
   `domainType_id` int(11) NOT NULL,
   `chirality` varchar(1) COLLATE utf8_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `pfamLinkerStart` int(11) NOT NULL,
-  `pfamLinkerStop` int(11) NOT NULL,
-  `definedLinkerStart` int(11) NOT NULL,
-  `definedLinkerStop` int(11) NOT NULL,
+  `description` longtext COLLATE utf8_unicode_ci,
+  `pfamLinkerStart` int(11),
+  `pfamLinkerStop` int(11),
+  `definedLinkerStart` int(11),
+  `definedLinkerStop` int(11),
   `pfamStart` int(11) NOT NULL,
   `pfamStop` int(11) NOT NULL,
-  `definedStart` int(11) NOT NULL,
-  `definedStop` int(11) NOT NULL,
+  `definedStart` int(11),
+  `definedStop` int(11),
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `databaseInput_domain_1efad5df` (`cds_id`),
@@ -477,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_domain` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=706 ;
 
 --
--- Daten für Tabelle `databaseInput_domain`
+-- Dumping data for table `databaseInput_domain`
 --
 
 INSERT INTO `databaseInput_domain` (`id`, `module`, `cds_id`, `domainType_id`, `chirality`, `description`, `pfamLinkerStart`, `pfamLinkerStop`, `definedLinkerStart`, `definedLinkerStop`, `pfamStart`, `pfamStop`, `definedStart`, `definedStop`, `user_id`) VALUES
@@ -513,682 +511,682 @@ INSERT INTO `databaseInput_domain` (`id`, `module`, `cds_id`, `domainType_id`, `
 (33, 4, 2, 1, 'D', '% No alignment done yet %\r\n% Pfam borders if HxxPF_rep is part of A domain:%\r\n% linker start: 7150\r\n% start: 7210', 7489, 9135, 7489, 9135, 7648, 9057, 7648, 9057, NULL),
 (34, 4, 2, 3, 'N', '% No alignment done yet %', 9058, 9363, 9058, 9363, 9136, 9330, 9136, 9330, NULL),
 (35, 4, 2, 5, 'N', 'End of Tyc B\r\n\r\n% No alignment done yet %', 9331, 10764, 9331, 10764, 9364, 10275, 9364, 10275, NULL),
-(36, 1, 41, 1, 'N', '', 1, 1019, 1, 1019, 463, 993, 463, 993, 5),
-(37, 1, 41, 3, 'N', '', 993, 1104, 993, 1104, 1019, 1083, 1019, 1083, 5),
-(38, 2, 41, 2, 'L', '', 1083, 1, 1083, 1, 1104, 1541, 1104, 1541, 5),
-(39, 2, 41, 1, 'N', '', 1, 1, 1, 1, 1535, 2073, 1535, 2073, 5),
-(40, 2, 41, 6, 'N', '', 1, 2513, 1, 2513, 2057, 2289, 2057, 2289, 5),
-(41, 2, 41, 3, 'N', '', 2289, 2607, 2289, 2607, 2513, 2575, 2513, 2575, 5),
-(42, 2, 41, 3, 'N', '', 2575, 2723, 2575, 2723, 2607, 2652, 2607, 2652, 5),
-(43, 3, 41, 2, 'L', '', 2652, 1, 2652, 1, 2723, 3132, 2723, 3132, 5),
-(44, 1, 42, 1, 'N', '', 1, 1149, 1, 1149, 201, 1131, 201, 1131, 5),
-(45, 1, 42, 3, 'N', '', 1131, 1230, 1131, 1230, 1149, 1209, 1149, 1209, 5),
-(46, 1, 42, 4, 'N', '', 1209, 1489, 1209, 1489, 1230, 1328, 1230, 1328, 5),
-(47, 1, 43, 1, 'N', '', 1, 540, 1, 540, 1, 532, 1, 532, 5),
-(48, 2, 44, 2, 'L', '', 1, 1, 1, 1, 11, 443, 11, 443, 5),
-(49, 2, 44, 1, 'N', '', 1, 968, 1, 968, 437, 956, 437, 956, 5),
-(50, 2, 44, 3, 'N', '', 956, 1053, 956, 1053, 968, 1033, 968, 1033, 5),
-(51, 3, 44, 2, 'L', '', 1033, 1, 1033, 1, 1053, 1499, 1053, 1499, 5),
-(52, 3, 44, 1, 'N', '', 1, 2043, 1, 2043, 1493, 2030, 1493, 2030, 5),
-(53, 3, 44, 3, 'N', '', 2030, 2129, 2030, 2129, 2043, 2108, 2043, 2108, 5),
-(54, 3, 44, 4, 'N', '', 2108, 2379, 2108, 2379, 2129, 2362, 2129, 2362, 5),
-(55, 1, 45, 1, 'N', '', 1, 524, 1, 524, 8, 538, 8, 538, 5),
-(56, 2, 46, 2, 'L', '', 1, 1, 1, 1, 7, 441, 7, 441, 5),
-(57, 2, 46, 1, 'N', '', 1, 978, 1, 978, 437, 965, 437, 965, 5),
-(58, 2, 46, 3, 'N', '', 965, 1066, 965, 1066, 978, 1043, 978, 1043, 5),
-(59, 2, 46, 4, 'N', '', 1043, 1294, 1043, 1294, 1066, 1278, 1066, 1278, 5),
-(60, 1, 47, 1, 'N', '', 1, 860, 1, 860, 194, 736, 194, 736, 5),
-(61, 1, 47, 5, 'N', '', 736, 1343, 736, 1343, 860, 1317, 860, 1317, 5),
-(62, 2, 47, 2, 'D', '', 1317, 1, 1317, 1, 1343, 1807, 1343, 1807, 5),
-(63, 2, 47, 1, 'N', '', 1, 2386, 1, 2386, 1800, 2359, 1800, 2359, 5),
-(64, 2, 47, 3, 'N', '', 2359, 2536, 2359, 2536, 2386, 2449, 2386, 2449, 5),
-(65, 3, 47, 2, 'L', '', 2449, 1, 2449, 1, 2536, 2951, 2536, 2951, 5),
-(66, 3, 47, 1, 'N', '', 1, 3540, 1, 3540, 2948, 3521, 2948, 3521, 5),
-(67, 3, 47, 3, 'N', '', 3521, 3653, 3521, 3653, 3540, 3604, 3540, 3604, 5),
-(68, 4, 47, 2, 'L', '', 3604, 4112, 3604, 4112, 3653, 4101, 3653, 4101, 5),
-(69, 4, 47, 1, 'N', '', 4101, 4669, 4101, 4669, 4112, 4650, 4112, 4650, 5),
-(70, 4, 47, 3, 'N', '', 4650, 4787, 4650, 4787, 4669, 4736, 4669, 4736, 5),
-(71, 5, 47, 2, 'L', '', 4736, 5218, 4736, 5218, 4787, 5188, 4787, 5188, 5),
-(72, 1, 48, 1, 'N', '', 1, 506, 1, 506, 1, 493, 1, 493, 5),
-(73, 1, 48, 3, 'N', '', 493, 605, 493, 605, 506, 566, 506, 566, 5),
-(74, 2, 48, 2, 'L', '', 566, 1, 566, 1, 605, 1048, 605, 1048, 5),
-(75, 2, 48, 1, 'N', '', 1, 1527, 1, 1527, 1016, 1513, 1016, 1513, 5),
-(76, 2, 48, 3, 'N', '', 1513, 1611, 1513, 1611, 1527, 1586, 1527, 1586, 5),
-(77, 2, 48, 5, 'N', '', 1586, 2095, 1586, 2095, 1611, 2070, 1611, 2070, 5),
-(78, 3, 48, 2, 'D', '', 2070, 1, 2070, 1, 2095, 2526, 2095, 2526, 5),
-(79, 3, 48, 1, 'N', '', 1, 3057, 1, 3057, 2519, 3045, 2519, 3045, 5),
-(80, 3, 48, 3, 'N', '', 3045, 3159, 3045, 3159, 3057, 3119, 3057, 3119, 5),
-(81, 4, 49, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
-(82, 4, 49, 1, 'N', '', 1, 960, 1, 960, 434, 947, 434, 947, 5),
-(83, 4, 49, 3, 'N', '', 947, 1042, 947, 1042, 960, 1020, 960, 1020, 5),
-(84, 4, 49, 5, 'N', '', 1020, 1514, 1020, 1514, 1042, 1492, 1042, 1492, 5),
-(85, 5, 49, 2, 'D', '', 1492, 1, 1492, 1, 1514, 1940, 1514, 1940, 5),
-(86, 5, 49, 1, 'N', '', 1, 2461, 1, 2461, 1934, 2449, 1934, 2449, 5),
-(87, 5, 49, 3, 'N', '', 2449, 2543, 2449, 2543, 2461, 2523, 2461, 2523, 5),
-(88, 5, 49, 5, 'N', '', 2523, 3025, 2523, 3025, 2543, 3003, 2543, 3003, 5),
-(89, 6, 49, 2, 'D', '', 3003, 1, 3003, 1, 3025, 3456, 3025, 3456, 5),
-(90, 6, 49, 1, 'N', '', 1, 3976, 1, 3976, 3450, 3964, 3450, 3964, 5),
-(91, 6, 49, 3, 'N', '', 3964, 4078, 3964, 4078, 3976, 4037, 3976, 4037, 5),
-(92, 7, 50, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
-(93, 7, 50, 1, 'N', '', 1, 975, 1, 975, 444, 961, 444, 961, 5),
-(94, 7, 50, 3, 'N', '', 961, 1056, 961, 1056, 975, 1038, 975, 1038, 5),
-(95, 7, 50, 5, 'N', '', 1038, 1625, 1038, 1625, 1056, 1494, 1056, 1494, 5),
-(96, 7, 50, 4, 'N', '', 1494, 1861, 1494, 1861, 1625, 1836, 1625, 1836, 5),
-(97, 2, 51, 2, 'L', '', 1, 1, 1, 1, 8, 444, 8, 444, 5),
-(98, 2, 51, 1, 'N', '', 1, 966, 1, 966, 438, 958, 438, 958, 5),
-(99, 2, 51, 3, 'N', '', 958, 1052, 958, 1052, 966, 1031, 966, 1031, 5),
-(100, 3, 51, 2, 'L', '', 1031, 1, 1031, 1, 1052, 1479, 1052, 1479, 5),
-(101, 3, 51, 1, 'N', '', 1, 2016, 1, 2016, 1473, 2001, 1473, 2001, 5),
-(102, 3, 51, 3, 'N', '', 2001, 2094, 2001, 2094, 2016, 2077, 2016, 2077, 5),
-(103, 3, 51, 5, 'N', '', 2077, 2560, 2077, 2560, 2094, 2534, 2094, 2534, 5),
-(104, 4, 52, 2, 'D', '', 1, 1, 1, 1, 13, 455, 13, 455, 5),
-(105, 4, 52, 1, 'N', '', 1, 972, 1, 972, 448, 960, 448, 960, 5),
-(106, 4, 52, 3, 'N', '', 960, 1058, 960, 1058, 972, 1037, 972, 1037, 5),
-(107, 5, 52, 2, 'L', '', 1037, 1, 1037, 1, 1058, 1485, 1058, 1485, 5),
-(108, 5, 52, 1, 'N', '', 1, 2013, 1, 2013, 1478, 2000, 1478, 2000, 5),
-(109, 5, 52, 3, 'N', '', 2000, 2094, 2000, 2094, 2013, 2077, 2013, 2077, 5),
-(110, 5, 52, 5, 'N', '', 2077, 2572, 2077, 2572, 2094, 2548, 2094, 2548, 5),
-(111, 6, 53, 2, 'D', '', 1, 1, 1, 1, 13, 448, 13, 448, 5),
-(112, 6, 53, 1, 'N', '', 1, 971, 1, 971, 441, 963, 441, 963, 5),
-(113, 6, 53, 3, 'N', '', 963, 1057, 963, 1057, 971, 1036, 971, 1036, 5),
-(114, 7, 53, 2, 'L', '', 1036, 1, 1036, 1, 1057, 1486, 1057, 1486, 5),
-(115, 7, 53, 1, 'N', '', 1, 2009, 1, 2009, 1480, 1997, 1480, 1997, 5),
-(116, 7, 53, 3, 'N', '', 1997, 2090, 1997, 2090, 2009, 2073, 2009, 2073, 5),
-(117, 7, 53, 5, 'N', '', 2073, 2555, 2073, 2555, 2090, 2546, 2090, 2546, 5),
-(118, 8, 54, 2, 'D', '', 1, 1, 1, 1, 13, 440, 13, 440, 5),
-(119, 8, 54, 1, 'N', '', 1, 870, 1, 870, 337, 856, 337, 856, 5),
-(120, 8, 54, 3, 'N', '', 856, 955, 856, 955, 870, 931, 870, 931, 5),
-(121, 9, 54, 2, 'L', '', 931, 1, 931, 1, 955, 1375, 955, 1375, 5),
-(122, 9, 54, 1, 'N', '', 1, 1901, 1, 1901, 1368, 1893, 1368, 1893, 5),
-(123, 9, 54, 3, 'N', '', 1893, 1987, 1893, 1987, 1901, 1966, 1901, 1966, 5),
-(124, 10, 54, 2, 'L', '', 1966, 1, 1966, 1, 1987, 2414, 1987, 2414, 5),
-(125, 10, 54, 1, 'N', '', 1, 2935, 1, 2935, 2408, 2927, 2408, 2927, 5),
-(126, 10, 54, 3, 'N', '', 2927, 3016, 2927, 3016, 2935, 2999, 2935, 2999, 5),
-(127, 10, 54, 5, 'N', '', 2999, 3496, 2999, 3496, 3016, 3472, 3016, 3472, 5),
-(128, 11, 55, 2, 'D', '', 1, 1, 1, 1, 13, 453, 13, 453, 5),
-(129, 11, 55, 1, 'N', '', 1, 975, 1, 975, 447, 961, 447, 961, 5),
-(130, 11, 55, 3, 'N', '', 961, 1061, 961, 1061, 975, 1040, 975, 1040, 5),
-(131, 11, 55, 4, 'N', '', 1040, 1275, 1040, 1275, 1061, 1264, 1061, 1264, 5),
-(132, 2, 56, 2, 'L', '', 1, 478, 1, 478, 33, 469, 33, 469, 5),
-(133, 2, 56, 1, 'N', '', 469, 1035, 469, 1035, 478, 1016, 478, 1016, 5),
-(134, 2, 56, 3, 'N', '', 1016, 1117, 1016, 1117, 1035, 1097, 1035, 1097, 5),
-(135, 3, 56, 2, 'L', '', 1097, 1, 1097, 1, 1117, 1559, 1117, 1559, 5),
-(136, 3, 56, 1, 'N', '', 1, 2531, 1, 2531, 1551, 2068, 1551, 2068, 5),
-(137, 3, 56, 3, 'N', '', 2068, 2615, 2068, 2615, 2531, 2595, 2531, 2595, 5),
-(138, 4, 56, 2, 'L', '', 2595, 1, 2595, 1, 2615, 3055, 2615, 3055, 5),
-(139, 4, 56, 1, 'N', '', 1, 4020, 1, 4020, 3047, 3561, 3047, 3561, 5),
-(140, 4, 56, 3, 'N', '', 3561, 4102, 3561, 4102, 4020, 4079, 4020, 4079, 5),
-(141, 5, 56, 2, 'L', '', 4079, 1, 4079, 1, 4102, 4542, 4102, 4542, 5),
-(142, 5, 56, 1, 'N', '', 1, 5510, 1, 5510, 4534, 5047, 4534, 5047, 5),
-(143, 5, 56, 3, 'N', '', 5047, 5594, 5047, 5594, 5510, 5574, 5510, 5574, 5),
-(144, 6, 56, 2, 'L', '', 5574, 1, 5574, 1, 5594, 6032, 5594, 6032, 5),
-(145, 6, 56, 1, 'N', '', 1, 7007, 1, 7007, 6027, 6525, 6027, 6525, 5),
-(146, 6, 56, 3, 'N', '', 6525, 7091, 6525, 7091, 7007, 7071, 7007, 7071, 5),
-(147, 7, 56, 2, 'L', '', 7071, 1, 7071, 1, 7091, 7526, 7091, 7526, 5),
-(148, 7, 56, 1, 'N', '', 1, 8063, 1, 8063, 7523, 8050, 7523, 8050, 5),
-(149, 7, 56, 3, 'N', '', 8050, 8151, 8050, 8151, 8063, 8131, 8063, 8131, 5),
-(150, 8, 56, 2, 'L', '', 8131, 1, 8131, 1, 8151, 8590, 8151, 8590, 5),
-(151, 8, 56, 1, 'N', '', 1, 9564, 1, 9564, 8585, 9094, 8585, 9094, 5),
-(152, 8, 56, 3, 'N', '', 9094, 9646, 9094, 9646, 9564, 9626, 9564, 9626, 5),
-(153, 9, 56, 2, 'L', '', 9626, 1, 9626, 1, 9646, 10095, 9646, 10095, 5),
-(154, 9, 56, 1, 'N', '', 1, 11061, 1, 11061, 10087, 10594, 10087, 10594, 5),
-(155, 9, 56, 3, 'N', '', 10594, 11143, 10594, 11143, 11061, 11123, 11061, 11123, 5),
-(156, 10, 56, 2, 'L', '', 11123, 1, 11123, 1, 11143, 11576, 11143, 11576, 5),
-(157, 10, 56, 1, 'N', '', 1, 12131, 1, 12131, 11553, 12114, 11553, 12114, 5),
-(158, 10, 56, 3, 'N', '', 12114, 12215, 12114, 12215, 12131, 12195, 12131, 12195, 5),
-(159, 11, 56, 2, 'L', '', 12195, 1, 12195, 1, 12215, 12650, 12215, 12650, 5),
-(160, 11, 56, 1, 'N', '', 1, 13629, 1, 13629, 12646, 13159, 12646, 13159, 5),
-(161, 11, 56, 3, 'N', '', 13159, 13711, 13159, 13711, 13629, 13691, 13629, 13691, 5),
-(162, 12, 56, 2, 'L', '', 13691, 14154, 13691, 14154, 13711, 14145, 13711, 14145, 5),
-(163, 12, 56, 1, 'N', '', 14145, 14702, 14145, 14702, 14154, 14684, 14154, 14684, 5),
-(164, 12, 56, 3, 'N', '', 14684, 14815, 14684, 14815, 14702, 14766, 14702, 14766, 5),
-(165, 13, 56, 2, 'L', '', 14766, 1, 14766, 1, 14815, 15282, 14815, 15282, 5),
-(166, 1, 57, 1, 'N', '', 1, 545, 1, 545, 17, 531, 17, 531, 5),
-(167, 1, 57, 3, 'N', '', 531, 626, 531, 626, 545, 609, 545, 609, 5),
-(168, 1, 57, 5, 'N', '', 609, 1099, 609, 1099, 626, 1078, 626, 1078, 5),
-(169, 2, 58, 2, 'D', '', 1, 1, 1, 1, 15, 453, 15, 453, 5),
-(170, 2, 58, 1, 'N', '', 1, 978, 1, 978, 446, 964, 446, 964, 5),
-(171, 2, 58, 3, 'N', '', 964, 1064, 964, 1064, 978, 1043, 978, 1043, 5),
-(172, 3, 58, 2, 'L', '', 1043, 1, 1043, 1, 1064, 1491, 1064, 1491, 5),
-(173, 3, 58, 1, 'N', '', 1, 2014, 1, 2014, 1485, 2000, 1485, 2000, 5),
-(174, 3, 58, 3, 'N', '', 2000, 2100, 2000, 2100, 2014, 2079, 2014, 2079, 5),
-(175, 4, 58, 2, 'L', '', 2079, 1, 2079, 1, 2100, 2527, 2100, 2527, 5),
-(176, 4, 58, 1, 'N', '', 1, 3061, 1, 3061, 2521, 3046, 2521, 3046, 5),
-(177, 4, 58, 3, 'N', '', 3046, 3146, 3046, 3146, 3061, 3125, 3061, 3125, 5),
-(178, 5, 58, 2, 'L', '', 3125, 1, 3125, 1, 3146, 3574, 3146, 3574, 5),
-(179, 5, 58, 1, 'N', '', 1, 4098, 1, 4098, 3568, 4084, 3568, 4084, 5),
-(180, 5, 58, 3, 'N', '', 4084, 4209, 4084, 4209, 4098, 4163, 4098, 4163, 5),
-(181, 5, 58, 4, 'N', '', 4163, 4453, 4163, 4453, 4209, 4449, 4209, 4449, 5),
-(182, 1, 59, 1, 'N', '', 1, 1096, 1, 1096, 556, 1080, 556, 1080, 5),
-(183, 1, 59, 3, 'N', '', 1080, 1184, 1080, 1184, 1096, 1159, 1096, 1159, 5),
-(184, 2, 59, 2, 'L', '', 1159, 1, 1159, 1, 1184, 1631, 1184, 1631, 5),
-(185, 2, 59, 1, 'N', '', 1, 2171, 1, 2171, 1625, 2156, 1625, 2156, 5),
-(186, 2, 59, 3, 'N', '', 2156, 2259, 2156, 2259, 2171, 2235, 2171, 2235, 5),
-(187, 3, 60, 2, 'L', '', 1, 1, 1, 1, 10, 458, 10, 458, 5),
-(188, 3, 60, 1, 'N', '', 1, 996, 1, 996, 452, 982, 452, 982, 5),
-(189, 3, 60, 3, 'N', '', 982, 1086, 982, 1086, 996, 1057, 996, 1057, 5),
-(190, 4, 60, 2, 'L', '', 1057, 1, 1057, 1, 1086, 1526, 1086, 1526, 5),
-(191, 4, 60, 1, 'N', '', 1, 2078, 1, 2078, 1520, 2064, 1520, 2064, 5),
-(192, 4, 60, 3, 'N', '', 2064, 2167, 2064, 2167, 2078, 2139, 2078, 2139, 5),
-(193, 5, 60, 2, 'L', '', 2139, 1, 2139, 1, 2167, 2607, 2167, 2607, 5),
-(194, 5, 60, 1, 'N', '', 1, 1, 1, 1, 2601, 3145, 2601, 3145, 5),
-(195, 5, 60, 6, 'N', '', 1, 3507, 1, 3507, 3117, 3367, 3117, 3367, 5),
-(196, 5, 60, 3, 'N', '', 3367, 3595, 3367, 3595, 3507, 3570, 3507, 3570, 5),
-(197, 6, 60, 2, 'L', '', 3570, 1, 3570, 1, 3595, 4033, 3595, 4033, 5),
-(198, 6, 60, 1, 'N', '', 1, 1, 1, 1, 4027, 4540, 4027, 4540, 5),
-(199, 6, 60, 6, 'N', '', 1, 4975, 1, 4975, 4533, 4768, 4533, 4768, 5),
-(200, 6, 60, 3, 'N', '', 4768, 5061, 4768, 5061, 4975, 5039, 4975, 5039, 5),
-(201, 6, 61, 7, 'N', '', 1, 264, 1, 264, 10, 260, 10, 260, 5),
-(202, 7, 62, 2, 'L', '', 1, 1, 1, 1, 45, 486, 45, 486, 5),
-(203, 7, 62, 1, 'N', '', 1, 1022, 1, 1022, 480, 1009, 480, 1009, 5),
-(204, 7, 62, 3, 'N', '', 1009, 1109, 1009, 1109, 1022, 1087, 1022, 1087, 5),
-(205, 7, 62, 4, 'N', '', 1087, 1384, 1087, 1384, 1109, 1377, 1109, 1377, 5),
-(206, 2, 63, 2, 'L', '', 1, 1, 1, 1, 11, 455, 11, 455, 5),
-(207, 2, 63, 1, 'N', '', 1, 1094, 1, 1094, 449, 1082, 449, 1082, 5),
-(208, 2, 63, 3, 'N', '', 1082, 1179, 1082, 1179, 1094, 1156, 1094, 1156, 5),
-(209, 3, 63, 2, 'L', '', 1156, 1647, 1156, 1647, 1179, 1634, 1179, 1634, 5),
-(210, 3, 63, 1, 'N', '', 1634, 2204, 1634, 2204, 1647, 2192, 1647, 2192, 5),
-(211, 3, 63, 3, 'N', '', 2192, 2289, 2192, 2289, 2204, 2269, 2204, 2269, 5),
-(212, 4, 63, 2, 'L', '', 2269, 1, 2269, 1, 2289, 2738, 2289, 2738, 5),
-(213, 4, 63, 1, 'N', '', 1, 3355, 1, 3355, 2732, 3257, 2732, 3257, 5),
-(214, 4, 63, 5, 'N', '', 3257, 3830, 3257, 3830, 3355, 3806, 3355, 3806, 5),
-(215, 5, 63, 2, 'D', '', 3806, 1, 3806, 1, 3830, 4262, 3830, 4262, 5),
-(216, 5, 63, 1, 'N', '', 1, 4766, 1, 4766, 4256, 4754, 4256, 4754, 5),
-(217, 5, 63, 3, 'N', '', 4754, 4851, 4754, 4851, 4766, 4831, 4766, 4831, 5),
-(218, 6, 63, 2, 'L', '', 4831, 1, 4831, 1, 4851, 5302, 4851, 5302, 5),
-(219, 6, 63, 1, 'N', '', 1, 5806, 1, 5806, 5296, 5794, 5296, 5794, 5),
-(220, 6, 63, 3, 'N', '', 5794, 5891, 5794, 5891, 5806, 5868, 5806, 5868, 5),
-(221, 7, 63, 2, 'L', '', 5868, 1, 5868, 1, 5891, 6340, 5891, 6340, 5),
-(222, 7, 63, 1, 'N', '', 1, 6974, 1, 6974, 6335, 6876, 6335, 6876, 5),
-(223, 7, 63, 5, 'N', '', 6876, 7464, 6876, 7464, 6974, 7429, 6974, 7429, 5),
-(224, 8, 64, 2, 'D', '', 1, 1, 1, 1, 18, 451, 18, 451, 5),
-(225, 8, 64, 1, 'N', '', 1, 952, 1, 952, 445, 940, 445, 940, 5),
-(226, 8, 64, 3, 'N', '', 940, 1037, 940, 1037, 952, 1017, 952, 1017, 5),
-(227, 9, 64, 2, 'L', '', 1017, 1, 1017, 1, 1037, 1484, 1037, 1484, 5),
-(228, 9, 64, 1, 'N', '', 1, 2001, 1, 2001, 1478, 1989, 1478, 1989, 5),
-(229, 9, 64, 3, 'N', '', 1989, 2086, 1989, 2086, 2001, 2066, 2001, 2066, 5),
-(230, 10, 64, 2, 'L', '', 2066, 1, 2066, 1, 2086, 2547, 2086, 2547, 5),
-(231, 10, 64, 1, 'N', '', 1, 3182, 1, 3182, 2541, 3072, 2541, 3072, 5),
-(232, 10, 64, 5, 'N', '', 3072, 3671, 3072, 3671, 3182, 3652, 3182, 3652, 5),
-(233, 11, 65, 2, 'D', '', 1, 1, 1, 1, 12, 447, 12, 447, 5),
-(234, 11, 65, 1, 'N', '', 1, 982, 1, 982, 441, 970, 441, 970, 5),
-(235, 11, 65, 3, 'N', '', 970, 1067, 970, 1067, 982, 1047, 982, 1047, 5),
-(236, 12, 65, 2, 'L', '', 1047, 1, 1047, 1, 1067, 1521, 1067, 1521, 5),
-(237, 12, 65, 1, 'N', '', 1, 2044, 1, 2044, 1515, 2034, 1515, 2034, 5),
-(238, 12, 65, 3, 'N', '', 2034, 2130, 2034, 2130, 2044, 2109, 2044, 2109, 5),
-(239, 12, 65, 4, 'N', '', 2109, 2418, 2109, 2418, 2130, 2368, 2130, 2368, 5),
-(240, 1, 66, 1, 'N', '', 1, 546, 1, 546, 15, 532, 15, 532, 5),
-(241, 1, 66, 3, 'N', '', 532, 638, 532, 638, 546, 611, 546, 611, 5),
-(242, 2, 66, 2, 'L', '', 611, 1, 611, 1, 638, 1072, 638, 1072, 5),
-(243, 2, 66, 1, 'N', '', 1, 1589, 1, 1589, 1067, 1565, 1067, 1565, 5),
-(244, 2, 66, 3, 'N', '', 1565, 1674, 1565, 1674, 1589, 1652, 1589, 1652, 5),
-(245, 3, 66, 2, 'L', '', 1652, 1, 1652, 1, 1674, 2109, 1674, 2109, 5),
-(246, 3, 66, 1, 'N', '', 1, 2623, 1, 2623, 2103, 2609, 2103, 2609, 5),
-(247, 3, 66, 3, 'N', '', 2609, 2708, 2609, 2708, 2623, 2686, 2623, 2686, 5),
-(248, 4, 66, 2, 'L', '', 2686, 1, 2686, 1, 2708, 3133, 2708, 3133, 5),
-(249, 4, 66, 1, 'N', '', 1, 3666, 1, 3666, 3127, 3650, 3127, 3650, 5),
-(250, 4, 66, 3, 'N', '', 3650, 3748, 3650, 3748, 3666, 3730, 3666, 3730, 5),
-(251, 4, 66, 5, 'N', '', 3730, 4212, 3730, 4212, 3748, 4204, 3748, 4204, 5),
-(252, 5, 66, 2, 'D', '', 4204, 1, 4204, 1, 4212, 4650, 4212, 4650, 5),
-(253, 5, 66, 1, 'N', '', 1, 5173, 1, 5173, 4644, 5159, 4644, 5159, 5),
-(254, 5, 66, 3, 'N', '', 5159, 5256, 5159, 5256, 5173, 5238, 5173, 5238, 5),
-(255, 6, 67, 2, 'L', '', 1, 1, 1, 1, 78, 504, 78, 504, 5),
-(256, 6, 67, 1, 'N', '', 1, 1023, 1, 1023, 498, 1009, 498, 1009, 5),
-(257, 6, 67, 3, 'N', '', 1009, 1109, 1009, 1109, 1023, 1088, 1023, 1088, 5),
-(258, 7, 67, 2, 'L', '', 1088, 1, 1088, 1, 1109, 1535, 1109, 1535, 5),
-(259, 7, 67, 1, 'N', '', 1, 2066, 1, 2066, 1529, 2052, 1529, 2052, 5),
-(260, 7, 67, 3, 'N', '', 2052, 2147, 2052, 2147, 2066, 2130, 2066, 2130, 5),
-(261, 7, 67, 5, 'N', '', 2130, 2608, 2130, 2608, 2147, 2582, 2147, 2582, 5),
-(262, 8, 68, 2, 'D', '', 1, 1, 1, 1, 11, 443, 11, 443, 5),
-(263, 8, 68, 1, 'N', '', 1, 968, 1, 968, 437, 954, 437, 954, 5),
-(264, 8, 68, 3, 'N', '', 954, 1054, 954, 1054, 968, 1033, 968, 1033, 5),
-(265, 9, 68, 2, 'L', '', 1033, 1, 1033, 1, 1054, 1480, 1054, 1480, 5),
-(266, 9, 68, 1, 'N', '', 1, 2000, 1, 2000, 1474, 1986, 1474, 1986, 5),
-(267, 9, 68, 3, 'N', '', 1986, 2082, 1986, 2082, 2000, 2064, 2000, 2064, 5),
-(268, 9, 68, 5, 'N', '', 2064, 2547, 2064, 2547, 2082, 2517, 2082, 2517, 5),
-(269, 10, 68, 2, 'D', '', 2517, 1, 2517, 1, 2547, 2984, 2547, 2984, 5),
-(270, 10, 68, 1, 'N', '', 1, 3504, 1, 3504, 2978, 3491, 2978, 3491, 5),
-(271, 10, 68, 3, 'N', '', 3491, 3590, 3491, 3590, 3504, 3569, 3504, 3569, 5),
-(272, 11, 68, 2, 'L', '', 3569, 1, 3569, 1, 3590, 4016, 3590, 4016, 5),
-(273, 11, 68, 1, 'N', '', 1, 4546, 1, 4546, 4009, 4534, 4009, 4534, 5),
-(274, 11, 68, 3, 'N', '', 4534, 4628, 4534, 4628, 4546, 4610, 4546, 4610, 5),
-(275, 11, 68, 5, 'N', '', 4610, 5094, 4610, 5094, 4628, 5063, 4628, 5063, 5),
-(276, 12, 68, 2, 'D', '', 5063, 1, 5063, 1, 5094, 5532, 5094, 5532, 5),
-(277, 12, 68, 1, 'N', '', 1, 6054, 1, 6054, 5526, 6040, 5526, 6040, 5),
-(278, 12, 68, 3, 'N', '', 6040, 6143, 6040, 6143, 6054, 6119, 6054, 6119, 5),
-(279, 12, 68, 4, 'N', '', 6119, 6360, 6119, 6360, 6143, 6350, 6143, 6350, 5),
-(280, 2, 69, 2, 'L', '', 1, 1, 1, 1, 10, 441, 10, 441, 5),
-(281, 2, 69, 1, 'N', '', 1, 956, 1, 956, 435, 943, 435, 943, 5),
-(282, 2, 69, 3, 'N', '', 943, 1037, 943, 1037, 956, 1018, 956, 1018, 5),
-(283, 2, 69, 5, 'N', '', 1018, 1508, 1018, 1508, 1037, 1488, 1037, 1488, 5),
-(284, 3, 69, 2, 'D', '', 1488, 1, 1488, 1, 1508, 1938, 1508, 1938, 5),
-(285, 3, 69, 1, 'N', '', 1, 2468, 1, 2468, 1932, 2455, 1932, 2455, 5),
-(286, 3, 69, 3, 'N', '', 2455, 2549, 2455, 2549, 2468, 2528, 2468, 2528, 5),
-(287, 3, 69, 5, 'N', '', 2528, 3023, 2528, 3023, 2549, 3003, 2549, 3003, 5),
-(288, 4, 69, 2, 'D', '', 3003, 1, 3003, 1, 3023, 3454, 3023, 3454, 5),
-(289, 4, 69, 1, 'N', '', 1, 3971, 1, 3971, 3448, 3958, 3448, 3958, 5),
-(290, 4, 69, 3, 'N', '', 3958, 4052, 3958, 4052, 3971, 4032, 3971, 4032, 5),
-(291, 4, 69, 5, 'N', '', 4032, 4526, 4032, 4526, 4052, 4506, 4052, 4506, 5),
-(292, 5, 69, 2, 'D', '', 4506, 1, 4506, 1, 4526, 4948, 4526, 4948, 5),
-(293, 5, 69, 1, 'N', '', 1, 5466, 1, 5466, 4942, 5452, 4942, 5452, 5),
-(294, 5, 69, 3, 'N', '', 5452, 5991, 5452, 5991, 5466, 5529, 5466, 5529, 5),
-(295, 1, 70, 1, 'N', '', 1, 505, 1, 505, 1, 492, 1, 492, 5),
-(296, 1, 70, 3, 'N', '', 492, 604, 492, 604, 505, 565, 505, 565, 5),
-(297, 2, 70, 2, 'L', '', 565, 1, 565, 1, 604, 1022, 604, 1022, 5),
-(298, 2, 70, 1, 'N', '', 1, 1526, 1, 1526, 1015, 1512, 1015, 1512, 5),
-(299, 2, 70, 3, 'N', '', 1512, 1608, 1512, 1608, 1526, 1585, 1526, 1585, 5),
-(300, 2, 70, 5, 'N', '', 1585, 2077, 1585, 2077, 1608, 2054, 1608, 2054, 5),
-(301, 3, 71, 2, 'D', '', 1, 1, 1, 1, 18, 446, 18, 446, 5),
-(302, 3, 71, 1, 'N', '', 1, 958, 1, 958, 440, 944, 440, 944, 5),
-(303, 3, 71, 3, 'N', '', 944, 1062, 944, 1062, 958, 1018, 958, 1018, 5),
-(304, 4, 72, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
-(305, 4, 72, 1, 'N', '', 1, 957, 1, 957, 433, 944, 433, 944, 5),
-(306, 4, 72, 3, 'N', '', 944, 1041, 944, 1041, 957, 1017, 957, 1017, 5),
-(307, 4, 72, 5, 'N', '', 1017, 1510, 1017, 1510, 1041, 1488, 1041, 1488, 5),
-(308, 5, 72, 2, 'D', '', 1488, 1, 1488, 1, 1510, 1936, 1510, 1936, 5),
-(309, 5, 72, 1, 'N', '', 1, 2457, 1, 2457, 1930, 2445, 1930, 2445, 5),
-(310, 5, 72, 3, 'N', '', 2445, 2539, 2445, 2539, 2457, 2519, 2457, 2519, 5),
-(311, 5, 72, 5, 'N', '', 2519, 3021, 2519, 3021, 2539, 2999, 2539, 2999, 5),
-(312, 6, 72, 2, 'D', '', 2999, 1, 2999, 1, 3021, 3447, 3021, 3447, 5),
-(313, 6, 72, 1, 'N', '', 1, 3966, 1, 3966, 3441, 3954, 3441, 3954, 5),
-(314, 6, 72, 3, 'N', '', 3954, 4068, 3954, 4068, 3966, 4027, 3966, 4027, 5),
-(315, 7, 73, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
-(316, 7, 73, 1, 'N', '', 1, 980, 1, 980, 444, 966, 444, 966, 5),
-(317, 7, 73, 3, 'N', '', 966, 1061, 966, 1061, 980, 1043, 980, 1043, 5),
-(318, 7, 73, 5, 'N', '', 1043, 1630, 1043, 1630, 1061, 1509, 1061, 1509, 5),
-(319, 7, 73, 4, 'N', '', 1509, 1861, 1509, 1861, 1630, 1841, 1630, 1841, 5),
-(320, 1, 74, 1, 'N', '', 1, 473, 1, 473, 1, 458, 1, 458, 5),
-(321, 2, 75, 2, 'L', '', 1, 1, 1, 1, 11, 445, 11, 445, 5),
-(322, 2, 75, 1, 'N', '', 1, 986, 1, 986, 438, 974, 438, 974, 5),
-(323, 2, 75, 3, 'N', '', 974, 1071, 974, 1071, 986, 1051, 986, 1051, 5),
-(324, 3, 75, 2, 'L', '', 1051, 1, 1051, 1, 1071, 1517, 1071, 1517, 5),
-(325, 3, 75, 1, 'N', '', 1, 2037, 1, 2037, 1511, 2023, 1511, 2023, 5),
-(326, 3, 75, 3, 'N', '', 2023, 2116, 2023, 2116, 2037, 2096, 2037, 2096, 5),
-(327, 3, 75, 5, 'N', '', 2096, 2612, 2096, 2612, 2116, 2600, 2116, 2600, 5),
-(328, 4, 76, 2, 'D', '', 1, 1, 1, 1, 12, 443, 12, 443, 5),
-(329, 4, 76, 1, 'N', '', 1, 976, 1, 976, 437, 964, 437, 964, 5),
-(330, 4, 76, 3, 'N', '', 964, 1061, 964, 1061, 976, 1041, 976, 1041, 5),
-(331, 5, 76, 2, 'L', '', 1041, 1, 1041, 1, 1061, 1505, 1061, 1505, 5),
-(332, 5, 76, 1, 'N', '', 1, 2047, 1, 2047, 1499, 2011, 1499, 2011, 5),
-(333, 5, 76, 8, 'N', '', 2011, 2450, 2011, 2450, 2047, 2147, 2047, 2147, 5),
-(334, 5, 76, 3, 'N', '', 2147, 2535, 2147, 2535, 2450, 2515, 2450, 2515, 5),
-(335, 6, 76, 2, 'L', '', 2515, 1, 2515, 1, 2535, 2981, 2535, 2981, 5),
-(336, 6, 76, 1, 'N', '', 1, 3522, 1, 3522, 2975, 3457, 2975, 3457, 5),
-(337, 6, 76, 8, 'N', '', 3457, 3910, 3457, 3910, 3522, 3612, 3522, 3612, 5),
-(338, 6, 76, 3, 'N', '', 3612, 3994, 3612, 3994, 3910, 3973, 3910, 3973, 5),
-(339, 6, 76, 4, 'N', '', 3973, 4248, 3973, 4248, 3994, 4233, 3994, 4233, 5),
-(340, 1, 77, 1, 'N', '', 1, 826, 1, 826, 270, 812, 270, 812, 5),
-(341, 1, 77, 3, 'N', '', 812, 921, 812, 921, 826, 892, 826, 892, 5),
-(342, 2, 77, 2, 'L', '', 892, 1, 892, 1, 921, 1371, 921, 1371, 5),
-(343, 2, 77, 1, 'N', '', 1, 1911, 1, 1911, 1359, 1898, 1359, 1898, 5),
-(344, 2, 77, 3, 'N', '', 1898, 1998, 1898, 1998, 1911, 1976, 1911, 1976, 5),
-(345, 3, 77, 2, 'L', '', 1976, 2460, 1976, 2460, 1998, 2448, 1998, 2448, 5),
-(346, 3, 77, 1, 'N', '', 2448, 2998, 2448, 2998, 2460, 2990, 2460, 2990, 5),
-(347, 3, 77, 3, 'N', '', 2990, 3082, 2990, 3082, 2998, 3063, 2998, 3063, 5),
-(348, 3, 77, 5, 'N', '', 3063, 3529, 3063, 3529, 3082, 3369, 3082, 3369, 5),
-(349, 3, 77, 4, 'N', '', 3369, 334, 3369, 334, 3529, 3744, 3529, 3744, 5),
-(350, 1, 78, 1, 'N', '', 1, 506, 1, 506, 1, 493, 1, 493, 5),
-(351, 1, 78, 3, 'N', '', 493, 607, 493, 607, 506, 568, 506, 568, 5),
-(352, 2, 78, 2, 'L', '', 568, 1, 568, 1, 607, 1026, 607, 1026, 5),
-(353, 2, 78, 1, 'N', '', 1, 1534, 1, 1534, 1022, 1520, 1022, 1520, 5),
-(354, 2, 78, 3, 'N', '', 1520, 1617, 1520, 1617, 1534, 1596, 1534, 1596, 5),
-(355, 2, 78, 5, 'N', '', 1596, 2098, 1596, 2098, 1617, 2075, 1617, 2075, 5),
-(356, 3, 79, 2, 'D', '', 1, 1, 1, 1, 18, 445, 18, 445, 5),
-(357, 3, 79, 1, 'N', '', 1, 955, 1, 955, 439, 943, 439, 943, 5),
-(358, 3, 79, 3, 'N', '', 943, 1064, 943, 1064, 955, 1019, 955, 1019, 5),
-(359, 4, 80, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
-(360, 4, 80, 1, 'N', '', 1, 960, 1, 960, 434, 947, 434, 947, 5),
-(361, 4, 80, 3, 'N', '', 947, 1042, 947, 1042, 960, 1020, 960, 1020, 5),
-(362, 4, 80, 5, 'N', '', 1020, 1506, 1020, 1506, 1042, 1484, 1042, 1484, 5),
-(363, 5, 80, 2, 'D', '', 1484, 1, 1484, 1, 1506, 1930, 1506, 1930, 5),
-(364, 5, 80, 1, 'N', '', 1, 2456, 1, 2456, 1924, 2444, 1924, 2444, 5),
-(365, 5, 80, 3, 'N', '', 2444, 2538, 2444, 2538, 2456, 2517, 2456, 2517, 5),
-(366, 5, 80, 5, 'N', '', 2517, 3020, 2517, 3020, 2538, 2998, 2538, 2998, 5),
-(367, 6, 80, 2, 'D', '', 2998, 1, 2998, 1, 3020, 3450, 3020, 3450, 5),
-(368, 6, 80, 1, 'N', '', 1, 3982, 1, 3982, 3444, 3970, 3444, 3970, 5),
-(369, 6, 80, 3, 'N', '', 3970, 4084, 3970, 4084, 3982, 4043, 3982, 4043, 5),
-(370, 7, 81, 2, 'L', '', 1, 1, 1, 1, 20, 451, 20, 451, 5),
-(371, 7, 81, 1, 'N', '', 1, 980, 1, 980, 445, 966, 445, 966, 5),
-(372, 7, 81, 3, 'N', '', 966, 1061, 966, 1061, 980, 1043, 980, 1043, 5),
-(373, 7, 81, 5, 'N', '', 1043, 1624, 1043, 1624, 1061, 1504, 1061, 1504, 5),
-(374, 7, 81, 4, 'N', '', 1504, 1864, 1504, 1864, 1624, 1839, 1624, 1839, 5),
-(375, 7, 82, 4, 'N', '', 1, 252, 1, 252, 18, 227, 18, 227, 5),
-(376, 2, 83, 2, 'L', '', 1, 1, 1, 1, 1, 379, 1, 379, 5),
-(377, 2, 83, 1, 'N', '', 1, 920, 1, 920, 372, 904, 372, 904, 5),
-(378, 2, 83, 3, 'N', '', 904, 1036, 904, 1036, 920, 974, 920, 974, 5),
-(379, 3, 83, 2, 'L', '', 974, 1, 974, 1, 1036, 1466, 1036, 1466, 5),
-(380, 3, 83, 1, 'N', '', 1, 2006, 1, 2006, 1460, 1992, 1460, 1992, 5),
-(381, 3, 83, 3, 'N', '', 1992, 2126, 1992, 2126, 2006, 2070, 2006, 2070, 5),
-(382, 4, 83, 2, 'L', '', 2070, 1, 2070, 1, 2126, 2551, 2126, 2551, 5),
-(383, 4, 83, 1, 'N', '', 1, 3095, 1, 3095, 2544, 3079, 2544, 3079, 5),
-(384, 4, 83, 3, 'N', '', 3079, 3213, 3079, 3213, 3095, 3157, 3095, 3157, 5),
-(385, 5, 83, 2, 'L', '', 3157, 1, 3157, 1, 3213, 3638, 3213, 3638, 5),
-(386, 5, 83, 1, 'N', '', 1, 4182, 1, 4182, 3631, 4166, 3631, 4166, 5),
-(387, 5, 83, 3, 'N', '', 4166, 4266, 4166, 4266, 4182, 4245, 4182, 4245, 5),
-(388, 6, 83, 2, 'L', '', 4245, 1, 4245, 1, 4266, 4706, 4266, 4706, 5),
-(389, 6, 83, 1, 'N', '', 1, 5246, 1, 5246, 4700, 5232, 4700, 5232, 5),
-(390, 6, 83, 3, 'N', '', 5232, 5332, 5232, 5332, 5246, 5311, 5246, 5311, 5),
-(391, 7, 83, 2, 'L', '', 5311, 1, 5311, 1, 5332, 5772, 5332, 5772, 5),
-(392, 7, 83, 1, 'N', '', 1, 6302, 1, 6302, 5766, 6286, 5766, 6286, 5),
-(393, 7, 83, 3, 'N', '', 6286, 6388, 6286, 6388, 6302, 6367, 6302, 6367, 5),
-(394, 8, 83, 2, 'L', '', 6367, 1, 6367, 1, 6388, 6831, 6388, 6831, 5),
-(395, 8, 83, 1, 'N', '', 1, 7374, 1, 7374, 6824, 7362, 6824, 7362, 5),
-(396, 8, 83, 3, 'N', '', 7362, 7494, 7362, 7494, 7374, 7432, 7374, 7432, 5),
-(397, 9, 83, 2, 'L', '', 7432, 1, 7432, 1, 7494, 7928, 7494, 7928, 5),
-(398, 9, 83, 1, 'N', '', 1, 8462, 1, 8462, 7922, 8448, 7922, 8448, 5),
-(399, 9, 83, 3, 'N', '', 8448, 8548, 8448, 8548, 8462, 8527, 8462, 8527, 5),
-(400, 10, 83, 2, 'L', '', 8527, 9021, 8527, 9021, 8548, 8988, 8548, 8988, 5),
-(401, 10, 83, 3, 'N', '', 8988, 9105, 8988, 9105, 9021, 9084, 9021, 9084, 5),
-(402, 10, 83, 4, 'N', '', 9084, 9377, 9084, 9377, 9105, 9355, 9105, 9355, 5),
-(403, 10, 84, 1, 'N', '', 1, 542, 1, 542, 5, 529, 5, 529, 5),
-(404, 10, 84, 3, 'N', '', 529, 615, 529, 615, 542, 607, 542, 607, 5),
-(405, 1, 85, 1, 'N', '', 1, 502, 1, 502, 1, 489, 1, 489, 5),
-(406, 1, 85, 3, 'N', '', 489, 604, 489, 604, 502, 562, 502, 562, 5),
-(407, 2, 85, 2, 'L', '', 562, 1, 562, 1, 604, 1022, 604, 1022, 5),
-(408, 2, 85, 1, 'N', '', 1, 1524, 1, 1524, 1015, 1511, 1015, 1511, 5),
-(409, 2, 85, 3, 'N', '', 1511, 1608, 1511, 1608, 1524, 1584, 1524, 1584, 5),
-(410, 2, 85, 5, 'N', '', 1584, 2071, 1584, 2071, 1608, 2050, 1608, 2050, 5),
-(411, 3, 86, 2, 'D', '', 1, 1, 1, 1, 18, 447, 18, 447, 5),
-(412, 3, 86, 1, 'N', '', 1, 957, 1, 957, 441, 945, 441, 945, 5),
-(413, 3, 86, 3, 'N', '', 945, 1038, 945, 1038, 957, 1018, 957, 1018, 5),
-(414, 3, 86, 5, 'N', '', 1018, 1492, 1018, 1492, 1038, 1474, 1038, 1474, 5),
-(415, 4, 87, 2, 'D', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
-(416, 4, 87, 1, 'N', '', 1, 959, 1, 959, 433, 946, 433, 946, 5),
-(417, 4, 87, 3, 'N', '', 946, 1040, 946, 1040, 959, 1019, 959, 1019, 5),
-(418, 4, 87, 5, 'N', '', 1019, 1509, 1019, 1509, 1040, 1487, 1040, 1487, 5),
-(419, 5, 87, 2, 'D', '', 1487, 1, 1487, 1, 1509, 1935, 1509, 1935, 5),
-(420, 5, 87, 1, 'N', '', 1, 2454, 1, 2454, 1929, 2442, 1929, 2442, 5),
-(421, 5, 87, 3, 'N', '', 2442, 2536, 2442, 2536, 2454, 2516, 2454, 2516, 5),
-(422, 5, 87, 5, 'N', '', 2516, 3017, 2516, 3017, 2536, 2996, 2536, 2996, 5),
-(423, 6, 87, 2, 'D', '', 2996, 1, 2996, 1, 3017, 3447, 3017, 3447, 5),
-(424, 6, 87, 1, 'N', '', 1, 3966, 1, 3966, 3441, 3953, 3441, 3953, 5),
-(425, 6, 87, 3, 'N', '', 3953, 4067, 3953, 4067, 3966, 4026, 3966, 4026, 5),
-(426, 7, 88, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
-(427, 7, 88, 1, 'N', '', 1, 975, 1, 975, 444, 961, 444, 961, 5),
-(428, 7, 88, 3, 'N', '', 961, 1057, 961, 1057, 975, 1038, 975, 1038, 5),
-(429, 7, 88, 5, 'N', '', 1038, 1627, 1038, 1627, 1057, 1505, 1057, 1505, 5),
-(430, 7, 88, 4, 'N', '', 1505, 1856, 1505, 1856, 1627, 1838, 1627, 1838, 5),
-(431, 2, 89, 2, 'L', '', 1, 1, 1, 1, 21, 460, 21, 460, 5),
-(432, 2, 89, 1, 'N', '', 1, 976, 1, 976, 453, 960, 453, 960, 5),
-(433, 2, 89, 3, 'N', '', 960, 1092, 960, 1092, 976, 1030, 976, 1030, 5),
-(434, 3, 89, 2, 'L', '', 1030, 1, 1030, 1, 1092, 1523, 1092, 1523, 5),
-(435, 3, 89, 1, 'N', '', 1, 2053, 1, 2053, 1517, 2037, 1517, 2037, 5),
-(436, 3, 89, 3, 'N', '', 2037, 2138, 2037, 2138, 2053, 2107, 2053, 2107, 5),
-(437, 4, 90, 2, 'L', '', 1, 1, 1, 1, 101, 531, 101, 531, 5),
-(438, 4, 90, 1, 'N', '', 1, 1070, 1, 1070, 525, 1054, 525, 1054, 5),
-(439, 4, 90, 3, 'N', '', 1054, 1186, 1054, 1186, 1070, 1132, 1070, 1132, 5),
-(440, 5, 90, 2, 'L', '', 1132, 1, 1132, 1, 1186, 1614, 1186, 1614, 5),
-(441, 5, 90, 1, 'N', '', 1, 2129, 1, 2129, 1608, 2113, 1608, 2113, 5),
-(442, 5, 90, 3, 'N', '', 2113, 2245, 2113, 2245, 2129, 2183, 2129, 2183, 5),
-(443, 6, 90, 2, 'L', '', 2183, 1, 2183, 1, 2245, 2675, 2245, 2675, 5),
-(444, 6, 90, 1, 'N', '', 1, 3190, 1, 3190, 2669, 3174, 2669, 3174, 5),
-(445, 6, 90, 3, 'N', '', 3174, 3306, 3174, 3306, 3190, 3244, 3190, 3244, 5),
-(446, 7, 90, 2, 'L', '', 3244, 1, 3244, 1, 3306, 3739, 3306, 3739, 5),
-(447, 7, 90, 1, 'N', '', 1, 4270, 1, 4270, 3733, 4254, 3733, 4254, 5),
-(448, 7, 90, 3, 'N', '', 4254, 4339, 4254, 4339, 4270, 4324, 4270, 4324, 5),
-(449, 8, 91, 2, 'L', '', 1, 1, 1, 1, 92, 525, 92, 525, 5),
-(450, 8, 91, 1, 'N', '', 1, 1049, 1, 1049, 519, 1034, 519, 1034, 5),
-(451, 8, 91, 3, 'N', '', 1034, 1134, 1034, 1134, 1049, 1113, 1049, 1113, 5),
-(452, 9, 91, 2, 'L', '', 1113, 1, 1113, 1, 1134, 1573, 1134, 1573, 5),
-(453, 9, 91, 1, 'N', '', 1, 2104, 1, 2104, 1567, 2088, 1567, 2088, 5),
-(454, 9, 91, 3, 'N', '', 2088, 2220, 2088, 2220, 2104, 2158, 2104, 2158, 5),
-(455, 10, 91, 2, 'L', '', 2158, 1, 2158, 1, 2220, 2651, 2220, 2651, 5),
-(456, 10, 91, 1, 'N', '', 1, 3178, 1, 3178, 2645, 3163, 2645, 3163, 5),
-(457, 10, 91, 3, 'N', '', 3163, 3263, 3163, 3263, 3178, 3239, 3178, 3239, 5),
-(458, 11, 91, 2, 'L', '', 3239, 1, 3239, 1, 3263, 3702, 3263, 3702, 5),
-(459, 11, 91, 1, 'N', '', 1, 4230, 1, 4230, 3696, 4214, 3696, 4214, 5),
-(460, 11, 91, 3, 'N', '', 4214, 4314, 4214, 4314, 4230, 4290, 4230, 4290, 5),
-(461, 12, 91, 2, 'L', '', 4290, 1, 4290, 1, 4314, 4753, 4314, 4753, 5),
-(462, 12, 91, 1, 'N', '', 1, 5283, 1, 5283, 4747, 5267, 4747, 5267, 5),
-(463, 12, 91, 3, 'N', '', 5267, 5367, 5267, 5367, 5283, 5337, 5283, 5337, 5),
-(464, 12, 91, 4, 'N', '', 5337, 5657, 5337, 5657, 5367, 5632, 5367, 5632, 5),
-(465, 12, 91, 4, 'N', '', 5632, 5925, 5632, 5925, 5657, 5840, 5657, 5840, 5),
-(466, 1, 92, 1, 'N', '', 1, 1, 1, 1, 1, 544, 1, 544, 5),
-(467, 1, 93, 3, 'N', '', 1, 294, 1, 294, 224, 280, 224, 280, 5),
-(468, 2, 94, 2, 'L', '', 1, 437, 1, 437, 1, 425, 1, 425, 5),
-(469, 2, 95, 9, 'N', '', 1, 458, 1, 458, 4, 448, 4, 448, 5),
-(470, 2, 95, 9, 'N', '', 448, 1, 448, 1, 458, 884, 458, 884, 5),
-(471, 2, 95, 1, 'N', '', 1, 1863, 1, 1863, 877, 1398, 877, 1398, 5),
-(472, 2, 95, 3, 'N', '', 1398, 1951, 1398, 1951, 1863, 1925, 1863, 1925, 5),
-(473, 3, 95, 2, 'L', '', 1925, 1, 1925, 1, 1951, 2414, 1951, 2414, 5),
-(474, 2, 96, 2, 'L', '', 1, 1, 1, 1, 8, 444, 8, 444, 5),
-(475, 2, 96, 1, 'N', '', 1, 979, 1, 979, 438, 965, 438, 965, 5),
-(476, 2, 96, 3, 'N', '', 965, 1065, 965, 1065, 979, 1044, 979, 1044, 5),
-(477, 3, 96, 2, 'L', '', 1044, 1, 1044, 1, 1065, 1490, 1065, 1490, 5),
-(478, 3, 96, 1, 'N', '', 1, 2018, 1, 2018, 1484, 2004, 1484, 2004, 5),
-(479, 3, 96, 3, 'N', '', 2004, 2104, 2004, 2104, 2018, 2081, 2018, 2081, 5),
-(480, 4, 96, 2, 'L', '', 2081, 1, 2081, 1, 2104, 2529, 2104, 2529, 5),
-(481, 4, 96, 1, 'N', '', 1, 3044, 1, 3044, 2523, 3031, 2523, 3031, 5),
-(482, 4, 96, 3, 'N', '', 3031, 3126, 3031, 3126, 3044, 3108, 3044, 3108, 5),
-(483, 4, 96, 5, 'N', '', 3108, 3583, 3108, 3583, 3126, 3567, 3126, 3567, 5),
-(484, 5, 97, 2, 'D', '', 1, 1, 1, 1, 12, 450, 12, 450, 5),
-(485, 5, 97, 1, 'N', '', 1, 968, 1, 968, 443, 956, 443, 956, 5),
-(486, 5, 97, 3, 'N', '', 956, 1054, 956, 1054, 968, 1033, 968, 1033, 5),
-(487, 6, 97, 2, 'L', '', 1033, 1, 1033, 1, 1054, 1480, 1054, 1480, 5),
-(488, 6, 97, 1, 'N', '', 1, 2013, 1, 2013, 1474, 2005, 1474, 2005, 5),
-(489, 6, 97, 3, 'N', '', 2005, 2100, 2005, 2100, 2013, 2078, 2013, 2078, 5),
-(490, 7, 97, 2, 'L', '', 2078, 1, 2078, 1, 2100, 2526, 2100, 2526, 5),
-(491, 7, 97, 1, 'N', '', 1, 3044, 1, 3044, 2520, 3031, 2520, 3031, 5),
-(492, 7, 97, 3, 'N', '', 3031, 3126, 3031, 3126, 3044, 3108, 3044, 3108, 5),
-(493, 7, 97, 5, 'N', '', 3108, 3589, 3108, 3589, 3126, 3561, 3126, 3561, 5),
-(494, 8, 98, 2, 'D', '', 1, 1, 1, 1, 21, 457, 21, 457, 5),
-(495, 8, 98, 1, 'N', '', 1, 986, 1, 986, 451, 973, 451, 973, 5),
-(496, 8, 98, 3, 'N', '', 973, 1070, 973, 1070, 986, 1051, 986, 1051, 5),
-(497, 8, 98, 4, 'N', '', 1051, 1289, 1051, 1289, 1070, 1266, 1070, 1266, 5),
-(498, 8, 99, 4, 'N', '', 1, 258, 1, 258, 15, 234, 15, 234, 5),
-(499, 1, 100, 1, 'N', '', 1, 507, 1, 507, 1, 494, 1, 494, 5),
-(500, 1, 100, 3, 'N', '', 494, 606, 494, 606, 507, 567, 507, 567, 5),
-(501, 2, 100, 2, 'L', '', 567, 1, 567, 1, 606, 1024, 606, 1024, 5),
-(502, 2, 100, 1, 'N', '', 1, 1528, 1, 1528, 1017, 1514, 1017, 1514, 5),
-(503, 2, 100, 3, 'N', '', 1514, 1611, 1514, 1611, 1528, 1587, 1528, 1587, 5),
-(504, 2, 100, 5, 'N', '', 1587, 2093, 1587, 2093, 1611, 2068, 1611, 2068, 5),
-(505, 3, 100, 2, 'D', '', 2068, 1, 2068, 1, 2093, 2523, 2093, 2523, 5),
-(506, 3, 100, 1, 'N', '', 1, 3054, 1, 3054, 2516, 3042, 2516, 3042, 5),
-(507, 3, 100, 3, 'N', '', 3042, 3166, 3042, 3166, 3054, 3116, 3054, 3116, 5),
-(508, 4, 101, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
-(509, 4, 101, 1, 'N', '', 1, 960, 1, 960, 434, 947, 434, 947, 5),
-(510, 4, 101, 3, 'N', '', 947, 1042, 947, 1042, 960, 1020, 960, 1020, 5),
-(511, 4, 101, 5, 'N', '', 1020, 1513, 1020, 1513, 1042, 1491, 1042, 1491, 5),
-(512, 5, 101, 2, 'D', '', 1491, 1, 1491, 1, 1513, 1939, 1513, 1939, 5),
-(513, 5, 101, 1, 'N', '', 1, 2460, 1, 2460, 1933, 2448, 1933, 2448, 5),
-(514, 5, 101, 3, 'N', '', 2448, 2543, 2448, 2543, 2460, 2522, 2460, 2522, 5),
-(515, 5, 101, 5, 'N', '', 2522, 3025, 2522, 3025, 2543, 3003, 2543, 3003, 5),
-(516, 6, 101, 2, 'D', '', 3003, 1, 3003, 1, 3025, 3456, 3025, 3456, 5),
-(517, 6, 101, 1, 'N', '', 1, 3976, 1, 3976, 3450, 3964, 3450, 3964, 5),
-(518, 6, 101, 3, 'N', '', 3964, 4078, 3964, 4078, 3976, 4037, 3976, 4037, 5),
-(519, 7, 102, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
-(520, 7, 102, 1, 'N', '', 1, 973, 1, 973, 444, 959, 444, 959, 5),
-(521, 7, 102, 3, 'N', '', 959, 1054, 959, 1054, 973, 1036, 973, 1036, 5),
-(522, 7, 102, 5, 'N', '', 1036, 1623, 1036, 1623, 1054, 1499, 1054, 1499, 5),
-(523, 7, 102, 4, 'N', '', 1499, 1859, 1499, 1859, 1623, 1832, 1623, 1832, 5),
-(524, 7, 103, 1, 'N', '', 1, 514, 1, 514, 1, 497, 1, 497, 5),
-(525, 7, 103, 3, 'N', '', 497, 582, 497, 582, 514, 577, 514, 577, 5),
-(526, 1, 104, 1, 'N', '', 1, 497, 1, 497, 1, 484, 1, 484, 5),
-(527, 1, 104, 3, 'N', '', 484, 599, 484, 599, 497, 557, 497, 557, 5),
-(528, 2, 104, 2, 'L', '', 557, 1, 557, 1, 599, 1027, 599, 1027, 5),
-(529, 2, 104, 1, 'N', '', 1, 1542, 1, 1542, 1023, 1529, 1023, 1529, 5),
-(530, 2, 104, 3, 'N', '', 1529, 1626, 1529, 1626, 1542, 1603, 1542, 1603, 5),
-(531, 2, 104, 5, 'N', '', 1603, 2117, 1603, 2117, 1626, 2100, 1626, 2100, 5),
-(532, 3, 105, 2, 'D', '', 1, 1, 1, 1, 18, 450, 18, 450, 5),
-(533, 3, 105, 1, 'N', '', 1, 953, 1, 953, 444, 942, 444, 942, 5),
-(534, 3, 105, 3, 'N', '', 942, 1035, 942, 1035, 953, 1015, 953, 1015, 5),
-(535, 3, 105, 5, 'N', '', 1015, 1532, 1015, 1532, 1035, 1528, 1035, 1528, 5),
-(536, 4, 106, 2, 'D', '', 1, 1, 1, 1, 12, 442, 12, 442, 5),
-(537, 4, 106, 1, 'N', '', 1, 963, 1, 963, 436, 951, 436, 951, 5),
-(538, 4, 106, 3, 'N', '', 951, 1046, 951, 1046, 963, 1025, 963, 1025, 5),
-(539, 4, 106, 5, 'N', '', 1025, 1526, 1025, 1526, 1046, 1505, 1046, 1505, 5),
-(540, 5, 106, 2, 'D', '', 1505, 1, 1505, 1, 1526, 1957, 1526, 1957, 5),
-(541, 5, 106, 1, 'N', '', 1, 2457, 1, 2457, 1951, 2446, 1951, 2446, 5),
-(542, 5, 106, 3, 'N', '', 2446, 2541, 2446, 2541, 2457, 2519, 2457, 2519, 5),
-(543, 5, 106, 5, 'N', '', 2519, 3030, 2519, 3030, 2541, 3016, 2541, 3016, 5),
-(544, 6, 106, 2, 'D', '', 3016, 1, 3016, 1, 3030, 3462, 3030, 3462, 5),
-(545, 6, 106, 1, 'N', '', 1, 4044, 1, 4044, 3456, 3951, 3456, 3951, 5),
-(546, 6, 106, 8, 'N', '', 3951, 4382, 3951, 4382, 4044, 4094, 4044, 4094, 5),
-(547, 6, 106, 3, 'N', '', 4094, 4460, 4094, 4460, 4382, 4443, 4382, 4443, 5),
-(548, 6, 106, 5, 'N', '', 4443, 4899, 4443, 4899, 4460, 4887, 4460, 4887, 5),
-(549, 7, 107, 2, 'D', '', 1, 1, 1, 1, 12, 442, 12, 442, 5),
-(550, 7, 107, 1, 'N', '', 1, 962, 1, 962, 436, 949, 436, 949, 5),
-(551, 7, 107, 3, 'N', '', 949, 1046, 949, 1046, 962, 1027, 962, 1027, 5),
-(552, 7, 107, 5, 'N', '', 1027, 1, 1027, 1, 1046, 1497, 1046, 1497, 5),
-(553, 7, 107, 1, 'N', '', 1, 1, 1, 1, 1490, 1915, 1490, 1915, 5),
-(554, 7, 107, 4, 'N', '', 1, 2165, 1, 2165, 1915, 2133, 1915, 2133, 5),
-(555, 1, 108, 1, 'N', '', 1, 550, 1, 550, 4, 537, 4, 537, 5),
-(556, 1, 108, 3, 'N', '', 537, 630, 537, 630, 550, 611, 550, 611, 5),
-(557, 1, 108, 5, 'N', '', 611, 1109, 611, 1109, 630, 1090, 630, 1090, 5),
-(558, 2, 108, 2, 'D', '', 1090, 1, 1090, 1, 1109, 1531, 1109, 1531, 5),
-(559, 2, 108, 1, 'N', '', 1, 2035, 1, 2035, 1504, 2018, 1504, 2018, 5),
-(560, 2, 108, 3, 'N', '', 2018, 2133, 2018, 2133, 2035, 2094, 2035, 2094, 5),
-(561, 3, 108, 2, 'L', '', 2094, 1, 2094, 1, 2133, 2570, 2133, 2570, 5),
-(562, 3, 109, 1, 'N', '', 1, 592, 1, 592, 27, 574, 27, 574, 5),
-(563, 3, 109, 3, 'N', '', 574, 668, 574, 668, 592, 647, 592, 647, 5),
-(564, 3, 109, 5, 'N', '', 647, 1139, 647, 1139, 668, 1121, 668, 1121, 5),
-(565, 4, 109, 2, 'D', '', 1121, 1, 1121, 1, 1139, 1562, 1139, 1562, 5),
-(566, 4, 109, 1, 'N', '', 1, 2082, 1, 2082, 1556, 2070, 1556, 2070, 5),
-(567, 4, 109, 3, 'N', '', 2070, 2169, 2070, 2169, 2082, 2142, 2082, 2142, 5),
-(568, 4, 109, 5, 'N', '', 2142, 2646, 2142, 2646, 2169, 2624, 2169, 2624, 5),
-(569, 5, 109, 2, 'D', '', 2624, 1, 2624, 1, 2646, 3078, 2646, 3078, 5),
-(570, 5, 109, 1, 'N', '', 1, 3614, 1, 3614, 3072, 3599, 3072, 3599, 5),
-(571, 5, 109, 3, 'N', '', 3599, 3702, 3599, 3702, 3614, 3680, 3614, 3680, 5),
-(572, 6, 109, 2, 'L', '', 3680, 1, 3680, 1, 3702, 4137, 3702, 4137, 5),
-(573, 6, 109, 1, 'N', '', 1, 4643, 1, 4643, 4131, 4628, 4131, 4628, 5),
-(574, 6, 109, 3, 'N', '', 4628, 4728, 4628, 4728, 4643, 4706, 4643, 4706, 5),
-(575, 6, 109, 4, 'N', '', 4706, 4977, 4706, 4977, 4728, 4966, 4728, 4966, 5),
-(576, 1, 110, 1, 'N', '', 1, 577, 1, 577, 13, 558, 13, 558, 5),
-(577, 1, 110, 3, 'N', '', 558, 660, 558, 660, 577, 639, 577, 639, 5),
-(578, 2, 110, 2, 'L', '', 639, 1, 639, 1, 660, 1074, 660, 1074, 5),
-(579, 2, 111, 1, 'N', '', 1, 557, 1, 557, 5, 534, 5, 534, 5),
-(580, 2, 111, 3, 'N', '', 534, 634, 534, 634, 557, 615, 557, 615, 5),
-(581, 3, 111, 2, 'L', '', 615, 1, 615, 1, 634, 1070, 634, 1070, 5),
-(582, 3, 111, 1, 'N', '', 1, 1615, 1, 1615, 1064, 1594, 1064, 1594, 5),
-(583, 3, 111, 3, 'N', '', 1594, 1703, 1594, 1703, 1615, 1679, 1615, 1679, 5),
-(584, 4, 111, 2, 'L', '', 1679, 1, 1679, 1, 1703, 2124, 1703, 2124, 5),
-(585, 4, 112, 3, 'N', '', 1, 118, 1, 118, 32, 89, 32, 89, 5),
-(586, 5, 112, 2, 'L', '', 89, 1, 89, 1, 118, 551, 118, 551, 5),
-(587, 5, 113, 1, 'N', '', 1, 574, 1, 574, 19, 556, 19, 556, 5),
-(588, 5, 113, 3, 'N', '', 556, 1089, 556, 1089, 574, 633, 574, 633, 5),
-(589, 5, 114, 4, 'N', '', 1, 263, 1, 263, 25, 250, 25, 250, 5),
-(590, 5, 115, 1, 'N', '', 1, 545, 1, 545, 1, 518, 1, 518, 5),
-(591, 5, 115, 3, 'N', '', 518, 611, 518, 611, 545, 592, 545, 592, 5),
-(592, 6, 116, 2, 'L', '', 1, 458, 1, 458, 15, 451, 15, 451, 5),
-(593, 2, 117, 2, 'L', '', 1, 1, 1, 1, 58, 501, 58, 501, 5),
-(594, 2, 117, 1, 'N', '', 1, 1027, 1, 1027, 495, 1012, 495, 1012, 5),
-(595, 2, 117, 3, 'N', '', 1012, 1104, 1012, 1104, 1027, 1086, 1027, 1086, 5),
-(596, 2, 117, 5, 'N', '', 1086, 1561, 1086, 1561, 1104, 1539, 1104, 1539, 5),
-(597, 3, 117, 2, 'D', '', 1539, 1, 1539, 1, 1561, 1979, 1561, 1979, 5),
-(598, 3, 117, 1, 'N', '', 1, 2508, 1, 2508, 1973, 2493, 1973, 2493, 5),
-(599, 3, 117, 3, 'N', '', 2493, 2592, 2493, 2592, 2508, 2568, 2508, 2568, 5),
-(600, 4, 117, 2, 'L', '', 2568, 1, 2568, 1, 2592, 3028, 2592, 3028, 5),
-(601, 4, 117, 1, 'N', '', 1, 3551, 1, 3551, 3022, 3539, 3022, 3539, 5),
-(602, 4, 117, 3, 'N', '', 3539, 3633, 3539, 3633, 3551, 3612, 3551, 3612, 5),
-(603, 4, 117, 5, 'N', '', 3612, 4096, 3612, 4096, 3633, 4074, 3633, 4074, 5),
-(604, 5, 117, 2, 'D', '', 4074, 1, 4074, 1, 4096, 4527, 4096, 4527, 5),
-(605, 5, 117, 1, 'N', '', 1, 5068, 1, 5068, 4521, 5054, 4521, 5054, 5),
-(606, 5, 117, 3, 'N', '', 5054, 5156, 5054, 5156, 5068, 5130, 5068, 5130, 5),
-(607, 6, 118, 2, 'L', '', 1, 1, 1, 1, 52, 491, 52, 491, 5),
-(608, 6, 118, 1, 'N', '', 1, 1030, 1, 1030, 485, 1015, 485, 1015, 5),
-(609, 6, 118, 3, 'N', '', 1015, 1113, 1015, 1113, 1030, 1093, 1030, 1093, 5),
-(610, 7, 118, 2, 'L', '', 1093, 1, 1093, 1, 1113, 1551, 1113, 1551, 5),
-(611, 7, 118, 1, 'N', '', 1, 2096, 1, 2096, 1545, 2078, 1545, 2078, 5),
-(612, 7, 118, 3, 'N', '', 2078, 2190, 2078, 2190, 2096, 2156, 2096, 2156, 5),
-(613, 8, 119, 2, 'L', '', 1, 1, 1, 1, 29, 468, 29, 468, 5),
-(614, 8, 119, 1, 'N', '', 1, 1010, 1, 1010, 462, 995, 462, 995, 5),
-(615, 8, 119, 3, 'N', '', 995, 1093, 995, 1093, 1010, 1073, 1010, 1073, 5),
-(616, 9, 119, 2, 'L', '', 1073, 1, 1073, 1, 1093, 1529, 1093, 1529, 5),
-(617, 9, 119, 1, 'N', '', 1, 1013, 1, 1013, 1523, 2056, 1523, 2056, 5),
-(618, 9, 119, 3, 'N', '', 995, 2153, 995, 2153, 2074, 2132, 2074, 2132, 5),
-(619, 9, 119, 4, 'N', '', 2132, 2431, 2132, 2431, 2153, 2253, 2153, 2253, 5),
-(620, 9, 120, 1, 'N', '', 1, 590, 1, 590, 1, 561, 1, 561, 5),
-(621, 9, 120, 3, 'N', '', 561, 681, 561, 681, 590, 653, 590, 653, 5),
-(622, 10, 120, 2, 'L', '', 653, 1, 653, 1, 681, 1120, 681, 1120, 5),
-(623, 10, 120, 1, 'N', '', 1, 1646, 1, 1646, 1113, 1633, 1113, 1633, 5),
-(624, 10, 120, 3, 'N', '', 1633, 1734, 1633, 1734, 1646, 1709, 1646, 1709, 5),
-(625, 11, 120, 2, 'L', '', 1709, 1, 1709, 1, 1734, 2175, 1734, 2175, 5),
-(626, 11, 120, 1, 'N', '', 1, 2717, 1, 2717, 2169, 2702, 2169, 2702, 5),
-(627, 11, 120, 3, 'N', '', 2702, 2797, 2702, 2797, 2717, 2776, 2717, 2776, 5),
-(628, 11, 120, 5, 'N', '', 2776, 3263, 2776, 3263, 2797, 3241, 2797, 3241, 5),
-(629, 12, 120, 2, 'D', '', 3241, 1, 3241, 1, 3263, 3707, 3263, 3707, 5),
-(630, 12, 120, 1, 'N', '', 1, 4248, 1, 4248, 3701, 4233, 3701, 4233, 5),
-(631, 12, 120, 3, 'N', '', 4233, 4337, 4233, 4337, 4248, 4308, 4248, 4308, 5),
-(632, 1, 121, 1, 'N', '', 1, 548, 1, 548, 12, 543, 12, 543, 5),
-(633, 1, 122, 3, 'N', '', 1, 107, 1, 107, 13, 82, 13, 82, 5),
-(634, 2, 122, 2, 'L', '', 82, 1, 82, 1, 107, 541, 107, 541, 5),
-(635, 2, 122, 1, 'N', '', 1, 1357, 1, 1357, 536, 1009, 536, 1009, 5),
-(636, 2, 122, 3, 'N', '', 1009, 1439, 1009, 1439, 1357, 1422, 1357, 1422, 5),
-(637, 3, 123, 2, 'L', '', 1, 1, 1, 1, 71, 500, 71, 500, 5),
-(638, 3, 123, 1, 'N', '', 1, 1415, 1, 1415, 496, 986, 496, 986, 5),
-(639, 3, 123, 3, 'N', '', 986, 1602, 986, 1602, 1415, 1485, 1415, 1485, 5),
-(640, 3, 123, 4, 'N', '', 1485, 1810, 1485, 1810, 1602, 1797, 1602, 1797, 5),
-(641, 1, 124, 1, 'N', '', 1, 583, 1, 583, 1, 583, 1, 583, 5),
-(642, 2, 125, 2, 'L', '', 1, 1, 1, 1, 11, 443, 11, 443, 5),
-(643, 2, 125, 1, 'N', '', 1, 957, 1, 957, 425, 942, 425, 942, 5),
-(644, 2, 125, 3, 'N', '', 942, 1043, 942, 1043, 957, 1022, 957, 1022, 5),
-(645, 3, 125, 2, 'L', '', 1022, 1, 1022, 1, 1043, 1488, 1043, 1488, 5),
-(646, 3, 125, 1, 'N', '', 1, 2014, 1, 2014, 1476, 2000, 1476, 2000, 5),
-(647, 3, 125, 3, 'N', '', 2000, 2099, 2000, 2099, 2014, 2075, 2014, 2075, 5),
-(648, 3, 125, 5, 'N', '', 2075, 2592, 2075, 2592, 2099, 2587, 2099, 2587, 5),
-(649, 4, 126, 2, 'D', '', 1, 1, 1, 1, 12, 450, 12, 450, 5),
-(650, 4, 126, 1, 'N', '', 1, 970, 1, 970, 444, 959, 444, 959, 5),
-(651, 4, 126, 3, 'N', '', 959, 1055, 959, 1055, 970, 1035, 970, 1035, 5),
-(652, 5, 126, 2, 'L', '', 1035, 1, 1035, 1, 1055, 1501, 1055, 1501, 5),
-(653, 5, 126, 1, 'N', '', 1, 2097, 1, 2097, 1496, 1975, 1496, 1975, 5),
-(654, 5, 126, 8, 'N', '', 1975, 2403, 1975, 2403, 2097, 2129, 2097, 2129, 5),
-(655, 5, 126, 3, 'N', '', 2129, 2488, 2129, 2488, 2403, 2468, 2403, 2468, 5),
-(656, 6, 126, 2, 'L', '', 2468, 1, 2468, 1, 2488, 2932, 2488, 2932, 5),
-(657, 6, 126, 1, 'N', '', 1, 3445, 1, 3445, 2926, 3435, 2926, 3435, 5),
-(658, 6, 126, 3, 'N', '', 3435, 1055, 3435, 1055, 3445, 3510, 3445, 3510, 5),
-(659, 7, 126, 2, 'L', '', 1035, 1, 1035, 1, 3530, 3977, 3530, 3977, 5),
-(660, 7, 126, 1, 'N', '', 1, 4511, 1, 4511, 3971, 4498, 3971, 4498, 5),
-(661, 7, 126, 3, 'N', '', 4498, 4598, 4498, 4598, 4511, 4576, 4511, 4576, 5),
-(662, 7, 126, 4, 'N', '', 4576, 4849, 4576, 4849, 4598, 4841, 4598, 4841, 5),
-(663, 2, 127, 2, 'L', '', 1, 1, 1, 1, 8, 445, 8, 445, 5),
-(664, 2, 127, 1, 'N', '', 1, 978, 1, 978, 439, 964, 439, 964, 5),
-(665, 2, 127, 3, 'N', '', 964, 1072, 964, 1072, 978, 1041, 978, 1041, 5),
-(666, 3, 127, 2, 'L', '', 1041, 1, 1041, 1, 1072, 1487, 1072, 1487, 5),
-(667, 3, 127, 1, 'N', '', 1, 2015, 1, 2015, 1481, 2001, 1481, 2001, 5),
-(668, 3, 127, 3, 'N', '', 2001, 2101, 2001, 2101, 2015, 2080, 2015, 2080, 5),
-(669, 4, 127, 2, 'L', '', 2080, 1, 2080, 1, 2101, 2527, 2101, 2527, 5),
-(670, 4, 127, 1, 'N', '', 1, 3046, 1, 3046, 2521, 3033, 2521, 3033, 5),
-(671, 4, 127, 3, 'N', '', 3033, 3128, 3033, 3128, 3046, 3110, 3046, 3110, 5),
-(672, 4, 127, 5, 'N', '', 3110, 3589, 3110, 3589, 3128, 3573, 3128, 3573, 5),
-(673, 5, 128, 2, 'D', '', 1, 1, 1, 1, 12, 449, 12, 449, 5),
-(674, 5, 128, 1, 'N', '', 1, 972, 1, 972, 443, 959, 443, 959, 5),
-(675, 5, 128, 3, 'N', '', 959, 1060, 959, 1060, 972, 1036, 972, 1036, 5),
-(676, 6, 128, 2, 'L', '', 1036, 1, 1036, 1, 1060, 1483, 1060, 1483, 5),
-(677, 6, 128, 1, 'N', '', 1, 2017, 1, 2017, 1477, 2003, 1477, 2003, 5),
-(678, 6, 128, 3, 'N', '', 2003, 2104, 2003, 2104, 2017, 2081, 2017, 2081, 5),
-(679, 7, 128, 2, 'L', '', 2081, 1, 2081, 1, 2104, 2529, 2104, 2529, 5),
-(680, 7, 128, 1, 'N', '', 1, 3045, 1, 3045, 2522, 3032, 2522, 3032, 5),
-(681, 7, 128, 3, 'N', '', 3032, 3127, 3032, 3127, 3045, 3109, 3045, 3109, 5),
-(682, 7, 128, 5, 'N', '', 3109, 3588, 3109, 3588, 3127, 3568, 3127, 3568, 5),
-(683, 8, 129, 2, 'D', '', 1, 1, 1, 1, 15, 449, 15, 449, 5),
-(684, 8, 129, 1, 'N', '', 1, 975, 1, 975, 442, 962, 442, 962, 5),
-(685, 8, 129, 3, 'N', '', 962, 1058, 962, 1058, 975, 1039, 975, 1039, 5),
-(686, 8, 129, 4, 'N', '', 1039, 1275, 1039, 1275, 1058, 1255, 1058, 1255, 5);
+(36, 1, 41, 1, 'N', '', 1, 826, 1, 826, 270, 812, 270, 812, 5),
+(37, 1, 41, 3, 'N', '', 812, 921, 812, 921, 826, 892, 826, 892, 5),
+(38, 2, 41, 2, 'L', '', 892, 1, 892, 1, 921, 1371, 921, 1371, 5),
+(39, 2, 41, 1, 'N', '', 1, 1911, 1, 1911, 1359, 1898, 1359, 1898, 5),
+(40, 2, 41, 3, 'N', '', 1898, 1998, 1898, 1998, 1911, 1976, 1911, 1976, 5),
+(41, 3, 41, 2, 'L', '', 1976, 2460, 1976, 2460, 1998, 2448, 1998, 2448, 5),
+(42, 3, 41, 1, 'N', '', 2448, 2998, 2448, 2998, 2460, 2990, 2460, 2990, 5),
+(43, 3, 41, 3, 'N', '', 2990, 3082, 2990, 3082, 2998, 3063, 2998, 3063, 5),
+(44, 3, 41, 5, 'N', '', 3063, 3529, 3063, 3529, 3082, 3369, 3082, 3369, 5),
+(45, 3, 41, 4, 'N', '', 3369, 334, 3369, 334, 3529, 3744, 3529, 3744, 5),
+(46, 2, 42, 2, 'L', '', 1, 1, 1, 1, 10, 441, 10, 441, 5),
+(47, 2, 42, 1, 'N', '', 1, 956, 1, 956, 435, 943, 435, 943, 5),
+(48, 2, 42, 3, 'N', '', 943, 1037, 943, 1037, 956, 1018, 956, 1018, 5),
+(49, 2, 42, 5, 'N', '', 1018, 1508, 1018, 1508, 1037, 1488, 1037, 1488, 5),
+(50, 3, 42, 2, 'D', '', 1488, 1, 1488, 1, 1508, 1938, 1508, 1938, 5),
+(51, 3, 42, 1, 'N', '', 1, 2468, 1, 2468, 1932, 2455, 1932, 2455, 5),
+(52, 3, 42, 3, 'N', '', 2455, 2549, 2455, 2549, 2468, 2528, 2468, 2528, 5),
+(53, 3, 42, 5, 'N', '', 2528, 3023, 2528, 3023, 2549, 3003, 2549, 3003, 5),
+(54, 4, 42, 2, 'D', '', 3003, 1, 3003, 1, 3023, 3454, 3023, 3454, 5),
+(55, 4, 42, 1, 'N', '', 1, 3971, 1, 3971, 3448, 3958, 3448, 3958, 5),
+(56, 4, 42, 3, 'N', '', 3958, 4052, 3958, 4052, 3971, 4032, 3971, 4032, 5),
+(57, 4, 42, 5, 'N', '', 4032, 4526, 4032, 4526, 4052, 4506, 4052, 4506, 5),
+(58, 5, 42, 2, 'D', '', 4506, 1, 4506, 1, 4526, 4948, 4526, 4948, 5),
+(59, 5, 42, 1, 'N', '', 1, 5466, 1, 5466, 4942, 5452, 4942, 5452, 5),
+(60, 5, 42, 3, 'N', '', 5452, 5991, 5452, 5991, 5466, 5529, 5466, 5529, 5),
+(61, 1, 43, 1, 'N', '', 1, 1, 1, 1, 1, 544, 1, 544, 5),
+(62, 1, 44, 3, 'N', '', 1, 294, 1, 294, 224, 280, 224, 280, 5),
+(63, 2, 45, 2, 'L', '', 1, 437, 1, 437, 1, 425, 1, 425, 5),
+(64, 2, 46, 6, 'N', '', 1, 458, 1, 458, 4, 448, 4, 448, 5),
+(65, 2, 46, 6, 'N', '', 448, 1, 448, 1, 458, 884, 458, 884, 5),
+(66, 2, 46, 1, 'N', '', 1, 1863, 1, 1863, 877, 1398, 877, 1398, 5),
+(67, 2, 46, 3, 'N', '', 1398, 1951, 1398, 1951, 1863, 1925, 1863, 1925, 5),
+(68, 3, 46, 2, 'L', '', 1925, 1, 1925, 1, 1951, 2414, 1951, 2414, 5),
+(69, 1, 47, 1, 'N', '', 1, 505, 1, 505, 1, 492, 1, 492, 5),
+(70, 1, 47, 3, 'N', '', 492, 604, 492, 604, 505, 565, 505, 565, 5),
+(71, 2, 47, 2, 'L', '', 565, 1, 565, 1, 604, 1022, 604, 1022, 5),
+(72, 2, 47, 1, 'N', '', 1, 1526, 1, 1526, 1015, 1512, 1015, 1512, 5),
+(73, 2, 47, 3, 'N', '', 1512, 1608, 1512, 1608, 1526, 1585, 1526, 1585, 5),
+(74, 2, 47, 5, 'N', '', 1585, 2077, 1585, 2077, 1608, 2054, 1608, 2054, 5),
+(75, 3, 48, 2, 'D', '', 1, 1, 1, 1, 18, 446, 18, 446, 5),
+(76, 3, 48, 1, 'N', '', 1, 958, 1, 958, 440, 944, 440, 944, 5),
+(77, 3, 48, 3, 'N', '', 944, 1062, 944, 1062, 958, 1018, 958, 1018, 5),
+(78, 4, 49, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
+(79, 4, 49, 1, 'N', '', 1, 957, 1, 957, 433, 944, 433, 944, 5),
+(80, 4, 49, 3, 'N', '', 944, 1041, 944, 1041, 957, 1017, 957, 1017, 5),
+(81, 4, 49, 5, 'N', '', 1017, 1510, 1017, 1510, 1041, 1488, 1041, 1488, 5),
+(82, 5, 49, 2, 'D', '', 1488, 1, 1488, 1, 1510, 1936, 1510, 1936, 5),
+(83, 5, 49, 1, 'N', '', 1, 2457, 1, 2457, 1930, 2445, 1930, 2445, 5),
+(84, 5, 49, 3, 'N', '', 2445, 2539, 2445, 2539, 2457, 2519, 2457, 2519, 5),
+(85, 5, 49, 5, 'N', '', 2519, 3021, 2519, 3021, 2539, 2999, 2539, 2999, 5),
+(86, 6, 49, 2, 'D', '', 2999, 1, 2999, 1, 3021, 3447, 3021, 3447, 5),
+(87, 6, 49, 1, 'N', '', 1, 3966, 1, 3966, 3441, 3954, 3441, 3954, 5),
+(88, 6, 49, 3, 'N', '', 3954, 4068, 3954, 4068, 3966, 4027, 3966, 4027, 5),
+(89, 7, 50, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
+(90, 7, 50, 1, 'N', '', 1, 980, 1, 980, 444, 966, 444, 966, 5),
+(91, 7, 50, 3, 'N', '', 966, 1061, 966, 1061, 980, 1043, 980, 1043, 5),
+(92, 7, 50, 5, 'N', '', 1043, 1630, 1043, 1630, 1061, 1509, 1061, 1509, 5),
+(93, 7, 50, 4, 'N', '', 1509, 1861, 1509, 1861, 1630, 1841, 1630, 1841, 5),
+(94, 1, 51, 1, 'N', '', 1, 583, 1, 583, 1, 583, 1, 583, 5),
+(95, 2, 52, 2, 'L', '', 1, 1, 1, 1, 11, 443, 11, 443, 5),
+(96, 2, 52, 1, 'N', '', 1, 957, 1, 957, 425, 942, 425, 942, 5),
+(97, 2, 52, 3, 'N', '', 942, 1043, 942, 1043, 957, 1022, 957, 1022, 5),
+(98, 3, 52, 2, 'L', '', 1022, 1, 1022, 1, 1043, 1488, 1043, 1488, 5),
+(99, 3, 52, 1, 'N', '', 1, 2014, 1, 2014, 1476, 2000, 1476, 2000, 5),
+(100, 3, 52, 3, 'N', '', 2000, 2099, 2000, 2099, 2014, 2075, 2014, 2075, 5),
+(101, 3, 52, 5, 'N', '', 2075, 2592, 2075, 2592, 2099, 2587, 2099, 2587, 5),
+(102, 4, 53, 2, 'D', '', 1, 1, 1, 1, 12, 450, 12, 450, 5),
+(103, 4, 53, 1, 'N', '', 1, 970, 1, 970, 444, 959, 444, 959, 5),
+(104, 4, 53, 3, 'N', '', 959, 1055, 959, 1055, 970, 1035, 970, 1035, 5),
+(105, 5, 53, 2, 'L', '', 1035, 1, 1035, 1, 1055, 1501, 1055, 1501, 5),
+(106, 5, 53, 1, 'N', '', 1, 2097, 1, 2097, 1496, 1975, 1496, 1975, 5),
+(107, 5, 53, 7, 'N', '', 1975, 2403, 1975, 2403, 2097, 2129, 2097, 2129, 5),
+(108, 5, 53, 3, 'N', '', 2129, 2488, 2129, 2488, 2403, 2468, 2403, 2468, 5),
+(109, 6, 53, 2, 'L', '', 2468, 1, 2468, 1, 2488, 2932, 2488, 2932, 5),
+(110, 6, 53, 1, 'N', '', 1, 3445, 1, 3445, 2926, 3435, 2926, 3435, 5),
+(111, 6, 53, 3, 'N', '', 3435, 1055, 3435, 1055, 3445, 3510, 3445, 3510, 5),
+(112, 7, 53, 2, 'L', '', 1035, 1, 1035, 1, 3530, 3977, 3530, 3977, 5),
+(113, 7, 53, 1, 'N', '', 1, 4511, 1, 4511, 3971, 4498, 3971, 4498, 5),
+(114, 7, 53, 3, 'N', '', 4498, 4598, 4498, 4598, 4511, 4576, 4511, 4576, 5),
+(115, 7, 53, 4, 'N', '', 4576, 4849, 4576, 4849, 4598, 4841, 4598, 4841, 5),
+(116, 1, 54, 1, 'N', '', 1, 1, 1, 1, 14, 547, 14, 547, 5),
+(117, 1, 55, 3, 'N', '', 1, 288, 1, 288, 233, 281, 233, 281, 5),
+(118, 1, 56, 6, 'N', '', 1, 448, 1, 448, 4, 441, 4, 441, 5),
+(119, 1, 56, 6, 'N', '', 441, 957, 441, 957, 448, 863, 448, 863, 5),
+(120, 1, 57, 6, 'N', '', 1, 1, 1, 1, 17, 437, 17, 437, 5),
+(121, 1, 57, 1, 'N', '', 1, 974, 1, 974, 431, 956, 431, 956, 5),
+(122, 1, 57, 3, 'N', '', 956, 1049, 956, 1049, 974, 1033, 974, 1033, 5),
+(123, 1, 58, 3, 'N', '', 1, 280, 1, 280, 187, 249, 187, 249, 5),
+(124, 2, 58, 2, 'L', '', 249, 1, 249, 1, 280, 706, 280, 706, 5),
+(125, 2, 59, 4, 'N', '', 1, 253, 1, 253, 18, 236, 18, 236, 5),
+(126, 1, 60, 1, 'N', '', 1, 550, 1, 550, 4, 537, 4, 537, 5),
+(127, 1, 60, 3, 'N', '', 537, 630, 537, 630, 550, 611, 550, 611, 5),
+(128, 1, 60, 5, 'N', '', 611, 1109, 611, 1109, 630, 1090, 630, 1090, 5),
+(129, 2, 60, 2, 'D', '', 1090, 1, 1090, 1, 1109, 1531, 1109, 1531, 5),
+(130, 2, 60, 1, 'N', '', 1, 2035, 1, 2035, 1504, 2018, 1504, 2018, 5),
+(131, 2, 60, 3, 'N', '', 2018, 2133, 2018, 2133, 2035, 2094, 2035, 2094, 5),
+(132, 3, 60, 2, 'L', '', 2094, 1, 2094, 1, 2133, 2570, 2133, 2570, 5),
+(133, 3, 61, 1, 'N', '', 1, 592, 1, 592, 27, 574, 27, 574, 5),
+(134, 3, 61, 3, 'N', '', 574, 668, 574, 668, 592, 647, 592, 647, 5),
+(135, 3, 61, 5, 'N', '', 647, 1139, 647, 1139, 668, 1121, 668, 1121, 5),
+(136, 4, 61, 2, 'D', '', 1121, 1, 1121, 1, 1139, 1562, 1139, 1562, 5),
+(137, 4, 61, 1, 'N', '', 1, 2082, 1, 2082, 1556, 2070, 1556, 2070, 5),
+(138, 4, 61, 3, 'N', '', 2070, 2169, 2070, 2169, 2082, 2142, 2082, 2142, 5),
+(139, 4, 61, 5, 'N', '', 2142, 2646, 2142, 2646, 2169, 2624, 2169, 2624, 5),
+(140, 5, 61, 2, 'D', '', 2624, 1, 2624, 1, 2646, 3078, 2646, 3078, 5),
+(141, 5, 61, 1, 'N', '', 1, 3614, 1, 3614, 3072, 3599, 3072, 3599, 5),
+(142, 5, 61, 3, 'N', '', 3599, 3702, 3599, 3702, 3614, 3680, 3614, 3680, 5),
+(143, 6, 61, 2, 'L', '', 3680, 1, 3680, 1, 3702, 4137, 3702, 4137, 5),
+(144, 6, 61, 1, 'N', '', 1, 4643, 1, 4643, 4131, 4628, 4131, 4628, 5),
+(145, 6, 61, 3, 'N', '', 4628, 4728, 4628, 4728, 4643, 4706, 4643, 4706, 5),
+(146, 6, 61, 4, 'N', '', 4706, 4977, 4706, 4977, 4728, 4966, 4728, 4966, 5),
+(147, 1, 62, 1, 'N', '', 1, 545, 1, 545, 17, 531, 17, 531, 5),
+(148, 1, 62, 3, 'N', '', 531, 626, 531, 626, 545, 609, 545, 609, 5),
+(149, 1, 62, 5, 'N', '', 609, 1099, 609, 1099, 626, 1078, 626, 1078, 5),
+(150, 2, 63, 2, 'D', '', 1, 1, 1, 1, 15, 453, 15, 453, 5),
+(151, 2, 63, 1, 'N', '', 1, 978, 1, 978, 446, 964, 446, 964, 5),
+(152, 2, 63, 3, 'N', '', 964, 1064, 964, 1064, 978, 1043, 978, 1043, 5),
+(153, 3, 63, 2, 'L', '', 1043, 1, 1043, 1, 1064, 1491, 1064, 1491, 5),
+(154, 3, 63, 1, 'N', '', 1, 2014, 1, 2014, 1485, 2000, 1485, 2000, 5),
+(155, 3, 63, 3, 'N', '', 2000, 2100, 2000, 2100, 2014, 2079, 2014, 2079, 5),
+(156, 4, 63, 2, 'L', '', 2079, 1, 2079, 1, 2100, 2527, 2100, 2527, 5),
+(157, 4, 63, 1, 'N', '', 1, 3061, 1, 3061, 2521, 3046, 2521, 3046, 5),
+(158, 4, 63, 3, 'N', '', 3046, 3146, 3046, 3146, 3061, 3125, 3061, 3125, 5),
+(159, 5, 63, 2, 'L', '', 3125, 1, 3125, 1, 3146, 3574, 3146, 3574, 5),
+(160, 5, 63, 1, 'N', '', 1, 4098, 1, 4098, 3568, 4084, 3568, 4084, 5),
+(161, 5, 63, 3, 'N', '', 4084, 4209, 4084, 4209, 4098, 4163, 4098, 4163, 5),
+(162, 5, 63, 4, 'N', '', 4163, 4453, 4163, 4453, 4209, 4449, 4209, 4449, 5),
+(163, 1, 64, 1, 'N', '', 1, 506, 1, 506, 1, 493, 1, 493, 5),
+(164, 1, 64, 3, 'N', '', 493, 607, 493, 607, 506, 568, 506, 568, 5),
+(165, 2, 64, 2, 'L', '', 568, 1, 568, 1, 607, 1026, 607, 1026, 5),
+(166, 2, 64, 1, 'N', '', 1, 1534, 1, 1534, 1022, 1520, 1022, 1520, 5),
+(167, 2, 64, 3, 'N', '', 1520, 1617, 1520, 1617, 1534, 1596, 1534, 1596, 5),
+(168, 2, 64, 5, 'N', '', 1596, 2098, 1596, 2098, 1617, 2075, 1617, 2075, 5),
+(169, 3, 65, 2, 'D', '', 1, 1, 1, 1, 18, 445, 18, 445, 5),
+(170, 3, 65, 1, 'N', '', 1, 955, 1, 955, 439, 943, 439, 943, 5),
+(171, 3, 65, 3, 'N', '', 943, 1064, 943, 1064, 955, 1019, 955, 1019, 5),
+(172, 4, 66, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
+(173, 4, 66, 1, 'N', '', 1, 960, 1, 960, 434, 947, 434, 947, 5),
+(174, 4, 66, 3, 'N', '', 947, 1042, 947, 1042, 960, 1020, 960, 1020, 5),
+(175, 4, 66, 5, 'N', '', 1020, 1506, 1020, 1506, 1042, 1484, 1042, 1484, 5),
+(176, 5, 66, 2, 'D', '', 1484, 1, 1484, 1, 1506, 1930, 1506, 1930, 5),
+(177, 5, 66, 1, 'N', '', 1, 2456, 1, 2456, 1924, 2444, 1924, 2444, 5),
+(178, 5, 66, 3, 'N', '', 2444, 2538, 2444, 2538, 2456, 2517, 2456, 2517, 5),
+(179, 5, 66, 5, 'N', '', 2517, 3020, 2517, 3020, 2538, 2998, 2538, 2998, 5),
+(180, 6, 66, 2, 'D', '', 2998, 1, 2998, 1, 3020, 3450, 3020, 3450, 5),
+(181, 6, 66, 1, 'N', '', 1, 3982, 1, 3982, 3444, 3970, 3444, 3970, 5),
+(182, 6, 66, 3, 'N', '', 3970, 4084, 3970, 4084, 3982, 4043, 3982, 4043, 5),
+(183, 7, 67, 2, 'L', '', 1, 1, 1, 1, 20, 451, 20, 451, 5),
+(184, 7, 67, 1, 'N', '', 1, 980, 1, 980, 445, 966, 445, 966, 5),
+(185, 7, 67, 3, 'N', '', 966, 1061, 966, 1061, 980, 1043, 980, 1043, 5),
+(186, 7, 67, 5, 'N', '', 1043, 1624, 1043, 1624, 1061, 1504, 1061, 1504, 5),
+(187, 7, 67, 4, 'N', '', 1504, 1864, 1504, 1864, 1624, 1839, 1624, 1839, 5),
+(188, 7, 68, 4, 'N', '', 1, 252, 1, 252, 18, 227, 18, 227, 5),
+(189, 1, 69, 1, 'N', '', 1, 1019, 1, 1019, 463, 993, 463, 993, 5),
+(190, 1, 69, 3, 'N', '', 993, 1104, 993, 1104, 1019, 1083, 1019, 1083, 5),
+(191, 2, 69, 2, 'L', '', 1083, 1, 1083, 1, 1104, 1541, 1104, 1541, 5),
+(192, 2, 69, 1, 'N', '', 1, 1, 1, 1, 1535, 2073, 1535, 2073, 5),
+(193, 2, 69, 8, 'N', '', 1, 2513, 1, 2513, 2057, 2289, 2057, 2289, 5),
+(194, 2, 69, 3, 'N', '', 2289, 2607, 2289, 2607, 2513, 2575, 2513, 2575, 5),
+(195, 2, 69, 3, 'N', '', 2575, 2723, 2575, 2723, 2607, 2652, 2607, 2652, 5),
+(196, 3, 69, 2, 'L', '', 2652, 1, 2652, 1, 2723, 3132, 2723, 3132, 5),
+(197, 1, 70, 1, 'N', '', 1, 524, 1, 524, 8, 538, 8, 538, 5),
+(198, 2, 71, 2, 'L', '', 1, 1, 1, 1, 7, 441, 7, 441, 5),
+(199, 2, 71, 1, 'N', '', 1, 978, 1, 978, 437, 965, 437, 965, 5),
+(200, 2, 71, 3, 'N', '', 965, 1066, 965, 1066, 978, 1043, 978, 1043, 5),
+(201, 2, 71, 4, 'N', '', 1043, 1294, 1043, 1294, 1066, 1278, 1066, 1278, 5),
+(202, 1, 72, 1, 'N', '', 1, 540, 1, 540, 1, 532, 1, 532, 5),
+(203, 2, 73, 2, 'L', '', 1, 1, 1, 1, 11, 443, 11, 443, 5),
+(204, 2, 73, 1, 'N', '', 1, 968, 1, 968, 437, 956, 437, 956, 5),
+(205, 2, 73, 3, 'N', '', 956, 1053, 956, 1053, 968, 1033, 968, 1033, 5),
+(206, 3, 73, 2, 'L', '', 1033, 1, 1033, 1, 1053, 1499, 1053, 1499, 5),
+(207, 3, 73, 1, 'N', '', 1, 2043, 1, 2043, 1493, 2030, 1493, 2030, 5),
+(208, 3, 73, 3, 'N', '', 2030, 2129, 2030, 2129, 2043, 2108, 2043, 2108, 5),
+(209, 3, 73, 4, 'N', '', 2108, 2379, 2108, 2379, 2129, 2362, 2129, 2362, 5),
+(210, 1, 74, 1, 'N', '', 1, 546, 1, 546, 15, 532, 15, 532, 5),
+(211, 1, 74, 3, 'N', '', 532, 638, 532, 638, 546, 611, 546, 611, 5),
+(212, 2, 74, 2, 'L', '', 611, 1, 611, 1, 638, 1072, 638, 1072, 5),
+(213, 2, 74, 1, 'N', '', 1, 1589, 1, 1589, 1067, 1565, 1067, 1565, 5),
+(214, 2, 74, 3, 'N', '', 1565, 1674, 1565, 1674, 1589, 1652, 1589, 1652, 5),
+(215, 3, 74, 2, 'L', '', 1652, 1, 1652, 1, 1674, 2109, 1674, 2109, 5),
+(216, 3, 74, 1, 'N', '', 1, 2623, 1, 2623, 2103, 2609, 2103, 2609, 5),
+(217, 3, 74, 3, 'N', '', 2609, 2708, 2609, 2708, 2623, 2686, 2623, 2686, 5),
+(218, 4, 74, 2, 'L', '', 2686, 1, 2686, 1, 2708, 3133, 2708, 3133, 5),
+(219, 4, 74, 1, 'N', '', 1, 3666, 1, 3666, 3127, 3650, 3127, 3650, 5),
+(220, 4, 74, 3, 'N', '', 3650, 3748, 3650, 3748, 3666, 3730, 3666, 3730, 5),
+(221, 4, 74, 5, 'N', '', 3730, 4212, 3730, 4212, 3748, 4204, 3748, 4204, 5),
+(222, 5, 74, 2, 'D', '', 4204, 1, 4204, 1, 4212, 4650, 4212, 4650, 5),
+(223, 5, 74, 1, 'N', '', 1, 5173, 1, 5173, 4644, 5159, 4644, 5159, 5),
+(224, 5, 74, 3, 'N', '', 5159, 5256, 5159, 5256, 5173, 5238, 5173, 5238, 5),
+(225, 6, 75, 2, 'L', '', 1, 1, 1, 1, 78, 504, 78, 504, 5),
+(226, 6, 75, 1, 'N', '', 1, 1023, 1, 1023, 498, 1009, 498, 1009, 5),
+(227, 6, 75, 3, 'N', '', 1009, 1109, 1009, 1109, 1023, 1088, 1023, 1088, 5),
+(228, 7, 75, 2, 'L', '', 1088, 1, 1088, 1, 1109, 1535, 1109, 1535, 5),
+(229, 7, 75, 1, 'N', '', 1, 2066, 1, 2066, 1529, 2052, 1529, 2052, 5),
+(230, 7, 75, 3, 'N', '', 2052, 2147, 2052, 2147, 2066, 2130, 2066, 2130, 5),
+(231, 7, 75, 5, 'N', '', 2130, 2608, 2130, 2608, 2147, 2582, 2147, 2582, 5),
+(232, 8, 76, 2, 'D', '', 1, 1, 1, 1, 11, 443, 11, 443, 5),
+(233, 8, 76, 1, 'N', '', 1, 968, 1, 968, 437, 954, 437, 954, 5),
+(234, 8, 76, 3, 'N', '', 954, 1054, 954, 1054, 968, 1033, 968, 1033, 5),
+(235, 9, 76, 2, 'L', '', 1033, 1, 1033, 1, 1054, 1480, 1054, 1480, 5),
+(236, 9, 76, 1, 'N', '', 1, 2000, 1, 2000, 1474, 1986, 1474, 1986, 5),
+(237, 9, 76, 3, 'N', '', 1986, 2082, 1986, 2082, 2000, 2064, 2000, 2064, 5),
+(238, 9, 76, 5, 'N', '', 2064, 2547, 2064, 2547, 2082, 2517, 2082, 2517, 5),
+(239, 10, 76, 2, 'D', '', 2517, 1, 2517, 1, 2547, 2984, 2547, 2984, 5),
+(240, 10, 76, 1, 'N', '', 1, 3504, 1, 3504, 2978, 3491, 2978, 3491, 5),
+(241, 10, 76, 3, 'N', '', 3491, 3590, 3491, 3590, 3504, 3569, 3504, 3569, 5),
+(242, 11, 76, 2, 'L', '', 3569, 1, 3569, 1, 3590, 4016, 3590, 4016, 5),
+(243, 11, 76, 1, 'N', '', 1, 4546, 1, 4546, 4009, 4534, 4009, 4534, 5),
+(244, 11, 76, 3, 'N', '', 4534, 4628, 4534, 4628, 4546, 4610, 4546, 4610, 5),
+(245, 11, 76, 5, 'N', '', 4610, 5094, 4610, 5094, 4628, 5063, 4628, 5063, 5),
+(246, 12, 76, 2, 'D', '', 5063, 1, 5063, 1, 5094, 5532, 5094, 5532, 5),
+(247, 12, 76, 1, 'N', '', 1, 6054, 1, 6054, 5526, 6040, 5526, 6040, 5),
+(248, 12, 76, 3, 'N', '', 6040, 6143, 6040, 6143, 6054, 6119, 6054, 6119, 5),
+(249, 12, 76, 4, 'N', '', 6119, 6360, 6119, 6360, 6143, 6350, 6143, 6350, 5),
+(250, 2, 77, 2, 'L', '', 1, 478, 1, 478, 33, 469, 33, 469, 5),
+(251, 2, 77, 1, 'N', '', 469, 1035, 469, 1035, 478, 1016, 478, 1016, 5),
+(252, 2, 77, 3, 'N', '', 1016, 1117, 1016, 1117, 1035, 1097, 1035, 1097, 5),
+(253, 3, 77, 2, 'L', '', 1097, 1, 1097, 1, 1117, 1559, 1117, 1559, 5),
+(254, 3, 77, 1, 'N', '', 1, 2531, 1, 2531, 1551, 2068, 1551, 2068, 5),
+(255, 3, 77, 3, 'N', '', 2068, 2615, 2068, 2615, 2531, 2595, 2531, 2595, 5),
+(256, 4, 77, 2, 'L', '', 2595, 1, 2595, 1, 2615, 3055, 2615, 3055, 5),
+(257, 4, 77, 1, 'N', '', 1, 4020, 1, 4020, 3047, 3561, 3047, 3561, 5),
+(258, 4, 77, 3, 'N', '', 3561, 4102, 3561, 4102, 4020, 4079, 4020, 4079, 5),
+(259, 5, 77, 2, 'L', '', 4079, 1, 4079, 1, 4102, 4542, 4102, 4542, 5),
+(260, 5, 77, 1, 'N', '', 1, 5510, 1, 5510, 4534, 5047, 4534, 5047, 5),
+(261, 5, 77, 3, 'N', '', 5047, 5594, 5047, 5594, 5510, 5574, 5510, 5574, 5),
+(262, 6, 77, 2, 'L', '', 5574, 1, 5574, 1, 5594, 6032, 5594, 6032, 5),
+(263, 6, 77, 1, 'N', '', 1, 7007, 1, 7007, 6027, 6525, 6027, 6525, 5),
+(264, 6, 77, 3, 'N', '', 6525, 7091, 6525, 7091, 7007, 7071, 7007, 7071, 5),
+(265, 7, 77, 2, 'L', '', 7071, 1, 7071, 1, 7091, 7526, 7091, 7526, 5),
+(266, 7, 77, 1, 'N', '', 1, 8063, 1, 8063, 7523, 8050, 7523, 8050, 5),
+(267, 7, 77, 3, 'N', '', 8050, 8151, 8050, 8151, 8063, 8131, 8063, 8131, 5),
+(268, 8, 77, 2, 'L', '', 8131, 1, 8131, 1, 8151, 8590, 8151, 8590, 5),
+(269, 8, 77, 1, 'N', '', 1, 9564, 1, 9564, 8585, 9094, 8585, 9094, 5),
+(270, 8, 77, 3, 'N', '', 9094, 9646, 9094, 9646, 9564, 9626, 9564, 9626, 5),
+(271, 9, 77, 2, 'L', '', 9626, 1, 9626, 1, 9646, 10095, 9646, 10095, 5),
+(272, 9, 77, 1, 'N', '', 1, 11061, 1, 11061, 10087, 10594, 10087, 10594, 5),
+(273, 9, 77, 3, 'N', '', 10594, 11143, 10594, 11143, 11061, 11123, 11061, 11123, 5),
+(274, 10, 77, 2, 'L', '', 11123, 1, 11123, 1, 11143, 11576, 11143, 11576, 5),
+(275, 10, 77, 1, 'N', '', 1, 12131, 1, 12131, 11553, 12114, 11553, 12114, 5),
+(276, 10, 77, 3, 'N', '', 12114, 12215, 12114, 12215, 12131, 12195, 12131, 12195, 5),
+(277, 11, 77, 2, 'L', '', 12195, 1, 12195, 1, 12215, 12650, 12215, 12650, 5),
+(278, 11, 77, 1, 'N', '', 1, 13629, 1, 13629, 12646, 13159, 12646, 13159, 5),
+(279, 11, 77, 3, 'N', '', 13159, 13711, 13159, 13711, 13629, 13691, 13629, 13691, 5),
+(280, 12, 77, 2, 'L', '', 13691, 14154, 13691, 14154, 13711, 14145, 13711, 14145, 5),
+(281, 12, 77, 1, 'N', '', 14145, 14702, 14145, 14702, 14154, 14684, 14154, 14684, 5),
+(282, 12, 77, 3, 'N', '', 14684, 14815, 14684, 14815, 14702, 14766, 14702, 14766, 5),
+(283, 13, 77, 2, 'L', '', 14766, 1, 14766, 1, 14815, 15282, 14815, 15282, 5),
+(284, 1, 78, 1, 'N', '', 1, 473, 1, 473, 1, 458, 1, 458, 5),
+(285, 2, 79, 2, 'L', '', 1, 1, 1, 1, 11, 445, 11, 445, 5),
+(286, 2, 79, 1, 'N', '', 1, 986, 1, 986, 438, 974, 438, 974, 5),
+(287, 2, 79, 3, 'N', '', 974, 1071, 974, 1071, 986, 1051, 986, 1051, 5),
+(288, 3, 79, 2, 'L', '', 1051, 1, 1051, 1, 1071, 1517, 1071, 1517, 5),
+(289, 3, 79, 1, 'N', '', 1, 2037, 1, 2037, 1511, 2023, 1511, 2023, 5),
+(290, 3, 79, 3, 'N', '', 2023, 2116, 2023, 2116, 2037, 2096, 2037, 2096, 5),
+(291, 3, 79, 5, 'N', '', 2096, 2612, 2096, 2612, 2116, 2600, 2116, 2600, 5),
+(292, 4, 80, 2, 'D', '', 1, 1, 1, 1, 12, 443, 12, 443, 5),
+(293, 4, 80, 1, 'N', '', 1, 976, 1, 976, 437, 964, 437, 964, 5),
+(294, 4, 80, 3, 'N', '', 964, 1061, 964, 1061, 976, 1041, 976, 1041, 5),
+(295, 5, 80, 2, 'L', '', 1041, 1, 1041, 1, 1061, 1505, 1061, 1505, 5),
+(296, 5, 80, 1, 'N', '', 1, 2047, 1, 2047, 1499, 2011, 1499, 2011, 5),
+(297, 5, 80, 7, 'N', '', 2011, 2450, 2011, 2450, 2047, 2147, 2047, 2147, 5),
+(298, 5, 80, 3, 'N', '', 2147, 2535, 2147, 2535, 2450, 2515, 2450, 2515, 5),
+(299, 6, 80, 2, 'L', '', 2515, 1, 2515, 1, 2535, 2981, 2535, 2981, 5),
+(300, 6, 80, 1, 'N', '', 1, 3522, 1, 3522, 2975, 3457, 2975, 3457, 5),
+(301, 6, 80, 7, 'N', '', 3457, 3910, 3457, 3910, 3522, 3612, 3522, 3612, 5),
+(302, 6, 80, 3, 'N', '', 3612, 3994, 3612, 3994, 3910, 3973, 3910, 3973, 5),
+(303, 6, 80, 4, 'N', '', 3973, 4248, 3973, 4248, 3994, 4233, 3994, 4233, 5),
+(304, 1, 81, 1, 'N', '', 1, 1149, 1, 1149, 201, 1131, 201, 1131, 5),
+(305, 1, 81, 3, 'N', '', 1131, 1230, 1131, 1230, 1149, 1209, 1149, 1209, 5),
+(306, 1, 81, 4, 'N', '', 1209, 1489, 1209, 1489, 1230, 1328, 1230, 1328, 5),
+(307, 1, 82, 1, 'N', '', 1, 577, 1, 577, 13, 558, 13, 558, 5),
+(308, 1, 82, 3, 'N', '', 558, 660, 558, 660, 577, 639, 577, 639, 5),
+(309, 2, 82, 2, 'L', '', 639, 1, 639, 1, 660, 1074, 660, 1074, 5),
+(310, 2, 83, 1, 'N', '', 1, 557, 1, 557, 5, 534, 5, 534, 5),
+(311, 2, 83, 3, 'N', '', 534, 634, 534, 634, 557, 615, 557, 615, 5),
+(312, 3, 83, 2, 'L', '', 615, 1, 615, 1, 634, 1070, 634, 1070, 5),
+(313, 3, 83, 1, 'N', '', 1, 1615, 1, 1615, 1064, 1594, 1064, 1594, 5),
+(314, 3, 83, 3, 'N', '', 1594, 1703, 1594, 1703, 1615, 1679, 1615, 1679, 5),
+(315, 4, 83, 2, 'L', '', 1679, 1, 1679, 1, 1703, 2124, 1703, 2124, 5),
+(316, 4, 84, 3, 'N', '', 1, 118, 1, 118, 32, 89, 32, 89, 5),
+(317, 5, 84, 2, 'L', '', 89, 1, 89, 1, 118, 551, 118, 551, 5),
+(318, 5, 85, 1, 'N', '', 1, 574, 1, 574, 19, 556, 19, 556, 5),
+(319, 5, 85, 3, 'N', '', 556, 1089, 556, 1089, 574, 633, 574, 633, 5),
+(320, 5, 86, 4, 'N', '', 1, 263, 1, 263, 25, 250, 25, 250, 5),
+(321, 5, 87, 1, 'N', '', 1, 545, 1, 545, 1, 518, 1, 518, 5),
+(322, 5, 87, 3, 'N', '', 518, 611, 518, 611, 545, 592, 545, 592, 5),
+(323, 6, 88, 2, 'L', '', 1, 458, 1, 458, 15, 451, 15, 451, 5),
+(324, 1, 89, 1, 'N', '', 1, 497, 1, 497, 1, 484, 1, 484, 5),
+(325, 1, 89, 3, 'N', '', 484, 599, 484, 599, 497, 557, 497, 557, 5),
+(326, 2, 89, 2, 'L', '', 557, 1, 557, 1, 599, 1027, 599, 1027, 5),
+(327, 2, 89, 1, 'N', '', 1, 1542, 1, 1542, 1023, 1529, 1023, 1529, 5),
+(328, 2, 89, 3, 'N', '', 1529, 1626, 1529, 1626, 1542, 1603, 1542, 1603, 5),
+(329, 2, 89, 5, 'N', '', 1603, 2117, 1603, 2117, 1626, 2100, 1626, 2100, 5),
+(330, 3, 90, 2, 'D', '', 1, 1, 1, 1, 18, 450, 18, 450, 5),
+(331, 3, 90, 1, 'N', '', 1, 953, 1, 953, 444, 942, 444, 942, 5),
+(332, 3, 90, 3, 'N', '', 942, 1035, 942, 1035, 953, 1015, 953, 1015, 5),
+(333, 3, 90, 5, 'N', '', 1015, 1532, 1015, 1532, 1035, 1528, 1035, 1528, 5),
+(334, 4, 91, 2, 'D', '', 1, 1, 1, 1, 12, 442, 12, 442, 5),
+(335, 4, 91, 1, 'N', '', 1, 963, 1, 963, 436, 951, 436, 951, 5),
+(336, 4, 91, 3, 'N', '', 951, 1046, 951, 1046, 963, 1025, 963, 1025, 5),
+(337, 4, 91, 5, 'N', '', 1025, 1526, 1025, 1526, 1046, 1505, 1046, 1505, 5),
+(338, 5, 91, 2, 'D', '', 1505, 1, 1505, 1, 1526, 1957, 1526, 1957, 5),
+(339, 5, 91, 1, 'N', '', 1, 2457, 1, 2457, 1951, 2446, 1951, 2446, 5),
+(340, 5, 91, 3, 'N', '', 2446, 2541, 2446, 2541, 2457, 2519, 2457, 2519, 5),
+(341, 5, 91, 5, 'N', '', 2519, 3030, 2519, 3030, 2541, 3016, 2541, 3016, 5),
+(342, 6, 91, 2, 'D', '', 3016, 1, 3016, 1, 3030, 3462, 3030, 3462, 5),
+(343, 6, 91, 1, 'N', '', 1, 4044, 1, 4044, 3456, 3951, 3456, 3951, 5),
+(344, 6, 91, 7, 'N', '', 3951, 4382, 3951, 4382, 4044, 4094, 4044, 4094, 5),
+(345, 6, 91, 3, 'N', '', 4094, 4460, 4094, 4460, 4382, 4443, 4382, 4443, 5),
+(346, 6, 91, 5, 'N', '', 4443, 4899, 4443, 4899, 4460, 4887, 4460, 4887, 5),
+(347, 7, 92, 2, 'D', '', 1, 1, 1, 1, 12, 442, 12, 442, 5),
+(348, 7, 92, 1, 'N', '', 1, 962, 1, 962, 436, 949, 436, 949, 5),
+(349, 7, 92, 3, 'N', '', 949, 1046, 949, 1046, 962, 1027, 962, 1027, 5),
+(350, 7, 92, 5, 'N', '', 1027, 1, 1027, 1, 1046, 1497, 1046, 1497, 5),
+(351, 7, 92, 1, 'N', '', 1, 1, 1, 1, 1490, 1915, 1490, 1915, 5),
+(352, 7, 92, 4, 'N', '', 1, 2165, 1, 2165, 1915, 2133, 1915, 2133, 5),
+(353, 2, 93, 2, 'L', '', 1, 1, 1, 1, 21, 460, 21, 460, 5),
+(354, 2, 93, 1, 'N', '', 1, 976, 1, 976, 453, 960, 453, 960, 5),
+(355, 2, 93, 3, 'N', '', 960, 1092, 960, 1092, 976, 1030, 976, 1030, 5),
+(356, 3, 93, 2, 'L', '', 1030, 1, 1030, 1, 1092, 1523, 1092, 1523, 5),
+(357, 3, 93, 1, 'N', '', 1, 2053, 1, 2053, 1517, 2037, 1517, 2037, 5),
+(358, 3, 93, 3, 'N', '', 2037, 2138, 2037, 2138, 2053, 2107, 2053, 2107, 5),
+(359, 4, 94, 2, 'L', '', 1, 1, 1, 1, 101, 531, 101, 531, 5),
+(360, 4, 94, 1, 'N', '', 1, 1070, 1, 1070, 525, 1054, 525, 1054, 5),
+(361, 4, 94, 3, 'N', '', 1054, 1186, 1054, 1186, 1070, 1132, 1070, 1132, 5),
+(362, 5, 94, 2, 'L', '', 1132, 1, 1132, 1, 1186, 1614, 1186, 1614, 5),
+(363, 5, 94, 1, 'N', '', 1, 2129, 1, 2129, 1608, 2113, 1608, 2113, 5),
+(364, 5, 94, 3, 'N', '', 2113, 2245, 2113, 2245, 2129, 2183, 2129, 2183, 5),
+(365, 6, 94, 2, 'L', '', 2183, 1, 2183, 1, 2245, 2675, 2245, 2675, 5),
+(366, 6, 94, 1, 'N', '', 1, 3190, 1, 3190, 2669, 3174, 2669, 3174, 5),
+(367, 6, 94, 3, 'N', '', 3174, 3306, 3174, 3306, 3190, 3244, 3190, 3244, 5),
+(368, 7, 94, 2, 'L', '', 3244, 1, 3244, 1, 3306, 3739, 3306, 3739, 5),
+(369, 7, 94, 1, 'N', '', 1, 4270, 1, 4270, 3733, 4254, 3733, 4254, 5),
+(370, 7, 94, 3, 'N', '', 4254, 4339, 4254, 4339, 4270, 4324, 4270, 4324, 5),
+(371, 8, 95, 2, 'L', '', 1, 1, 1, 1, 92, 525, 92, 525, 5),
+(372, 8, 95, 1, 'N', '', 1, 1049, 1, 1049, 519, 1034, 519, 1034, 5),
+(373, 8, 95, 3, 'N', '', 1034, 1134, 1034, 1134, 1049, 1113, 1049, 1113, 5),
+(374, 9, 95, 2, 'L', '', 1113, 1, 1113, 1, 1134, 1573, 1134, 1573, 5),
+(375, 9, 95, 1, 'N', '', 1, 2104, 1, 2104, 1567, 2088, 1567, 2088, 5),
+(376, 9, 95, 3, 'N', '', 2088, 2220, 2088, 2220, 2104, 2158, 2104, 2158, 5),
+(377, 10, 95, 2, 'L', '', 2158, 1, 2158, 1, 2220, 2651, 2220, 2651, 5),
+(378, 10, 95, 1, 'N', '', 1, 3178, 1, 3178, 2645, 3163, 2645, 3163, 5),
+(379, 10, 95, 3, 'N', '', 3163, 3263, 3163, 3263, 3178, 3239, 3178, 3239, 5),
+(380, 11, 95, 2, 'L', '', 3239, 1, 3239, 1, 3263, 3702, 3263, 3702, 5),
+(381, 11, 95, 1, 'N', '', 1, 4230, 1, 4230, 3696, 4214, 3696, 4214, 5),
+(382, 11, 95, 3, 'N', '', 4214, 4314, 4214, 4314, 4230, 4290, 4230, 4290, 5),
+(383, 12, 95, 2, 'L', '', 4290, 1, 4290, 1, 4314, 4753, 4314, 4753, 5),
+(384, 12, 95, 1, 'N', '', 1, 5283, 1, 5283, 4747, 5267, 4747, 5267, 5),
+(385, 12, 95, 3, 'N', '', 5267, 5367, 5267, 5367, 5283, 5337, 5283, 5337, 5),
+(386, 12, 95, 4, 'N', '', 5337, 5657, 5337, 5657, 5367, 5632, 5367, 5632, 5),
+(387, 12, 95, 4, 'N', '', 5632, 5925, 5632, 5925, 5657, 5840, 5657, 5840, 5),
+(388, 1, 96, 1, 'N', '', 1, 509, 1, 509, 1, 507, 1, 507, 5),
+(389, 1, 96, 8, 'N', '', 507, 944, 507, 944, 509, 713, 509, 713, 5),
+(390, 1, 96, 3, 'N', '', 713, 1029, 713, 1029, 944, 1006, 944, 1006, 5),
+(391, 2, 96, 2, 'L', '', 1006, 1, 1006, 1, 1029, 1459, 1029, 1459, 5),
+(392, 2, 97, 1, 'N', '', 1, 1, 1, 1, 22, 549, 22, 549, 5),
+(393, 2, 97, 8, 'N', '', 1, 966, 1, 966, 533, 770, 533, 770, 5),
+(394, 2, 97, 3, 'N', '', 770, 1052, 770, 1052, 966, 1030, 966, 1030, 5),
+(395, 3, 97, 2, 'L', '', 1030, 1506, 1030, 1506, 1052, 1500, 1052, 1500, 5),
+(396, 1, 98, 1, 'N', '', 1, 860, 1, 860, 194, 736, 194, 736, 5),
+(397, 1, 98, 5, 'N', '', 736, 1343, 736, 1343, 860, 1317, 860, 1317, 5),
+(398, 2, 98, 2, 'D', '', 1317, 1, 1317, 1, 1343, 1807, 1343, 1807, 5),
+(399, 2, 98, 1, 'N', '', 1, 2386, 1, 2386, 1800, 2359, 1800, 2359, 5),
+(400, 2, 98, 3, 'N', '', 2359, 2536, 2359, 2536, 2386, 2449, 2386, 2449, 5),
+(401, 3, 98, 2, 'L', '', 2449, 1, 2449, 1, 2536, 2951, 2536, 2951, 5),
+(402, 3, 98, 1, 'N', '', 1, 3540, 1, 3540, 2948, 3521, 2948, 3521, 5),
+(403, 3, 98, 3, 'N', '', 3521, 3653, 3521, 3653, 3540, 3604, 3540, 3604, 5),
+(404, 4, 98, 2, 'L', '', 3604, 4112, 3604, 4112, 3653, 4101, 3653, 4101, 5),
+(405, 4, 98, 1, 'N', '', 4101, 4669, 4101, 4669, 4112, 4650, 4112, 4650, 5),
+(406, 4, 98, 3, 'N', '', 4650, 4787, 4650, 4787, 4669, 4736, 4669, 4736, 5),
+(407, 5, 98, 2, 'L', '', 4736, 5218, 4736, 5218, 4787, 5188, 4787, 5188, 5),
+(408, 2, 99, 2, 'L', '', 1, 1, 1, 1, 58, 501, 58, 501, 5),
+(409, 2, 99, 1, 'N', '', 1, 1027, 1, 1027, 495, 1012, 495, 1012, 5),
+(410, 2, 99, 3, 'N', '', 1012, 1104, 1012, 1104, 1027, 1086, 1027, 1086, 5),
+(411, 2, 99, 5, 'N', '', 1086, 1561, 1086, 1561, 1104, 1539, 1104, 1539, 5),
+(412, 3, 99, 2, 'D', '', 1539, 1, 1539, 1, 1561, 1979, 1561, 1979, 5),
+(413, 3, 99, 1, 'N', '', 1, 2508, 1, 2508, 1973, 2493, 1973, 2493, 5),
+(414, 3, 99, 3, 'N', '', 2493, 2592, 2493, 2592, 2508, 2568, 2508, 2568, 5),
+(415, 4, 99, 2, 'L', '', 2568, 1, 2568, 1, 2592, 3028, 2592, 3028, 5),
+(416, 4, 99, 1, 'N', '', 1, 3551, 1, 3551, 3022, 3539, 3022, 3539, 5),
+(417, 4, 99, 3, 'N', '', 3539, 3633, 3539, 3633, 3551, 3612, 3551, 3612, 5),
+(418, 4, 99, 5, 'N', '', 3612, 4096, 3612, 4096, 3633, 4074, 3633, 4074, 5),
+(419, 5, 99, 2, 'D', '', 4074, 1, 4074, 1, 4096, 4527, 4096, 4527, 5),
+(420, 5, 99, 1, 'N', '', 1, 5068, 1, 5068, 4521, 5054, 4521, 5054, 5),
+(421, 5, 99, 3, 'N', '', 5054, 5156, 5054, 5156, 5068, 5130, 5068, 5130, 5),
+(422, 6, 100, 2, 'L', '', 1, 1, 1, 1, 52, 491, 52, 491, 5),
+(423, 6, 100, 1, 'N', '', 1, 1030, 1, 1030, 485, 1015, 485, 1015, 5),
+(424, 6, 100, 3, 'N', '', 1015, 1113, 1015, 1113, 1030, 1093, 1030, 1093, 5),
+(425, 7, 100, 2, 'L', '', 1093, 1, 1093, 1, 1113, 1551, 1113, 1551, 5),
+(426, 7, 100, 1, 'N', '', 1, 2096, 1, 2096, 1545, 2078, 1545, 2078, 5),
+(427, 7, 100, 3, 'N', '', 2078, 2190, 2078, 2190, 2096, 2156, 2096, 2156, 5),
+(428, 8, 101, 2, 'L', '', 1, 1, 1, 1, 29, 468, 29, 468, 5),
+(429, 8, 101, 1, 'N', '', 1, 1010, 1, 1010, 462, 995, 462, 995, 5),
+(430, 8, 101, 3, 'N', '', 995, 1093, 995, 1093, 1010, 1073, 1010, 1073, 5),
+(431, 9, 101, 2, 'L', '', 1073, 1, 1073, 1, 1093, 1529, 1093, 1529, 5),
+(432, 9, 101, 1, 'N', '', 1, 1013, 1, 1013, 1523, 2056, 1523, 2056, 5),
+(433, 9, 101, 3, 'N', '', 995, 2153, 995, 2153, 2074, 2132, 2074, 2132, 5),
+(434, 9, 101, 4, 'N', '', 2132, 2431, 2132, 2431, 2153, 2253, 2153, 2253, 5),
+(435, 9, 102, 1, 'N', '', 1, 590, 1, 590, 1, 561, 1, 561, 5),
+(436, 9, 102, 3, 'N', '', 561, 681, 561, 681, 590, 653, 590, 653, 5),
+(437, 10, 102, 2, 'L', '', 653, 1, 653, 1, 681, 1120, 681, 1120, 5),
+(438, 10, 102, 1, 'N', '', 1, 1646, 1, 1646, 1113, 1633, 1113, 1633, 5),
+(439, 10, 102, 3, 'N', '', 1633, 1734, 1633, 1734, 1646, 1709, 1646, 1709, 5),
+(440, 11, 102, 2, 'L', '', 1709, 1, 1709, 1, 1734, 2175, 1734, 2175, 5),
+(441, 11, 102, 1, 'N', '', 1, 2717, 1, 2717, 2169, 2702, 2169, 2702, 5),
+(442, 11, 102, 3, 'N', '', 2702, 2797, 2702, 2797, 2717, 2776, 2717, 2776, 5),
+(443, 11, 102, 5, 'N', '', 2776, 3263, 2776, 3263, 2797, 3241, 2797, 3241, 5),
+(444, 12, 102, 2, 'D', '', 3241, 1, 3241, 1, 3263, 3707, 3263, 3707, 5),
+(445, 12, 102, 1, 'N', '', 1, 4248, 1, 4248, 3701, 4233, 3701, 4233, 5),
+(446, 12, 102, 3, 'N', '', 4233, 4337, 4233, 4337, 4248, 4308, 4248, 4308, 5),
+(447, 1, 103, 1, 'N', '', 1, 502, 1, 502, 1, 489, 1, 489, 5),
+(448, 1, 103, 3, 'N', '', 489, 604, 489, 604, 502, 562, 502, 562, 5),
+(449, 2, 103, 2, 'L', '', 562, 1, 562, 1, 604, 1022, 604, 1022, 5),
+(450, 2, 103, 1, 'N', '', 1, 1524, 1, 1524, 1015, 1511, 1015, 1511, 5),
+(451, 2, 103, 3, 'N', '', 1511, 1608, 1511, 1608, 1524, 1584, 1524, 1584, 5),
+(452, 2, 103, 5, 'N', '', 1584, 2071, 1584, 2071, 1608, 2050, 1608, 2050, 5),
+(453, 3, 104, 2, 'D', '', 1, 1, 1, 1, 18, 447, 18, 447, 5),
+(454, 3, 104, 1, 'N', '', 1, 957, 1, 957, 441, 945, 441, 945, 5),
+(455, 3, 104, 3, 'N', '', 945, 1038, 945, 1038, 957, 1018, 957, 1018, 5),
+(456, 3, 104, 5, 'N', '', 1018, 1492, 1018, 1492, 1038, 1474, 1038, 1474, 5),
+(457, 4, 105, 2, 'D', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
+(458, 4, 105, 1, 'N', '', 1, 959, 1, 959, 433, 946, 433, 946, 5),
+(459, 4, 105, 3, 'N', '', 946, 1040, 946, 1040, 959, 1019, 959, 1019, 5),
+(460, 4, 105, 5, 'N', '', 1019, 1509, 1019, 1509, 1040, 1487, 1040, 1487, 5),
+(461, 5, 105, 2, 'D', '', 1487, 1, 1487, 1, 1509, 1935, 1509, 1935, 5),
+(462, 5, 105, 1, 'N', '', 1, 2454, 1, 2454, 1929, 2442, 1929, 2442, 5),
+(463, 5, 105, 3, 'N', '', 2442, 2536, 2442, 2536, 2454, 2516, 2454, 2516, 5),
+(464, 5, 105, 5, 'N', '', 2516, 3017, 2516, 3017, 2536, 2996, 2536, 2996, 5),
+(465, 6, 105, 2, 'D', '', 2996, 1, 2996, 1, 3017, 3447, 3017, 3447, 5),
+(466, 6, 105, 1, 'N', '', 1, 3966, 1, 3966, 3441, 3953, 3441, 3953, 5),
+(467, 6, 105, 3, 'N', '', 3953, 4067, 3953, 4067, 3966, 4026, 3966, 4026, 5),
+(468, 7, 106, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
+(469, 7, 106, 1, 'N', '', 1, 975, 1, 975, 444, 961, 444, 961, 5),
+(470, 7, 106, 3, 'N', '', 961, 1057, 961, 1057, 975, 1038, 975, 1038, 5),
+(471, 7, 106, 5, 'N', '', 1038, 1627, 1038, 1627, 1057, 1505, 1057, 1505, 5),
+(472, 7, 106, 4, 'N', '', 1505, 1856, 1505, 1856, 1627, 1838, 1627, 1838, 5),
+(473, 1, 107, 1, 'N', '', 1, 548, 1, 548, 12, 543, 12, 543, 5),
+(474, 1, 108, 3, 'N', '', 1, 107, 1, 107, 13, 82, 13, 82, 5),
+(475, 2, 108, 2, 'L', '', 82, 1, 82, 1, 107, 541, 107, 541, 5),
+(476, 2, 108, 1, 'N', '', 1, 1357, 1, 1357, 536, 1009, 536, 1009, 5),
+(477, 2, 108, 3, 'N', '', 1009, 1439, 1009, 1439, 1357, 1422, 1357, 1422, 5),
+(478, 3, 109, 2, 'L', '', 1, 1, 1, 1, 71, 500, 71, 500, 5),
+(479, 3, 109, 1, 'N', '', 1, 1415, 1, 1415, 496, 986, 496, 986, 5),
+(480, 3, 109, 3, 'N', '', 986, 1602, 986, 1602, 1415, 1485, 1415, 1485, 5),
+(481, 3, 109, 4, 'N', '', 1485, 1810, 1485, 1810, 1602, 1797, 1602, 1797, 5),
+(482, 1, 110, 1, 'N', '', 1, 506, 1, 506, 1, 493, 1, 493, 5),
+(483, 1, 110, 3, 'N', '', 493, 605, 493, 605, 506, 566, 506, 566, 5),
+(484, 2, 110, 2, 'L', '', 566, 1, 566, 1, 605, 1048, 605, 1048, 5),
+(485, 2, 110, 1, 'N', '', 1, 1527, 1, 1527, 1016, 1513, 1016, 1513, 5),
+(486, 2, 110, 3, 'N', '', 1513, 1611, 1513, 1611, 1527, 1586, 1527, 1586, 5),
+(487, 2, 110, 5, 'N', '', 1586, 2095, 1586, 2095, 1611, 2070, 1611, 2070, 5),
+(488, 3, 110, 2, 'D', '', 2070, 1, 2070, 1, 2095, 2526, 2095, 2526, 5),
+(489, 3, 110, 1, 'N', '', 1, 3057, 1, 3057, 2519, 3045, 2519, 3045, 5),
+(490, 3, 110, 3, 'N', '', 3045, 3159, 3045, 3159, 3057, 3119, 3057, 3119, 5),
+(491, 4, 111, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
+(492, 4, 111, 1, 'N', '', 1, 960, 1, 960, 434, 947, 434, 947, 5),
+(493, 4, 111, 3, 'N', '', 947, 1042, 947, 1042, 960, 1020, 960, 1020, 5),
+(494, 4, 111, 5, 'N', '', 1020, 1514, 1020, 1514, 1042, 1492, 1042, 1492, 5),
+(495, 5, 111, 2, 'D', '', 1492, 1, 1492, 1, 1514, 1940, 1514, 1940, 5),
+(496, 5, 111, 1, 'N', '', 1, 2461, 1, 2461, 1934, 2449, 1934, 2449, 5),
+(497, 5, 111, 3, 'N', '', 2449, 2543, 2449, 2543, 2461, 2523, 2461, 2523, 5),
+(498, 5, 111, 5, 'N', '', 2523, 3025, 2523, 3025, 2543, 3003, 2543, 3003, 5),
+(499, 6, 111, 2, 'D', '', 3003, 1, 3003, 1, 3025, 3456, 3025, 3456, 5),
+(500, 6, 111, 1, 'N', '', 1, 3976, 1, 3976, 3450, 3964, 3450, 3964, 5),
+(501, 6, 111, 3, 'N', '', 3964, 4078, 3964, 4078, 3976, 4037, 3976, 4037, 5),
+(502, 7, 112, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
+(503, 7, 112, 1, 'N', '', 1, 975, 1, 975, 444, 961, 444, 961, 5),
+(504, 7, 112, 3, 'N', '', 961, 1056, 961, 1056, 975, 1038, 975, 1038, 5),
+(505, 7, 112, 5, 'N', '', 1038, 1625, 1038, 1625, 1056, 1494, 1056, 1494, 5),
+(506, 7, 112, 4, 'N', '', 1494, 1861, 1494, 1861, 1625, 1836, 1625, 1836, 5),
+(507, 1, 113, 1, 'N', '', 1, 1096, 1, 1096, 556, 1080, 556, 1080, 5),
+(508, 1, 113, 3, 'N', '', 1080, 1184, 1080, 1184, 1096, 1159, 1096, 1159, 5),
+(509, 2, 113, 2, 'L', '', 1159, 1, 1159, 1, 1184, 1631, 1184, 1631, 5),
+(510, 2, 113, 1, 'N', '', 1, 2171, 1, 2171, 1625, 2156, 1625, 2156, 5),
+(511, 2, 113, 3, 'N', '', 2156, 2259, 2156, 2259, 2171, 2235, 2171, 2235, 5),
+(512, 3, 114, 2, 'L', '', 1, 1, 1, 1, 10, 458, 10, 458, 5),
+(513, 3, 114, 1, 'N', '', 1, 996, 1, 996, 452, 982, 452, 982, 5),
+(514, 3, 114, 3, 'N', '', 982, 1086, 982, 1086, 996, 1057, 996, 1057, 5),
+(515, 4, 114, 2, 'L', '', 1057, 1, 1057, 1, 1086, 1526, 1086, 1526, 5),
+(516, 4, 114, 1, 'N', '', 1, 2078, 1, 2078, 1520, 2064, 1520, 2064, 5),
+(517, 4, 114, 3, 'N', '', 2064, 2167, 2064, 2167, 2078, 2139, 2078, 2139, 5),
+(518, 5, 114, 2, 'L', '', 2139, 1, 2139, 1, 2167, 2607, 2167, 2607, 5),
+(519, 5, 114, 1, 'N', '', 1, 1, 1, 1, 2601, 3145, 2601, 3145, 5),
+(520, 5, 114, 8, 'N', '', 1, 3507, 1, 3507, 3117, 3367, 3117, 3367, 5),
+(521, 5, 114, 3, 'N', '', 3367, 3595, 3367, 3595, 3507, 3570, 3507, 3570, 5),
+(522, 6, 114, 2, 'L', '', 3570, 1, 3570, 1, 3595, 4033, 3595, 4033, 5),
+(523, 6, 114, 1, 'N', '', 1, 1, 1, 1, 4027, 4540, 4027, 4540, 5),
+(524, 6, 114, 8, 'N', '', 1, 4975, 1, 4975, 4533, 4768, 4533, 4768, 5),
+(525, 6, 114, 3, 'N', '', 4768, 5061, 4768, 5061, 4975, 5039, 4975, 5039, 5),
+(526, 6, 115, 9, 'N', '', 1, 264, 1, 264, 10, 260, 10, 260, 5),
+(527, 7, 116, 2, 'L', '', 1, 1, 1, 1, 45, 486, 45, 486, 5),
+(528, 7, 116, 1, 'N', '', 1, 1022, 1, 1022, 480, 1009, 480, 1009, 5),
+(529, 7, 116, 3, 'N', '', 1009, 1109, 1009, 1109, 1022, 1087, 1022, 1087, 5),
+(530, 7, 116, 4, 'N', '', 1087, 1384, 1087, 1384, 1109, 1377, 1109, 1377, 5),
+(531, 2, 117, 2, 'L', '', 1, 1, 1, 1, 8, 444, 8, 444, 5),
+(532, 2, 117, 1, 'N', '', 1, 979, 1, 979, 438, 965, 438, 965, 5),
+(533, 2, 117, 3, 'N', '', 965, 1065, 965, 1065, 979, 1044, 979, 1044, 5),
+(534, 3, 117, 2, 'L', '', 1044, 1, 1044, 1, 1065, 1490, 1065, 1490, 5),
+(535, 3, 117, 1, 'N', '', 1, 2018, 1, 2018, 1484, 2004, 1484, 2004, 5),
+(536, 3, 117, 3, 'N', '', 2004, 2104, 2004, 2104, 2018, 2081, 2018, 2081, 5),
+(537, 4, 117, 2, 'L', '', 2081, 1, 2081, 1, 2104, 2529, 2104, 2529, 5),
+(538, 4, 117, 1, 'N', '', 1, 3044, 1, 3044, 2523, 3031, 2523, 3031, 5),
+(539, 4, 117, 3, 'N', '', 3031, 3126, 3031, 3126, 3044, 3108, 3044, 3108, 5),
+(540, 4, 117, 5, 'N', '', 3108, 3583, 3108, 3583, 3126, 3567, 3126, 3567, 5),
+(541, 5, 118, 2, 'D', '', 1, 1, 1, 1, 12, 450, 12, 450, 5),
+(542, 5, 118, 1, 'N', '', 1, 968, 1, 968, 443, 956, 443, 956, 5),
+(543, 5, 118, 3, 'N', '', 956, 1054, 956, 1054, 968, 1033, 968, 1033, 5),
+(544, 6, 118, 2, 'L', '', 1033, 1, 1033, 1, 1054, 1480, 1054, 1480, 5),
+(545, 6, 118, 1, 'N', '', 1, 2013, 1, 2013, 1474, 2005, 1474, 2005, 5),
+(546, 6, 118, 3, 'N', '', 2005, 2100, 2005, 2100, 2013, 2078, 2013, 2078, 5),
+(547, 7, 118, 2, 'L', '', 2078, 1, 2078, 1, 2100, 2526, 2100, 2526, 5),
+(548, 7, 118, 1, 'N', '', 1, 3044, 1, 3044, 2520, 3031, 2520, 3031, 5),
+(549, 7, 118, 3, 'N', '', 3031, 3126, 3031, 3126, 3044, 3108, 3044, 3108, 5),
+(550, 7, 118, 5, 'N', '', 3108, 3589, 3108, 3589, 3126, 3561, 3126, 3561, 5),
+(551, 8, 119, 2, 'D', '', 1, 1, 1, 1, 21, 457, 21, 457, 5),
+(552, 8, 119, 1, 'N', '', 1, 986, 1, 986, 451, 973, 451, 973, 5),
+(553, 8, 119, 3, 'N', '', 973, 1070, 973, 1070, 986, 1051, 986, 1051, 5),
+(554, 8, 119, 4, 'N', '', 1051, 1289, 1051, 1289, 1070, 1266, 1070, 1266, 5),
+(555, 8, 120, 4, 'N', '', 1, 258, 1, 258, 15, 234, 15, 234, 5),
+(556, 2, 121, 2, 'L', '', 1, 1, 1, 1, 11, 455, 11, 455, 5),
+(557, 2, 121, 1, 'N', '', 1, 1094, 1, 1094, 449, 1082, 449, 1082, 5),
+(558, 2, 121, 3, 'N', '', 1082, 1179, 1082, 1179, 1094, 1156, 1094, 1156, 5),
+(559, 3, 121, 2, 'L', '', 1156, 1647, 1156, 1647, 1179, 1634, 1179, 1634, 5),
+(560, 3, 121, 1, 'N', '', 1634, 2204, 1634, 2204, 1647, 2192, 1647, 2192, 5),
+(561, 3, 121, 3, 'N', '', 2192, 2289, 2192, 2289, 2204, 2269, 2204, 2269, 5),
+(562, 4, 121, 2, 'L', '', 2269, 1, 2269, 1, 2289, 2738, 2289, 2738, 5),
+(563, 4, 121, 1, 'N', '', 1, 3355, 1, 3355, 2732, 3257, 2732, 3257, 5),
+(564, 4, 121, 5, 'N', '', 3257, 3830, 3257, 3830, 3355, 3806, 3355, 3806, 5),
+(565, 5, 121, 2, 'D', '', 3806, 1, 3806, 1, 3830, 4262, 3830, 4262, 5),
+(566, 5, 121, 1, 'N', '', 1, 4766, 1, 4766, 4256, 4754, 4256, 4754, 5),
+(567, 5, 121, 3, 'N', '', 4754, 4851, 4754, 4851, 4766, 4831, 4766, 4831, 5),
+(568, 6, 121, 2, 'L', '', 4831, 1, 4831, 1, 4851, 5302, 4851, 5302, 5),
+(569, 6, 121, 1, 'N', '', 1, 5806, 1, 5806, 5296, 5794, 5296, 5794, 5),
+(570, 6, 121, 3, 'N', '', 5794, 5891, 5794, 5891, 5806, 5868, 5806, 5868, 5),
+(571, 7, 121, 2, 'L', '', 5868, 1, 5868, 1, 5891, 6340, 5891, 6340, 5),
+(572, 7, 121, 1, 'N', '', 1, 6974, 1, 6974, 6335, 6876, 6335, 6876, 5),
+(573, 7, 121, 5, 'N', '', 6876, 7464, 6876, 7464, 6974, 7429, 6974, 7429, 5),
+(574, 8, 122, 2, 'D', '', 1, 1, 1, 1, 18, 451, 18, 451, 5),
+(575, 8, 122, 1, 'N', '', 1, 952, 1, 952, 445, 940, 445, 940, 5),
+(576, 8, 122, 3, 'N', '', 940, 1037, 940, 1037, 952, 1017, 952, 1017, 5),
+(577, 9, 122, 2, 'L', '', 1017, 1, 1017, 1, 1037, 1484, 1037, 1484, 5),
+(578, 9, 122, 1, 'N', '', 1, 2001, 1, 2001, 1478, 1989, 1478, 1989, 5),
+(579, 9, 122, 3, 'N', '', 1989, 2086, 1989, 2086, 2001, 2066, 2001, 2066, 5),
+(580, 10, 122, 2, 'L', '', 2066, 1, 2066, 1, 2086, 2547, 2086, 2547, 5),
+(581, 10, 122, 1, 'N', '', 1, 3182, 1, 3182, 2541, 3072, 2541, 3072, 5),
+(582, 10, 122, 5, 'N', '', 3072, 3671, 3072, 3671, 3182, 3652, 3182, 3652, 5),
+(583, 11, 123, 2, 'D', '', 1, 1, 1, 1, 12, 447, 12, 447, 5),
+(584, 11, 123, 1, 'N', '', 1, 982, 1, 982, 441, 970, 441, 970, 5),
+(585, 11, 123, 3, 'N', '', 970, 1067, 970, 1067, 982, 1047, 982, 1047, 5),
+(586, 12, 123, 2, 'L', '', 1047, 1, 1047, 1, 1067, 1521, 1067, 1521, 5),
+(587, 12, 123, 1, 'N', '', 1, 2044, 1, 2044, 1515, 2034, 1515, 2034, 5),
+(588, 12, 123, 3, 'N', '', 2034, 2130, 2034, 2130, 2044, 2109, 2044, 2109, 5),
+(589, 12, 123, 4, 'N', '', 2109, 2418, 2109, 2418, 2130, 2368, 2130, 2368, 5),
+(590, 1, 124, 1, 'N', '', 1, 507, 1, 507, 1, 494, 1, 494, 5),
+(591, 1, 124, 3, 'N', '', 494, 606, 494, 606, 507, 567, 507, 567, 5),
+(592, 2, 124, 2, 'L', '', 567, 1, 567, 1, 606, 1024, 606, 1024, 5),
+(593, 2, 124, 1, 'N', '', 1, 1528, 1, 1528, 1017, 1514, 1017, 1514, 5),
+(594, 2, 124, 3, 'N', '', 1514, 1611, 1514, 1611, 1528, 1587, 1528, 1587, 5),
+(595, 2, 124, 5, 'N', '', 1587, 2093, 1587, 2093, 1611, 2068, 1611, 2068, 5),
+(596, 3, 124, 2, 'D', '', 2068, 1, 2068, 1, 2093, 2523, 2093, 2523, 5),
+(597, 3, 124, 1, 'N', '', 1, 3054, 1, 3054, 2516, 3042, 2516, 3042, 5),
+(598, 3, 124, 3, 'N', '', 3042, 3166, 3042, 3166, 3054, 3116, 3054, 3116, 5),
+(599, 4, 125, 2, 'L', '', 1, 1, 1, 1, 12, 440, 12, 440, 5),
+(600, 4, 125, 1, 'N', '', 1, 960, 1, 960, 434, 947, 434, 947, 5),
+(601, 4, 125, 3, 'N', '', 947, 1042, 947, 1042, 960, 1020, 960, 1020, 5),
+(602, 4, 125, 5, 'N', '', 1020, 1513, 1020, 1513, 1042, 1491, 1042, 1491, 5),
+(603, 5, 125, 2, 'D', '', 1491, 1, 1491, 1, 1513, 1939, 1513, 1939, 5),
+(604, 5, 125, 1, 'N', '', 1, 2460, 1, 2460, 1933, 2448, 1933, 2448, 5),
+(605, 5, 125, 3, 'N', '', 2448, 2543, 2448, 2543, 2460, 2522, 2460, 2522, 5),
+(606, 5, 125, 5, 'N', '', 2522, 3025, 2522, 3025, 2543, 3003, 2543, 3003, 5),
+(607, 6, 125, 2, 'D', '', 3003, 1, 3003, 1, 3025, 3456, 3025, 3456, 5),
+(608, 6, 125, 1, 'N', '', 1, 3976, 1, 3976, 3450, 3964, 3450, 3964, 5),
+(609, 6, 125, 3, 'N', '', 3964, 4078, 3964, 4078, 3976, 4037, 3976, 4037, 5),
+(610, 7, 126, 2, 'L', '', 1, 1, 1, 1, 20, 450, 20, 450, 5),
+(611, 7, 126, 1, 'N', '', 1, 973, 1, 973, 444, 959, 444, 959, 5),
+(612, 7, 126, 3, 'N', '', 959, 1054, 959, 1054, 973, 1036, 973, 1036, 5),
+(613, 7, 126, 5, 'N', '', 1036, 1623, 1036, 1623, 1054, 1499, 1054, 1499, 5),
+(614, 7, 126, 4, 'N', '', 1499, 1859, 1499, 1859, 1623, 1832, 1623, 1832, 5),
+(615, 7, 127, 1, 'N', '', 1, 514, 1, 514, 1, 497, 1, 497, 5),
+(616, 7, 127, 3, 'N', '', 497, 582, 497, 582, 514, 577, 514, 577, 5),
+(617, 2, 128, 2, 'L', '', 1, 1, 1, 1, 8, 445, 8, 445, 5),
+(618, 2, 128, 1, 'N', '', 1, 978, 1, 978, 439, 964, 439, 964, 5),
+(619, 2, 128, 3, 'N', '', 964, 1072, 964, 1072, 978, 1041, 978, 1041, 5),
+(620, 3, 128, 2, 'L', '', 1041, 1, 1041, 1, 1072, 1487, 1072, 1487, 5),
+(621, 3, 128, 1, 'N', '', 1, 2015, 1, 2015, 1481, 2001, 1481, 2001, 5),
+(622, 3, 128, 3, 'N', '', 2001, 2101, 2001, 2101, 2015, 2080, 2015, 2080, 5),
+(623, 4, 128, 2, 'L', '', 2080, 1, 2080, 1, 2101, 2527, 2101, 2527, 5),
+(624, 4, 128, 1, 'N', '', 1, 3046, 1, 3046, 2521, 3033, 2521, 3033, 5),
+(625, 4, 128, 3, 'N', '', 3033, 3128, 3033, 3128, 3046, 3110, 3046, 3110, 5),
+(626, 4, 128, 5, 'N', '', 3110, 3589, 3110, 3589, 3128, 3573, 3128, 3573, 5),
+(627, 5, 129, 2, 'D', '', 1, 1, 1, 1, 12, 449, 12, 449, 5),
+(628, 5, 129, 1, 'N', '', 1, 972, 1, 972, 443, 959, 443, 959, 5),
+(629, 5, 129, 3, 'N', '', 959, 1060, 959, 1060, 972, 1036, 972, 1036, 5),
+(630, 6, 129, 2, 'L', '', 1036, 1, 1036, 1, 1060, 1483, 1060, 1483, 5),
+(631, 6, 129, 1, 'N', '', 1, 2017, 1, 2017, 1477, 2003, 1477, 2003, 5),
+(632, 6, 129, 3, 'N', '', 2003, 2104, 2003, 2104, 2017, 2081, 2017, 2081, 5),
+(633, 7, 129, 2, 'L', '', 2081, 1, 2081, 1, 2104, 2529, 2104, 2529, 5),
+(634, 7, 129, 1, 'N', '', 1, 3045, 1, 3045, 2522, 3032, 2522, 3032, 5),
+(635, 7, 129, 3, 'N', '', 3032, 3127, 3032, 3127, 3045, 3109, 3045, 3109, 5),
+(636, 7, 129, 5, 'N', '', 3109, 3588, 3109, 3588, 3127, 3568, 3127, 3568, 5),
+(637, 8, 130, 2, 'D', '', 1, 1, 1, 1, 15, 449, 15, 449, 5),
+(638, 8, 130, 1, 'N', '', 1, 975, 1, 975, 442, 962, 442, 962, 5),
+(639, 8, 130, 3, 'N', '', 962, 1058, 962, 1058, 975, 1039, 975, 1039, 5),
+(640, 8, 130, 4, 'N', '', 1039, 1275, 1039, 1275, 1058, 1255, 1058, 1255, 5),
+(641, 8, 131, 4, 'N', '', 1, 243, 1, 243, 14, 235, 14, 235, 5),
+(642, 2, 132, 2, 'L', '', 1, 1, 1, 1, 1, 379, 1, 379, 5),
+(643, 2, 132, 1, 'N', '', 1, 920, 1, 920, 372, 904, 372, 904, 5),
+(644, 2, 132, 3, 'N', '', 904, 1036, 904, 1036, 920, 974, 920, 974, 5),
+(645, 3, 132, 2, 'L', '', 974, 1, 974, 1, 1036, 1466, 1036, 1466, 5),
+(646, 3, 132, 1, 'N', '', 1, 2006, 1, 2006, 1460, 1992, 1460, 1992, 5),
+(647, 3, 132, 3, 'N', '', 1992, 2126, 1992, 2126, 2006, 2070, 2006, 2070, 5),
+(648, 4, 132, 2, 'L', '', 2070, 1, 2070, 1, 2126, 2551, 2126, 2551, 5),
+(649, 4, 132, 1, 'N', '', 1, 3095, 1, 3095, 2544, 3079, 2544, 3079, 5),
+(650, 4, 132, 3, 'N', '', 3079, 3213, 3079, 3213, 3095, 3157, 3095, 3157, 5),
+(651, 5, 132, 2, 'L', '', 3157, 1, 3157, 1, 3213, 3638, 3213, 3638, 5),
+(652, 5, 132, 1, 'N', '', 1, 4182, 1, 4182, 3631, 4166, 3631, 4166, 5),
+(653, 5, 132, 3, 'N', '', 4166, 4266, 4166, 4266, 4182, 4245, 4182, 4245, 5),
+(654, 6, 132, 2, 'L', '', 4245, 1, 4245, 1, 4266, 4706, 4266, 4706, 5),
+(655, 6, 132, 1, 'N', '', 1, 5246, 1, 5246, 4700, 5232, 4700, 5232, 5),
+(656, 6, 132, 3, 'N', '', 5232, 5332, 5232, 5332, 5246, 5311, 5246, 5311, 5),
+(657, 7, 132, 2, 'L', '', 5311, 1, 5311, 1, 5332, 5772, 5332, 5772, 5),
+(658, 7, 132, 1, 'N', '', 1, 6302, 1, 6302, 5766, 6286, 5766, 6286, 5),
+(659, 7, 132, 3, 'N', '', 6286, 6388, 6286, 6388, 6302, 6367, 6302, 6367, 5),
+(660, 8, 132, 2, 'L', '', 6367, 1, 6367, 1, 6388, 6831, 6388, 6831, 5),
+(661, 8, 132, 1, 'N', '', 1, 7374, 1, 7374, 6824, 7362, 6824, 7362, 5),
+(662, 8, 132, 3, 'N', '', 7362, 7494, 7362, 7494, 7374, 7432, 7374, 7432, 5),
+(663, 9, 132, 2, 'L', '', 7432, 1, 7432, 1, 7494, 7928, 7494, 7928, 5),
+(664, 9, 132, 1, 'N', '', 1, 8462, 1, 8462, 7922, 8448, 7922, 8448, 5),
+(665, 9, 132, 3, 'N', '', 8448, 8548, 8448, 8548, 8462, 8527, 8462, 8527, 5),
+(666, 10, 132, 2, 'L', '', 8527, 9021, 8527, 9021, 8548, 8988, 8548, 8988, 5),
+(667, 10, 132, 3, 'N', '', 8988, 9105, 8988, 9105, 9021, 9084, 9021, 9084, 5),
+(668, 10, 132, 4, 'N', '', 9084, 9377, 9084, 9377, 9105, 9355, 9105, 9355, 5),
+(669, 10, 133, 1, 'N', '', 1, 542, 1, 542, 5, 529, 5, 529, 5),
+(670, 10, 133, 3, 'N', '', 529, 615, 529, 615, 542, 607, 542, 607, 5),
+(671, 2, 134, 2, 'L', '', 1, 1, 1, 1, 8, 444, 8, 444, 5),
+(672, 2, 134, 1, 'N', '', 1, 966, 1, 966, 438, 958, 438, 958, 5),
+(673, 2, 134, 3, 'N', '', 958, 1052, 958, 1052, 966, 1031, 966, 1031, 5),
+(674, 3, 134, 2, 'L', '', 1031, 1, 1031, 1, 1052, 1479, 1052, 1479, 5),
+(675, 3, 134, 1, 'N', '', 1, 2016, 1, 2016, 1473, 2001, 1473, 2001, 5),
+(676, 3, 134, 3, 'N', '', 2001, 2094, 2001, 2094, 2016, 2077, 2016, 2077, 5),
+(677, 3, 134, 5, 'N', '', 2077, 2560, 2077, 2560, 2094, 2534, 2094, 2534, 5),
+(678, 4, 135, 2, 'D', '', 1, 1, 1, 1, 13, 455, 13, 455, 5),
+(679, 4, 135, 1, 'N', '', 1, 972, 1, 972, 448, 960, 448, 960, 5),
+(680, 4, 135, 3, 'N', '', 960, 1058, 960, 1058, 972, 1037, 972, 1037, 5),
+(681, 5, 135, 2, 'L', '', 1037, 1, 1037, 1, 1058, 1485, 1058, 1485, 5),
+(682, 5, 135, 1, 'N', '', 1, 2013, 1, 2013, 1478, 2000, 1478, 2000, 5),
+(683, 5, 135, 3, 'N', '', 2000, 2094, 2000, 2094, 2013, 2077, 2013, 2077, 5),
+(684, 5, 135, 5, 'N', '', 2077, 2572, 2077, 2572, 2094, 2548, 2094, 2548, 5),
+(685, 6, 136, 2, 'D', '', 1, 1, 1, 1, 13, 448, 13, 448, 5),
+(686, 6, 136, 1, 'N', '', 1, 971, 1, 971, 441, 963, 441, 963, 5);
 INSERT INTO `databaseInput_domain` (`id`, `module`, `cds_id`, `domainType_id`, `chirality`, `description`, `pfamLinkerStart`, `pfamLinkerStop`, `definedLinkerStart`, `definedLinkerStop`, `pfamStart`, `pfamStop`, `definedStart`, `definedStop`, `user_id`) VALUES
-(687, 8, 130, 4, 'N', '', 1, 243, 1, 243, 14, 235, 14, 235, 5),
-(688, 1, 131, 1, 'N', '', 1, 509, 1, 509, 1, 507, 1, 507, 5),
-(689, 1, 131, 6, 'N', '', 507, 944, 507, 944, 509, 713, 509, 713, 5),
-(690, 1, 131, 3, 'N', '', 713, 1029, 713, 1029, 944, 1006, 944, 1006, 5),
-(691, 2, 131, 2, 'L', '', 1006, 1, 1006, 1, 1029, 1459, 1029, 1459, 5),
-(692, 2, 132, 1, 'N', '', 1, 1, 1, 1, 22, 549, 22, 549, 5),
-(693, 2, 132, 6, 'N', '', 1, 966, 1, 966, 533, 770, 533, 770, 5),
-(694, 2, 132, 3, 'N', '', 770, 1052, 770, 1052, 966, 1030, 966, 1030, 5),
-(695, 3, 132, 2, 'L', '', 1030, 1506, 1030, 1506, 1052, 1500, 1052, 1500, 5),
-(696, 1, 133, 1, 'N', '', 1, 1, 1, 1, 14, 547, 14, 547, 5),
-(697, 1, 134, 3, 'N', '', 1, 288, 1, 288, 233, 281, 233, 281, 5),
-(698, 1, 135, 9, 'N', '', 1, 448, 1, 448, 4, 441, 4, 441, 5),
-(699, 1, 135, 9, 'N', '', 441, 957, 441, 957, 448, 863, 448, 863, 5),
-(700, 1, 136, 9, 'N', '', 1, 1, 1, 1, 17, 437, 17, 437, 5),
-(701, 1, 136, 1, 'N', '', 1, 974, 1, 974, 431, 956, 431, 956, 5),
-(702, 1, 136, 3, 'N', '', 956, 1049, 956, 1049, 974, 1033, 974, 1033, 5),
-(703, 1, 137, 3, 'N', '', 1, 280, 1, 280, 187, 249, 187, 249, 5),
-(704, 2, 137, 2, 'L', '', 249, 1, 249, 1, 280, 706, 280, 706, 5),
-(705, 2, 138, 4, 'N', '', 1, 253, 1, 253, 18, 236, 18, 236, 5);
+(687, 6, 136, 3, 'N', '', 963, 1057, 963, 1057, 971, 1036, 971, 1036, 5),
+(688, 7, 136, 2, 'L', '', 1036, 1, 1036, 1, 1057, 1486, 1057, 1486, 5),
+(689, 7, 136, 1, 'N', '', 1, 2009, 1, 2009, 1480, 1997, 1480, 1997, 5),
+(690, 7, 136, 3, 'N', '', 1997, 2090, 1997, 2090, 2009, 2073, 2009, 2073, 5),
+(691, 7, 136, 5, 'N', '', 2073, 2555, 2073, 2555, 2090, 2546, 2090, 2546, 5),
+(692, 8, 137, 2, 'D', '', 1, 1, 1, 1, 13, 440, 13, 440, 5),
+(693, 8, 137, 1, 'N', '', 1, 870, 1, 870, 337, 856, 337, 856, 5),
+(694, 8, 137, 3, 'N', '', 856, 955, 856, 955, 870, 931, 870, 931, 5),
+(695, 9, 137, 2, 'L', '', 931, 1, 931, 1, 955, 1375, 955, 1375, 5),
+(696, 9, 137, 1, 'N', '', 1, 1901, 1, 1901, 1368, 1893, 1368, 1893, 5),
+(697, 9, 137, 3, 'N', '', 1893, 1987, 1893, 1987, 1901, 1966, 1901, 1966, 5),
+(698, 10, 137, 2, 'L', '', 1966, 1, 1966, 1, 1987, 2414, 1987, 2414, 5),
+(699, 10, 137, 1, 'N', '', 1, 2935, 1, 2935, 2408, 2927, 2408, 2927, 5),
+(700, 10, 137, 3, 'N', '', 2927, 3016, 2927, 3016, 2935, 2999, 2935, 2999, 5),
+(701, 10, 137, 5, 'N', '', 2999, 3496, 2999, 3496, 3016, 3472, 3016, 3472, 5),
+(702, 11, 138, 2, 'D', '', 1, 1, 1, 1, 13, 453, 13, 453, 5),
+(703, 11, 138, 1, 'N', '', 1, 975, 1, 975, 447, 961, 447, 961, 5),
+(704, 11, 138, 3, 'N', '', 961, 1061, 961, 1061, 975, 1040, 975, 1040, 5),
+(705, 11, 138, 4, 'N', '', 1040, 1275, 1040, 1275, 1061, 1264, 1061, 1264, 5);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_domain_substrateSpecificity`
+-- Table structure for table `databaseInput_domain_substrateSpecificity`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_domain_substrateSpecificity` (
@@ -1199,10 +1197,10 @@ CREATE TABLE IF NOT EXISTS `databaseInput_domain_substrateSpecificity` (
   UNIQUE KEY `domain_id` (`domain_id`,`substrate_id`),
   KEY `databaseInput_domain_substrateSpecificity_e8b327e7` (`domain_id`),
   KEY `databaseInput_domain_substrateSpecificity_d3ae637d` (`substrate_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=174 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=73 ;
 
 --
--- Daten für Tabelle `databaseInput_domain_substrateSpecificity`
+-- Dumping data for table `databaseInput_domain_substrateSpecificity`
 --
 
 INSERT INTO `databaseInput_domain_substrateSpecificity` (`id`, `domain_id`, `substrate_id`) VALUES
@@ -1236,143 +1234,42 @@ INSERT INTO `databaseInput_domain_substrateSpecificity` (`id`, `domain_id`, `sub
 (39, 33, 6),
 (40, 33, 7),
 (41, 36, 43),
-(42, 47, 44),
-(43, 48, 45),
-(44, 49, 46),
-(45, 55, 47),
-(46, 68, 48),
-(47, 69, 49),
-(48, 81, 50),
-(49, 82, 51),
-(50, 85, 52),
-(51, 86, 53),
-(52, 92, 54),
-(53, 93, 55),
-(54, 114, 56),
-(55, 115, 57),
-(56, 144, 58),
-(57, 145, 59),
-(58, 147, 60),
-(59, 148, 61),
-(60, 150, 62),
-(61, 151, 63),
-(62, 190, 64),
-(63, 191, 65),
-(64, 212, 66),
-(65, 213, 67),
-(66, 221, 68),
-(67, 222, 69),
-(68, 227, 70),
-(69, 228, 71),
-(70, 233, 72),
-(71, 234, 73),
-(72, 236, 74),
-(73, 237, 75),
-(74, 284, 76),
-(75, 285, 77),
-(76, 292, 78),
-(77, 293, 79),
-(78, 295, 80),
-(79, 301, 81),
-(80, 302, 82),
-(81, 304, 83),
-(82, 305, 84),
-(83, 308, 85),
-(84, 309, 86),
-(85, 312, 87),
-(86, 313, 88),
-(87, 315, 89),
-(88, 316, 90),
-(89, 320, 91),
-(90, 331, 92),
-(91, 332, 93),
-(92, 340, 94),
-(93, 350, 95),
-(94, 356, 96),
-(95, 357, 97),
-(96, 359, 98),
-(97, 360, 99),
-(98, 363, 100),
-(99, 364, 101),
-(100, 370, 102),
-(101, 371, 103),
-(102, 382, 104),
-(103, 383, 105),
-(104, 385, 106),
-(105, 386, 107),
-(106, 394, 108),
-(107, 395, 109),
-(108, 397, 110),
-(109, 398, 111),
-(110, 403, 112),
-(111, 405, 113),
-(112, 411, 114),
-(113, 412, 115),
-(114, 415, 116),
-(115, 416, 117),
-(116, 419, 118),
-(117, 420, 119),
-(118, 423, 120),
-(119, 424, 121),
-(120, 426, 122),
-(121, 427, 123),
-(122, 466, 124),
-(123, 471, 125),
-(124, 501, 126),
-(125, 502, 127),
-(126, 508, 128),
-(127, 509, 129),
-(128, 512, 130),
-(129, 513, 131),
-(130, 516, 132),
-(131, 517, 133),
-(132, 519, 134),
-(133, 520, 135),
-(134, 526, 136),
-(135, 528, 137),
-(136, 529, 138),
-(137, 532, 139),
-(138, 533, 140),
-(139, 536, 141),
-(140, 537, 142),
-(141, 540, 143),
-(142, 541, 144),
-(143, 549, 145),
-(144, 550, 146),
-(145, 553, 147),
-(146, 555, 148),
-(147, 558, 149),
-(148, 559, 150),
-(149, 561, 151),
-(150, 562, 152),
-(151, 572, 153),
-(152, 573, 154),
-(153, 576, 155),
-(154, 586, 156),
-(155, 587, 157),
-(156, 610, 158),
-(157, 611, 159),
-(158, 620, 160),
-(159, 629, 161),
-(160, 630, 162),
-(161, 632, 163),
-(162, 641, 164),
-(163, 645, 165),
-(164, 646, 166),
-(165, 652, 167),
-(166, 653, 168),
-(167, 656, 169),
-(168, 657, 170),
-(169, 659, 171),
-(170, 660, 172),
-(171, 691, 173),
-(172, 692, 174),
-(173, 696, 175);
+(42, 50, 45),
+(43, 58, 47),
+(44, 61, 49),
+(45, 69, 51),
+(46, 78, 53),
+(47, 86, 55),
+(48, 89, 57),
+(49, 94, 59),
+(50, 98, 61),
+(51, 105, 63),
+(52, 109, 65),
+(53, 112, 67),
+(54, 126, 69),
+(55, 129, 71),
+(56, 189, 73),
+(57, 262, 75),
+(58, 284, 77),
+(59, 307, 79),
+(60, 351, 81),
+(61, 404, 83),
+(62, 425, 85),
+(63, 435, 87),
+(64, 444, 89),
+(65, 473, 91),
+(66, 515, 93),
+(67, 583, 95),
+(68, 648, 97),
+(69, 660, 99),
+(70, 663, 101),
+(71, 669, 103),
+(72, 688, 105);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_linkout`
+-- Table structure for table `databaseInput_linkout`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_linkout` (
@@ -1389,7 +1286,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_linkout` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=77 ;
 
 --
--- Daten für Tabelle `databaseInput_linkout`
+-- Dumping data for table `databaseInput_linkout`
 --
 
 INSERT INTO `databaseInput_linkout` (`id`, `linkoutType_id`, `identifier`, `content_type_id`, `object_id`, `user_id`) VALUES
@@ -1473,7 +1370,7 @@ INSERT INTO `databaseInput_linkout` (`id`, `linkoutType_id`, `identifier`, `cont
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_linkouttype`
+-- Table structure for table `databaseInput_linkouttype`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_linkouttype` (
@@ -1485,7 +1382,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_linkouttype` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
--- Daten für Tabelle `databaseInput_linkouttype`
+-- Dumping data for table `databaseInput_linkouttype`
 --
 
 INSERT INTO `databaseInput_linkouttype` (`id`, `shortcut`, `url`, `description`) VALUES
@@ -1500,7 +1397,7 @@ INSERT INTO `databaseInput_linkouttype` (`id`, `shortcut`, `url`, `description`)
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_modification`
+-- Table structure for table `databaseInput_modification`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_modification` (
@@ -1512,7 +1409,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_modification` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
--- Daten für Tabelle `databaseInput_modification`
+-- Dumping data for table `databaseInput_modification`
 --
 
 INSERT INTO `databaseInput_modification` (`id`, `name`, `domainType_id`) VALUES
@@ -1521,7 +1418,7 @@ INSERT INTO `databaseInput_modification` (`id`, `name`, `domainType_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_origin`
+-- Table structure for table `databaseInput_origin`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_origin` (
@@ -1538,7 +1435,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_origin` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=36 ;
 
 --
--- Daten für Tabelle `databaseInput_origin`
+-- Dumping data for table `databaseInput_origin`
 --
 
 INSERT INTO `databaseInput_origin` (`id`, `sourceType`, `source`, `species`, `description`, `parent_id`, `user_id`) VALUES
@@ -1579,7 +1476,7 @@ INSERT INTO `databaseInput_origin` (`id`, `sourceType`, `source`, `species`, `de
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_product`
+-- Table structure for table `databaseInput_product`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_product` (
@@ -1592,7 +1489,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_product` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=67 ;
 
 --
--- Daten für Tabelle `databaseInput_product`
+-- Dumping data for table `databaseInput_product`
 --
 
 INSERT INTO `databaseInput_product` (`id`, `name`, `description`, `user_id`) VALUES
@@ -1630,43 +1527,43 @@ INSERT INTO `databaseInput_product` (`id`, `name`, `description`, `user_id`) VAL
 (32, 'A40926', 'precursor of dalbavancin', NULL),
 (33, 'ACV', 'L-delta-(alpha-Aminoadipoyl)-L-cysteinyl-D-valine', NULL),
 (34, 'Actinomycin', '-', NULL),
-(35, 'Enniatin', '', 5),
-(36, 'Indigoidine', '', 5),
-(37, 'Bacillibactin', '', 5),
-(38, 'Enterobactin', '', 5),
-(39, 'Hc_Toxin', '', 5),
-(40, 'Chloroeremomycin', '', 5),
-(41, 'Fengycin', '', 5),
-(42, 'Cyclosporin', '', 5),
-(43, 'Gramicidin', '', 5),
-(44, 'Anabaenopeptilide', '', 5),
-(45, 'Cda', '', 5),
-(46, 'Bacitracin', '', 5),
-(47, 'Glycopeptilide', '', 5),
-(48, 'Teicoplanin', '', 5),
+(35, 'Acv', '', 5),
+(36, 'Glycopeptilide', '', 5),
+(37, 'Vibriobactin', '', 5),
+(38, 'Teicoplanin', '', 5),
+(39, 'Pristinamycin', '', 5),
+(40, 'Anguibactin', '', 5),
+(41, 'Exochelin', '', 5),
+(42, 'Gramicidin', '', 5),
+(43, 'A40926', '', 5),
+(44, 'Enniatin', '', 5),
+(45, 'Enterobactin', '', 5),
+(46, 'Bacillibactin', '', 5),
+(47, 'Bacitracin', '', 5),
+(48, 'Cyclosporin', '', 5),
 (49, 'Actinomycin', '', 5),
-(50, 'Acv', '', 5),
-(51, 'A40926', '', 5),
-(52, 'Syringomycin', '', 5),
-(53, 'A47934', '', 5),
-(54, 'Arthrofactin', '', 5),
-(55, 'Vibriobactin', '', 5),
-(56, 'Lichenycin', '', 5),
-(57, 'Balhimycin', '', 5),
-(58, 'Complestatin', '', 5),
-(59, 'Exochelin', '', 5),
-(60, 'Viomycin', '', 5),
-(61, 'Pyoverdine', '', 5),
-(62, 'Pyochelin', '', 5),
-(63, 'Pristinamycin', '', 5),
+(50, 'Indigoidine', '', 5),
+(51, 'Viomycin', '', 5),
+(52, 'Complestatin', '', 5),
+(53, 'Arthrofactin', '', 5),
+(54, 'Thaxtomin', '', 5),
+(55, 'Hc_Toxin', '', 5),
+(56, 'Pyoverdine', '', 5),
+(57, 'A47934', '', 5),
+(58, 'Pyochelin', '', 5),
+(59, 'Chloroeremomycin', '', 5),
+(60, 'Anabaenopeptilide', '', 5),
+(61, 'Lichenycin', '', 5),
+(62, 'Cda', '', 5),
+(63, 'Balhimycin', '', 5),
 (64, 'Surfactin', '', 5),
-(65, 'Thaxtomin', '', 5),
-(66, 'Anguibactin', '', 5);
+(65, 'Syringomycin', '', 5),
+(66, 'Fengycin', '', 5);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_substrate`
+-- Table structure for table `databaseInput_substrate`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_substrate` (
@@ -1677,200 +1574,132 @@ CREATE TABLE IF NOT EXISTS `databaseInput_substrate` (
   `enantiomer_id` int(11) DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
+  `smashName` varchar(50) COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `databaseInput_substrate_bf6beede` (`enantiomer_id`),
   KEY `databaseInput_substrate_410d0aac` (`parent_id`),
   KEY `databaseInput_substrate_6340c63c` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=176 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=107 ;
 
 --
--- Daten für Tabelle `databaseInput_substrate`
+-- Dumping data for table `databaseInput_substrate`
 --
 
-INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`) VALUES
-(1, 'L-alanine', 'L', '5950\r\n  -OEChem-08061307293D\r\n\r\n 13 12  0     1  0  0  0  0  0999 V2000\r\n    1.4573   -1.0438    0.2682 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2492    1.1165   -0.4047 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4105    1.1507    0.1821 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7085   -0.1136    0.3937 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.3345   -1.2000   -0.4702 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7470    0.0903    0.0308 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7666   -0.3737    1.4558 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8580   -2.1695   -0.2878 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4023   -1.3127   -0.2521 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2248   -0.9797   -1.5384 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3916    1.0420    0.4376 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4071    1.3875   -0.8099 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4062   -0.9341    0.0447 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  6  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 12  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5950\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n11 0.36\r\n12 0.36\r\n13 0.5\r\n2 -0.57\r\n3 -0.99\r\n4 0.33\r\n6 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n1\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 6 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n6\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000173E00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n1.5212\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.429\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 10810435145306950879\r\n16714656 1 17834121844547885910\r\n20096714 4 18336274448292194721\r\n21015797 1 9294747371048054674\r\n21040471 1 18199189481819369609\r\n24536 1 17822010959911299856\r\n29004967 10 17974853083746877907\r\n5943 1 14140374571562451139\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n106.76\r\n1.92\r\n1.35\r\n0.68\r\n0.03\r\n0.06\r\n-0.01\r\n-0.14\r\n-0.16\r\n-0.16\r\n-0.03\r\n-0.04\r\n-0.03\r\n-0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n193.798\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n68.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 2, NULL, NULL),
-(2, 'D-alanine', 'D', '71080\r\n  -OEChem-08061307313D\r\n\r\n 13 12  0     1  0  0  0  0  0999 V2000\r\n    1.4540   -1.0463   -0.2600 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2497    1.1182    0.4005 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4128    1.1501   -0.1734 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7093   -0.1115   -0.3951 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.3291   -1.2038    0.4660 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7475    0.0933   -0.0380 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7772   -0.3698   -1.4569 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3997   -1.3089    0.2583 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8590   -2.1736    0.2695 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2071   -0.9930    1.5349 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9750    1.8923   -0.7175 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3418    1.4251    0.8055 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4015   -0.9395   -0.0294 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  6  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 12  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71080\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n11 0.36\r\n12 0.36\r\n13 0.5\r\n2 -0.57\r\n3 -0.99\r\n4 0.33\r\n6 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n1\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 6 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n6\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115A800000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n1.5874\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.429\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 10878900634851653371\r\n20096714 4 18268142072216222973\r\n21015797 1 9078573519497957180\r\n21040471 1 18190176785006496237\r\n24536 1 18261944236697031724\r\n29004967 10 17974574902983696515\r\n5943 1 15574980789017939183\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n106.76\r\n1.92\r\n1.35\r\n0.67\r\n0.04\r\n0.05\r\n0.01\r\n-0.14\r\n0.16\r\n-0.16\r\n0.04\r\n-0.04\r\n-0.03\r\n0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n193.826\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n68.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 1, NULL, NULL),
-(3, 'Glycine', 'L', '750\r\n  -OEChem-08061307323D\r\n\r\n 10  9  0     0  0  0  0  0  0999 V2000\r\n   -1.6487    0.6571   -0.0104 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4837   -1.2934   -0.0005 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9006   -0.0812   -0.0090 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7341    0.7867    0.0079 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5023   -0.0691    0.0120 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7326    1.4215   -0.8824 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7464    1.4088    0.9069 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8743   -0.6844   -0.8301 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8887   -0.6969    0.8031 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4447    0.0839   -0.0260 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  5  1  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  2  5  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n750\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n10 0.5\r\n2 -0.57\r\n3 -0.99\r\n4 0.33\r\n5 0.66\r\n8 0.36\r\n9 0.36\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n1\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 5 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n5\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000002EE00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n2.2569\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.429\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 9221305500492508682\r\n16714656 1 18334301928958962636\r\n20096714 4 18408886234834677880\r\n21015797 1 9580758932782445613\r\n21040471 1 18410573955102640736\r\n5460574 1 9295288339411764896\r\n5943 1 16976965699258066967\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n86.18\r\n1.9\r\n1.06\r\n0.56\r\n0.45\r\n0.2\r\n0\r\n-0.21\r\n0.01\r\n-0.19\r\n0\r\n0.01\r\n-0.02\r\n0\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n152.844\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n56.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', NULL, NULL, NULL),
-(4, 'L-serine', 'L', '5951\r\n  -OEChem-08061307333D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    1.9164    1.0306   -0.2064 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9147    1.4730    0.6928 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6876    0.0439   -0.8956 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1783   -1.9614    0.3145 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2499   -0.5719    0.4674 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.5043   -0.3229   -0.3653 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8900    0.3087   -0.0075 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4351   -0.3707    1.5285 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3293   -0.9735   -0.0556 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3198   -0.4858   -1.4328 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3831   -2.1614   -0.6638 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0421   -2.1182    0.8321 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1022    1.1706    0.7378 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6432    2.0607    0.3991 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5951\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n7\r\n4\r\n5\r\n3\r\n6\r\n2\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n11 0.36\r\n12 0.36\r\n13 0.4\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.28\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000173F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n4.149\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 12485356495207036850\r\n139733 1 18261115153558827558\r\n18185500 45 17836357155712849555\r\n20096714 4 18195819461474012680\r\n21040471 1 18335140903522744364\r\n23552449 1 17979076307930056396\r\n24536 1 18340778112665698116\r\n29004967 10 11815602104003645950\r\n5943 1 11546198244563313227\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n121.47\r\n1.98\r\n1.53\r\n0.79\r\n0.38\r\n0.42\r\n0.04\r\n-0.63\r\n0.42\r\n0.06\r\n-0.29\r\n-0.18\r\n-0.03\r\n-0.17\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n224.017\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n76.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', NULL, NULL, NULL),
-(5, 'D-serine', 'D', '71077\r\n  -OEChem-08061307343D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    1.8714   -1.0658   -0.2252 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9380   -1.4494    0.7135 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6655   -0.0394   -0.9132 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1596    1.9680    0.2979 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2550    0.5772    0.4734 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    1.5205    0.3096   -0.3367 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8839   -0.3003   -0.0096 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4184    0.3817    1.5391 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3881    0.5373   -1.4006 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3593    0.9046    0.0389 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2755    2.1737   -0.6943 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5824    2.5869    0.6238 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2103   -1.5834   -0.7149 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6702   -2.0321    0.4192 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71077\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n8\r\n5\r\n3\r\n9\r\n1\r\n4\r\n7\r\n6\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n11 0.36\r\n12 0.36\r\n13 0.4\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.28\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115A500000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n4.8206\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 7853578993483642276\r\n20096714 4 7997975660920866422\r\n21040471 1 17678147530260442293\r\n24536 1 18337388352392172968\r\n29004967 10 18269561704946780802\r\n5943 1 11556452277113775561\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n121.47\r\n1.97\r\n1.53\r\n0.79\r\n0.35\r\n0.43\r\n-0.04\r\n-0.62\r\n-0.41\r\n0.08\r\n0.28\r\n-0.19\r\n-0.04\r\n0.19\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n224.109\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n76.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 4, NULL, NULL),
-(6, 'L-phenylalanine', 'L', '6140\r\n  -OEChem-08061307353D\r\n\r\n 23 23  0     1  0  0  0  0  0999 V2000\r\n   -1.5606   -1.5480   -1.0372 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1863   -1.0236    0.4554 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7945    1.6326   -0.1118 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6090    0.9812    0.7905 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6652    0.7241   -0.2957 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.7593    0.4612    0.4141 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1082   -0.8355    0.7537 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6370    1.2913   -0.2633 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2259   -0.6859   -0.2249 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3708   -1.3157    0.4062 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8996    0.8109   -0.6109 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2665   -0.4925   -0.2761 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9180    0.5378    1.7471 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5161    2.0589    0.9859 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2654    0.8943   -1.3020 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4193   -1.4840    1.2872 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3595    2.3068   -0.5307 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4744    2.5968   -0.1977 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1587    1.5450    0.8368 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6567   -2.3305    0.6672 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.5970    1.4516   -1.1428 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.2496   -0.8665   -0.5468 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9362   -2.4531   -0.9956 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  3 19  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6  7  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  7 10  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 11  2  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n 10 12  2  0  0  0  0\r\n 10 20  1  0  0  0  0\r\n 11 12  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6140\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n6\r\n5\r\n2\r\n10\r\n3\r\n8\r\n4\r\n9\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n20\r\n1 -0.65\r\n10 -0.15\r\n11 -0.15\r\n12 -0.15\r\n16 0.15\r\n17 0.15\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.15\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n3 -0.99\r\n4 0.14\r\n5 0.33\r\n6 -0.14\r\n7 -0.15\r\n8 -0.15\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n6 6 7 8 10 11 12 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017FC00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n22.5987\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18187643651828636781\r\n12932764 1 18202281445876520928\r\n14128692 85 18413387644350318440\r\n14325111 11 18335141994507955400\r\n15310529 11 18334295383333721393\r\n15775835 57 18261399909880191452\r\n16945 1 18265608969182132496\r\n17844478 74 18115317785891664955\r\n18619055 16 18339636733433074012\r\n19422 9 18408892832020391715\r\n20279233 1 17131540666045140302\r\n23402655 69 18114744836927597293\r\n23552423 10 18333728013705971810\r\n25610 137 18042978755478841441\r\n3248919 1 18040987458015951561\r\n8030462 33 18337096943266805037\r\n81228 2 16485862280881840960\r\n9939556 21 18335701594207498844\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n230.23\r\n5.23\r\n1.63\r\n0.87\r\n0.48\r\n0.01\r\n0\r\n0.5\r\n-0.63\r\n0.36\r\n-0.08\r\n-0.01\r\n0.09\r\n-0.39\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n472.563\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n132.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 7, NULL, NULL),
-(7, 'D-phenylalanine', 'D', '71567\r\n  -OEChem-08061307363D\r\n\r\n 23 23  0     1  0  0  0  0  0999 V2000\r\n    1.5127   -1.5170   -1.0396 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1581   -1.0556    0.4609 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8016    1.6318   -0.1125 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6239    0.9672    0.7943 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6687    0.7241   -0.3034 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.7477    0.4554    0.4163 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6272    1.2983   -0.2422 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0968   -0.8457    0.7368 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2221   -0.6853   -0.2335 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8927    0.8264   -0.5905 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3623   -1.3178    0.3885 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2603   -0.4818   -0.2751 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5336    2.0420    1.0059 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9365    0.5097    1.7431 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2656    0.9046   -1.3065 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3492    2.3175   -0.4943 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4069   -1.5038    1.2570 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1661    1.5352    0.8351 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4809    2.5966   -0.1891 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5917    1.4771   -1.1078 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6488   -2.3360    0.6348 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.2456   -0.8493   -0.5463 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8455   -2.4388   -0.9975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  3 19  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6  7  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  7 10  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 11  2  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n 10 12  2  0  0  0  0\r\n 10 20  1  0  0  0  0\r\n 11 12  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71567\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n3\r\n2\r\n6\r\n4\r\n10\r\n9\r\n5\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n20\r\n1 -0.65\r\n10 -0.15\r\n11 -0.15\r\n12 -0.15\r\n16 0.15\r\n17 0.15\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.15\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n3 -0.99\r\n4 0.14\r\n5 0.33\r\n6 -0.14\r\n7 -0.15\r\n8 -0.15\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n6 6 7 8 10 11 12 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0001178F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n22.4335\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.503\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10608611 8 18335978735551976677\r\n12716758 59 18114178636047481473\r\n12897270 3 18338241569067768236\r\n12932764 1 17968104092090884152\r\n14325111 11 18335136501234240817\r\n15219456 202 18410011065410675921\r\n15310529 11 18341330084519278085\r\n15775835 57 18059578065037577582\r\n16945 1 18265902354097880201\r\n17990270 104 18342182124542483390\r\n18186145 218 18260546680451744933\r\n18619055 16 18411980282024619377\r\n19973954 147 18335424573038157565\r\n20201158 50 18341894052211299359\r\n20645477 70 18341891892243708831\r\n20653085 51 17676491622915785893\r\n20671657 53 18269848531911684774\r\n21501502 16 18411704287558300617\r\n22802520 49 18334581235029851825\r\n23552423 10 18186802495553188059\r\n23559900 14 18338226056484613482\r\n2748010 2 18409733996970028243\r\n3248919 1 18202284675760486337\r\n369184 2 18409171017257816977\r\n57812782 119 18335696126629611606\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n230.23\r\n5.19\r\n1.63\r\n0.87\r\n0.44\r\n0.01\r\n0\r\n0.46\r\n0.61\r\n0.35\r\n0.08\r\n0.01\r\n0.09\r\n0.37\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n472.985\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n131.9\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 6, NULL, NULL),
-(8, 'L-leucine', 'L', '6106\r\n  -OEChem-08061307373D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    1.1033   -1.2860    1.2673 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5537   -1.0509   -0.9426 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7313    1.7545    0.0120 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8021    0.1905   -0.4087 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5643    1.0793   -0.6494 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6249    0.8408    0.2948 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -2.3423    0.3183    1.0160 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4509   -1.2719   -0.6984 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1464   -0.5747    0.1090 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5824    0.5084   -1.1114 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2445    0.9573   -1.6937 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8798    2.1273   -0.5531 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3267    0.9880    1.3375 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6488   -0.0803    1.7629 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5447    1.3661    1.2610 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2828   -0.2347    1.1155 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8590   -1.3871   -1.6109 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9914   -1.7963    0.1398 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3866   -1.8167   -0.8823 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4154    2.7159    0.1372 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9986    1.6785   -0.9694 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4347   -2.2013    1.1460 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  6  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6106\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n2\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n6 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n3 4 7 8 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017DA00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n13.7321\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 10897424772938417728\r\n15310529 11 17386861507925892583\r\n18185500 45 18268135642781900343\r\n21040471 1 18049155876149393388\r\n21922407 69 16628525185827166549\r\n23552333 60 18196633293658043847\r\n24536 1 17845921987930834575\r\n29004967 10 17749113296251295537\r\n5084963 1 18048299339353457868\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n2.73\r\n1.59\r\n1.07\r\n0.76\r\n0.06\r\n-0.19\r\n0.08\r\n-0.3\r\n-0.57\r\n0.1\r\n0.13\r\n-0.22\r\n-0.23\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n313.472\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 9, NULL, NULL),
-(9, 'D-leucine', 'D', '439524\r\n  -OEChem-08061307383D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    2.1710   -1.4441    0.0628 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6980    0.7592    0.1621 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2154    1.5429   -0.5507 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0098   -0.3827    0.4553 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4914   -0.4731    0.7128 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4101    0.1021   -0.3914 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -2.4212   -1.0696   -0.8473 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4407    1.0866    0.4227 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8686   -0.1213   -0.0262 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5202   -0.8771    1.2913 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2578    0.0095    1.6723 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2459   -1.5338    0.8579 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2338   -0.3880   -1.3541 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0247   -0.5590   -1.7304 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0716   -2.1071   -0.8654 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5127   -1.0841   -0.9402 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9862    1.6656    1.2332 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2446    1.5734   -0.5365 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5269    1.1430    0.5659 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8602    1.9055   -1.2516 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4311    2.0243    0.3214 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1132   -1.5883    0.2946 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  6  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n439524\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n2\r\n4\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n6 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n3 4 7 8 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0006B4E400000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n11.0487\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12932741 1 15913323602339144211\r\n12932764 1 18059863877947094307\r\n14390081 3 18343866640522328400\r\n15310529 11 18201438103531368031\r\n23552423 10 18260272918983103114\r\n24536 1 17969229000118698793\r\n29004967 10 18187088381440173690\r\n3248919 1 17967817179759390754\r\n369184 2 18202566172391297115\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n4.02\r\n1.37\r\n0.83\r\n0.53\r\n0.11\r\n-0.03\r\n-0.26\r\n0.03\r\n-0.1\r\n-0.14\r\n-0.31\r\n-0.06\r\n-0.36\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n311.843\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 8, NULL, NULL),
-(10, 'L-threonine', 'L', '6288\r\n  -OEChem-08061307393D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n   -1.7106   -1.1847    0.3581 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9758   -1.6811    0.1310 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0214    0.1505   -0.7007 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4053    1.8669    0.5743 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3544    0.1880    0.2043 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.0664    0.4488    0.7285 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.5255    0.5514   -1.2654 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1216   -0.3398   -0.0300 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1453    0.1699    1.7857 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0741    0.7709    0.7921 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3273    1.6097   -1.4579 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5518    0.3376   -1.5856 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8762   -0.0531   -1.9078 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3076    2.0515    1.0115 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2745    2.4357    1.0777 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6070   -1.4093    1.2985 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6641   -2.1843   -0.3540 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  5  1  0  0  0  0\r\n  1 16  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 17  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6288\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n6\r\n2\r\n4\r\n9\r\n5\r\n8\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n14 0.36\r\n15 0.36\r\n16 0.4\r\n17 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.28\r\n6 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000189000000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.7234\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.586\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 13495736796882073608\r\n18185500 45 18270121205962491394\r\n21040471 1 17751616811345107861\r\n24536 1 18193275195867535578\r\n29004967 10 18272373078769385426\r\n5943 1 15743565239240249753\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n142.05\r\n2.2\r\n1.48\r\n0.98\r\n0\r\n0.04\r\n-0.2\r\n-0.32\r\n-0.58\r\n0.15\r\n0.3\r\n-0.22\r\n0.18\r\n0.2\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n265.499\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n88.9\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 11, NULL, NULL),
-(11, 'D-threonine', 'D', '69435\r\n  -OEChem-08061307403D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n    1.1556    0.5726    1.3653 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6606    1.3370   -0.5627 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0926   -0.5633    0.5958 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2151   -1.7284   -0.1114 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1567    0.5443   -0.0609 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.0292   -0.3555   -0.5909 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    2.5413    0.1010   -0.5167 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3445    0.0924   -0.1184 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0171   -0.3682   -1.6865 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9835    1.5718   -0.4021 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2904    0.8422   -0.2157 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5873   -0.0072   -1.6045 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8448   -0.8413   -0.0485 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3551   -1.7254    0.8986 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0624   -2.1259   -0.5136 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8546    1.1864    1.6488 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5436    1.6245   -0.2466 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  5  1  0  0  0  0\r\n  1 16  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 17  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n69435\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n6\r\n7\r\n3\r\n4\r\n8\r\n9\r\n1\r\n5\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n14 0.36\r\n15 0.36\r\n16 0.4\r\n17 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.28\r\n6 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00010F3B00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.8468\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.582\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n16714656 1 18263372532466452214\r\n20096714 4 17275103967771227305\r\n21040471 1 18411128134848797350\r\n24536 1 18042111094633258829\r\n29004967 10 16486988288283814198\r\n5084963 1 18201720699230630045\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n142.05\r\n2.83\r\n1.21\r\n0.92\r\n0.44\r\n0.3\r\n-0.22\r\n-0.37\r\n0.11\r\n-0.25\r\n0.08\r\n0.16\r\n-0.14\r\n0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n264.479\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n89.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 10, NULL, NULL),
-(12, 'L-tyrosine', 'L', '6057\r\n  -OEChem-08061307413D\r\n\r\n 24 24  0     1  0  0  0  0  0999 V2000\r\n   -1.7727   -1.6313   -0.9931 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.2183   -0.6351   -0.3947 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4801   -1.1584    0.4234 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2387    1.4947   -0.2351 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0493    1.0210    0.7633 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0479    0.6553   -0.3458 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.3618    0.5774    0.4529 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7803   -0.6798    0.8553 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2077    1.4373   -0.2276 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5197   -0.7846   -0.2378 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0827   -1.0891    0.5690 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5101    1.0280   -0.5141 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9476   -0.2353   -0.1158 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3631    0.5945    1.7261 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0322    2.1089    0.9190 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6246    0.8135   -1.3445 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1158   -1.3512    1.3914 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8752    2.4217   -0.5440 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9777    2.4737   -0.3486 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6297    1.4190    0.7038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4114   -2.0754    0.8853 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1790    1.6973   -1.0482 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0912   -2.5568   -0.9282 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.3494   -1.5339   -0.0467 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2 13  1  0  0  0  0\r\n  2 24  1  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  7  8  2  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  8 11  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n 11 13  2  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 13  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6057\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n6\r\n7\r\n5\r\n10\r\n2\r\n9\r\n3\r\n4\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n21\r\n1 -0.65\r\n10 0.66\r\n11 -0.15\r\n12 -0.15\r\n13 0.08\r\n17 0.15\r\n18 0.15\r\n19 0.36\r\n2 -0.53\r\n20 0.36\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n24 0.45\r\n3 -0.57\r\n4 -0.99\r\n5 0.14\r\n6 0.33\r\n7 -0.14\r\n8 -0.15\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 donor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 1 3 10 anion\r\n6 7 8 9 11 12 13 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n13\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017A900000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n24.6717\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11401426 45 18260825969669806040\r\n11769659 78 18341888602140244366\r\n12897270 3 18113612430313781153\r\n12932764 1 18129942394110394737\r\n13296908 3 18273209815755699136\r\n14128692 85 18413106186426960904\r\n14325111 11 18335140912065485488\r\n15775835 57 18114465560973810741\r\n16945 1 18192425496627847928\r\n17844478 74 18042131002144350971\r\n18186145 218 17821725039901998140\r\n19422 9 18339652238544457555\r\n20279233 1 16988554689153481036\r\n20645476 183 18335698308821443519\r\n21119208 17 18408603630292033564\r\n23402539 116 18187363195624195710\r\n23402655 69 18040997289201717828\r\n23552423 10 18334289902945012705\r\n23559900 14 18059850633264985618\r\n23598291 2 17897714375777863563\r\n305870 269 9727642699922544684\r\n3312278 4 18411419475307455705\r\n465052 167 18126856117313195127\r\n7364860 26 18128814329724976200\r\n81228 2 16485866700213349416\r\n93112 12 18335417954599056069\r\n9939556 21 18408885126759599821\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n244.94\r\n6.02\r\n1.6\r\n0.87\r\n0.36\r\n0.04\r\n0.03\r\n-1.03\r\n-0.95\r\n-0.57\r\n-0.12\r\n-0.03\r\n-0.09\r\n-0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n506.139\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n140.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 13, NULL, NULL),
-(13, 'D-tyrosine', 'D', '71098\r\n  -OEChem-08061307423D\r\n\r\n 24 24  0     1  0  0  0  0  0999 V2000\r\n    1.7271   -1.5966   -0.9966 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.2133   -0.6209   -0.3958 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.4506   -1.1874    0.4296 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2442    1.4946   -0.2358 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0624    1.0053    0.7676 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0502    0.6553   -0.3537 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.3513    0.5693    0.4555 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1985    1.4425   -0.2053 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7695   -0.6940    0.8379 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5156   -0.7832   -0.2474 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5030    1.0403   -0.4924 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0739   -1.0962    0.5507 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9406   -0.2290   -0.1144 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0477    2.0908    0.9402 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3790    0.5639    1.7227 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6240    0.8245   -1.3492 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8660    2.4318   -0.5060 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1041   -1.3754    1.3599 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.6352    1.4097    0.7024 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9823    2.4746   -0.3391 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1732    1.7199   -1.0116 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4029   -2.0874    0.8511 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0023   -2.5357   -0.9297 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.3449   -1.5256   -0.0636 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2 13  1  0  0  0  0\r\n  2 24  1  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  7  8  2  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  8 11  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n 11 13  2  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 13  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71098\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n6\r\n3\r\n7\r\n5\r\n10\r\n9\r\n4\r\n2\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n21\r\n1 -0.65\r\n10 0.66\r\n11 -0.15\r\n12 -0.15\r\n13 0.08\r\n17 0.15\r\n18 0.15\r\n19 0.36\r\n2 -0.53\r\n20 0.36\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n24 0.45\r\n3 -0.57\r\n4 -0.99\r\n5 0.14\r\n6 0.33\r\n7 -0.14\r\n8 -0.15\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 donor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 1 3 10 anion\r\n6 7 8 9 11 12 13 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n13\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115BA00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n24.4999\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.577\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10608611 8 18407755941218833820\r\n10857977 72 12103842371718169817\r\n11769659 78 17702936063153906327\r\n12032990 46 18260552268605039323\r\n12251169 10 10592040254335203866\r\n12716758 59 18040716965518471849\r\n12897270 3 18337116755977542532\r\n12932764 1 17131826586255291953\r\n14251717 144 18202562882404520783\r\n14325111 11 18335420157922527505\r\n15219456 202 18410011048098976905\r\n15775835 57 18059576952783472742\r\n16945 1 18192718838593916169\r\n17990270 104 18269844133696485406\r\n18186145 218 17895191074012305045\r\n200 152 17988923361953169852\r\n20201158 50 18412829053562167518\r\n20279233 1 18334577983449465008\r\n20361792 2 16487253266001360881\r\n20645476 183 16081088199265934683\r\n20645477 70 18413106156436315887\r\n20671657 53 18269284469625069790\r\n21501502 16 18340494382499179032\r\n21501925 9 18411128122327866490\r\n22802520 49 18261120663980821521\r\n23402539 116 18261380135692524644\r\n23552423 10 18187366519074340617\r\n23559900 14 18337944572928472226\r\n57812782 119 18334292046075671102\r\n7364860 26 18339079405908789592\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n244.94\r\n5.98\r\n1.6\r\n0.86\r\n0.42\r\n0.05\r\n-0.03\r\n-0.98\r\n0.94\r\n-0.56\r\n0.11\r\n-0.04\r\n-0.09\r\n0.28\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n506.531\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n139.9\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 12, NULL, NULL);
-INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`) VALUES
-(14, 'L-glutamine', 'L', '5961\r\n  -OEChem-08061307443D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n   -2.1389    1.6370    0.5099 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6773    0.2475   -1.1973 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9039    0.2551    1.0351 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4789   -1.8922   -0.0291 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2441    0.1932   -1.2385 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1338   -0.2355    0.8758 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3424   -0.6086    0.6590 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.0032   -0.1458   -0.3839 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1158    0.4356   -0.1257 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4683    0.1136   -0.1051 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1904    0.7236    1.4071 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5783   -0.9764    1.5545 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8319   -0.7041    1.6355 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9500   -1.0821   -0.9509 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6339    0.6568   -1.0331 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1360   -1.8186   -0.9858 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4648   -2.1420   -0.0988 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8560    0.0780   -2.1693 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.2414    0.3697   -1.1781 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6450    2.3081    0.0041 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 18  1  0  0  0  0\r\n  5 19  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5961\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n37\r\n42\r\n38\r\n46\r\n41\r\n13\r\n35\r\n3\r\n25\r\n34\r\n30\r\n45\r\n22\r\n4\r\n39\r\n11\r\n14\r\n31\r\n10\r\n8\r\n20\r\n33\r\n43\r\n44\r\n26\r\n1\r\n7\r\n32\r\n40\r\n28\r\n24\r\n36\r\n23\r\n17\r\n19\r\n9\r\n29\r\n5\r\n15\r\n27\r\n18\r\n6\r\n21\r\n16\r\n12\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n10 0.57\r\n16 0.36\r\n17 0.36\r\n18 0.37\r\n19 0.37\r\n2 -0.57\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000174900000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n9.9844\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12716758 59 18342740702008311338\r\n12897270 3 16702301217734052424\r\n12932741 1 17917999407764667114\r\n12932764 1 18334583489935194138\r\n14390081 3 18342735200139270448\r\n15775835 57 17458065962502918541\r\n19837323 101 18270688567211238441\r\n19973954 147 18341617082840028544\r\n20653085 51 18189068537351904184\r\n3248919 1 18408040706409031318\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n178.23\r\n4.89\r\n1.19\r\n1.08\r\n2.71\r\n0.25\r\n0.05\r\n-1.17\r\n0.84\r\n-0.99\r\n-0.03\r\n0.21\r\n-0.1\r\n-0.24\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n337.458\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n109.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 15, NULL, NULL),
-(15, 'D-glutamine', 'D', '145815\r\n  -OEChem-08061307443D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n   -1.8849   -1.5237    0.9234 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6131   -0.6801   -1.0497 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8835    0.1297    1.0306 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6676    1.8080   -0.5058 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1776   -0.5963   -1.1318 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1264    0.6331    0.7408 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3839    0.7687    0.4835 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.9683    0.1008   -0.4248 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0327   -0.5217    0.0166 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4264   -0.1186   -0.0827 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5272    1.6059    1.0562 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2688   -0.0353    1.6008 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8794    1.0630    1.4162 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5672   -0.8589   -0.7709 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9251    0.8010   -1.2671 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6746    1.8949   -0.6377 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2794    1.5469   -1.4111 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7742   -0.7872   -2.0434 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1701   -0.7770   -1.0244 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2969   -2.3589    0.6151 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 18  1  0  0  0  0\r\n  5 19  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n145815\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n43\r\n31\r\n3\r\n39\r\n26\r\n44\r\n37\r\n13\r\n17\r\n47\r\n41\r\n20\r\n33\r\n11\r\n38\r\n19\r\n45\r\n28\r\n18\r\n32\r\n10\r\n30\r\n42\r\n8\r\n36\r\n14\r\n46\r\n34\r\n25\r\n6\r\n24\r\n35\r\n15\r\n4\r\n21\r\n22\r\n7\r\n40\r\n29\r\n16\r\n9\r\n27\r\n2\r\n12\r\n23\r\n5\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n10 0.57\r\n16 0.36\r\n17 0.36\r\n18 0.37\r\n19 0.37\r\n2 -0.57\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0002399700000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n9.9685\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.581\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 17846206782948900728\r\n12716758 59 18267302032363278368\r\n12897270 3 18187086182380033726\r\n12932741 1 18060135393285197872\r\n12932764 1 18336832991946754656\r\n15310529 11 15719113578006943755\r\n20201158 50 18201996642305476014\r\n20653085 51 14851874825381087287\r\n20711985 344 18339358565681616169\r\n21061003 4 17632584876359391440\r\n29004967 10 17418094329898394560\r\n3248919 1 17967813829990893902\r\n369184 2 16630527319207707649\r\n8030462 33 17821730516043257872\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n178.23\r\n4.73\r\n1.27\r\n1.06\r\n2.77\r\n0.18\r\n0.02\r\n-1.16\r\n-0.62\r\n-0.91\r\n-0.04\r\n0.08\r\n-0.11\r\n0.47\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n337.562\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n109.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 14, NULL, NULL),
-(16, 'L-asparagine', 'L', '6267\r\n  -OEChem-08061307473D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n    0.6999   -1.5909    0.8956 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0189   -0.9167   -0.8203 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1454   -0.6098   -1.0603 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7805    1.6834    0.0854 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1032    0.1565    1.1081 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6990    0.7436    0.3906 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.5174    1.0666   -0.4797 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2275   -0.6457    0.0740 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6597    0.1130   -0.1934 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4822    0.8127    1.4611 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8691    2.0889   -0.2945 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2732    0.9867   -1.5466 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0356    1.6193   -0.8994 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6135    1.4403    0.6200 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7155    0.7905    1.7990 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8660   -0.4370    1.4170 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0341   -2.4882    0.6823 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6267\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n5\r\n14\r\n15\r\n3\r\n4\r\n1\r\n17\r\n16\r\n7\r\n11\r\n12\r\n13\r\n8\r\n18\r\n6\r\n10\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.37\r\n16 0.37\r\n17 0.5\r\n2 -0.57\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.57\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000187B00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n11.171\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.581\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 16620464601833680024\r\n18185500 45 18048307847535900314\r\n21040471 1 18118682368671456656\r\n21922407 69 17417519323976970017\r\n23552333 60 18128798885085369927\r\n23552423 10 18410004429765273061\r\n24536 1 17345736521872826085\r\n29004967 10 18186807958614600921\r\n5084963 1 18197197338638332064\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n157.65\r\n2.82\r\n1.47\r\n0.98\r\n0.75\r\n0.12\r\n-0.03\r\n-0.23\r\n0.26\r\n-0.78\r\n-0.1\r\n0.3\r\n-0.18\r\n-0.02\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n301.304\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n96.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 17, NULL, NULL),
-(17, 'D-asparagine', 'D', '439600\r\n  -OEChem-08061307483D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n    0.7958   -1.5002   -1.0214 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0875   -0.8499    0.7242 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7209   -1.0885    0.7897 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6862    1.7749   -0.0427 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5422    0.4364   -0.7240 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6493    0.7931   -0.3700 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.5593    1.0062    0.5439 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2597   -0.5790   -0.1365 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6562    0.0070    0.2368 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3806    0.8987   -1.4265 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2897    0.8810    1.6006 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9530    2.0240    0.4322 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5157    1.6064   -0.6105 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9721    1.6743    0.9305 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4585    1.3414   -1.1757 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.3167   -0.1493   -1.0183 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1976   -2.3829   -0.8742 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n439600\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n10\r\n5\r\n3\r\n16\r\n13\r\n15\r\n8\r\n14\r\n4\r\n9\r\n12\r\n6\r\n2\r\n7\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.37\r\n16 0.37\r\n17 0.5\r\n2 -0.57\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.57\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0006B53000000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n11.1006\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.581\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 13654608801392766660\r\n15310529 11 16227198949174253395\r\n18185500 45 17917987282871524127\r\n20711978 78 18128562464257675947\r\n21040471 1 18053948634460497036\r\n21922407 69 15625936474423353071\r\n23552449 11 18335977601616897816\r\n241688 4 17548989853249916083\r\n24536 1 18271539606111333753\r\n29004967 10 18342460292088323538\r\n5084963 1 17973464370406567796\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n157.65\r\n2.89\r\n1.53\r\n0.88\r\n0.95\r\n0.15\r\n0.03\r\n-0.14\r\n-0.01\r\n-0.64\r\n0.07\r\n0.07\r\n-0.17\r\n0.14\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n301.237\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n96\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 16, NULL, NULL),
-(18, 'L-ornithine', 'L', '6262\r\n  -OEChem-08061307493D\r\n\r\n 21 20  0     1  0  0  0  0  0999 V2000\r\n    1.6884   -1.5615    0.7827 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1485   -0.6169   -1.2261 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2965    1.8348   -0.4347 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6082   -0.4932   -0.7057 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3416    0.5599    0.9520 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2979    0.1323   -0.1704 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1222    0.7429    0.5227 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -2.7133   -0.0799    0.3687 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7055   -0.5185   -0.0891 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7035    1.4975    1.3939 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3832   -0.1908    1.7520 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9430   -0.7970   -0.6317 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3168    0.8981   -0.9550 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7249    0.9851    1.4059 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.0897    0.8452    0.8190 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7091   -0.8521    1.1454 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8153    1.6194   -1.3066 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2836    1.9358   -0.6682 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6426    0.2311   -1.4219 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.5561   -0.5799   -0.3414 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0654   -2.3755    0.3857 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 21  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6262\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n4\r\n28\r\n35\r\n37\r\n27\r\n29\r\n38\r\n7\r\n30\r\n11\r\n8\r\n34\r\n26\r\n36\r\n32\r\n21\r\n19\r\n33\r\n16\r\n24\r\n12\r\n2\r\n31\r\n9\r\n13\r\n23\r\n17\r\n5\r\n3\r\n22\r\n15\r\n25\r\n6\r\n14\r\n10\r\n18\r\n20\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.36\r\n21 0.5\r\n3 -0.99\r\n4 -0.99\r\n7 0.33\r\n8 0.27\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000187600000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.371\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18040722488841145951\r\n12932741 1 17676211316227883945\r\n12932764 1 18333170566180617535\r\n14128692 85 18059584567660365368\r\n14390081 3 12973608841615520295\r\n20653091 64 18343303664830706464\r\n23552333 60 18202566202181833248\r\n23552423 10 18411703192573592897\r\n23552449 11 18201145603088674817\r\n29004967 10 18334576823924443680\r\n3248919 1 18338230570199725449\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n163.52\r\n4.32\r\n1.32\r\n1\r\n4.26\r\n0.21\r\n0.02\r\n-1.26\r\n0.97\r\n-0.89\r\n0.01\r\n-0.23\r\n-0.09\r\n-0.26\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.933\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n102.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 19, NULL, NULL),
-(19, 'D-ornithine', 'D', '71082\r\n  -OEChem-08061307503D\r\n\r\n 21 20  0     1  0  0  0  0  0999 V2000\r\n    1.8048    1.5544    0.7052 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1874    0.4928   -1.2611 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1909   -1.8622   -0.3540 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6384    0.4419   -0.7291 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3478   -0.4239    0.9886 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3127   -0.0878   -0.1571 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0960   -0.7202    0.5549 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -2.7317    0.1318    0.3699 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7515    0.4732   -0.1172 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3474    0.4086    1.7038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7343   -1.2951    1.5342 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3291   -0.9032   -0.8895 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9678    0.8126   -0.6798 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6973   -0.9566    1.4407 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7437    0.9545    1.0933 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.0874   -0.7686    0.8819 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6966   -1.6646   -1.2227 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7219   -2.6670    0.0600 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.3331    1.2949   -1.1960 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.5667    0.6367   -0.3565 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2261    2.3250    0.2683 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 21  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71082\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n30\r\n9\r\n29\r\n12\r\n28\r\n22\r\n10\r\n26\r\n19\r\n8\r\n25\r\n5\r\n27\r\n24\r\n14\r\n31\r\n16\r\n4\r\n20\r\n21\r\n13\r\n2\r\n23\r\n17\r\n18\r\n7\r\n6\r\n15\r\n3\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.36\r\n21 0.5\r\n3 -0.99\r\n4 -0.99\r\n7 0.33\r\n8 0.27\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115AA00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.2509\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 16588034532463815265\r\n12897270 3 18343023311061869393\r\n12932741 1 17822866290254169371\r\n12932764 1 18343865511489053365\r\n14390081 3 18261106383578688905\r\n21040471 1 18188494712752299066\r\n230 275 17603861183097967721\r\n23235685 24 17822294621105635012\r\n3248919 1 18411695448953312691\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n163.52\r\n4.4\r\n1.28\r\n1\r\n4.28\r\n0.25\r\n-0.03\r\n-1.3\r\n-1.02\r\n-0.88\r\n0\r\n-0.21\r\n-0.08\r\n0.23\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.869\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n102.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 18, NULL, NULL),
-(20, 'L-aspartic acid', 'L', '5960\r\n  -OEChem-08061307523D\r\n\r\n 16 15  0     1  0  0  0  0  0999 V2000\r\n    0.8765   -1.7477    0.4612 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5468    0.2085   -1.0110 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0079   -0.5891   -1.1272 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8021   -0.7792    0.8987 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7445    1.6788    0.4055 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7272    0.6375    0.5499 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.5957    1.1159   -0.0613 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2748   -0.5980   -0.1470 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6864    0.0732    0.0312 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6051    0.4158    1.6166 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4391    1.3530   -1.1219 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9553    2.0203    0.4426 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5932    1.3992    0.8965 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4247    2.5341    0.8586 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2403   -2.5417    0.0146 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2665   -0.4573   -0.9797 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 15  1  0  0  0  0\r\n  2  9  1  0  0  0  0\r\n  2 16  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  9  2  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 13  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5960\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n12\r\n4\r\n3\r\n2\r\n9\r\n5\r\n11\r\n7\r\n6\r\n10\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.5\r\n16 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 8 anion\r\n3 2 4 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000174800000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.3698\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.715\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18041011613012225318\r\n137420 1 9505317914091190224\r\n18185500 45 17905329524481664858\r\n21040471 1 18122060072681638224\r\n21922407 69 16415192416546670307\r\n23552333 60 17631716262299918581\r\n23552423 10 18411980239307295405\r\n23552449 11 18200856405839835033\r\n24536 1 18410851066598430641\r\n29004967 10 18342463629378152392\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n156.76\r\n2.93\r\n1.48\r\n0.93\r\n1.09\r\n0.06\r\n0.12\r\n-0.12\r\n0.63\r\n-0.72\r\n-0.26\r\n0.08\r\n-0.12\r\n0.36\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.836\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n95.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 21, NULL, NULL),
-(21, 'D-aspartic acid', 'D', '83887\r\n  -OEChem-08061307533D\r\n\r\n 16 15  0     1  0  0  0  0  0999 V2000\r\n    1.5137   -1.5919   -0.6067 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6025    0.1004    0.9014 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5048   -0.5767    1.4219 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7345   -0.8795   -0.9598 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6733    1.7493   -0.3626 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7114    0.6595   -0.5273 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.6584    1.0848    0.0160 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2853   -0.5349    0.2184 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6931   -0.0111   -0.1013 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6276    0.4133   -1.5925 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0381    1.9597   -0.5241 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5626    1.3537    1.0762 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3321    2.5816   -0.8422 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5520    1.5018   -0.8166 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8728   -2.3640   -0.1196 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2895   -0.5980    0.8511 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 15  1  0  0  0  0\r\n  2  9  1  0  0  0  0\r\n  2 16  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  9  2  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 13  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n83887\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n12\r\n6\r\n2\r\n11\r\n10\r\n4\r\n5\r\n3\r\n7\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.5\r\n16 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 8 anion\r\n3 2 4 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000147AF00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.3555\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.713\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 12954472541618673468\r\n18185500 45 18270955851373299415\r\n21040471 1 17977387466607265516\r\n21922407 69 18130784620106792481\r\n23552333 60 18410015454930660113\r\n23552449 11 18114453509322016857\r\n24536 1 18341323440183655167\r\n29004967 10 17603304886006858753\r\n5084963 1 17988085470048142179\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n156.76\r\n2.9\r\n1.45\r\n1\r\n1.35\r\n0.23\r\n-0.19\r\n-0.34\r\n-0.37\r\n-0.79\r\n0.27\r\n-0.02\r\n-0.23\r\n-0.26\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.177\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n95.7\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 20, NULL, NULL),
-(22, 'L-glutamic acid', 'L', '33032\r\n  -OEChem-08061307533D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n    1.8673    1.4740   -1.0053 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1163    0.7071    1.0794 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5878    0.7410    1.0154 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9184   -0.2347   -0.9789 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6806   -1.7797    0.5894 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1238   -0.6649   -0.7146 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3856   -0.7970   -0.4512 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.9609   -0.0832    0.4279 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0137    0.5241   -0.0440 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4156    0.1132    0.0818 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5282   -1.6486   -0.9894 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2668   -0.0337   -1.6022 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8836   -1.1268   -1.3708 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9129   -0.7486    1.2969 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5643    0.8967    0.7156 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6879   -1.9245    0.6494 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2786   -2.6805    0.3327 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2713    2.3275   -0.7398 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.0615    0.8235    0.8441 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 18  1  0  0  0  0\r\n  2 10  1  0  0  0  0\r\n  2 19  1  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4 10  2  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  5 17  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n33032\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n21\r\n16\r\n20\r\n22\r\n11\r\n26\r\n12\r\n29\r\n13\r\n27\r\n14\r\n18\r\n30\r\n4\r\n9\r\n3\r\n25\r\n10\r\n23\r\n5\r\n7\r\n19\r\n17\r\n24\r\n28\r\n2\r\n6\r\n15\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n10 0.66\r\n16 0.36\r\n17 0.36\r\n18 0.5\r\n19 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 9 anion\r\n3 2 4 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000810800000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.4573\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.714\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10219947 1 18114172047710138944\r\n10857977 72 15936421056452836647\r\n12897270 3 15554175825776144829\r\n12932741 1 17167865236071508295\r\n12932764 1 18335707092039925015\r\n14390081 3 17847062198721526473\r\n15775835 57 18060704991489316993\r\n19973954 147 18114745928076065853\r\n21040471 1 18270684302234905758\r\n230 275 18410014338180945724\r\n23552423 10 17559964220941829943\r\n3248919 1 18334858337750954131\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n177.34\r\n4.65\r\n1.28\r\n1.04\r\n2.76\r\n0.18\r\n-0.02\r\n-1.11\r\n0.54\r\n-0.87\r\n0.05\r\n0.01\r\n-0.11\r\n-0.5\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n336.76\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n108.5\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 23, NULL, NULL),
-(23, 'D-glutamic acid', 'D', '23327\r\n  -OEChem-08061307543D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n    2.0909   -1.6869   -0.3513 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2080    0.0102    1.2337 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6515   -0.1520    1.2201 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9058   -0.4276   -0.9753 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4996    1.8871   -0.1490 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1289    0.1615   -0.8999 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3481    0.5510   -0.7212 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.9934    0.1912    0.3637 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0968   -0.4291    0.1646 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4509   -0.1053    0.1146 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1894   -0.8419   -1.3414 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5753    0.8362   -1.6433 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8428    0.5448   -1.6999 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6219   -0.5474    1.0824 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9414    1.1839    0.8241 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0140    2.5660   -0.7338 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4832    2.1552   -0.1586 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5749   -2.3190    0.2218 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1522   -0.1908    1.0594 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 18  1  0  0  0  0\r\n  2 10  1  0  0  0  0\r\n  2 19  1  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4 10  2  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  5 17  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n23327\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n24\r\n16\r\n23\r\n11\r\n28\r\n2\r\n4\r\n21\r\n5\r\n13\r\n8\r\n27\r\n14\r\n17\r\n25\r\n12\r\n9\r\n26\r\n19\r\n22\r\n6\r\n20\r\n7\r\n15\r\n18\r\n10\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n10 0.66\r\n16 0.36\r\n17 0.36\r\n18 0.5\r\n19 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 9 anion\r\n3 2 4 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00005B1F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.2637\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.714\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10219947 1 18410283718909468050\r\n12932741 1 17313100878061886917\r\n12932764 1 18260555566760023597\r\n14390081 3 14404911262857900619\r\n15775835 57 17132398314989802771\r\n20201158 50 17821721706764874378\r\n20653091 64 17894640244483226532\r\n20711985 344 17390221529819551636\r\n21028194 46 12103553195627759654\r\n23552449 11 18186515527255393804\r\n29004967 10 18335414634799994884\r\n3248919 1 18343584074940325023\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n177.34\r\n4.8\r\n1.2\r\n1.08\r\n2.72\r\n0.23\r\n-0.09\r\n-1\r\n-0.94\r\n-1.04\r\n0.1\r\n0.23\r\n-0.08\r\n0.02\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n336.574\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n108.5\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 22, NULL, NULL),
-(24, 'L-valine', 'L', '6287\r\n  -OEChem-08061307553D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n   -1.5450   -1.4733   -0.2634 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7308    0.3763    1.0301 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2561    1.7673   -0.8569 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3804    0.0130   -0.2307 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0464    0.3243   -0.7445 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.7318   -1.4774   -0.1626 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6518    0.6838    1.1200 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1858   -0.2139    0.1080 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0843    0.4571   -0.9495 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1592   -0.0971   -1.7516 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5567   -1.9585   -1.1304 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1288   -1.9948    0.5905 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7866   -1.6168    0.0967 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9886    0.2970    1.9007 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6824    0.4931    1.4403 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5287    1.7701    1.0717 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1415    1.9507   -1.3279 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4679    2.1741   -1.4481 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2748   -1.8228    0.2912 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 19  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6287\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n6\r\n8\r\n5\r\n3\r\n7\r\n1\r\n4\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.5\r\n2 -0.57\r\n3 -0.99\r\n5 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n3 4 6 7 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000188F00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.1635\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.506\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n18185500 45 18266184013763732287\r\n20096714 4 16271926055779426056\r\n21040471 1 18271542904714866697\r\n23552449 11 17607231353730139803\r\n24536 1 18188780585606761179\r\n29004967 10 17822871847567128448\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.37\r\n1.53\r\n1.03\r\n0.15\r\n0.13\r\n-0.13\r\n0.55\r\n-0.55\r\n0.05\r\n0.26\r\n0\r\n-0.33\r\n0.23\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n272.37\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n94.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 25, NULL, NULL),
-(25, 'D-valine', 'D', '71563\r\n  -OEChem-08061307563D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n    1.5439    1.4660    0.2477 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7283   -0.3890   -1.0383 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2734   -1.7689    0.8715 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3814   -0.0270    0.2247 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0470   -0.3303    0.7390 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.7194   -0.6366   -1.1406 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6707    1.4778    0.2194 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1789    0.2081   -0.1232 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0821   -0.4714    0.9462 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1622    0.1007    1.7420 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6015   -1.7246   -1.1316 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0760   -0.2300   -1.9276 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7583   -0.4209   -1.4129 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0715    1.9998   -0.5337 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7259    1.6663   -0.0066 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4563    1.9208    1.1975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4474   -2.1758    1.4663 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1601   -1.9358    1.3464 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2767    1.8111   -0.3058 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 19  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71563\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n9\r\n6\r\n4\r\n3\r\n5\r\n2\r\n7\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.5\r\n2 -0.57\r\n3 -0.99\r\n5 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n3 4 6 7 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0001178B00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.6968\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.506\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 17773308152546740957\r\n137420 1 12625318703194589435\r\n18185500 45 18121769530939113075\r\n20096714 4 18337677399491314993\r\n21040471 1 18113908173066276280\r\n23552449 1 17615688874443591384\r\n24536 1 18116725190602683780\r\n29004967 10 12319459930176603246\r\n5084963 1 16950563302428206106\r\n5943 1 13344787628923076075\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.37\r\n1.52\r\n1.04\r\n0.15\r\n0.14\r\n0.14\r\n0.48\r\n0.59\r\n0.03\r\n-0.28\r\n0.02\r\n-0.33\r\n-0.25\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n272.212\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n94.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 24, NULL, NULL),
-(26, 'L-isoleucine', 'L', '6306\r\n  -OEChem-08061307573D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    1.7318    1.0709   -1.2228 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2594    0.4785    0.9014 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6284   -1.6112    0.9265 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8499   -0.1966   -0.5113 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.5599   -0.8012   -0.2932 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.3284    0.7162    0.6425 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8909   -1.2949   -0.7794 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7052    1.3375    0.4485 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5949    0.3007   -0.1121 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8062    0.4240   -1.4171 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8584   -1.4200   -1.1465 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6102    1.5338    0.7760 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3472    0.1596    1.5865 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5242   -1.9957   -1.5374 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1186   -1.8650    0.1273 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8257   -0.8738   -1.1625 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7682    1.8589   -0.5118 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9027    2.0653    1.2424 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4975    0.5847    0.4911 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4726   -1.0328    1.7505 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5632   -2.0056    1.0260 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4077    1.7712   -1.1008 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6306\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n15\r\n2\r\n4\r\n16\r\n10\r\n14\r\n5\r\n7\r\n12\r\n13\r\n6\r\n9\r\n11\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n5 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 7 hydrophobe\r\n1 8 hydrophobe\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000018A200000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.591\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n14390081 3 17988923340795149985\r\n15775835 57 18342177743407050089\r\n18185500 45 18410566280106755181\r\n20653085 51 18130244734222865096\r\n20711978 78 16950847990193428539\r\n21040471 1 18201444623196706381\r\n23552423 10 18410576175601031871\r\n24536 1 18187651335593753062\r\n29004967 10 17168424844207875553\r\n5084963 1 18188757461608289094\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n3.29\r\n1.53\r\n1.05\r\n0.65\r\n0.29\r\n-0.04\r\n-1.32\r\n0.1\r\n0.61\r\n0.06\r\n-0.36\r\n0.02\r\n-0.55\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n311.09\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 27, NULL, NULL);
-INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`) VALUES
-(27, 'D-isoleucine', 'D', '76551\r\n  -OEChem-08061307583D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    1.6924   -1.1085   -1.2050 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2694   -0.4678    0.8923 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6388    1.6215    0.9108 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8474    0.1961   -0.5095 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.5634    0.8027   -0.3026 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.3244   -0.7095    0.6506 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8893    1.2928   -0.7811 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7025   -1.3299    0.4634 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5996   -0.2974   -0.1190 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8080   -0.4293   -1.4121 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8645    1.4128   -1.1612 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3426   -0.1481    1.5916 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6067   -1.5268    0.7878 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8142    0.8682   -1.1846 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1408    1.8496    0.1275 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5161    2.0048   -1.5251 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4933   -0.5750    0.4992 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9011   -2.0498    1.2642 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7671   -1.8600   -0.4918 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3959    1.0723    1.7329 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0391    2.3799    0.8616 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3524   -1.8221   -1.0728 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n76551\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n3\r\n8\r\n15\r\n1\r\n9\r\n13\r\n7\r\n6\r\n11\r\n12\r\n10\r\n5\r\n4\r\n14\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n5 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 7 hydrophobe\r\n1 8 hydrophobe\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00012B0700000003\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.7303\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12423570 1 10970162560851976773\r\n20711978 78 18058734735556273005\r\n21040471 1 17825944823726942469\r\n21922407 69 17058655294370391155\r\n23552423 10 17603871151759168879\r\n23552449 11 18268433619012549251\r\n24536 1 18272937085300715548\r\n29004967 10 18131631170992923474\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n3.28\r\n1.54\r\n1.04\r\n0.66\r\n0.29\r\n0.04\r\n-1.3\r\n-0.14\r\n0.59\r\n-0.06\r\n-0.34\r\n0.01\r\n0.56\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n311.117\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 26, NULL, NULL),
-(28, 'L-tryptophan', 'L', '6305\r\n  -OEChem-08061308003D\r\n\r\n 27 28  0     1  0  0  0  0  0999 V2000\r\n    1.4762   -0.8154    1.7282 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5598   -1.9472    0.0879 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6474    2.0044    0.5482 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.8759    0.3655   -0.5832 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1475    1.1323   -0.4236 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5065    0.9845   -0.9830 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8667    0.1349   -0.3859 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5601    0.4881    0.0402 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.9823    0.7078    0.2286 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3625    2.2702    0.1579 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9431   -1.2045   -0.8169 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1751    0.0055    0.4346 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2083   -0.8852    0.5860 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1298   -1.9193   -0.6176 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2274   -1.3216   -0.0012 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4724    0.2941   -1.8370 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8346    1.9497   -1.3927 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6391    1.1902    0.8789 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0723    3.2449    0.3304 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2620    2.6639    1.0051 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1001   -1.6864   -1.3035 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.0301    0.4699    0.9143 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1948   -2.9522   -0.9490 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.5715    0.1348    0.1255 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1549    1.2657   -0.9717 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1393   -1.8953    0.1434 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2617   -1.7057    2.0797 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  1 27  1  0  0  0  0\r\n  2 13  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 10  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 24  1  0  0  0  0\r\n  4 25  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  6 17  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  2  0  0  0  0\r\n  8 13  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n 10 19  1  0  0  0  0\r\n 11 14  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 15  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\n 14 15  2  0  0  0  0\r\n 14 23  1  0  0  0  0\r\n 15 26  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6305\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n18\r\n9\r\n4\r\n15\r\n19\r\n14\r\n17\r\n6\r\n16\r\n12\r\n13\r\n10\r\n7\r\n3\r\n11\r\n5\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n23\r\n1 -0.65\r\n10 -0.3\r\n11 -0.15\r\n12 -0.15\r\n13 0.66\r\n14 -0.15\r\n15 -0.15\r\n19 0.15\r\n2 -0.57\r\n20 0.27\r\n21 0.15\r\n22 0.15\r\n23 0.15\r\n24 0.36\r\n25 0.36\r\n26 0.15\r\n27 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.18\r\n6 0.18\r\n8 0.33\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n9\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 13 anion\r\n5 3 5 7 9 10 rings\r\n6 7 9 11 12 14 15 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n15\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000018A100000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n20.3006\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n45.819\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11578080 2 18044063921631987172\r\n12382932 28 18342172297346008739\r\n12553582 1 18339637957620267583\r\n13221675 6 18410296938460187006\r\n13538477 17 18409445856177914860\r\n15001771 113 18337390560110812629\r\n15076042 46 18270116786388370305\r\n15375462 189 18335425724268409835\r\n16752209 62 18340195302926022533\r\n16945 1 18341606031762393341\r\n17804303 29 18056201271877253182\r\n19422 9 18335426712311406226\r\n20442098 301 18341891883389899966\r\n20510252 161 17988370260576517201\r\n20645477 70 17690549106974296535\r\n20871998 184 18202566163648381989\r\n22112679 90 18128831913457911133\r\n22445834 79 18408325471008859442\r\n23236772 104 18333455352113071832\r\n232386 152 18269843171275638837\r\n23388829 49 18338797917777723101\r\n23463225 33 18410860962229259495\r\n23552423 10 17905326578571904349\r\n23559900 14 18272931614193070404\r\n23598294 1 18270408191435270001\r\n2748010 2 17186174063400709389\r\n3312278 4 18335986462239826991\r\n34934 24 18410289241900190429\r\n427121 178 16123918433733439433\r\n7364860 26 17840586221194573353\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n286.99\r\n5.19\r\n2.17\r\n0.99\r\n1.38\r\n0.26\r\n0.17\r\n-1.69\r\n0.1\r\n-0.46\r\n0.05\r\n0.29\r\n-0.14\r\n-0.73\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n619.038\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n158.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', NULL, NULL, NULL),
-(29, 'D-tryptophan', 'D', '9060\r\n  -OEChem-08061308013D\r\n\r\n 27 28  0     1  0  0  0  0  0999 V2000\r\n   -1.4202    0.8157   -1.6976 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5635    1.9491   -0.0995 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6436   -2.0069   -0.5435 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.8800   -0.3628    0.5749 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1531   -1.1312    0.4218 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5132   -0.9814    0.9780 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8623   -0.1349    0.3851 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5642   -0.4860   -0.0484 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    1.9789   -0.7100   -0.2253 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3572   -2.2705   -0.1564 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9388    1.2050    0.8141 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1730   -0.0093   -0.4291 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2117    0.8865   -0.5958 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1268    1.9183    0.6170 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2255    1.3185    0.0047 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8427   -1.9455    1.3887 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4802   -0.2895    1.8308 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6425   -1.1883   -0.8871 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0780   -3.2451   -0.3284 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2588   -2.6678   -0.9975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0950    1.6886    1.2975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.0289   -0.4754   -0.9056 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1919    2.9518    0.9468 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1596   -1.2629    0.9633 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.5755   -0.1319   -0.1340 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1385    1.8910   -0.1384 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1798    1.7056   -2.0327 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  1 27  1  0  0  0  0\r\n  2 13  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 10  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 24  1  0  0  0  0\r\n  4 25  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  6 17  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  2  0  0  0  0\r\n  8 13  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n 10 19  1  0  0  0  0\r\n 11 14  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 15  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\n 14 15  2  0  0  0  0\r\n 14 23  1  0  0  0  0\r\n 15 26  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n9060\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n9\r\n18\r\n14\r\n7\r\n19\r\n15\r\n2\r\n11\r\n16\r\n5\r\n6\r\n3\r\n17\r\n13\r\n4\r\n10\r\n12\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n23\r\n1 -0.65\r\n10 -0.3\r\n11 -0.15\r\n12 -0.15\r\n13 0.66\r\n14 -0.15\r\n15 -0.15\r\n19 0.15\r\n2 -0.57\r\n20 0.27\r\n21 0.15\r\n22 0.15\r\n23 0.15\r\n24 0.36\r\n25 0.36\r\n26 0.15\r\n27 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.18\r\n6 0.18\r\n8 0.33\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n9\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 13 anion\r\n5 3 5 7 9 10 rings\r\n6 7 9 11 12 14 15 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n15\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000236400000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n20.3132\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n45.82\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n1 1 18341612637670079438\r\n10608611 8 18408603630492564929\r\n11031198 65 18342742918110962310\r\n11132069 177 18189330337378798425\r\n11471102 20 18343022189832721161\r\n11578080 2 8408286333729413535\r\n12654215 9 18339355250140663908\r\n13132413 78 17102813562585277602\r\n13294875 104 16811768436666108123\r\n13464514 151 18194405485384000452\r\n13839132 238 18187079520838258991\r\n15219456 202 18408886209033050227\r\n15775835 57 18200879585751970831\r\n16945 1 18341604932229640570\r\n17844478 74 18261404385388912891\r\n18186145 218 18130794477215005320\r\n21028194 46 18334292089035848048\r\n21501502 16 18335416812185065627\r\n21524375 3 18339358686030442626\r\n21947302 44 18337945705998010866\r\n22802520 49 18264773164235604389\r\n23402539 116 17968933218685488171\r\n23402655 69 18272931618192443685\r\n238 59 18123437597605775477\r\n25 1 18412829053598863448\r\n2748010 2 17838908375340942370\r\n3286 77 18408600331725651199\r\n63268167 104 18202005404159962474\r\n77492 1 16845580802779571291\r\n81228 2 17332792255026495498\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n286.99\r\n5.18\r\n2.17\r\n0.98\r\n1.4\r\n0.26\r\n-0.15\r\n-1.68\r\n-0.09\r\n-0.46\r\n-0.05\r\n0.28\r\n-0.14\r\n0.72\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n619.239\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n158.3\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 28, NULL, NULL),
-(30, 'L-histidine', 'L', '6274\r\n  -OEChem-08061308023D\r\n\r\n 20 20  0     1  0  0  0  0  0999 V2000\r\n   -1.0689   -1.6919   -0.7660 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4946   -1.1223    0.9038 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6797    0.1409    1.1624 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7494    1.3693   -0.2178 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8201   -0.3365   -0.6825 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3579    1.3004    0.3217 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5062    0.6397   -0.4567 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.9671    0.6020    0.1195 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7498   -0.7917   -0.0102 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6556    0.3150   -1.0031 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8043   -0.4249    0.6290 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5942    1.3196    1.3946 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2433    2.3450    0.0039 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3124    0.6416   -1.5355 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4441    0.1943    2.1450 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3992    0.5299   -2.0301 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6419    2.3346   -0.5280 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9358    1.4198    0.7835 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.5655   -0.8810    1.2458 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2415   -2.6142   -0.4801 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 15  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  4 18  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  2  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  2  0  0  0  0\r\n 10 16  1  0  0  0  0\r\n 11 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6274\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n9\r\n16\r\n12\r\n4\r\n20\r\n7\r\n8\r\n14\r\n15\r\n3\r\n6\r\n2\r\n11\r\n19\r\n17\r\n10\r\n5\r\n13\r\n18\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.08\r\n11 0.04\r\n15 0.27\r\n16 0.15\r\n17 0.36\r\n18 0.36\r\n19 0.15\r\n2 -0.57\r\n20 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.57\r\n6 0.18\r\n7 0.33\r\n8 -0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n3 3 5 11 cation\r\n5 3 5 8 10 11 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n11\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000188200000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.9539\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.654\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 14056993979206604083\r\n12932764 1 18271807968700595688\r\n15310529 11 17895482521612900700\r\n16945 1 17969215655460391109\r\n20201158 50 17632574907814046286\r\n20645464 45 17846491543443691394\r\n23235685 24 18339075965433964901\r\n23552423 10 17968380168362411957\r\n29004967 10 17203891859937136848\r\n369184 2 14908180854499463455\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n199.69\r\n4.3\r\n1.38\r\n1\r\n0.59\r\n0.14\r\n-0.02\r\n0.46\r\n-0.2\r\n-1.01\r\n0.05\r\n0.32\r\n0.1\r\n0.1\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n409.56\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n117.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 31, NULL, NULL),
-(31, 'D-histidine', 'D', '71083\r\n  -OEChem-08061308033D\r\n\r\n 20 20  0     1  0  0  0  0  0999 V2000\r\n    1.9365   -1.5628   -0.9470 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5274   -0.8197    1.1196 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1857    1.0655   -0.0387 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4073    1.6934   -0.4366 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7000   -1.0946   -0.0788 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2383    1.0917    0.5328 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3602    0.6701   -0.4259 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.0660    0.3805    0.2516 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0150   -0.6197    0.0273 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3726   -0.9313    0.2291 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1605    0.1269   -0.2333 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0617    2.1730    0.4461 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5170    0.9063    1.5783 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9803    0.5561   -1.4479 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2987    2.0689   -0.1036 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7364   -1.7837    0.4165 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7240    1.8738    0.5160 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0184    2.5746   -0.7709 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1764    0.3974   -0.4837 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3426   -2.4111   -0.6680 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 15  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  4 18  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  2  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  2  0  0  0  0\r\n 10 16  1  0  0  0  0\r\n 11 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71083\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n19\r\n5\r\n22\r\n18\r\n7\r\n6\r\n10\r\n21\r\n8\r\n15\r\n14\r\n17\r\n12\r\n9\r\n1\r\n4\r\n16\r\n13\r\n3\r\n20\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.08\r\n11 0.04\r\n15 0.27\r\n16 0.15\r\n17 0.36\r\n18 0.36\r\n19 0.15\r\n2 -0.57\r\n20 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.57\r\n6 0.18\r\n7 0.33\r\n8 -0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n3 3 5 11 cation\r\n5 3 5 8 10 11 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n11\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115AB00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.8346\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.652\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18265903629624331773\r\n12932764 1 17821733805887986261\r\n14325111 11 18407759253076072577\r\n15310529 11 18336547221944628157\r\n16945 1 18263646156438130897\r\n17990270 104 18412831269849539014\r\n19973954 147 18411424990135251309\r\n20201158 50 18413106134708206655\r\n20645477 70 18410289229416260799\r\n23235687 12 18334290955053777204\r\n23552423 10 18334013895524914915\r\n3248919 1 18343862204063626577\r\n369184 2 18334013908615525593\r\n7364860 26 18343303695280715968\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n199.69\r\n4.67\r\n1.52\r\n0.81\r\n1.31\r\n0.04\r\n-0.05\r\n-0.48\r\n0.27\r\n-0.65\r\n0.15\r\n-0.39\r\n-0.11\r\n-0.11\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n409.132\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n117.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 30, NULL, NULL),
-(32, 'L-lysine', 'L', '5962\r\n  -OEChem-08061308043D\r\n\r\n 24 23  0     1  0  0  0  0  0999 V2000\r\n   -2.7908   -1.6235   -0.3318 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5637    0.2615    0.6609 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5026    1.7690   -0.0718 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.8579   -0.3942    0.2918 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1674    0.3292   -0.3051 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1555   -0.2958    0.1586 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4066   -0.3826    0.2435 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4135    0.3533   -0.4323 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    3.6883    0.3006   -0.2331 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6942   -0.3175    0.0195 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2003    1.3818    0.0009 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2016    0.3162   -1.4017 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2045   -0.2620    1.2554 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1479   -1.3614   -0.1051 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3982   -1.4306   -0.0810 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3689   -0.3832    1.3401 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3829    0.2891   -1.5263 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.7077    1.3445    0.0985 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.7326    0.2970   -1.3275 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5674    1.8676    0.9405 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3525    2.1750   -0.4609 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.8417   -0.3724    1.3106 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    5.7014    0.1029    0.0088 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6273   -2.0269   -0.0160 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 24  1  0  0  0  0\r\n  2 10  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  4 22  1  0  0  0  0\r\n  4 23  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  6 14  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5962\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n69\r\n67\r\n30\r\n93\r\n65\r\n90\r\n29\r\n18\r\n59\r\n77\r\n40\r\n22\r\n32\r\n56\r\n35\r\n85\r\n66\r\n8\r\n73\r\n75\r\n7\r\n61\r\n64\r\n72\r\n70\r\n89\r\n62\r\n55\r\n37\r\n79\r\n46\r\n68\r\n50\r\n92\r\n44\r\n63\r\n88\r\n5\r\n76\r\n52\r\n16\r\n17\r\n71\r\n19\r\n80\r\n25\r\n54\r\n34\r\n41\r\n53\r\n12\r\n74\r\n84\r\n1\r\n6\r\n23\r\n45\r\n39\r\n82\r\n83\r\n47\r\n3\r\n13\r\n42\r\n4\r\n49\r\n86\r\n26\r\n9\r\n87\r\n58\r\n81\r\n60\r\n21\r\n31\r\n78\r\n33\r\n38\r\n48\r\n20\r\n36\r\n24\r\n51\r\n15\r\n27\r\n91\r\n57\r\n11\r\n28\r\n43\r\n10\r\n14\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n10 0.66\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.36\r\n23 0.36\r\n24 0.5\r\n3 -0.99\r\n4 -0.99\r\n8 0.33\r\n9 0.27\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000174A00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.9369\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11062470 55 11527947859386917362\r\n12932764 1 17488728022213747326\r\n14325111 11 18335981987216207414\r\n18342897 69 18409724058515912674\r\n190213 19 13326856642999686966\r\n20645464 45 17132120147433185679\r\n20828058 44 18344145899691559430\r\n21293036 1 14418135127601398720\r\n22485316 2 18411696582597877162\r\n23380061 127 18409162186852672052\r\n23402539 116 18408595968128373974\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n184.09\r\n7.75\r\n1.15\r\n0.68\r\n6.62\r\n0.13\r\n0\r\n-1.2\r\n0.77\r\n-0.91\r\n-0.08\r\n-0.09\r\n0\r\n-0.27\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n337.151\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n116.7\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 33, NULL, NULL),
-(33, 'D-lysine', 'D', '57449\r\n  -OEChem-08061308053D\r\n\r\n 24 23  0     1  0  0  0  0  0999 V2000\r\n   -2.2075    1.6185   -0.7760 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5375    0.6972    1.2682 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8558   -1.7600    0.5238 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.5392    0.3714    0.1142 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7841   -0.2591    0.0754 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2456   -0.6468   -0.9944 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2092   -0.1237   -0.4668 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6938   -0.7206   -0.4939 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    3.1892    0.2388    0.6489 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1815    0.5844    0.1007 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7870   -1.0120    0.8722 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4945    0.6921    0.5378 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0383   -1.6128   -1.4319 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1914    0.0867   -1.8092 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2299    0.6466   -1.2478 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5101   -1.0686   -0.9364 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3597   -0.9665   -1.3289 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1815   -0.5330    1.4263 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8959    1.1854    1.1153 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2906   -1.5447    1.3436 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5052   -2.6473    0.1647 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.8339   -0.5131   -0.2977 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    5.1878    0.5614    0.8771 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5340    2.4441   -0.3589 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 24  1  0  0  0  0\r\n  2 10  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  4 22  1  0  0  0  0\r\n  4 23  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  6 14  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n57449\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n69\r\n13\r\n11\r\n31\r\n39\r\n14\r\n60\r\n63\r\n52\r\n59\r\n40\r\n23\r\n53\r\n71\r\n67\r\n41\r\n70\r\n36\r\n38\r\n61\r\n3\r\n22\r\n56\r\n37\r\n65\r\n19\r\n62\r\n29\r\n18\r\n6\r\n7\r\n33\r\n15\r\n42\r\n64\r\n68\r\n8\r\n45\r\n2\r\n35\r\n48\r\n16\r\n27\r\n50\r\n34\r\n26\r\n66\r\n58\r\n24\r\n4\r\n54\r\n21\r\n30\r\n47\r\n46\r\n51\r\n5\r\n57\r\n25\r\n28\r\n44\r\n49\r\n12\r\n17\r\n43\r\n20\r\n32\r\n55\r\n9\r\n10\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n10 0.66\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.36\r\n23 0.36\r\n24 0.5\r\n3 -0.99\r\n4 -0.99\r\n8 0.33\r\n9 0.27\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000E06900000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.7402\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11127187 94 10735865158725924641\r\n124424 183 18131060512047966050\r\n12897270 3 11095876051636763406\r\n12932764 1 18187362125797530832\r\n13024252 1 16660358195325319863\r\n14390081 3 17632576037269106098\r\n20211469 26 15430322463920647035\r\n20645464 45 18343588421099166558\r\n20653085 51 15983996817091189515\r\n23402539 116 18341603871947965695\r\n23500284 214 18060147500613298457\r\n3248919 1 18334573572892838870\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n184.09\r\n6.13\r\n1.26\r\n0.98\r\n7.25\r\n0.08\r\n-0.03\r\n-1.62\r\n-0.95\r\n-1.16\r\n-0.01\r\n-0.42\r\n-0.06\r\n0.24\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n338.013\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n116.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 32, NULL, NULL),
-(34, 'L-arginine', 'L', '6322\r\n  -OEChem-08061308063D\r\n\r\n 26 25  0     1  0  0  0  0  0999 V2000\r\n   -2.3027   -1.9535   -0.2040 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4436   -0.5315    1.1465 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8917    1.6021   -0.3339 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9642   -0.2357    0.0497 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.9181   -1.4167   -0.3497 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1368    0.7627    0.2805 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7698    0.4929   -0.8697 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1713    0.8748    0.4921 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2988    0.3560   -0.8131 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.3447    1.0326    0.4373 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7459   -0.7207    0.1586 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2599   -0.2630    0.0056 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3371   -0.4537   -1.2146 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4987    1.2540   -1.6125 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5946    1.8211    0.8474 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4186    0.1088    1.2369 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7019    0.1202   -1.8038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6008    1.8203   -0.2817 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6949    1.3401    1.4301 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.9080    1.5421   -0.3876 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6212    2.3685   -0.9492 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6025   -2.6477    0.4208 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.4065   -2.2611   -0.5818 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.9305   -1.4589   -0.3900 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    5.1395    0.6251    0.2127 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.8208    1.6857    0.5561 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 11  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2 11  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  4 12  2  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  5 23  1  0  0  0  0\r\n  5 24  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 25  1  0  0  0  0\r\n  6 26  1  0  0  0  0\r\n  7  8  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\n  9 11  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n 10 18  1  0  0  0  0\r\n 10 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6322\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n4\r\n72\r\n17\r\n12\r\n96\r\n27\r\n83\r\n58\r\n63\r\n38\r\n85\r\n93\r\n9\r\n33\r\n82\r\n5\r\n87\r\n52\r\n3\r\n81\r\n32\r\n55\r\n76\r\n56\r\n91\r\n70\r\n34\r\n64\r\n45\r\n89\r\n95\r\n84\r\n22\r\n41\r\n74\r\n49\r\n77\r\n61\r\n67\r\n44\r\n92\r\n24\r\n1\r\n75\r\n13\r\n6\r\n88\r\n79\r\n62\r\n25\r\n78\r\n31\r\n46\r\n90\r\n11\r\n40\r\n15\r\n53\r\n69\r\n57\r\n39\r\n47\r\n16\r\n73\r\n14\r\n86\r\n60\r\n29\r\n2\r\n59\r\n68\r\n66\r\n50\r\n23\r\n94\r\n8\r\n48\r\n80\r\n36\r\n10\r\n18\r\n21\r\n20\r\n7\r\n51\r\n30\r\n71\r\n19\r\n26\r\n43\r\n65\r\n54\r\n28\r\n42\r\n35\r\n37\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.25\r\n11 0.66\r\n12 0.55\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n23 0.4\r\n24 0.4\r\n25 0.4\r\n26 0.4\r\n3 -0.99\r\n4 -0.7\r\n5 -0.85\r\n6 -0.85\r\n9 0.33\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 5 donor\r\n1 6 donor\r\n3 1 2 11 anion\r\n4 4 5 6 12 cation\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000018B200000004\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n18.4327\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.711\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12162725 195 9223238446313502218\r\n124424 183 17845929645768177277\r\n12932764 1 17240472577217501004\r\n13296908 3 18411978049000373580\r\n14325111 11 18409444778510252228\r\n14577589 140 18408322164295491679\r\n17834074 16 18408322176974834030\r\n18186145 218 17822006476435071116\r\n190213 19 18113616781115697676\r\n20201158 50 18342454824669094654\r\n20279233 1 18341885290657058284\r\n20281407 28 18413106173557857224\r\n20645464 45 18131077017538680503\r\n20645477 70 17988071180765860582\r\n21293036 1 13984663676183150257\r\n22485316 2 18411696591097991602\r\n23402539 116 16370714921130949868\r\n449060 23 18041275577539281571\r\n528716 315 17022904549191671731\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n215.29\r\n7.45\r\n1.49\r\n0.86\r\n5.19\r\n0.34\r\n-0.02\r\n1.58\r\n-0.42\r\n-0.48\r\n0.06\r\n-0.48\r\n-0.04\r\n0.59\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n408.397\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n130.7\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 35, NULL, NULL),
-(35, 'D-arginine', 'D', '71070\r\n  -OEChem-08061308073D\r\n\r\n 26 25  0     1  0  0  0  0  0999 V2000\r\n    3.4571   -0.1075    1.4468 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4871    1.6621    0.4097 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8861   -0.1271   -1.8595 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9733    0.2203    0.0808 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.8454    1.5109   -0.3683 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.2002   -0.6766    0.1646 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7664   -0.6094   -0.7299 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0811   -1.0106    0.5846 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2952   -0.5508   -0.5924 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.4360   -1.0907    0.4486 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7440    0.4657    0.4413 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2622    0.3136   -0.0263 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3898    0.3703   -1.0515 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4946   -1.3292   -1.5126 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4621   -1.9855    0.9112 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3273   -0.2869    1.3705 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6821   -1.5417   -0.3280 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6920   -1.8375   -0.3127 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8506   -1.4171    1.4101 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6095   -0.7716   -2.5991 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.9023   -0.1846   -1.8004 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.7340    0.5508    2.1192 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2828    2.3369   -0.5414 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.8512    1.6050   -0.4565 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -5.1902   -0.4868    0.0526 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.9432   -1.6236    0.4191 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 11  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2 11  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  4 12  2  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  5 23  1  0  0  0  0\r\n  5 24  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 25  1  0  0  0  0\r\n  6 26  1  0  0  0  0\r\n  7  8  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\n  9 11  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n 10 18  1  0  0  0  0\r\n 10 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71070\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n81\r\n27\r\n78\r\n80\r\n16\r\n18\r\n67\r\n2\r\n92\r\n35\r\n36\r\n75\r\n88\r\n8\r\n59\r\n97\r\n89\r\n66\r\n79\r\n7\r\n69\r\n90\r\n71\r\n48\r\n76\r\n77\r\n28\r\n84\r\n85\r\n44\r\n99\r\n47\r\n65\r\n54\r\n68\r\n12\r\n87\r\n42\r\n82\r\n3\r\n23\r\n96\r\n26\r\n21\r\n74\r\n5\r\n40\r\n32\r\n58\r\n86\r\n72\r\n9\r\n13\r\n70\r\n55\r\n83\r\n11\r\n93\r\n15\r\n52\r\n91\r\n57\r\n29\r\n38\r\n17\r\n94\r\n39\r\n33\r\n56\r\n50\r\n98\r\n53\r\n14\r\n64\r\n6\r\n73\r\n10\r\n43\r\n46\r\n20\r\n45\r\n31\r\n22\r\n51\r\n60\r\n19\r\n4\r\n63\r\n24\r\n25\r\n30\r\n61\r\n41\r\n34\r\n95\r\n49\r\n62\r\n37\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.25\r\n11 0.66\r\n12 0.55\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n23 0.4\r\n24 0.4\r\n25 0.4\r\n26 0.4\r\n3 -0.99\r\n4 -0.7\r\n5 -0.85\r\n6 -0.85\r\n9 0.33\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 5 donor\r\n1 6 donor\r\n3 1 2 11 anion\r\n4 4 5 6 12 cation\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0001159E00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n18.4621\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.711\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12932764 1 18341061773559638567\r\n14390081 3 18409731746776462755\r\n15775835 57 18040434408188994424\r\n177051 138 7853561423168125233\r\n18186145 218 17988653956119585987\r\n19107657 47 15936402338895832855\r\n20233049 118 18260556614916945996\r\n20606313 2 18060698407404737520\r\n20645477 70 16702030746379340726\r\n20671657 53 16915682297186541918\r\n212847 35 18113901515851390061\r\n22485316 2 9295290534255948433\r\n230 275 18202566176770686466\r\n23048698 100 15646774509034444647\r\n23380061 81 16443071581925470318\r\n23402539 116 18272072903489217575\r\n23557571 272 18272385156882092637\r\n3248919 1 16845580806937609171\r\n449060 23 11167940260293598731\r\n53428517 58 17417811776837497527\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n215.29\r\n7.54\r\n1.26\r\n1.14\r\n4.92\r\n0.34\r\n0.25\r\n1.88\r\n-0.16\r\n0.38\r\n-0.12\r\n-1.39\r\n-0.06\r\n0.48\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n407.16\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n131.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 34, NULL, NULL),
-(36, 'L-methionine', 'L', '6137\r\n  -OEChem-08061308083D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n    2.2858    0.9701    0.2797 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1607    1.6402    0.6921 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5905    0.3693   -0.5240 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3628   -1.8775    0.4986 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4156   -0.8111   -0.8013 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5662   -0.6533    0.3686 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.2656    0.4223   -1.1208 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5486    0.4754    0.1110 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2617   -0.5355    0.4960 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0596   -1.6832   -0.6351 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1540   -1.0435   -1.7128 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0512   -0.4839    1.3194 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6282    1.2591   -1.4238 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9239    0.2090   -1.9700 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9632   -1.8082    1.3197 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7442   -2.6701    0.6669 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6638   -1.3256    0.9562 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.0990   -0.3183    1.1653 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.6690   -0.8794   -0.4583 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8051    2.3619    0.5302 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  7  1  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 20  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6137\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n14\r\n28\r\n30\r\n27\r\n29\r\n19\r\n23\r\n36\r\n2\r\n32\r\n35\r\n26\r\n15\r\n6\r\n31\r\n11\r\n13\r\n4\r\n22\r\n24\r\n10\r\n25\r\n34\r\n21\r\n9\r\n33\r\n1\r\n12\r\n3\r\n8\r\n20\r\n7\r\n18\r\n16\r\n17\r\n5\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.46\r\n15 0.36\r\n16 0.36\r\n2 -0.65\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n6 0.33\r\n7 0.23\r\n8 0.66\r\n9 0.23\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 9 hydrophobe\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017F90000000E\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.7079\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n17834069 15 18120369857274793272\r\n18342897 137 18335139769783610766\r\n20651381 17 18201147780747844020\r\n207724 885 17967536727354142172\r\n21040471 1 18265071166246444141\r\n21922407 69 17025456648855433100\r\n23552423 10 17896606274336756118\r\n24536 1 18268454415017271780\r\n29004967 10 11239987966973907247\r\n369184 2 18337107964015736480\r\n5084963 1 18186804668695947964\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n172.35\r\n3.95\r\n1.5\r\n0.97\r\n1.84\r\n0.14\r\n0.18\r\n-0.17\r\n-0.54\r\n-0.46\r\n-0.31\r\n0.19\r\n-0.02\r\n-0.01\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n304.509\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n113.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 37, NULL, NULL);
-INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`) VALUES
-(37, 'D-methionine', 'D', '84815\r\n  -OEChem-08061308093D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n   -2.3216   -0.9566   -0.3220 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1990   -1.6377   -0.6749 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6174   -0.3325    0.5181 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3332    1.8951   -0.4765 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4200    0.7632    0.8024 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5692    0.6484   -0.3663 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.2637   -0.4848    1.0782 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5805   -0.4573   -0.1216 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2941    0.5622   -0.4374 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1442    0.9659    1.7245 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0662    1.6382    0.6645 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0681    0.4775   -1.3238 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9025   -0.3126    1.9513 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6237   -1.3374    1.3259 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7815    2.1078    0.4146 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6941    2.6688   -0.6567 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6667    0.8659    0.5444 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1551    0.3793   -1.0866 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7070    1.3686   -0.8832 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8504   -2.3503   -0.5013 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  7  1  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 20  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n84815\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n29\r\n25\r\n26\r\n15\r\n33\r\n6\r\n34\r\n10\r\n35\r\n31\r\n17\r\n32\r\n19\r\n14\r\n28\r\n24\r\n16\r\n2\r\n11\r\n5\r\n30\r\n3\r\n22\r\n23\r\n36\r\n13\r\n9\r\n27\r\n4\r\n7\r\n20\r\n18\r\n21\r\n12\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.46\r\n15 0.36\r\n16 0.36\r\n2 -0.65\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n6 0.33\r\n7 0.23\r\n8 0.66\r\n9 0.23\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 9 hydrophobe\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00014B4F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n9.058\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 12607393387060670947\r\n11062470 55 18411975849649999065\r\n12897270 3 18122065561844846013\r\n15310529 11 18267024045401015967\r\n18185500 45 18060145365967235111\r\n20201158 50 18410852140429905839\r\n20211469 26 17987793008518993986\r\n20651381 22 13973672949514941235\r\n20653085 51 18259990353670313769\r\n23235687 12 18334852853114627551\r\n23552423 10 18411704296380337227\r\n29004967 10 18411422803849061746\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n172.35\r\n4.03\r\n1.5\r\n0.95\r\n1.9\r\n0.16\r\n-0.17\r\n-0.15\r\n0.52\r\n-0.44\r\n0.31\r\n0.17\r\n-0.03\r\n0.01\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n304.442\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n113.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 36, NULL, NULL),
-(38, 'L-cysteine', 'L', '5862\r\n  -OEChem-08061308103D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    2.2268    1.1231    0.0436 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3649    1.1718    0.9125 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1766    0.4956   -1.2446 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4351   -1.9834    0.1592 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1262   -0.6592    0.4341 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.4925   -0.5194   -0.2399 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8690    0.3716   -0.0649 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2375   -0.5515    1.5201 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1890   -1.2704    0.1485 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4157   -0.6634   -1.3235 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2936   -2.1083    0.6947 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2095   -2.7023    0.4860 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3385    1.8238   -0.6762 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9919    1.8374    0.5574 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5862\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n3\r\n6\r\n4\r\n8\r\n5\r\n9\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.41\r\n11 0.36\r\n12 0.36\r\n13 0.18\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.23\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000016E600000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.3598\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.43\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n20096714 4 18269280071109144560\r\n21040471 1 18410018723511379512\r\n23552449 1 18052253191941322440\r\n24536 1 18271805752613586920\r\n29004967 10 17326342021416917915\r\n5084963 1 17749401321021289146\r\n5943 1 12354312687961778279\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n131.19\r\n2.36\r\n1.58\r\n0.9\r\n1.69\r\n0.47\r\n0.12\r\n-0.75\r\n0.04\r\n-0.42\r\n-0.19\r\n-0.26\r\n-0.23\r\n0.03\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n231.349\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n87.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 39, NULL, NULL),
-(39, 'D-cysteine', 'D', '92851\r\n  -OEChem-08061308123D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    2.2488   -1.1212    0.0662 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4126   -1.1327    0.9166 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1759   -0.5002   -1.2489 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4262    1.9752    0.1568 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1333    0.6496    0.4283 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    1.4976    0.5080   -0.2492 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8651   -0.3786   -0.0698 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2408    0.5415    1.5142 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4127    0.6233   -1.3357 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1907    1.2742    0.1150 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4874    2.1242   -0.8503 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2123    2.6904    0.5038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3242   -1.0006    1.3997 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0645   -1.7765    0.5660 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n92851\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n3\r\n5\r\n4\r\n7\r\n6\r\n9\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.41\r\n11 0.36\r\n12 0.36\r\n13 0.18\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.23\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00016AB300000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.5266\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.43\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 15968409049070633488\r\n139733 1 8502382130585015634\r\n18185500 45 18058441187468853806\r\n21040471 1 17691411810936495560\r\n23552333 60 16983483964986147863\r\n24536 1 18260544507261388642\r\n29004967 10 18265337394173611096\r\n5943 1 17201082744908601253\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n131.19\r\n2.39\r\n1.57\r\n0.9\r\n1.69\r\n0.48\r\n-0.12\r\n-0.8\r\n-0.02\r\n-0.4\r\n0.18\r\n-0.27\r\n-0.22\r\n-0.03\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n231.285\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n87.5\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 38, NULL, NULL),
-(40, 'L-proline', 'L', '145742\r\n  -OEChem-08061308173D\r\n\r\n 17 17  0     1  0  0  0  0  0999 V2000\r\n    2.1617   -0.9509   -0.1119 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5688    1.2164   -0.4953 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7807    0.9314    0.7770 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0834   -0.2476    0.7251 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.7235   -1.3171   -0.0031 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9888   -0.6106   -0.4752 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6499    0.8635   -0.3933 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3289    0.1149   -0.0235 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3625   -0.5522    1.7389 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9873   -2.1429    0.6671 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1919   -1.7411   -0.8624 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2798   -0.9157   -1.4848 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8187   -0.8485    0.2018 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1204    1.1932   -1.2945 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5424    1.4831   -0.2694 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2509    1.8003    0.8023 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9837   -0.7341   -0.6014 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 16  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n145742\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n4\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n16 0.36\r\n17 0.5\r\n2 -0.57\r\n3 -0.9\r\n4 0.33\r\n7 0.27\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n5 3 4 5 6 7 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0002394E00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.2424\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.502\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18193557997957459956\r\n137420 1 8921595011813361833\r\n16714656 1 18411980295268301895\r\n18185500 45 18338511928700687402\r\n20096714 4 18186800253443141793\r\n21040471 1 18268420257358618345\r\n23552423 10 18408319990646790694\r\n24536 1 18336539507951190946\r\n29004967 10 14189569754067799747\r\n369184 2 14764342687340111614\r\n5084963 1 18409164385622551131\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.59\r\n1.31\r\n0.79\r\n0.44\r\n0.03\r\n-0.08\r\n0.1\r\n0.55\r\n-0.04\r\n0.07\r\n-0.08\r\n-0.07\r\n-0.12\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n294.274\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n89\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 41, NULL, NULL),
-(41, 'D-proline', 'D', '8988\r\n  -OEChem-08061308183D\r\n\r\n 17 17  0     1  0  0  0  0  0999 V2000\r\n   -2.2137    0.9467   -0.1657 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7225   -1.1368    0.6178 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7304   -1.0853   -0.3656 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0723    0.1103   -0.6221 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.6784    1.2753    0.0144 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9016    0.6393    0.6567 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0995   -0.6264   -0.1511 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4014   -0.1231    0.0156 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2073    0.2589   -1.6993 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1012    1.8406    0.7533 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0021    1.9733   -0.7671 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7748    1.2975    0.6281 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6897    0.3957    1.7051 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5862   -0.4082   -1.1089 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6954   -1.3695    0.3857 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6799   -1.7365   -1.1469 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.0938    0.8126    0.2463 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 16  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n8988\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n4\r\n5\r\n3\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n16 0.36\r\n17 0.5\r\n2 -0.57\r\n3 -0.9\r\n4 0.33\r\n7 0.27\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n5 3 4 5 6 7 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000231C00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n5.3688\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.502\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 18335975480092840840\r\n20096714 4 18059851822174406292\r\n21040471 1 18270677700817365756\r\n23552423 10 18113623378259395166\r\n24536 1 18261384602548072693\r\n29004967 10 18412265034335638138\r\n5084963 1 17845936367354760394\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.86\r\n1.26\r\n0.75\r\n0.39\r\n0.06\r\n-0.02\r\n-0.01\r\n-0.35\r\n-0.03\r\n-0.04\r\n-0.04\r\n-0.02\r\n0.32\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n294.065\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n89.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 40, NULL, NULL),
-(42, 'L-N-methyl tyrosine', 'L', '519723\r\n  -OEChem-08271309073D\r\n\r\n 27 27  0     1  0  0  0  0  0999 V2000\r\n   -1.7158   -1.4419   -1.4325 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1293   -1.6961    0.7833 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.4401   -0.5260   -0.5333 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1763    1.0007    0.3092 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8528    0.5507   -0.1158 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.7903    1.0524    0.8746 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6107    0.6296    0.4972 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1090   -0.5693    0.9787 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3680    1.4499   -0.3225 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9078   -0.9662   -0.1747 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1971    0.5609   -0.6297 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4021   -0.9594    0.6306 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6612    1.0598   -0.6707 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1783   -0.1450   -0.1942 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6228    0.9443   -1.1147 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0079    0.6891    1.8889 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8272    2.1484    0.9429 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1836    2.0194    0.3593 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5187   -1.2085    1.6283 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9726    2.3885   -0.6999 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.9670    0.8609   -1.6577 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -5.1492    1.0314   -0.3609 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.3697   -0.5192   -0.5944 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7939   -1.8994    1.0099 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2606    1.6982   -1.3139 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7674   -2.4209   -1.4646 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.6332   -1.3833   -0.1164 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 26  1  0  0  0  0\r\n  2 10  2  0  0  0  0\r\n  3 14  1  0  0  0  0\r\n  3 27  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 18  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  6 17  1  0  0  0  0\r\n  7  8  2  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  8 12  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\n  9 13  2  0  0  0  0\r\n  9 20  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 11 22  1  0  0  0  0\r\n 11 23  1  0  0  0  0\r\n 12 14  2  0  0  0  0\r\n 12 24  1  0  0  0  0\r\n 13 14  1  0  0  0  0\r\n 13 25  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n519723\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n24\r\n3\r\n20\r\n21\r\n27\r\n25\r\n8\r\n2\r\n11\r\n4\r\n23\r\n18\r\n16\r\n17\r\n13\r\n15\r\n22\r\n19\r\n5\r\n14\r\n12\r\n10\r\n7\r\n26\r\n6\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n21\r\n1 -0.65\r\n10 0.66\r\n11 0.27\r\n12 -0.15\r\n13 -0.15\r\n14 0.08\r\n18 0.36\r\n19 0.15\r\n2 -0.57\r\n20 0.15\r\n24 0.15\r\n25 0.15\r\n26 0.5\r\n27 0.45\r\n3 -0.53\r\n4 -0.9\r\n5 0.33\r\n6 0.14\r\n7 -0.14\r\n8 -0.15\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 10 anion\r\n6 7 8 9 12 13 14 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n14\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0007EE2B00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n29.2939\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11031198 65 16950567644756160912\r\n11401426 45 18259703398415410816\r\n12932764 1 16226035725980496680\r\n13221675 6 18334013869533584561\r\n13296908 3 18201439232981049576\r\n13839132 238 13046206252644039906\r\n14115302 16 18343865523804476957\r\n14128692 85 18341332275184668624\r\n14911166 2 18410853235593779725\r\n14993402 34 18410008797826290125\r\n15207287 21 16271925995512812133\r\n15775835 57 17749391455428740638\r\n16945 1 18261104145420692952\r\n18186145 218 17603863438245831628\r\n19422 9 18336835289458696335\r\n20201158 50 18202285775182501830\r\n20279233 1 17060618901968101190\r\n20281407 28 16845577517372111380\r\n20523700 14 18408603660372641814\r\n20645476 183 18333730213051415859\r\n21119208 17 18335703823390380116\r\n23402539 116 17632009750364031281\r\n23402655 69 18040434356465043452\r\n23559900 14 18272651256176654848\r\n25 1 17531245024067676984\r\n2748010 2 16391558718881680168\r\n465052 167 17984149425028320007\r\n528886 8 18113334210885416376\r\n74978 22 18060133297193425513\r\n81228 2 16271107924517911048\r\n93112 12 18333452062052182357\r\n9939556 21 18409168839382584196\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n265.52\r\n6.7\r\n1.52\r\n1.02\r\n0.15\r\n0.19\r\n-0.07\r\n0\r\n-1.63\r\n0.31\r\n-0.01\r\n0.13\r\n0.16\r\n-0.34\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n545.553\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n153\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$', NULL, 12, NULL),
-(43, 'HiV', 'L', '', NULL, NULL, 5),
-(44, 'Dhb', 'L', '', NULL, NULL, 5),
-(45, 'Glycine', 'L', '', NULL, NULL, 5),
-(46, 'Glycine', 'L', '', NULL, NULL, 5),
-(47, 'Dhb', 'L', '', NULL, NULL, 5),
-(48, 'Aeo', 'L', '', NULL, NULL, 5),
-(49, 'Aeo', 'L', '', NULL, NULL, 5),
-(50, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(51, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(52, 'HpG', 'L', '', NULL, NULL, 5),
-(53, 'HpG', 'L', '', NULL, NULL, 5),
-(54, 'HpG', 'L', '', NULL, NULL, 5),
-(55, 'HpG', 'L', '', NULL, NULL, 5),
-(56, 'Ala/Val', 'L', '', NULL, NULL, 5),
-(57, 'Ala/Val', 'L', '', NULL, NULL, 5),
-(58, 'Bmt', 'L', '', NULL, NULL, 5),
-(59, 'Bmt', 'L', '', NULL, NULL, 5),
-(60, 'Abu', 'L', '', NULL, NULL, 5),
-(61, 'Abu', 'L', '', NULL, NULL, 5),
-(62, 'Glycine', 'L', '', NULL, NULL, 5),
-(63, 'Glycine', 'L', '', NULL, NULL, 5),
-(64, 'AhP', 'L', '', NULL, NULL, 5),
-(65, 'AhP', 'L', '', NULL, NULL, 5),
-(66, 'tryptophane', 'L', '', NULL, NULL, 5),
-(67, 'tryptophane', 'L', '', NULL, NULL, 5),
-(68, 'Hpg', 'L', '', NULL, NULL, 5),
-(69, 'Hpg', 'L', '', NULL, NULL, 5),
-(70, 'Glycine', 'L', '', NULL, NULL, 5),
-(71, 'Glycine', 'L', '', NULL, NULL, 5),
-(72, 'Glu3Me', 'L', '', NULL, NULL, 5),
-(73, 'Glu3Me', 'L', '', NULL, NULL, 5),
-(74, 'tryptophane', 'L', '', NULL, NULL, 5),
-(75, 'tryptophane', 'L', '', NULL, NULL, 5),
-(76, 'Thr-4C', 'L', '', NULL, NULL, 5),
-(77, 'Thr-4C', 'L', '', NULL, NULL, 5),
-(78, 'Ala-OH', 'L', '', NULL, NULL, 5),
-(79, 'Ala-OH', 'L', '', NULL, NULL, 5),
-(80, 'HpG', 'L', '', NULL, NULL, 5),
-(81, 'HpG', 'L', '', NULL, NULL, 5),
-(82, 'HpG', 'L', '', NULL, NULL, 5),
-(83, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(84, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(85, 'HpG', 'L', '', NULL, NULL, 5),
-(86, 'HpG', 'L', '', NULL, NULL, 5),
-(87, 'Tyrb-O', 'L', '', NULL, NULL, 5),
-(88, 'Tyrb-O', 'L', '', NULL, NULL, 5),
-(89, 'DHpG', 'L', '', NULL, NULL, 5),
-(90, 'DHpG', 'L', '', NULL, NULL, 5),
-(91, '4-MHA', 'L', '', NULL, NULL, 5),
-(92, 'Glycine', 'L', '', NULL, NULL, 5),
-(93, 'Glycine', 'L', '', NULL, NULL, 5),
-(94, 'Aad', 'L', '', NULL, NULL, 5),
-(95, 'DHpG', 'L', '', NULL, NULL, 5),
-(96, 'DHpG', 'L', '', NULL, NULL, 5),
-(97, 'DHpG', 'L', '', NULL, NULL, 5),
-(98, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(99, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(100, 'HpG', 'L', '', NULL, NULL, 5),
-(101, 'HpG', 'L', '', NULL, NULL, 5),
-(102, 'DHpG', 'L', '', NULL, NULL, 5),
-(103, 'DHpG', 'L', '', NULL, NULL, 5),
-(104, 'Dab', 'L', '', NULL, NULL, 5),
-(105, 'Dab', 'L', '', NULL, NULL, 5),
-(106, 'Dab', 'L', '', NULL, NULL, 5),
-(107, 'Dab', 'L', '', NULL, NULL, 5),
-(108, 'DhBu-3OH', 'L', '', NULL, NULL, 5),
-(109, 'DhBu-3OH', 'L', '', NULL, NULL, 5),
-(110, 'Asp-3OH', 'L', '', NULL, NULL, 5),
-(111, 'Asp-3OH', 'L', '', NULL, NULL, 5),
-(112, 'Thr-4Cl', 'L', '', NULL, NULL, 5),
-(113, 'DHpG', 'L', '', NULL, NULL, 5),
-(114, 'HpG', 'L', '', NULL, NULL, 5),
-(115, 'HpG', 'L', '', NULL, NULL, 5),
-(116, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(117, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(118, 'HpG', 'L', '', NULL, NULL, 5),
-(119, 'HpG', 'L', '', NULL, NULL, 5),
-(120, 'Tyrb-O', 'L', '', NULL, NULL, 5),
-(121, 'Tyrb-O', 'L', '', NULL, NULL, 5),
-(122, 'DHpG', 'L', '', NULL, NULL, 5),
-(123, 'DHpG', 'L', '', NULL, NULL, 5),
-(124, 'Dhb', 'L', '', NULL, NULL, 5),
-(125, 'Glycine', 'L', '', NULL, NULL, 5),
-(126, 'Tyrb-O', 'L', '', NULL, NULL, 5),
-(127, 'Tyrb-O', 'L', '', NULL, NULL, 5),
-(128, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(129, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(130, 'HpG', 'L', '', NULL, NULL, 5),
-(131, 'HpG', 'L', '', NULL, NULL, 5),
-(132, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(133, 'HpG2Cl', 'L', '', NULL, NULL, 5),
-(134, 'DHpG', 'L', '', NULL, NULL, 5),
-(135, 'DHpG', 'L', '', NULL, NULL, 5),
-(136, 'Hpg2Cl', 'L', '', NULL, NULL, 5),
-(137, 'tryptophane', 'L', '', NULL, NULL, 5),
-(138, 'tryptophane', 'L', '', NULL, NULL, 5),
-(139, 'Hpg2Cl', 'L', '', NULL, NULL, 5),
-(140, 'Hpg2Cl', 'L', '', NULL, NULL, 5),
-(141, 'Hpg', 'L', '', NULL, NULL, 5),
-(142, 'Hpg', 'L', '', NULL, NULL, 5),
-(143, 'Hpg2Cl', 'L', '', NULL, NULL, 5),
-(144, 'Hpg2Cl', 'L', '', NULL, NULL, 5),
-(145, 'Hpg', 'L', '', NULL, NULL, 5),
-(146, 'Hpg', 'L', '', NULL, NULL, 5),
-(147, 'Inactive', 'L', '', NULL, NULL, 5),
-(148, 'Orn-OH', 'L', '', NULL, NULL, 5),
-(149, 'Ala-B', 'L', '', NULL, NULL, 5),
-(150, 'Ala-B', 'L', '', NULL, NULL, 5),
-(151, 'Orn-OH', 'L', '', NULL, NULL, 5),
-(152, 'Orn-OH', 'L', '', NULL, NULL, 5),
-(153, 'Orn-OH', 'L', '', NULL, NULL, 5),
-(154, 'Orn-OH', 'L', '', NULL, NULL, 5),
-(155, 'Dap', 'L', '', NULL, NULL, 5),
-(156, 'Dap', 'L', '', NULL, NULL, 5),
-(157, 'Dap', 'L', '', NULL, NULL, 5),
-(158, 'Lys-OH', 'L', '', NULL, NULL, 5),
-(159, 'Lys-OH', 'L', '', NULL, NULL, 5),
-(160, 'ACoL', 'L', '', NULL, NULL, 5),
-(161, 'TOPA', 'L', '', NULL, NULL, 5),
-(162, 'TOPA', 'L', '', NULL, NULL, 5),
-(163, 'Sal', 'L', '', NULL, NULL, 5),
-(164, 'PIC', 'L', '', NULL, NULL, 5),
-(165, 'Abu', 'L', '', NULL, NULL, 5),
-(166, 'Abu', 'L', '', NULL, NULL, 5),
-(167, 'Dpp', 'L', '', NULL, NULL, 5),
-(168, 'Dpp', 'L', '', NULL, NULL, 5),
-(169, 'PIP', 'L', '', NULL, NULL, 5),
-(170, 'PIP', 'L', '', NULL, NULL, 5),
-(171, 'PhG', 'L', '', NULL, NULL, 5),
-(172, 'PhG', 'L', '', NULL, NULL, 5),
-(173, 'tryptophane', 'L', '', NULL, NULL, 5),
-(174, 'tryptophane', 'L', '', NULL, NULL, 5),
-(175, 'DhB', 'L', '', NULL, NULL, 5);
+INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`, `smashName`) VALUES
+(1, 'L-alanine', 'L', '5950\r\n  -OEChem-08061307293D\r\n\r\n 13 12  0     1  0  0  0  0  0999 V2000\r\n    1.4573   -1.0438    0.2682 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2492    1.1165   -0.4047 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4105    1.1507    0.1821 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7085   -0.1136    0.3937 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.3345   -1.2000   -0.4702 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7470    0.0903    0.0308 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7666   -0.3737    1.4558 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8580   -2.1695   -0.2878 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4023   -1.3127   -0.2521 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2248   -0.9797   -1.5384 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3916    1.0420    0.4376 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4071    1.3875   -0.8099 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4062   -0.9341    0.0447 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  6  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 12  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5950\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n11 0.36\r\n12 0.36\r\n13 0.5\r\n2 -0.57\r\n3 -0.99\r\n4 0.33\r\n6 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n1\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 6 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n6\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000173E00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n1.5212\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.429\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 10810435145306950879\r\n16714656 1 17834121844547885910\r\n20096714 4 18336274448292194721\r\n21015797 1 9294747371048054674\r\n21040471 1 18199189481819369609\r\n24536 1 17822010959911299856\r\n29004967 10 17974853083746877907\r\n5943 1 14140374571562451139\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n106.76\r\n1.92\r\n1.35\r\n0.68\r\n0.03\r\n0.06\r\n-0.01\r\n-0.14\r\n-0.16\r\n-0.16\r\n-0.03\r\n-0.04\r\n-0.03\r\n-0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n193.798\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n68.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 2, NULL, NULL, NULL),
+(2, 'D-alanine', 'D', '71080\r\n  -OEChem-08061307313D\r\n\r\n 13 12  0     1  0  0  0  0  0999 V2000\r\n    1.4540   -1.0463   -0.2600 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2497    1.1182    0.4005 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4128    1.1501   -0.1734 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7093   -0.1115   -0.3951 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.3291   -1.2038    0.4660 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7475    0.0933   -0.0380 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7772   -0.3698   -1.4569 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3997   -1.3089    0.2583 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8590   -2.1736    0.2695 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2071   -0.9930    1.5349 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9750    1.8923   -0.7175 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3418    1.4251    0.8055 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4015   -0.9395   -0.0294 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  6  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 12  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71080\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n11 0.36\r\n12 0.36\r\n13 0.5\r\n2 -0.57\r\n3 -0.99\r\n4 0.33\r\n6 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n1\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 6 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n6\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115A800000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n1.5874\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.429\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 10878900634851653371\r\n20096714 4 18268142072216222973\r\n21015797 1 9078573519497957180\r\n21040471 1 18190176785006496237\r\n24536 1 18261944236697031724\r\n29004967 10 17974574902983696515\r\n5943 1 15574980789017939183\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n106.76\r\n1.92\r\n1.35\r\n0.67\r\n0.04\r\n0.05\r\n0.01\r\n-0.14\r\n0.16\r\n-0.16\r\n0.04\r\n-0.04\r\n-0.03\r\n0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n193.826\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n68.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 1, NULL, NULL, NULL),
+(3, 'Glycine', 'L', '750\r\n  -OEChem-08061307323D\r\n\r\n 10  9  0     0  0  0  0  0  0999 V2000\r\n   -1.6487    0.6571   -0.0104 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4837   -1.2934   -0.0005 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9006   -0.0812   -0.0090 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7341    0.7867    0.0079 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5023   -0.0691    0.0120 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7326    1.4215   -0.8824 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7464    1.4088    0.9069 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8743   -0.6844   -0.8301 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8887   -0.6969    0.8031 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4447    0.0839   -0.0260 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  5  1  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  2  5  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n750\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n10 0.5\r\n2 -0.57\r\n3 -0.99\r\n4 0.33\r\n5 0.66\r\n8 0.36\r\n9 0.36\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n1\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 5 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n5\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000002EE00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n2.2569\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.429\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 9221305500492508682\r\n16714656 1 18334301928958962636\r\n20096714 4 18408886234834677880\r\n21015797 1 9580758932782445613\r\n21040471 1 18410573955102640736\r\n5460574 1 9295288339411764896\r\n5943 1 16976965699258066967\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n86.18\r\n1.9\r\n1.06\r\n0.56\r\n0.45\r\n0.2\r\n0\r\n-0.21\r\n0.01\r\n-0.19\r\n0\r\n0.01\r\n-0.02\r\n0\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n152.844\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n56.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', NULL, NULL, NULL, NULL),
+(4, 'L-serine', 'L', '5951\r\n  -OEChem-08061307333D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    1.9164    1.0306   -0.2064 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9147    1.4730    0.6928 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6876    0.0439   -0.8956 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1783   -1.9614    0.3145 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2499   -0.5719    0.4674 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.5043   -0.3229   -0.3653 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8900    0.3087   -0.0075 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4351   -0.3707    1.5285 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3293   -0.9735   -0.0556 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3198   -0.4858   -1.4328 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3831   -2.1614   -0.6638 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0421   -2.1182    0.8321 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1022    1.1706    0.7378 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6432    2.0607    0.3991 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5951\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n7\r\n4\r\n5\r\n3\r\n6\r\n2\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n11 0.36\r\n12 0.36\r\n13 0.4\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.28\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000173F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n4.149\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 12485356495207036850\r\n139733 1 18261115153558827558\r\n18185500 45 17836357155712849555\r\n20096714 4 18195819461474012680\r\n21040471 1 18335140903522744364\r\n23552449 1 17979076307930056396\r\n24536 1 18340778112665698116\r\n29004967 10 11815602104003645950\r\n5943 1 11546198244563313227\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n121.47\r\n1.98\r\n1.53\r\n0.79\r\n0.38\r\n0.42\r\n0.04\r\n-0.63\r\n0.42\r\n0.06\r\n-0.29\r\n-0.18\r\n-0.03\r\n-0.17\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n224.017\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n76.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', NULL, NULL, NULL, NULL),
+(5, 'D-serine', 'D', '71077\r\n  -OEChem-08061307343D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    1.8714   -1.0658   -0.2252 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9380   -1.4494    0.7135 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6655   -0.0394   -0.9132 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1596    1.9680    0.2979 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2550    0.5772    0.4734 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    1.5205    0.3096   -0.3367 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8839   -0.3003   -0.0096 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4184    0.3817    1.5391 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3881    0.5373   -1.4006 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3593    0.9046    0.0389 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2755    2.1737   -0.6943 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5824    2.5869    0.6238 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2103   -1.5834   -0.7149 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6702   -2.0321    0.4192 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71077\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n8\r\n5\r\n3\r\n9\r\n1\r\n4\r\n7\r\n6\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n11 0.36\r\n12 0.36\r\n13 0.4\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.28\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115A500000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n4.8206\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n139733 1 7853578993483642276\r\n20096714 4 7997975660920866422\r\n21040471 1 17678147530260442293\r\n24536 1 18337388352392172968\r\n29004967 10 18269561704946780802\r\n5943 1 11556452277113775561\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n121.47\r\n1.97\r\n1.53\r\n0.79\r\n0.35\r\n0.43\r\n-0.04\r\n-0.62\r\n-0.41\r\n0.08\r\n0.28\r\n-0.19\r\n-0.04\r\n0.19\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n224.109\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n76.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 4, NULL, NULL, NULL),
+(6, 'L-phenylalanine', 'L', '6140\r\n  -OEChem-08061307353D\r\n\r\n 23 23  0     1  0  0  0  0  0999 V2000\r\n   -1.5606   -1.5480   -1.0372 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1863   -1.0236    0.4554 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7945    1.6326   -0.1118 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6090    0.9812    0.7905 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6652    0.7241   -0.2957 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.7593    0.4612    0.4141 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1082   -0.8355    0.7537 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6370    1.2913   -0.2633 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2259   -0.6859   -0.2249 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3708   -1.3157    0.4062 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8996    0.8109   -0.6109 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2665   -0.4925   -0.2761 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9180    0.5378    1.7471 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5161    2.0589    0.9859 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2654    0.8943   -1.3020 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4193   -1.4840    1.2872 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3595    2.3068   -0.5307 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4744    2.5968   -0.1977 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1587    1.5450    0.8368 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6567   -2.3305    0.6672 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.5970    1.4516   -1.1428 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.2496   -0.8665   -0.5468 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9362   -2.4531   -0.9956 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  3 19  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6  7  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  7 10  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 11  2  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n 10 12  2  0  0  0  0\r\n 10 20  1  0  0  0  0\r\n 11 12  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6140\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n6\r\n5\r\n2\r\n10\r\n3\r\n8\r\n4\r\n9\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n20\r\n1 -0.65\r\n10 -0.15\r\n11 -0.15\r\n12 -0.15\r\n16 0.15\r\n17 0.15\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.15\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n3 -0.99\r\n4 0.14\r\n5 0.33\r\n6 -0.14\r\n7 -0.15\r\n8 -0.15\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n6 6 7 8 10 11 12 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017FC00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n22.5987\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18187643651828636781\r\n12932764 1 18202281445876520928\r\n14128692 85 18413387644350318440\r\n14325111 11 18335141994507955400\r\n15310529 11 18334295383333721393\r\n15775835 57 18261399909880191452\r\n16945 1 18265608969182132496\r\n17844478 74 18115317785891664955\r\n18619055 16 18339636733433074012\r\n19422 9 18408892832020391715\r\n20279233 1 17131540666045140302\r\n23402655 69 18114744836927597293\r\n23552423 10 18333728013705971810\r\n25610 137 18042978755478841441\r\n3248919 1 18040987458015951561\r\n8030462 33 18337096943266805037\r\n81228 2 16485862280881840960\r\n9939556 21 18335701594207498844\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n230.23\r\n5.23\r\n1.63\r\n0.87\r\n0.48\r\n0.01\r\n0\r\n0.5\r\n-0.63\r\n0.36\r\n-0.08\r\n-0.01\r\n0.09\r\n-0.39\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n472.563\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n132.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 7, NULL, NULL, NULL),
+(7, 'D-phenylalanine', 'D', '71567\r\n  -OEChem-08061307363D\r\n\r\n 23 23  0     1  0  0  0  0  0999 V2000\r\n    1.5127   -1.5170   -1.0396 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1581   -1.0556    0.4609 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8016    1.6318   -0.1125 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6239    0.9672    0.7943 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6687    0.7241   -0.3034 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.7477    0.4554    0.4163 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6272    1.2983   -0.2422 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0968   -0.8457    0.7368 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2221   -0.6853   -0.2335 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8927    0.8264   -0.5905 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3623   -1.3178    0.3885 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2603   -0.4818   -0.2751 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5336    2.0420    1.0059 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9365    0.5097    1.7431 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2656    0.9046   -1.3065 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3492    2.3175   -0.4943 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4069   -1.5038    1.2570 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1661    1.5352    0.8351 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4809    2.5966   -0.1891 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5917    1.4771   -1.1078 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6488   -2.3360    0.6348 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.2456   -0.8493   -0.5463 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8455   -2.4388   -0.9975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  3 19  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6  7  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  7 10  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 11  2  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n 10 12  2  0  0  0  0\r\n 10 20  1  0  0  0  0\r\n 11 12  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71567\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n3\r\n2\r\n6\r\n4\r\n10\r\n9\r\n5\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n20\r\n1 -0.65\r\n10 -0.15\r\n11 -0.15\r\n12 -0.15\r\n16 0.15\r\n17 0.15\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.15\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n3 -0.99\r\n4 0.14\r\n5 0.33\r\n6 -0.14\r\n7 -0.15\r\n8 -0.15\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n6 6 7 8 10 11 12 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0001178F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n22.4335\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.503\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10608611 8 18335978735551976677\r\n12716758 59 18114178636047481473\r\n12897270 3 18338241569067768236\r\n12932764 1 17968104092090884152\r\n14325111 11 18335136501234240817\r\n15219456 202 18410011065410675921\r\n15310529 11 18341330084519278085\r\n15775835 57 18059578065037577582\r\n16945 1 18265902354097880201\r\n17990270 104 18342182124542483390\r\n18186145 218 18260546680451744933\r\n18619055 16 18411980282024619377\r\n19973954 147 18335424573038157565\r\n20201158 50 18341894052211299359\r\n20645477 70 18341891892243708831\r\n20653085 51 17676491622915785893\r\n20671657 53 18269848531911684774\r\n21501502 16 18411704287558300617\r\n22802520 49 18334581235029851825\r\n23552423 10 18186802495553188059\r\n23559900 14 18338226056484613482\r\n2748010 2 18409733996970028243\r\n3248919 1 18202284675760486337\r\n369184 2 18409171017257816977\r\n57812782 119 18335696126629611606\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n230.23\r\n5.19\r\n1.63\r\n0.87\r\n0.44\r\n0.01\r\n0\r\n0.46\r\n0.61\r\n0.35\r\n0.08\r\n0.01\r\n0.09\r\n0.37\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n472.985\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n131.9\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 6, NULL, NULL, NULL),
+(8, 'L-leucine', 'L', '6106\r\n  -OEChem-08061307373D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    1.1033   -1.2860    1.2673 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5537   -1.0509   -0.9426 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7313    1.7545    0.0120 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8021    0.1905   -0.4087 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5643    1.0793   -0.6494 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6249    0.8408    0.2948 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -2.3423    0.3183    1.0160 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4509   -1.2719   -0.6984 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1464   -0.5747    0.1090 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5824    0.5084   -1.1114 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2445    0.9573   -1.6937 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8798    2.1273   -0.5531 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3267    0.9880    1.3375 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6488   -0.0803    1.7629 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5447    1.3661    1.2610 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2828   -0.2347    1.1155 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8590   -1.3871   -1.6109 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9914   -1.7963    0.1398 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3866   -1.8167   -0.8823 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4154    2.7159    0.1372 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9986    1.6785   -0.9694 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4347   -2.2013    1.1460 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  6  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6106\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n2\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n6 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n3 4 7 8 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017DA00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n13.7321\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 10897424772938417728\r\n15310529 11 17386861507925892583\r\n18185500 45 18268135642781900343\r\n21040471 1 18049155876149393388\r\n21922407 69 16628525185827166549\r\n23552333 60 18196633293658043847\r\n24536 1 17845921987930834575\r\n29004967 10 17749113296251295537\r\n5084963 1 18048299339353457868\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n2.73\r\n1.59\r\n1.07\r\n0.76\r\n0.06\r\n-0.19\r\n0.08\r\n-0.3\r\n-0.57\r\n0.1\r\n0.13\r\n-0.22\r\n-0.23\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n313.472\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 9, NULL, NULL, NULL),
+(9, 'D-leucine', 'D', '439524\r\n  -OEChem-08061307383D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    2.1710   -1.4441    0.0628 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6980    0.7592    0.1621 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2154    1.5429   -0.5507 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0098   -0.3827    0.4553 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4914   -0.4731    0.7128 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4101    0.1021   -0.3914 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -2.4212   -1.0696   -0.8473 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4407    1.0866    0.4227 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8686   -0.1213   -0.0262 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5202   -0.8771    1.2913 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2578    0.0095    1.6723 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2459   -1.5338    0.8579 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2338   -0.3880   -1.3541 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0247   -0.5590   -1.7304 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0716   -2.1071   -0.8654 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5127   -1.0841   -0.9402 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9862    1.6656    1.2332 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2446    1.5734   -0.5365 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5269    1.1430    0.5659 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8602    1.9055   -1.2516 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4311    2.0243    0.3214 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1132   -1.5883    0.2946 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  6  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n439524\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n2\r\n4\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n6 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 9 anion\r\n3 4 7 8 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0006B4E400000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n11.0487\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12932741 1 15913323602339144211\r\n12932764 1 18059863877947094307\r\n14390081 3 18343866640522328400\r\n15310529 11 18201438103531368031\r\n23552423 10 18260272918983103114\r\n24536 1 17969229000118698793\r\n29004967 10 18187088381440173690\r\n3248919 1 17967817179759390754\r\n369184 2 18202566172391297115\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n4.02\r\n1.37\r\n0.83\r\n0.53\r\n0.11\r\n-0.03\r\n-0.26\r\n0.03\r\n-0.1\r\n-0.14\r\n-0.31\r\n-0.06\r\n-0.36\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n311.843\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 8, NULL, NULL, NULL),
+(10, 'L-threonine', 'L', '6288\r\n  -OEChem-08061307393D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n   -1.7106   -1.1847    0.3581 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9758   -1.6811    0.1310 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0214    0.1505   -0.7007 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4053    1.8669    0.5743 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3544    0.1880    0.2043 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.0664    0.4488    0.7285 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.5255    0.5514   -1.2654 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1216   -0.3398   -0.0300 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1453    0.1699    1.7857 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0741    0.7709    0.7921 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3273    1.6097   -1.4579 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5518    0.3376   -1.5856 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8762   -0.0531   -1.9078 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3076    2.0515    1.0115 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2745    2.4357    1.0777 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6070   -1.4093    1.2985 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6641   -2.1843   -0.3540 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  5  1  0  0  0  0\r\n  1 16  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 17  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6288\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n6\r\n2\r\n4\r\n9\r\n5\r\n8\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n14 0.36\r\n15 0.36\r\n16 0.4\r\n17 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.28\r\n6 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000189000000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.7234\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.586\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 13495736796882073608\r\n18185500 45 18270121205962491394\r\n21040471 1 17751616811345107861\r\n24536 1 18193275195867535578\r\n29004967 10 18272373078769385426\r\n5943 1 15743565239240249753\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n142.05\r\n2.2\r\n1.48\r\n0.98\r\n0\r\n0.04\r\n-0.2\r\n-0.32\r\n-0.58\r\n0.15\r\n0.3\r\n-0.22\r\n0.18\r\n0.2\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n265.499\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n88.9\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 11, NULL, NULL, NULL),
+(11, 'D-threonine', 'D', '69435\r\n  -OEChem-08061307403D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n    1.1556    0.5726    1.3653 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6606    1.3370   -0.5627 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0926   -0.5633    0.5958 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2151   -1.7284   -0.1114 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1567    0.5443   -0.0609 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.0292   -0.3555   -0.5909 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    2.5413    0.1010   -0.5167 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3445    0.0924   -0.1184 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0171   -0.3682   -1.6865 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9835    1.5718   -0.4021 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2904    0.8422   -0.2157 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5873   -0.0072   -1.6045 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8448   -0.8413   -0.0485 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3551   -1.7254    0.8986 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0624   -2.1259   -0.5136 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8546    1.1864    1.6488 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5436    1.6245   -0.2466 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  5  1  0  0  0  0\r\n  1 16  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 17  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n69435\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n6\r\n7\r\n3\r\n4\r\n8\r\n9\r\n1\r\n5\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.68\r\n14 0.36\r\n15 0.36\r\n16 0.4\r\n17 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.28\r\n6 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 1 donor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00010F3B00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.8468\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.582\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n16714656 1 18263372532466452214\r\n20096714 4 17275103967771227305\r\n21040471 1 18411128134848797350\r\n24536 1 18042111094633258829\r\n29004967 10 16486988288283814198\r\n5084963 1 18201720699230630045\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n142.05\r\n2.83\r\n1.21\r\n0.92\r\n0.44\r\n0.3\r\n-0.22\r\n-0.37\r\n0.11\r\n-0.25\r\n0.08\r\n0.16\r\n-0.14\r\n0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n264.479\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n89.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 10, NULL, NULL, NULL),
+(12, 'L-tyrosine', 'L', '6057\r\n  -OEChem-08061307413D\r\n\r\n 24 24  0     1  0  0  0  0  0999 V2000\r\n   -1.7727   -1.6313   -0.9931 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.2183   -0.6351   -0.3947 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4801   -1.1584    0.4234 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2387    1.4947   -0.2351 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0493    1.0210    0.7633 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0479    0.6553   -0.3458 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.3618    0.5774    0.4529 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7803   -0.6798    0.8553 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2077    1.4373   -0.2276 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5197   -0.7846   -0.2378 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0827   -1.0891    0.5690 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5101    1.0280   -0.5141 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9476   -0.2353   -0.1158 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3631    0.5945    1.7261 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0322    2.1089    0.9190 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6246    0.8135   -1.3445 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1158   -1.3512    1.3914 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8752    2.4217   -0.5440 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9777    2.4737   -0.3486 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6297    1.4190    0.7038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4114   -2.0754    0.8853 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1790    1.6973   -1.0482 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0912   -2.5568   -0.9282 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.3494   -1.5339   -0.0467 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2 13  1  0  0  0  0\r\n  2 24  1  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  7  8  2  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  8 11  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n 11 13  2  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 13  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6057\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n6\r\n7\r\n5\r\n10\r\n2\r\n9\r\n3\r\n4\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n21\r\n1 -0.65\r\n10 0.66\r\n11 -0.15\r\n12 -0.15\r\n13 0.08\r\n17 0.15\r\n18 0.15\r\n19 0.36\r\n2 -0.53\r\n20 0.36\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n24 0.45\r\n3 -0.57\r\n4 -0.99\r\n5 0.14\r\n6 0.33\r\n7 -0.14\r\n8 -0.15\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 donor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 1 3 10 anion\r\n6 7 8 9 11 12 13 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n13\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017A900000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n24.6717\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11401426 45 18260825969669806040\r\n11769659 78 18341888602140244366\r\n12897270 3 18113612430313781153\r\n12932764 1 18129942394110394737\r\n13296908 3 18273209815755699136\r\n14128692 85 18413106186426960904\r\n14325111 11 18335140912065485488\r\n15775835 57 18114465560973810741\r\n16945 1 18192425496627847928\r\n17844478 74 18042131002144350971\r\n18186145 218 17821725039901998140\r\n19422 9 18339652238544457555\r\n20279233 1 16988554689153481036\r\n20645476 183 18335698308821443519\r\n21119208 17 18408603630292033564\r\n23402539 116 18187363195624195710\r\n23402655 69 18040997289201717828\r\n23552423 10 18334289902945012705\r\n23559900 14 18059850633264985618\r\n23598291 2 17897714375777863563\r\n305870 269 9727642699922544684\r\n3312278 4 18411419475307455705\r\n465052 167 18126856117313195127\r\n7364860 26 18128814329724976200\r\n81228 2 16485866700213349416\r\n93112 12 18335417954599056069\r\n9939556 21 18408885126759599821\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n244.94\r\n6.02\r\n1.6\r\n0.87\r\n0.36\r\n0.04\r\n0.03\r\n-1.03\r\n-0.95\r\n-0.57\r\n-0.12\r\n-0.03\r\n-0.09\r\n-0.3\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n506.139\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n140.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 13, NULL, NULL, NULL),
+(13, 'D-tyrosine', 'D', '71098\r\n  -OEChem-08061307423D\r\n\r\n 24 24  0     1  0  0  0  0  0999 V2000\r\n    1.7271   -1.5966   -0.9966 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.2133   -0.6209   -0.3958 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.4506   -1.1874    0.4296 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2442    1.4946   -0.2358 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0624    1.0053    0.7676 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0502    0.6553   -0.3537 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.3513    0.5693    0.4555 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1985    1.4425   -0.2053 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7695   -0.6940    0.8379 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5156   -0.7832   -0.2474 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5030    1.0403   -0.4924 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0739   -1.0962    0.5507 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9406   -0.2290   -0.1144 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0477    2.0908    0.9402 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3790    0.5639    1.7227 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6240    0.8245   -1.3492 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8660    2.4318   -0.5060 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1041   -1.3754    1.3599 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.6352    1.4097    0.7024 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9823    2.4746   -0.3391 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1732    1.7199   -1.0116 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4029   -2.0874    0.8511 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0023   -2.5357   -0.9297 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.3449   -1.5256   -0.0636 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 23  1  0  0  0  0\r\n  2 13  1  0  0  0  0\r\n  2 24  1  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  7  8  2  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  8 11  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n 11 13  2  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 13  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71098\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n6\r\n3\r\n7\r\n5\r\n10\r\n9\r\n4\r\n2\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n21\r\n1 -0.65\r\n10 0.66\r\n11 -0.15\r\n12 -0.15\r\n13 0.08\r\n17 0.15\r\n18 0.15\r\n19 0.36\r\n2 -0.53\r\n20 0.36\r\n21 0.15\r\n22 0.15\r\n23 0.5\r\n24 0.45\r\n3 -0.57\r\n4 -0.99\r\n5 0.14\r\n6 0.33\r\n7 -0.14\r\n8 -0.15\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 donor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 1 3 10 anion\r\n6 7 8 9 11 12 13 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n13\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115BA00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n24.4999\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.577\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10608611 8 18407755941218833820\r\n10857977 72 12103842371718169817\r\n11769659 78 17702936063153906327\r\n12032990 46 18260552268605039323\r\n12251169 10 10592040254335203866\r\n12716758 59 18040716965518471849\r\n12897270 3 18337116755977542532\r\n12932764 1 17131826586255291953\r\n14251717 144 18202562882404520783\r\n14325111 11 18335420157922527505\r\n15219456 202 18410011048098976905\r\n15775835 57 18059576952783472742\r\n16945 1 18192718838593916169\r\n17990270 104 18269844133696485406\r\n18186145 218 17895191074012305045\r\n200 152 17988923361953169852\r\n20201158 50 18412829053562167518\r\n20279233 1 18334577983449465008\r\n20361792 2 16487253266001360881\r\n20645476 183 16081088199265934683\r\n20645477 70 18413106156436315887\r\n20671657 53 18269284469625069790\r\n21501502 16 18340494382499179032\r\n21501925 9 18411128122327866490\r\n22802520 49 18261120663980821521\r\n23402539 116 18261380135692524644\r\n23552423 10 18187366519074340617\r\n23559900 14 18337944572928472226\r\n57812782 119 18334292046075671102\r\n7364860 26 18339079405908789592\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n244.94\r\n5.98\r\n1.6\r\n0.86\r\n0.42\r\n0.05\r\n-0.03\r\n-0.98\r\n0.94\r\n-0.56\r\n0.11\r\n-0.04\r\n-0.09\r\n0.28\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n506.531\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n139.9\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 12, NULL, NULL, NULL);
+INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`, `smashName`) VALUES
+(14, 'L-glutamine', 'L', '5961\r\n  -OEChem-08061307443D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n   -2.1389    1.6370    0.5099 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6773    0.2475   -1.1973 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9039    0.2551    1.0351 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4789   -1.8922   -0.0291 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2441    0.1932   -1.2385 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1338   -0.2355    0.8758 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3424   -0.6086    0.6590 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.0032   -0.1458   -0.3839 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1158    0.4356   -0.1257 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4683    0.1136   -0.1051 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1904    0.7236    1.4071 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5783   -0.9764    1.5545 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8319   -0.7041    1.6355 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9500   -1.0821   -0.9509 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6339    0.6568   -1.0331 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1360   -1.8186   -0.9858 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4648   -2.1420   -0.0988 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8560    0.0780   -2.1693 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.2414    0.3697   -1.1781 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6450    2.3081    0.0041 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 18  1  0  0  0  0\r\n  5 19  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5961\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n37\r\n42\r\n38\r\n46\r\n41\r\n13\r\n35\r\n3\r\n25\r\n34\r\n30\r\n45\r\n22\r\n4\r\n39\r\n11\r\n14\r\n31\r\n10\r\n8\r\n20\r\n33\r\n43\r\n44\r\n26\r\n1\r\n7\r\n32\r\n40\r\n28\r\n24\r\n36\r\n23\r\n17\r\n19\r\n9\r\n29\r\n5\r\n15\r\n27\r\n18\r\n6\r\n21\r\n16\r\n12\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n10 0.57\r\n16 0.36\r\n17 0.36\r\n18 0.37\r\n19 0.37\r\n2 -0.57\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000174900000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n9.9844\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12716758 59 18342740702008311338\r\n12897270 3 16702301217734052424\r\n12932741 1 17917999407764667114\r\n12932764 1 18334583489935194138\r\n14390081 3 18342735200139270448\r\n15775835 57 17458065962502918541\r\n19837323 101 18270688567211238441\r\n19973954 147 18341617082840028544\r\n20653085 51 18189068537351904184\r\n3248919 1 18408040706409031318\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n178.23\r\n4.89\r\n1.19\r\n1.08\r\n2.71\r\n0.25\r\n0.05\r\n-1.17\r\n0.84\r\n-0.99\r\n-0.03\r\n0.21\r\n-0.1\r\n-0.24\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n337.458\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n109.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 15, NULL, NULL, NULL),
+(15, 'D-glutamine', 'D', '145815\r\n  -OEChem-08061307443D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n   -1.8849   -1.5237    0.9234 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6131   -0.6801   -1.0497 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8835    0.1297    1.0306 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6676    1.8080   -0.5058 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1776   -0.5963   -1.1318 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1264    0.6331    0.7408 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3839    0.7687    0.4835 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.9683    0.1008   -0.4248 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0327   -0.5217    0.0166 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4264   -0.1186   -0.0827 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5272    1.6059    1.0562 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2688   -0.0353    1.6008 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8794    1.0630    1.4162 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5672   -0.8589   -0.7709 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9251    0.8010   -1.2671 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6746    1.8949   -0.6377 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2794    1.5469   -1.4111 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7742   -0.7872   -2.0434 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1701   -0.7770   -1.0244 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2969   -2.3589    0.6151 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3 10  2  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 18  1  0  0  0  0\r\n  5 19  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n145815\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n43\r\n31\r\n3\r\n39\r\n26\r\n44\r\n37\r\n13\r\n17\r\n47\r\n41\r\n20\r\n33\r\n11\r\n38\r\n19\r\n45\r\n28\r\n18\r\n32\r\n10\r\n30\r\n42\r\n8\r\n36\r\n14\r\n46\r\n34\r\n25\r\n6\r\n24\r\n35\r\n15\r\n4\r\n21\r\n22\r\n7\r\n40\r\n29\r\n16\r\n9\r\n27\r\n2\r\n12\r\n23\r\n5\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n10 0.57\r\n16 0.36\r\n17 0.36\r\n18 0.37\r\n19 0.37\r\n2 -0.57\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0002399700000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n9.9685\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.581\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 17846206782948900728\r\n12716758 59 18267302032363278368\r\n12897270 3 18187086182380033726\r\n12932741 1 18060135393285197872\r\n12932764 1 18336832991946754656\r\n15310529 11 15719113578006943755\r\n20201158 50 18201996642305476014\r\n20653085 51 14851874825381087287\r\n20711985 344 18339358565681616169\r\n21061003 4 17632584876359391440\r\n29004967 10 17418094329898394560\r\n3248919 1 17967813829990893902\r\n369184 2 16630527319207707649\r\n8030462 33 17821730516043257872\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n178.23\r\n4.73\r\n1.27\r\n1.06\r\n2.77\r\n0.18\r\n0.02\r\n-1.16\r\n-0.62\r\n-0.91\r\n-0.04\r\n0.08\r\n-0.11\r\n0.47\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n337.562\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n109.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 14, NULL, NULL, NULL),
+(16, 'L-asparagine', 'L', '6267\r\n  -OEChem-08061307473D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n    0.6999   -1.5909    0.8956 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0189   -0.9167   -0.8203 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1454   -0.6098   -1.0603 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7805    1.6834    0.0854 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1032    0.1565    1.1081 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6990    0.7436    0.3906 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.5174    1.0666   -0.4797 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2275   -0.6457    0.0740 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6597    0.1130   -0.1934 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4822    0.8127    1.4611 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8691    2.0889   -0.2945 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2732    0.9867   -1.5466 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0356    1.6193   -0.8994 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6135    1.4403    0.6200 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7155    0.7905    1.7990 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8660   -0.4370    1.4170 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0341   -2.4882    0.6823 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6267\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n5\r\n14\r\n15\r\n3\r\n4\r\n1\r\n17\r\n16\r\n7\r\n11\r\n12\r\n13\r\n8\r\n18\r\n6\r\n10\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.37\r\n16 0.37\r\n17 0.5\r\n2 -0.57\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.57\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000187B00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n11.171\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.581\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 16620464601833680024\r\n18185500 45 18048307847535900314\r\n21040471 1 18118682368671456656\r\n21922407 69 17417519323976970017\r\n23552333 60 18128798885085369927\r\n23552423 10 18410004429765273061\r\n24536 1 17345736521872826085\r\n29004967 10 18186807958614600921\r\n5084963 1 18197197338638332064\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n157.65\r\n2.82\r\n1.47\r\n0.98\r\n0.75\r\n0.12\r\n-0.03\r\n-0.23\r\n0.26\r\n-0.78\r\n-0.1\r\n0.3\r\n-0.18\r\n-0.02\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n301.304\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n96.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 17, NULL, NULL, NULL),
+(17, 'D-asparagine', 'D', '439600\r\n  -OEChem-08061307483D\r\n\r\n 17 16  0     1  0  0  0  0  0999 V2000\r\n    0.7958   -1.5002   -1.0214 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0875   -0.8499    0.7242 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7209   -1.0885    0.7897 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6862    1.7749   -0.0427 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5422    0.4364   -0.7240 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6493    0.7931   -0.3700 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.5593    1.0062    0.5439 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2597   -0.5790   -0.1365 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6562    0.0070    0.2368 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3806    0.8987   -1.4265 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2897    0.8810    1.6006 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9530    2.0240    0.4322 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5157    1.6064   -0.6105 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9721    1.6743    0.9305 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4585    1.3414   -1.1757 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.3167   -0.1493   -1.0183 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1976   -2.3829   -0.8742 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 13  1  0  0  0  0\r\n  4 14  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n439600\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n10\r\n5\r\n3\r\n16\r\n13\r\n15\r\n8\r\n14\r\n4\r\n9\r\n12\r\n6\r\n2\r\n7\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n14\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.37\r\n16 0.37\r\n17 0.5\r\n2 -0.57\r\n3 -0.57\r\n4 -0.99\r\n5 -0.8\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.57\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 5 donor\r\n3 1 2 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0006B53000000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n11.1006\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.581\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 13654608801392766660\r\n15310529 11 16227198949174253395\r\n18185500 45 17917987282871524127\r\n20711978 78 18128562464257675947\r\n21040471 1 18053948634460497036\r\n21922407 69 15625936474423353071\r\n23552449 11 18335977601616897816\r\n241688 4 17548989853249916083\r\n24536 1 18271539606111333753\r\n29004967 10 18342460292088323538\r\n5084963 1 17973464370406567796\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n157.65\r\n2.89\r\n1.53\r\n0.88\r\n0.95\r\n0.15\r\n0.03\r\n-0.14\r\n-0.01\r\n-0.64\r\n0.07\r\n0.07\r\n-0.17\r\n0.14\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n301.237\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n96\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 16, NULL, NULL, NULL),
+(18, 'L-ornithine', 'L', '6262\r\n  -OEChem-08061307493D\r\n\r\n 21 20  0     1  0  0  0  0  0999 V2000\r\n    1.6884   -1.5615    0.7827 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1485   -0.6169   -1.2261 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2965    1.8348   -0.4347 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6082   -0.4932   -0.7057 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3416    0.5599    0.9520 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2979    0.1323   -0.1704 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1222    0.7429    0.5227 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -2.7133   -0.0799    0.3687 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7055   -0.5185   -0.0891 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7035    1.4975    1.3939 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3832   -0.1908    1.7520 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9430   -0.7970   -0.6317 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3168    0.8981   -0.9550 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7249    0.9851    1.4059 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.0897    0.8452    0.8190 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7091   -0.8521    1.1454 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8153    1.6194   -1.3066 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2836    1.9358   -0.6682 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6426    0.2311   -1.4219 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.5561   -0.5799   -0.3414 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0654   -2.3755    0.3857 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 21  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6262\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n4\r\n28\r\n35\r\n37\r\n27\r\n29\r\n38\r\n7\r\n30\r\n11\r\n8\r\n34\r\n26\r\n36\r\n32\r\n21\r\n19\r\n33\r\n16\r\n24\r\n12\r\n2\r\n31\r\n9\r\n13\r\n23\r\n17\r\n5\r\n3\r\n22\r\n15\r\n25\r\n6\r\n14\r\n10\r\n18\r\n20\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.36\r\n21 0.5\r\n3 -0.99\r\n4 -0.99\r\n7 0.33\r\n8 0.27\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000187600000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.371\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18040722488841145951\r\n12932741 1 17676211316227883945\r\n12932764 1 18333170566180617535\r\n14128692 85 18059584567660365368\r\n14390081 3 12973608841615520295\r\n20653091 64 18343303664830706464\r\n23552333 60 18202566202181833248\r\n23552423 10 18411703192573592897\r\n23552449 11 18201145603088674817\r\n29004967 10 18334576823924443680\r\n3248919 1 18338230570199725449\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n163.52\r\n4.32\r\n1.32\r\n1\r\n4.26\r\n0.21\r\n0.02\r\n-1.26\r\n0.97\r\n-0.89\r\n0.01\r\n-0.23\r\n-0.09\r\n-0.26\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.933\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n102.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 19, NULL, NULL, NULL),
+(19, 'D-ornithine', 'D', '71082\r\n  -OEChem-08061307503D\r\n\r\n 21 20  0     1  0  0  0  0  0999 V2000\r\n    1.8048    1.5544    0.7052 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1874    0.4928   -1.2611 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1909   -1.8622   -0.3540 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6384    0.4419   -0.7291 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3478   -0.4239    0.9886 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3127   -0.0878   -0.1571 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0960   -0.7202    0.5549 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -2.7317    0.1318    0.3699 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7515    0.4732   -0.1172 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3474    0.4086    1.7038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7343   -1.2951    1.5342 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3291   -0.9032   -0.8895 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9678    0.8126   -0.6798 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6973   -0.9566    1.4407 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7437    0.9545    1.0933 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.0874   -0.7686    0.8819 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6966   -1.6646   -1.2227 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7219   -2.6670    0.0600 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.3331    1.2949   -1.1960 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.5667    0.6367   -0.3565 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2261    2.3250    0.2683 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 21  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 19  1  0  0  0  0\r\n  4 20  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71082\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n30\r\n9\r\n29\r\n12\r\n28\r\n22\r\n10\r\n26\r\n19\r\n8\r\n25\r\n5\r\n27\r\n24\r\n14\r\n31\r\n16\r\n4\r\n20\r\n21\r\n13\r\n2\r\n23\r\n17\r\n18\r\n7\r\n6\r\n15\r\n3\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.36\r\n2 -0.57\r\n20 0.36\r\n21 0.5\r\n3 -0.99\r\n4 -0.99\r\n7 0.33\r\n8 0.27\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115AA00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.2509\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 16588034532463815265\r\n12897270 3 18343023311061869393\r\n12932741 1 17822866290254169371\r\n12932764 1 18343865511489053365\r\n14390081 3 18261106383578688905\r\n21040471 1 18188494712752299066\r\n230 275 17603861183097967721\r\n23235685 24 17822294621105635012\r\n3248919 1 18411695448953312691\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n163.52\r\n4.4\r\n1.28\r\n1\r\n4.28\r\n0.25\r\n-0.03\r\n-1.3\r\n-1.02\r\n-0.88\r\n0\r\n-0.21\r\n-0.08\r\n0.23\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.869\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n102.6\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 18, NULL, NULL, NULL),
+(20, 'L-aspartic acid', 'L', '5960\r\n  -OEChem-08061307523D\r\n\r\n 16 15  0     1  0  0  0  0  0999 V2000\r\n    0.8765   -1.7477    0.4612 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5468    0.2085   -1.0110 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0079   -0.5891   -1.1272 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8021   -0.7792    0.8987 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7445    1.6788    0.4055 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7272    0.6375    0.5499 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.5957    1.1159   -0.0613 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2748   -0.5980   -0.1470 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6864    0.0732    0.0312 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6051    0.4158    1.6166 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4391    1.3530   -1.1219 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9553    2.0203    0.4426 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5932    1.3992    0.8965 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4247    2.5341    0.8586 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2403   -2.5417    0.0146 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2665   -0.4573   -0.9797 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 15  1  0  0  0  0\r\n  2  9  1  0  0  0  0\r\n  2 16  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  9  2  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 13  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5960\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n12\r\n4\r\n3\r\n2\r\n9\r\n5\r\n11\r\n7\r\n6\r\n10\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.5\r\n16 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 8 anion\r\n3 2 4 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000174800000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.3698\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.715\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18041011613012225318\r\n137420 1 9505317914091190224\r\n18185500 45 17905329524481664858\r\n21040471 1 18122060072681638224\r\n21922407 69 16415192416546670307\r\n23552333 60 17631716262299918581\r\n23552423 10 18411980239307295405\r\n23552449 11 18200856405839835033\r\n24536 1 18410851066598430641\r\n29004967 10 18342463629378152392\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n156.76\r\n2.93\r\n1.48\r\n0.93\r\n1.09\r\n0.06\r\n0.12\r\n-0.12\r\n0.63\r\n-0.72\r\n-0.26\r\n0.08\r\n-0.12\r\n0.36\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.836\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n95.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 21, NULL, NULL, NULL),
+(21, 'D-aspartic acid', 'D', '83887\r\n  -OEChem-08061307533D\r\n\r\n 16 15  0     1  0  0  0  0  0999 V2000\r\n    1.5137   -1.5919   -0.6067 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6025    0.1004    0.9014 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5048   -0.5767    1.4219 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7345   -0.8795   -0.9598 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6733    1.7493   -0.3626 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7114    0.6595   -0.5273 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.6584    1.0848    0.0160 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2853   -0.5349    0.2184 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6931   -0.0111   -0.1013 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6276    0.4133   -1.5925 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0381    1.9597   -0.5241 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5626    1.3537    1.0762 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3321    2.5816   -0.8422 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5520    1.5018   -0.8166 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8728   -2.3640   -0.1196 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2895   -0.5980    0.8511 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 15  1  0  0  0  0\r\n  2  9  1  0  0  0  0\r\n  2 16  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  9  2  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 13  1  0  0  0  0\r\n  5 14  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  1  0  0  0  0\r\n  7 12  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n83887\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n12\r\n6\r\n2\r\n11\r\n10\r\n4\r\n5\r\n3\r\n7\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n13 0.36\r\n14 0.36\r\n15 0.5\r\n16 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n6 0.33\r\n7 0.06\r\n8 0.66\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 8 anion\r\n3 2 4 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000147AF00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.3555\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.713\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 12954472541618673468\r\n18185500 45 18270955851373299415\r\n21040471 1 17977387466607265516\r\n21922407 69 18130784620106792481\r\n23552333 60 18410015454930660113\r\n23552449 11 18114453509322016857\r\n24536 1 18341323440183655167\r\n29004967 10 17603304886006858753\r\n5084963 1 17988085470048142179\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n156.76\r\n2.9\r\n1.45\r\n1\r\n1.35\r\n0.23\r\n-0.19\r\n-0.34\r\n-0.37\r\n-0.79\r\n0.27\r\n-0.02\r\n-0.23\r\n-0.26\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n299.177\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n95.7\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 20, NULL, NULL, NULL),
+(22, 'L-glutamic acid', 'L', '33032\r\n  -OEChem-08061307533D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n    1.8673    1.4740   -1.0053 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1163    0.7071    1.0794 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5878    0.7410    1.0154 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9184   -0.2347   -0.9789 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6806   -1.7797    0.5894 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1238   -0.6649   -0.7146 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3856   -0.7970   -0.4512 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.9609   -0.0832    0.4279 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0137    0.5241   -0.0440 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4156    0.1132    0.0818 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5282   -1.6486   -0.9894 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2668   -0.0337   -1.6022 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8836   -1.1268   -1.3708 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9129   -0.7486    1.2969 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5643    0.8967    0.7156 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6879   -1.9245    0.6494 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2786   -2.6805    0.3327 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2713    2.3275   -0.7398 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.0615    0.8235    0.8441 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 18  1  0  0  0  0\r\n  2 10  1  0  0  0  0\r\n  2 19  1  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4 10  2  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  5 17  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n33032\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n21\r\n16\r\n20\r\n22\r\n11\r\n26\r\n12\r\n29\r\n13\r\n27\r\n14\r\n18\r\n30\r\n4\r\n9\r\n3\r\n25\r\n10\r\n23\r\n5\r\n7\r\n19\r\n17\r\n24\r\n28\r\n2\r\n6\r\n15\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n10 0.66\r\n16 0.36\r\n17 0.36\r\n18 0.5\r\n19 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 9 anion\r\n3 2 4 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000810800000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.4573\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.714\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10219947 1 18114172047710138944\r\n10857977 72 15936421056452836647\r\n12897270 3 15554175825776144829\r\n12932741 1 17167865236071508295\r\n12932764 1 18335707092039925015\r\n14390081 3 17847062198721526473\r\n15775835 57 18060704991489316993\r\n19973954 147 18114745928076065853\r\n21040471 1 18270684302234905758\r\n230 275 18410014338180945724\r\n23552423 10 17559964220941829943\r\n3248919 1 18334858337750954131\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n177.34\r\n4.65\r\n1.28\r\n1.04\r\n2.76\r\n0.18\r\n-0.02\r\n-1.11\r\n0.54\r\n-0.87\r\n0.05\r\n0.01\r\n-0.11\r\n-0.5\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n336.76\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n108.5\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 23, NULL, NULL, NULL),
+(23, 'D-glutamic acid', 'D', '23327\r\n  -OEChem-08061307543D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n    2.0909   -1.6869   -0.3513 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2080    0.0102    1.2337 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6515   -0.1520    1.2201 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9058   -0.4276   -0.9753 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4996    1.8871   -0.1490 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1289    0.1615   -0.8999 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3481    0.5510   -0.7212 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -0.9934    0.1912    0.3637 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0968   -0.4291    0.1646 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4509   -0.1053    0.1146 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1894   -0.8419   -1.3414 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5753    0.8362   -1.6433 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8428    0.5448   -1.6999 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6219   -0.5474    1.0824 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9414    1.1839    0.8241 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0140    2.5660   -0.7338 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4832    2.1552   -0.1586 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5749   -2.3190    0.2218 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1522   -0.1908    1.0594 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 18  1  0  0  0  0\r\n  2 10  1  0  0  0  0\r\n  2 19  1  0  0  0  0\r\n  3  9  2  0  0  0  0\r\n  4 10  2  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 16  1  0  0  0  0\r\n  5 17  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 14  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n23327\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n24\r\n16\r\n23\r\n11\r\n28\r\n2\r\n4\r\n21\r\n5\r\n13\r\n8\r\n27\r\n14\r\n17\r\n25\r\n12\r\n9\r\n26\r\n19\r\n22\r\n6\r\n20\r\n7\r\n15\r\n18\r\n10\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n13\r\n1 -0.65\r\n10 0.66\r\n16 0.36\r\n17 0.36\r\n18 0.5\r\n19 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.57\r\n5 -0.99\r\n7 0.33\r\n8 0.06\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 acceptor\r\n1 5 cation\r\n1 5 donor\r\n3 1 3 9 anion\r\n3 2 4 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00005B1F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.2637\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.714\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10219947 1 18410283718909468050\r\n12932741 1 17313100878061886917\r\n12932764 1 18260555566760023597\r\n14390081 3 14404911262857900619\r\n15775835 57 17132398314989802771\r\n20201158 50 17821721706764874378\r\n20653091 64 17894640244483226532\r\n20711985 344 17390221529819551636\r\n21028194 46 12103553195627759654\r\n23552449 11 18186515527255393804\r\n29004967 10 18335414634799994884\r\n3248919 1 18343584074940325023\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n177.34\r\n4.8\r\n1.2\r\n1.08\r\n2.72\r\n0.23\r\n-0.09\r\n-1\r\n-0.94\r\n-1.04\r\n0.1\r\n0.23\r\n-0.08\r\n0.02\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n336.574\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n108.5\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 22, NULL, NULL, NULL),
+(24, 'L-valine', 'L', '6287\r\n  -OEChem-08061307553D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n   -1.5450   -1.4733   -0.2634 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7308    0.3763    1.0301 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2561    1.7673   -0.8569 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3804    0.0130   -0.2307 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0464    0.3243   -0.7445 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.7318   -1.4774   -0.1626 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6518    0.6838    1.1200 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1858   -0.2139    0.1080 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0843    0.4571   -0.9495 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1592   -0.0971   -1.7516 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5567   -1.9585   -1.1304 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1288   -1.9948    0.5905 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7866   -1.6168    0.0967 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9886    0.2970    1.9007 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6824    0.4931    1.4403 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5287    1.7701    1.0717 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1415    1.9507   -1.3279 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4679    2.1741   -1.4481 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2748   -1.8228    0.2912 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 19  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6287\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n6\r\n8\r\n5\r\n3\r\n7\r\n1\r\n4\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.5\r\n2 -0.57\r\n3 -0.99\r\n5 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n3 4 6 7 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000188F00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.1635\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.506\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n18185500 45 18266184013763732287\r\n20096714 4 16271926055779426056\r\n21040471 1 18271542904714866697\r\n23552449 11 17607231353730139803\r\n24536 1 18188780585606761179\r\n29004967 10 17822871847567128448\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.37\r\n1.53\r\n1.03\r\n0.15\r\n0.13\r\n-0.13\r\n0.55\r\n-0.55\r\n0.05\r\n0.26\r\n0\r\n-0.33\r\n0.23\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n272.37\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n94.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 25, NULL, NULL, NULL),
+(25, 'D-valine', 'D', '71563\r\n  -OEChem-08061307563D\r\n\r\n 19 18  0     1  0  0  0  0  0999 V2000\r\n    1.5439    1.4660    0.2477 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7283   -0.3890   -1.0383 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2734   -1.7689    0.8715 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3814   -0.0270    0.2247 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0470   -0.3303    0.7390 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.7194   -0.6366   -1.1406 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6707    1.4778    0.2194 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1789    0.2081   -0.1232 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0821   -0.4714    0.9462 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1622    0.1007    1.7420 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6015   -1.7246   -1.1316 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0760   -0.2300   -1.9276 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7583   -0.4209   -1.4129 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0715    1.9998   -0.5337 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7259    1.6663   -0.0066 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4563    1.9208    1.1975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4474   -2.1758    1.4663 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1601   -1.9358    1.3464 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2767    1.8111   -0.3058 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 19  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 17  1  0  0  0  0\r\n  3 18  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  6 11  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71563\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n9\r\n6\r\n4\r\n3\r\n5\r\n2\r\n7\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n17 0.36\r\n18 0.36\r\n19 0.5\r\n2 -0.57\r\n3 -0.99\r\n5 0.33\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n3 4 6 7 hydrophobe\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0001178B00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.6968\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.506\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 17773308152546740957\r\n137420 1 12625318703194589435\r\n18185500 45 18121769530939113075\r\n20096714 4 18337677399491314993\r\n21040471 1 18113908173066276280\r\n23552449 1 17615688874443591384\r\n24536 1 18116725190602683780\r\n29004967 10 12319459930176603246\r\n5084963 1 16950563302428206106\r\n5943 1 13344787628923076075\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.37\r\n1.52\r\n1.04\r\n0.15\r\n0.14\r\n0.14\r\n0.48\r\n0.59\r\n0.03\r\n-0.28\r\n0.02\r\n-0.33\r\n-0.25\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n272.212\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n94.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 24, NULL, NULL, NULL),
+(26, 'L-isoleucine', 'L', '6306\r\n  -OEChem-08061307573D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    1.7318    1.0709   -1.2228 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2594    0.4785    0.9014 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6284   -1.6112    0.9265 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8499   -0.1966   -0.5113 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.5599   -0.8012   -0.2932 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.3284    0.7162    0.6425 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8909   -1.2949   -0.7794 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7052    1.3375    0.4485 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5949    0.3007   -0.1121 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8062    0.4240   -1.4171 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8584   -1.4200   -1.1465 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6102    1.5338    0.7760 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3472    0.1596    1.5865 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5242   -1.9957   -1.5374 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1186   -1.8650    0.1273 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8257   -0.8738   -1.1625 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7682    1.8589   -0.5118 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9027    2.0653    1.2424 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4975    0.5847    0.4911 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4726   -1.0328    1.7505 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5632   -2.0056    1.0260 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4077    1.7712   -1.1008 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6306\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n15\r\n2\r\n4\r\n16\r\n10\r\n14\r\n5\r\n7\r\n12\r\n13\r\n6\r\n9\r\n11\r\n3\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n5 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 7 hydrophobe\r\n1 8 hydrophobe\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000018A200000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.591\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n14390081 3 17988923340795149985\r\n15775835 57 18342177743407050089\r\n18185500 45 18410566280106755181\r\n20653085 51 18130244734222865096\r\n20711978 78 16950847990193428539\r\n21040471 1 18201444623196706381\r\n23552423 10 18410576175601031871\r\n24536 1 18187651335593753062\r\n29004967 10 17168424844207875553\r\n5084963 1 18188757461608289094\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n3.29\r\n1.53\r\n1.05\r\n0.65\r\n0.29\r\n-0.04\r\n-1.32\r\n0.1\r\n0.61\r\n0.06\r\n-0.36\r\n0.02\r\n-0.55\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n311.09\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 27, NULL, NULL, NULL);
+INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`, `smashName`) VALUES
+(27, 'D-isoleucine', 'D', '76551\r\n  -OEChem-08061307583D\r\n\r\n 22 21  0     1  0  0  0  0  0999 V2000\r\n    1.6924   -1.1085   -1.2050 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2694   -0.4678    0.8923 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6388    1.6215    0.9108 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8474    0.1961   -0.5095 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.5634    0.8027   -0.3026 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.3244   -0.7095    0.6506 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8893    1.2928   -0.7811 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7025   -1.3299    0.4634 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5996   -0.2974   -0.1190 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8080   -0.4293   -1.4121 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8645    1.4128   -1.1612 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3426   -0.1481    1.5916 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6067   -1.5268    0.7878 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8142    0.8682   -1.1846 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1408    1.8496    0.1275 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5161    2.0048   -1.5251 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4933   -0.5750    0.4992 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9011   -2.0498    1.2642 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7671   -1.8600   -0.4918 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3959    1.0723    1.7329 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0391    2.3799    0.8616 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3524   -1.8221   -1.0728 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  5  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  5  9  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n76551\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n3\r\n8\r\n15\r\n1\r\n9\r\n13\r\n7\r\n6\r\n11\r\n12\r\n10\r\n5\r\n4\r\n14\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n3 -0.99\r\n5 0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 7 hydrophobe\r\n1 8 hydrophobe\r\n3 1 2 9 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00012B0700000003\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.7303\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12423570 1 10970162560851976773\r\n20711978 78 18058734735556273005\r\n21040471 1 17825944823726942469\r\n21922407 69 17058655294370391155\r\n23552423 10 17603871151759168879\r\n23552449 11 18268433619012549251\r\n24536 1 18272937085300715548\r\n29004967 10 18131631170992923474\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n168.5\r\n3.28\r\n1.54\r\n1.04\r\n0.66\r\n0.29\r\n0.04\r\n-1.3\r\n-0.14\r\n0.59\r\n-0.06\r\n-0.34\r\n0.01\r\n0.56\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n311.117\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n106.1\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 26, NULL, NULL, NULL),
+(28, 'L-tryptophan', 'L', '6305\r\n  -OEChem-08061308003D\r\n\r\n 27 28  0     1  0  0  0  0  0999 V2000\r\n    1.4762   -0.8154    1.7282 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5598   -1.9472    0.0879 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6474    2.0044    0.5482 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.8759    0.3655   -0.5832 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1475    1.1323   -0.4236 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5065    0.9845   -0.9830 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8667    0.1349   -0.3859 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5601    0.4881    0.0402 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -1.9823    0.7078    0.2286 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3625    2.2702    0.1579 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9431   -1.2045   -0.8169 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1751    0.0055    0.4346 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2083   -0.8852    0.5860 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1298   -1.9193   -0.6176 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2274   -1.3216   -0.0012 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4724    0.2941   -1.8370 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8346    1.9497   -1.3927 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6391    1.1902    0.8789 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0723    3.2449    0.3304 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2620    2.6639    1.0051 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1001   -1.6864   -1.3035 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.0301    0.4699    0.9143 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1948   -2.9522   -0.9490 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.5715    0.1348    0.1255 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1549    1.2657   -0.9717 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1393   -1.8953    0.1434 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2617   -1.7057    2.0797 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  1 27  1  0  0  0  0\r\n  2 13  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 10  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 24  1  0  0  0  0\r\n  4 25  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  6 17  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  2  0  0  0  0\r\n  8 13  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n 10 19  1  0  0  0  0\r\n 11 14  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 15  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\n 14 15  2  0  0  0  0\r\n 14 23  1  0  0  0  0\r\n 15 26  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6305\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n18\r\n9\r\n4\r\n15\r\n19\r\n14\r\n17\r\n6\r\n16\r\n12\r\n13\r\n10\r\n7\r\n3\r\n11\r\n5\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n23\r\n1 -0.65\r\n10 -0.3\r\n11 -0.15\r\n12 -0.15\r\n13 0.66\r\n14 -0.15\r\n15 -0.15\r\n19 0.15\r\n2 -0.57\r\n20 0.27\r\n21 0.15\r\n22 0.15\r\n23 0.15\r\n24 0.36\r\n25 0.36\r\n26 0.15\r\n27 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.18\r\n6 0.18\r\n8 0.33\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n9\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 13 anion\r\n5 3 5 7 9 10 rings\r\n6 7 9 11 12 14 15 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n15\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000018A100000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n20.3006\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n45.819\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11578080 2 18044063921631987172\r\n12382932 28 18342172297346008739\r\n12553582 1 18339637957620267583\r\n13221675 6 18410296938460187006\r\n13538477 17 18409445856177914860\r\n15001771 113 18337390560110812629\r\n15076042 46 18270116786388370305\r\n15375462 189 18335425724268409835\r\n16752209 62 18340195302926022533\r\n16945 1 18341606031762393341\r\n17804303 29 18056201271877253182\r\n19422 9 18335426712311406226\r\n20442098 301 18341891883389899966\r\n20510252 161 17988370260576517201\r\n20645477 70 17690549106974296535\r\n20871998 184 18202566163648381989\r\n22112679 90 18128831913457911133\r\n22445834 79 18408325471008859442\r\n23236772 104 18333455352113071832\r\n232386 152 18269843171275638837\r\n23388829 49 18338797917777723101\r\n23463225 33 18410860962229259495\r\n23552423 10 17905326578571904349\r\n23559900 14 18272931614193070404\r\n23598294 1 18270408191435270001\r\n2748010 2 17186174063400709389\r\n3312278 4 18335986462239826991\r\n34934 24 18410289241900190429\r\n427121 178 16123918433733439433\r\n7364860 26 17840586221194573353\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n286.99\r\n5.19\r\n2.17\r\n0.99\r\n1.38\r\n0.26\r\n0.17\r\n-1.69\r\n0.1\r\n-0.46\r\n0.05\r\n0.29\r\n-0.14\r\n-0.73\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n619.038\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n158.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', NULL, NULL, NULL, NULL),
+(29, 'D-tryptophan', 'D', '9060\r\n  -OEChem-08061308013D\r\n\r\n 27 28  0     1  0  0  0  0  0999 V2000\r\n   -1.4202    0.8157   -1.6976 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5635    1.9491   -0.0995 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6436   -2.0069   -0.5435 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.8800   -0.3628    0.5749 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1531   -1.1312    0.4218 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5132   -0.9814    0.9780 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.8623   -0.1349    0.3851 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5642   -0.4860   -0.0484 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    1.9789   -0.7100   -0.2253 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3572   -2.2705   -0.1564 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9388    1.2050    0.8141 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1730   -0.0093   -0.4291 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2117    0.8865   -0.5958 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1268    1.9183    0.6170 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2255    1.3185    0.0047 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8427   -1.9455    1.3887 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4802   -0.2895    1.8308 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6425   -1.1883   -0.8871 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0780   -3.2451   -0.3284 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2588   -2.6678   -0.9975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0950    1.6886    1.2975 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.0289   -0.4754   -0.9056 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1919    2.9518    0.9468 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1596   -1.2629    0.9633 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.5755   -0.1319   -0.1340 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1385    1.8910   -0.1384 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1798    1.7056   -2.0327 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  1 27  1  0  0  0  0\r\n  2 13  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 10  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4 24  1  0  0  0  0\r\n  4 25  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  2  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  6 17  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 11  2  0  0  0  0\r\n  8 13  1  0  0  0  0\r\n  8 18  1  0  0  0  0\r\n  9 12  2  0  0  0  0\r\n 10 19  1  0  0  0  0\r\n 11 14  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 12 15  1  0  0  0  0\r\n 12 22  1  0  0  0  0\r\n 14 15  2  0  0  0  0\r\n 14 23  1  0  0  0  0\r\n 15 26  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n9060\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n9\r\n18\r\n14\r\n7\r\n19\r\n15\r\n2\r\n11\r\n16\r\n5\r\n6\r\n3\r\n17\r\n13\r\n4\r\n10\r\n12\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n23\r\n1 -0.65\r\n10 -0.3\r\n11 -0.15\r\n12 -0.15\r\n13 0.66\r\n14 -0.15\r\n15 -0.15\r\n19 0.15\r\n2 -0.57\r\n20 0.27\r\n21 0.15\r\n22 0.15\r\n23 0.15\r\n24 0.36\r\n25 0.36\r\n26 0.15\r\n27 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.18\r\n6 0.18\r\n8 0.33\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n9\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 13 anion\r\n5 3 5 7 9 10 rings\r\n6 7 9 11 12 14 15 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n15\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000236400000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n20.3132\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n45.82\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n1 1 18341612637670079438\r\n10608611 8 18408603630492564929\r\n11031198 65 18342742918110962310\r\n11132069 177 18189330337378798425\r\n11471102 20 18343022189832721161\r\n11578080 2 8408286333729413535\r\n12654215 9 18339355250140663908\r\n13132413 78 17102813562585277602\r\n13294875 104 16811768436666108123\r\n13464514 151 18194405485384000452\r\n13839132 238 18187079520838258991\r\n15219456 202 18408886209033050227\r\n15775835 57 18200879585751970831\r\n16945 1 18341604932229640570\r\n17844478 74 18261404385388912891\r\n18186145 218 18130794477215005320\r\n21028194 46 18334292089035848048\r\n21501502 16 18335416812185065627\r\n21524375 3 18339358686030442626\r\n21947302 44 18337945705998010866\r\n22802520 49 18264773164235604389\r\n23402539 116 17968933218685488171\r\n23402655 69 18272931618192443685\r\n238 59 18123437597605775477\r\n25 1 18412829053598863448\r\n2748010 2 17838908375340942370\r\n3286 77 18408600331725651199\r\n63268167 104 18202005404159962474\r\n77492 1 16845580802779571291\r\n81228 2 17332792255026495498\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n286.99\r\n5.18\r\n2.17\r\n0.98\r\n1.4\r\n0.26\r\n-0.15\r\n-1.68\r\n-0.09\r\n-0.46\r\n-0.05\r\n0.28\r\n-0.14\r\n0.72\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n619.239\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n158.3\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 28, NULL, NULL, NULL),
+(30, 'L-histidine', 'L', '6274\r\n  -OEChem-08061308023D\r\n\r\n 20 20  0     1  0  0  0  0  0999 V2000\r\n   -1.0689   -1.6919   -0.7660 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.4946   -1.1223    0.9038 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6797    0.1409    1.1624 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7494    1.3693   -0.2178 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8201   -0.3365   -0.6825 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3579    1.3004    0.3217 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5062    0.6397   -0.4567 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    0.9671    0.6020    0.1195 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7498   -0.7917   -0.0102 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6556    0.3150   -1.0031 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8043   -0.4249    0.6290 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5942    1.3196    1.3946 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2433    2.3450    0.0039 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3124    0.6416   -1.5355 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4441    0.1943    2.1450 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3992    0.5299   -2.0301 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6419    2.3346   -0.5280 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.9358    1.4198    0.7835 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.5655   -0.8810    1.2458 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2415   -2.6142   -0.4801 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 15  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  4 18  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  2  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  2  0  0  0  0\r\n 10 16  1  0  0  0  0\r\n 11 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6274\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n9\r\n16\r\n12\r\n4\r\n20\r\n7\r\n8\r\n14\r\n15\r\n3\r\n6\r\n2\r\n11\r\n19\r\n17\r\n10\r\n5\r\n13\r\n18\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.08\r\n11 0.04\r\n15 0.27\r\n16 0.15\r\n17 0.36\r\n18 0.36\r\n19 0.15\r\n2 -0.57\r\n20 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.57\r\n6 0.18\r\n7 0.33\r\n8 -0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n3 3 5 11 cation\r\n5 3 5 8 10 11 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n11\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000188200000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n7.9539\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.654\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 14056993979206604083\r\n12932764 1 18271807968700595688\r\n15310529 11 17895482521612900700\r\n16945 1 17969215655460391109\r\n20201158 50 17632574907814046286\r\n20645464 45 17846491543443691394\r\n23235685 24 18339075965433964901\r\n23552423 10 17968380168362411957\r\n29004967 10 17203891859937136848\r\n369184 2 14908180854499463455\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n199.69\r\n4.3\r\n1.38\r\n1\r\n0.59\r\n0.14\r\n-0.02\r\n0.46\r\n-0.2\r\n-1.01\r\n0.05\r\n0.32\r\n0.1\r\n0.1\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n409.56\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n117.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 31, NULL, NULL, NULL),
+(31, 'D-histidine', 'D', '71083\r\n  -OEChem-08061308033D\r\n\r\n 20 20  0     1  0  0  0  0  0999 V2000\r\n    1.9365   -1.5628   -0.9470 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5274   -0.8197    1.1196 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1857    1.0655   -0.0387 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4073    1.6934   -0.4366 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7000   -1.0946   -0.0788 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2383    1.0917    0.5328 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3602    0.6701   -0.4259 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.0660    0.3805    0.2516 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0150   -0.6197    0.0273 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3726   -0.9313    0.2291 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1605    0.1269   -0.2333 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0617    2.1730    0.4461 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5170    0.9063    1.5783 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9803    0.5561   -1.4479 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2987    2.0689   -0.1036 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7364   -1.7837    0.4165 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7240    1.8738    0.5160 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0184    2.5746   -0.7709 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1764    0.3974   -0.4837 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3426   -2.4111   -0.6680 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  1 20  1  0  0  0  0\r\n  2  9  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 11  1  0  0  0  0\r\n  3 15  1  0  0  0  0\r\n  4  7  1  0  0  0  0\r\n  4 17  1  0  0  0  0\r\n  4 18  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  2  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  2  0  0  0  0\r\n 10 16  1  0  0  0  0\r\n 11 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71083\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n19\r\n5\r\n22\r\n18\r\n7\r\n6\r\n10\r\n21\r\n8\r\n15\r\n14\r\n17\r\n12\r\n9\r\n1\r\n4\r\n16\r\n13\r\n3\r\n20\r\n11\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.08\r\n11 0.04\r\n15 0.27\r\n16 0.15\r\n17 0.36\r\n18 0.36\r\n19 0.15\r\n2 -0.57\r\n20 0.5\r\n3 0.03\r\n4 -0.99\r\n5 -0.57\r\n6 0.18\r\n7 0.33\r\n8 -0.33\r\n9 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n3\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 9 anion\r\n3 3 5 11 cation\r\n5 3 5 8 10 11 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n11\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000115AB00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.8346\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.652\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18265903629624331773\r\n12932764 1 17821733805887986261\r\n14325111 11 18407759253076072577\r\n15310529 11 18336547221944628157\r\n16945 1 18263646156438130897\r\n17990270 104 18412831269849539014\r\n19973954 147 18411424990135251309\r\n20201158 50 18413106134708206655\r\n20645477 70 18410289229416260799\r\n23235687 12 18334290955053777204\r\n23552423 10 18334013895524914915\r\n3248919 1 18343862204063626577\r\n369184 2 18334013908615525593\r\n7364860 26 18343303695280715968\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n199.69\r\n4.67\r\n1.52\r\n0.81\r\n1.31\r\n0.04\r\n-0.05\r\n-0.48\r\n0.27\r\n-0.65\r\n0.15\r\n-0.39\r\n-0.11\r\n-0.11\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n409.132\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n117.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 30, NULL, NULL, NULL),
+(32, 'L-lysine', 'L', '5962\r\n  -OEChem-08061308043D\r\n\r\n 24 23  0     1  0  0  0  0  0999 V2000\r\n   -2.7908   -1.6235   -0.3318 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.5637    0.2615    0.6609 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5026    1.7690   -0.0718 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.8579   -0.3942    0.2918 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1674    0.3292   -0.3051 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1555   -0.2958    0.1586 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4066   -0.3826    0.2435 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4135    0.3533   -0.4323 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    3.6883    0.3006   -0.2331 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6942   -0.3175    0.0195 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2003    1.3818    0.0009 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.2016    0.3162   -1.4017 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2045   -0.2620    1.2554 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1479   -1.3614   -0.1051 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3982   -1.4306   -0.0810 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3689   -0.3832    1.3401 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3829    0.2891   -1.5263 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.7077    1.3445    0.0985 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.7326    0.2970   -1.3275 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5674    1.8676    0.9405 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3525    2.1750   -0.4609 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.8417   -0.3724    1.3106 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    5.7014    0.1029    0.0088 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6273   -2.0269   -0.0160 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 24  1  0  0  0  0\r\n  2 10  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  4 22  1  0  0  0  0\r\n  4 23  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  6 14  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5962\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n2\r\n69\r\n67\r\n30\r\n93\r\n65\r\n90\r\n29\r\n18\r\n59\r\n77\r\n40\r\n22\r\n32\r\n56\r\n35\r\n85\r\n66\r\n8\r\n73\r\n75\r\n7\r\n61\r\n64\r\n72\r\n70\r\n89\r\n62\r\n55\r\n37\r\n79\r\n46\r\n68\r\n50\r\n92\r\n44\r\n63\r\n88\r\n5\r\n76\r\n52\r\n16\r\n17\r\n71\r\n19\r\n80\r\n25\r\n54\r\n34\r\n41\r\n53\r\n12\r\n74\r\n84\r\n1\r\n6\r\n23\r\n45\r\n39\r\n82\r\n83\r\n47\r\n3\r\n13\r\n42\r\n4\r\n49\r\n86\r\n26\r\n9\r\n87\r\n58\r\n81\r\n60\r\n21\r\n31\r\n78\r\n33\r\n38\r\n48\r\n20\r\n36\r\n24\r\n51\r\n15\r\n27\r\n91\r\n57\r\n11\r\n28\r\n43\r\n10\r\n14\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n10 0.66\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.36\r\n23 0.36\r\n24 0.5\r\n3 -0.99\r\n4 -0.99\r\n8 0.33\r\n9 0.27\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000174A00000002\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.9369\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11062470 55 11527947859386917362\r\n12932764 1 17488728022213747326\r\n14325111 11 18335981987216207414\r\n18342897 69 18409724058515912674\r\n190213 19 13326856642999686966\r\n20645464 45 17132120147433185679\r\n20828058 44 18344145899691559430\r\n21293036 1 14418135127601398720\r\n22485316 2 18411696582597877162\r\n23380061 127 18409162186852672052\r\n23402539 116 18408595968128373974\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n184.09\r\n7.75\r\n1.15\r\n0.68\r\n6.62\r\n0.13\r\n0\r\n-1.2\r\n0.77\r\n-0.91\r\n-0.08\r\n-0.09\r\n0\r\n-0.27\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n337.151\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n116.7\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 33, NULL, NULL, NULL),
+(33, 'D-lysine', 'D', '57449\r\n  -OEChem-08061308053D\r\n\r\n 24 23  0     1  0  0  0  0  0999 V2000\r\n   -2.2075    1.6185   -0.7760 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5375    0.6972    1.2682 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8558   -1.7600    0.5238 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.5392    0.3714    0.1142 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7841   -0.2591    0.0754 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2456   -0.6468   -0.9944 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2092   -0.1237   -0.4668 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6938   -0.7206   -0.4939 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    3.1892    0.2388    0.6489 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1815    0.5844    0.1007 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7870   -1.0120    0.8722 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4945    0.6921    0.5378 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0383   -1.6128   -1.4319 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1914    0.0867   -1.8092 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2299    0.6466   -1.2478 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5101   -1.0686   -0.9364 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.3597   -0.9665   -1.3289 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1815   -0.5330    1.4263 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8959    1.1854    1.1153 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2906   -1.5447    1.3436 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5052   -2.6473    0.1647 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.8339   -0.5131   -0.2977 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    5.1878    0.5614    0.8771 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5340    2.4441   -0.3589 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 24  1  0  0  0  0\r\n  2 10  2  0  0  0  0\r\n  3  8  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  4 22  1  0  0  0  0\r\n  4 23  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  6 14  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\n  7 16  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n57449\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n69\r\n13\r\n11\r\n31\r\n39\r\n14\r\n60\r\n63\r\n52\r\n59\r\n40\r\n23\r\n53\r\n71\r\n67\r\n41\r\n70\r\n36\r\n38\r\n61\r\n3\r\n22\r\n56\r\n37\r\n65\r\n19\r\n62\r\n29\r\n18\r\n6\r\n7\r\n33\r\n15\r\n42\r\n64\r\n68\r\n8\r\n45\r\n2\r\n35\r\n48\r\n16\r\n27\r\n50\r\n34\r\n26\r\n66\r\n58\r\n24\r\n4\r\n54\r\n21\r\n30\r\n47\r\n46\r\n51\r\n5\r\n57\r\n25\r\n28\r\n44\r\n49\r\n12\r\n17\r\n43\r\n20\r\n32\r\n55\r\n9\r\n10\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n12\r\n1 -0.65\r\n10 0.66\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.36\r\n23 0.36\r\n24 0.5\r\n3 -0.99\r\n4 -0.99\r\n8 0.33\r\n9 0.27\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 10 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n10\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000E06900000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n0.7402\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.58\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11127187 94 10735865158725924641\r\n124424 183 18131060512047966050\r\n12897270 3 11095876051636763406\r\n12932764 1 18187362125797530832\r\n13024252 1 16660358195325319863\r\n14390081 3 17632576037269106098\r\n20211469 26 15430322463920647035\r\n20645464 45 18343588421099166558\r\n20653085 51 15983996817091189515\r\n23402539 116 18341603871947965695\r\n23500284 214 18060147500613298457\r\n3248919 1 18334573572892838870\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n184.09\r\n6.13\r\n1.26\r\n0.98\r\n7.25\r\n0.08\r\n-0.03\r\n-1.62\r\n-0.95\r\n-1.16\r\n-0.01\r\n-0.42\r\n-0.06\r\n0.24\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n338.013\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n116.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 32, NULL, NULL, NULL),
+(34, 'L-arginine', 'L', '6322\r\n  -OEChem-08061308063D\r\n\r\n 26 25  0     1  0  0  0  0  0999 V2000\r\n   -2.3027   -1.9535   -0.2040 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.4436   -0.5315    1.1465 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8917    1.6021   -0.3339 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9642   -0.2357    0.0497 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.9181   -1.4167   -0.3497 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.1368    0.7627    0.2805 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7698    0.4929   -0.8697 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1713    0.8748    0.4921 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2988    0.3560   -0.8131 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.3447    1.0326    0.4373 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7459   -0.7207    0.1586 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2599   -0.2630    0.0056 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.3371   -0.4537   -1.2146 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4987    1.2540   -1.6125 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5946    1.8211    0.8474 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4186    0.1088    1.2369 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7019    0.1202   -1.8038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6008    1.8203   -0.2817 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6949    1.3401    1.4301 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.9080    1.5421   -0.3876 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6212    2.3685   -0.9492 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.6025   -2.6477    0.4208 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.4065   -2.2611   -0.5818 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.9305   -1.4589   -0.3900 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    5.1395    0.6251    0.2127 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.8208    1.6857    0.5561 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 11  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2 11  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  4 12  2  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  5 23  1  0  0  0  0\r\n  5 24  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 25  1  0  0  0  0\r\n  6 26  1  0  0  0  0\r\n  7  8  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\n  9 11  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n 10 18  1  0  0  0  0\r\n 10 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6322\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n4\r\n72\r\n17\r\n12\r\n96\r\n27\r\n83\r\n58\r\n63\r\n38\r\n85\r\n93\r\n9\r\n33\r\n82\r\n5\r\n87\r\n52\r\n3\r\n81\r\n32\r\n55\r\n76\r\n56\r\n91\r\n70\r\n34\r\n64\r\n45\r\n89\r\n95\r\n84\r\n22\r\n41\r\n74\r\n49\r\n77\r\n61\r\n67\r\n44\r\n92\r\n24\r\n1\r\n75\r\n13\r\n6\r\n88\r\n79\r\n62\r\n25\r\n78\r\n31\r\n46\r\n90\r\n11\r\n40\r\n15\r\n53\r\n69\r\n57\r\n39\r\n47\r\n16\r\n73\r\n14\r\n86\r\n60\r\n29\r\n2\r\n59\r\n68\r\n66\r\n50\r\n23\r\n94\r\n8\r\n48\r\n80\r\n36\r\n10\r\n18\r\n21\r\n20\r\n7\r\n51\r\n30\r\n71\r\n19\r\n26\r\n43\r\n65\r\n54\r\n28\r\n42\r\n35\r\n37\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.25\r\n11 0.66\r\n12 0.55\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n23 0.4\r\n24 0.4\r\n25 0.4\r\n26 0.4\r\n3 -0.99\r\n4 -0.7\r\n5 -0.85\r\n6 -0.85\r\n9 0.33\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 5 donor\r\n1 6 donor\r\n3 1 2 11 anion\r\n4 4 5 6 12 cation\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000018B200000004\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n18.4327\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.711\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12162725 195 9223238446313502218\r\n124424 183 17845929645768177277\r\n12932764 1 17240472577217501004\r\n13296908 3 18411978049000373580\r\n14325111 11 18409444778510252228\r\n14577589 140 18408322164295491679\r\n17834074 16 18408322176974834030\r\n18186145 218 17822006476435071116\r\n190213 19 18113616781115697676\r\n20201158 50 18342454824669094654\r\n20279233 1 18341885290657058284\r\n20281407 28 18413106173557857224\r\n20645464 45 18131077017538680503\r\n20645477 70 17988071180765860582\r\n21293036 1 13984663676183150257\r\n22485316 2 18411696591097991602\r\n23402539 116 16370714921130949868\r\n449060 23 18041275577539281571\r\n528716 315 17022904549191671731\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n215.29\r\n7.45\r\n1.49\r\n0.86\r\n5.19\r\n0.34\r\n-0.02\r\n1.58\r\n-0.42\r\n-0.48\r\n0.06\r\n-0.48\r\n-0.04\r\n0.59\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n408.397\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n130.7\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 35, NULL, NULL, NULL),
+(35, 'D-arginine', 'D', '71070\r\n  -OEChem-08061308073D\r\n\r\n 26 25  0     1  0  0  0  0  0999 V2000\r\n    3.4571   -0.1075    1.4468 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4871    1.6621    0.4097 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.8861   -0.1271   -1.8595 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9733    0.2203    0.0808 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.8454    1.5109   -0.3683 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.2002   -0.6766    0.1646 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7664   -0.6094   -0.7299 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0811   -1.0106    0.5846 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.2952   -0.5508   -0.5924 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.4360   -1.0907    0.4486 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7440    0.4657    0.4413 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2622    0.3136   -0.0263 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3898    0.3703   -1.0515 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4946   -1.3292   -1.5126 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4621   -1.9855    0.9112 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3273   -0.2869    1.3705 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6821   -1.5417   -0.3280 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6920   -1.8375   -0.3127 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8506   -1.4171    1.4101 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6095   -0.7716   -2.5991 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.9023   -0.1846   -1.8004 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.7340    0.5508    2.1192 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2828    2.3369   -0.5414 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.8512    1.6050   -0.4565 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -5.1902   -0.4868    0.0526 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.9432   -1.6236    0.4191 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 11  1  0  0  0  0\r\n  1 22  1  0  0  0  0\r\n  2 11  2  0  0  0  0\r\n  3  9  1  0  0  0  0\r\n  3 20  1  0  0  0  0\r\n  3 21  1  0  0  0  0\r\n  4 10  1  0  0  0  0\r\n  4 12  2  0  0  0  0\r\n  5 12  1  0  0  0  0\r\n  5 23  1  0  0  0  0\r\n  5 24  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 25  1  0  0  0  0\r\n  6 26  1  0  0  0  0\r\n  7  8  1  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  8 10  1  0  0  0  0\r\n  8 15  1  0  0  0  0\r\n  8 16  1  0  0  0  0\r\n  9 11  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n 10 18  1  0  0  0  0\r\n 10 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n71070\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n81\r\n27\r\n78\r\n80\r\n16\r\n18\r\n67\r\n2\r\n92\r\n35\r\n36\r\n75\r\n88\r\n8\r\n59\r\n97\r\n89\r\n66\r\n79\r\n7\r\n69\r\n90\r\n71\r\n48\r\n76\r\n77\r\n28\r\n84\r\n85\r\n44\r\n99\r\n47\r\n65\r\n54\r\n68\r\n12\r\n87\r\n42\r\n82\r\n3\r\n23\r\n96\r\n26\r\n21\r\n74\r\n5\r\n40\r\n32\r\n58\r\n86\r\n72\r\n9\r\n13\r\n70\r\n55\r\n83\r\n11\r\n93\r\n15\r\n52\r\n91\r\n57\r\n29\r\n38\r\n17\r\n94\r\n39\r\n33\r\n56\r\n50\r\n98\r\n53\r\n14\r\n64\r\n6\r\n73\r\n10\r\n43\r\n46\r\n20\r\n45\r\n31\r\n22\r\n51\r\n60\r\n19\r\n4\r\n63\r\n24\r\n25\r\n30\r\n61\r\n41\r\n34\r\n95\r\n49\r\n62\r\n37\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n17\r\n1 -0.65\r\n10 0.25\r\n11 0.66\r\n12 0.55\r\n2 -0.57\r\n20 0.36\r\n21 0.36\r\n22 0.5\r\n23 0.4\r\n24 0.4\r\n25 0.4\r\n26 0.4\r\n3 -0.99\r\n4 -0.7\r\n5 -0.85\r\n6 -0.85\r\n9 0.33\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n5\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n8\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n1 5 donor\r\n1 6 donor\r\n3 1 2 11 anion\r\n4 4 5 6 12 cation\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n12\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0001159E00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n18.4621\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n40.711\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12932764 1 18341061773559638567\r\n14390081 3 18409731746776462755\r\n15775835 57 18040434408188994424\r\n177051 138 7853561423168125233\r\n18186145 218 17988653956119585987\r\n19107657 47 15936402338895832855\r\n20233049 118 18260556614916945996\r\n20606313 2 18060698407404737520\r\n20645477 70 16702030746379340726\r\n20671657 53 16915682297186541918\r\n212847 35 18113901515851390061\r\n22485316 2 9295290534255948433\r\n230 275 18202566176770686466\r\n23048698 100 15646774509034444647\r\n23380061 81 16443071581925470318\r\n23402539 116 18272072903489217575\r\n23557571 272 18272385156882092637\r\n3248919 1 16845580806937609171\r\n449060 23 11167940260293598731\r\n53428517 58 17417811776837497527\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n215.29\r\n7.54\r\n1.26\r\n1.14\r\n4.92\r\n0.34\r\n0.25\r\n1.88\r\n-0.16\r\n0.38\r\n-0.12\r\n-1.39\r\n-0.06\r\n0.48\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n407.16\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n131.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 34, NULL, NULL, NULL),
+(36, 'L-methionine', 'L', '6137\r\n  -OEChem-08061308083D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n    2.2858    0.9701    0.2797 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1607    1.6402    0.6921 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5905    0.3693   -0.5240 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3628   -1.8775    0.4986 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.4156   -0.8111   -0.8013 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.5662   -0.6533    0.3686 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.2656    0.4223   -1.1208 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.5486    0.4754    0.1110 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2617   -0.5355    0.4960 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0596   -1.6832   -0.6351 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1540   -1.0435   -1.7128 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0512   -0.4839    1.3194 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6282    1.2591   -1.4238 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9239    0.2090   -1.9700 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9632   -1.8082    1.3197 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7442   -2.6701    0.6669 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6638   -1.3256    0.9562 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.0990   -0.3183    1.1653 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.6690   -0.8794   -0.4583 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8051    2.3619    0.5302 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  7  1  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 20  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n6137\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n14\r\n28\r\n30\r\n27\r\n29\r\n19\r\n23\r\n36\r\n2\r\n32\r\n35\r\n26\r\n15\r\n6\r\n31\r\n11\r\n13\r\n4\r\n22\r\n24\r\n10\r\n25\r\n34\r\n21\r\n9\r\n33\r\n1\r\n12\r\n3\r\n8\r\n20\r\n7\r\n18\r\n16\r\n17\r\n5\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.46\r\n15 0.36\r\n16 0.36\r\n2 -0.65\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n6 0.33\r\n7 0.23\r\n8 0.66\r\n9 0.23\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 9 hydrophobe\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000017F90000000E\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n8.7079\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n17834069 15 18120369857274793272\r\n18342897 137 18335139769783610766\r\n20651381 17 18201147780747844020\r\n207724 885 17967536727354142172\r\n21040471 1 18265071166246444141\r\n21922407 69 17025456648855433100\r\n23552423 10 17896606274336756118\r\n24536 1 18268454415017271780\r\n29004967 10 11239987966973907247\r\n369184 2 18337107964015736480\r\n5084963 1 18186804668695947964\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n172.35\r\n3.95\r\n1.5\r\n0.97\r\n1.84\r\n0.14\r\n0.18\r\n-0.17\r\n-0.54\r\n-0.46\r\n-0.31\r\n0.19\r\n-0.02\r\n-0.01\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n304.509\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n113.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 37, NULL, NULL, NULL);
+INSERT INTO `databaseInput_substrate` (`id`, `name`, `chirality`, `structure`, `enantiomer_id`, `parent_id`, `user_id`, `smashName`) VALUES
+(37, 'D-methionine', 'D', '84815\r\n  -OEChem-08061308093D\r\n\r\n 20 19  0     1  0  0  0  0  0999 V2000\r\n   -2.3216   -0.9566   -0.3220 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1990   -1.6377   -0.6749 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6174   -0.3325    0.5181 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3332    1.8951   -0.4765 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4200    0.7632    0.8024 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5692    0.6484   -0.3663 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n   -1.2637   -0.4848    1.0782 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5805   -0.4573   -0.1216 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.2941    0.5622   -0.4374 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1442    0.9659    1.7245 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0662    1.6382    0.6645 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0681    0.4775   -1.3238 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9025   -0.3126    1.9513 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.6237   -1.3374    1.3259 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.7815    2.1078    0.4146 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6941    2.6688   -0.6567 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.6667    0.8659    0.5444 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1551    0.3793   -1.0866 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.7070    1.3686   -0.8832 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.8504   -2.3503   -0.5013 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  7  1  0  0  0  0\r\n  1  9  1  0  0  0  0\r\n  2  8  1  0  0  0  0\r\n  2 20  1  0  0  0  0\r\n  3  8  2  0  0  0  0\r\n  4  6  1  0  0  0  0\r\n  4 15  1  0  0  0  0\r\n  4 16  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  8  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  7 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  9 17  1  0  0  0  0\r\n  9 18  1  0  0  0  0\r\n  9 19  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n84815\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n29\r\n25\r\n26\r\n15\r\n33\r\n6\r\n34\r\n10\r\n35\r\n31\r\n17\r\n32\r\n19\r\n14\r\n28\r\n24\r\n16\r\n2\r\n11\r\n5\r\n30\r\n3\r\n22\r\n23\r\n36\r\n13\r\n9\r\n27\r\n4\r\n7\r\n20\r\n18\r\n21\r\n12\r\n8\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.46\r\n15 0.36\r\n16 0.36\r\n2 -0.65\r\n20 0.5\r\n3 -0.57\r\n4 -0.99\r\n6 0.33\r\n7 0.23\r\n8 0.66\r\n9 0.23\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n1 9 hydrophobe\r\n3 2 3 8 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n9\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00014B4F00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n9.058\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.505\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 12607393387060670947\r\n11062470 55 18411975849649999065\r\n12897270 3 18122065561844846013\r\n15310529 11 18267024045401015967\r\n18185500 45 18060145365967235111\r\n20201158 50 18410852140429905839\r\n20211469 26 17987793008518993986\r\n20651381 22 13973672949514941235\r\n20653085 51 18259990353670313769\r\n23235687 12 18334852853114627551\r\n23552423 10 18411704296380337227\r\n29004967 10 18411422803849061746\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n172.35\r\n4.03\r\n1.5\r\n0.95\r\n1.9\r\n0.16\r\n-0.17\r\n-0.15\r\n0.52\r\n-0.44\r\n0.31\r\n0.17\r\n-0.03\r\n0.01\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n304.442\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n113.8\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 36, NULL, NULL, NULL),
+(38, 'L-cysteine', 'L', '5862\r\n  -OEChem-08061308103D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    2.2268    1.1231    0.0436 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.3649    1.1718    0.9125 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1766    0.4956   -1.2446 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4351   -1.9834    0.1592 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1262   -0.6592    0.4341 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n    1.4925   -0.5194   -0.2399 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8690    0.3716   -0.0649 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2375   -0.5515    1.5201 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1890   -1.2704    0.1485 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4157   -0.6634   -1.3235 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.2936   -2.1083    0.6947 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2095   -2.7023    0.4860 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3385    1.8238   -0.6762 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9919    1.8374    0.5574 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n5862\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n7\r\n3\r\n6\r\n4\r\n8\r\n5\r\n9\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.41\r\n11 0.36\r\n12 0.36\r\n13 0.18\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.23\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n000016E600000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.3598\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.43\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n20096714 4 18269280071109144560\r\n21040471 1 18410018723511379512\r\n23552449 1 18052253191941322440\r\n24536 1 18271805752613586920\r\n29004967 10 17326342021416917915\r\n5084963 1 17749401321021289146\r\n5943 1 12354312687961778279\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n131.19\r\n2.36\r\n1.58\r\n0.9\r\n1.69\r\n0.47\r\n0.12\r\n-0.75\r\n0.04\r\n-0.42\r\n-0.19\r\n-0.26\r\n-0.23\r\n0.03\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n231.349\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n87.4\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 39, NULL, NULL, NULL),
+(39, 'D-cysteine', 'D', '92851\r\n  -OEChem-08061308123D\r\n\r\n 14 13  0     1  0  0  0  0  0999 V2000\r\n    2.2488   -1.1212    0.0662 S   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4126   -1.1327    0.9166 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1759   -0.5002   -1.2489 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4262    1.9752    0.1568 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1333    0.6496    0.4283 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    1.4976    0.5080   -0.2492 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8651   -0.3786   -0.0698 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2408    0.5415    1.5142 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.4127    0.6233   -1.3357 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.1907    1.2742    0.1150 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.4874    2.1242   -0.8503 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.2123    2.6904    0.5038 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.3242   -1.0006    1.3997 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.0645   -1.7765    0.5660 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  6  1  0  0  0  0\r\n  1 13  1  0  0  0  0\r\n  2  7  1  0  0  0  0\r\n  2 14  1  0  0  0  0\r\n  3  7  2  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 12  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5  7  1  0  0  0  0\r\n  5  8  1  0  0  0  0\r\n  6  9  1  0  0  0  0\r\n  6 10  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n92851\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n8\r\n3\r\n5\r\n4\r\n7\r\n6\r\n9\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n11\r\n1 -0.41\r\n11 0.36\r\n12 0.36\r\n13 0.18\r\n14 0.5\r\n2 -0.65\r\n3 -0.57\r\n4 -0.99\r\n5 0.33\r\n6 0.23\r\n7 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n5\r\n1 2 acceptor\r\n1 3 acceptor\r\n1 4 cation\r\n1 4 donor\r\n3 2 3 7 anion\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n7\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n00016AB300000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.5266\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n25.43\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n137420 1 15968409049070633488\r\n139733 1 8502382130585015634\r\n18185500 45 18058441187468853806\r\n21040471 1 17691411810936495560\r\n23552333 60 16983483964986147863\r\n24536 1 18260544507261388642\r\n29004967 10 18265337394173611096\r\n5943 1 17201082744908601253\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n131.19\r\n2.39\r\n1.57\r\n0.9\r\n1.69\r\n0.48\r\n-0.12\r\n-0.8\r\n-0.02\r\n-0.4\r\n0.18\r\n-0.27\r\n-0.22\r\n-0.03\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n231.285\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n87.5\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 38, NULL, NULL, NULL),
+(40, 'L-proline', 'L', '145742\r\n  -OEChem-08061308173D\r\n\r\n 17 17  0     1  0  0  0  0  0999 V2000\r\n    2.1617   -0.9509   -0.1119 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.5688    1.2164   -0.4953 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.7807    0.9314    0.7770 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.0834   -0.2476    0.7251 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.7235   -1.3171   -0.0031 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9888   -0.6106   -0.4752 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6499    0.8635   -0.3933 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3289    0.1149   -0.0235 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.3625   -0.5522    1.7389 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.9873   -2.1429    0.6671 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.1919   -1.7411   -0.8624 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.2798   -0.9157   -1.4848 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.8187   -0.8485    0.2018 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.1204    1.1932   -1.2945 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.5424    1.4831   -0.2694 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2509    1.8003    0.8023 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.9837   -0.7341   -0.6014 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 16  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n145742\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n3\r\n4\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n16 0.36\r\n17 0.5\r\n2 -0.57\r\n3 -0.9\r\n4 0.33\r\n7 0.27\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n5 3 4 5 6 7 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0002394E00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n6.2424\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.502\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n12897270 3 18193557997957459956\r\n137420 1 8921595011813361833\r\n16714656 1 18411980295268301895\r\n18185500 45 18338511928700687402\r\n20096714 4 18186800253443141793\r\n21040471 1 18268420257358618345\r\n23552423 10 18408319990646790694\r\n24536 1 18336539507951190946\r\n29004967 10 14189569754067799747\r\n369184 2 14764342687340111614\r\n5084963 1 18409164385622551131\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.59\r\n1.31\r\n0.79\r\n0.44\r\n0.03\r\n-0.08\r\n0.1\r\n0.55\r\n-0.04\r\n0.07\r\n-0.08\r\n-0.07\r\n-0.12\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n294.274\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n89\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 41, NULL, NULL, NULL),
+(41, 'D-proline', 'D', '8988\r\n  -OEChem-08061308183D\r\n\r\n 17 17  0     1  0  0  0  0  0999 V2000\r\n   -2.2137    0.9467   -0.1657 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7225   -1.1368    0.6178 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.7304   -1.0853   -0.3656 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.0723    0.1103   -0.6221 C   0  0  2  0  0  0  0  0  0  0  0  0\r\n    0.6784    1.2753    0.0144 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.9016    0.6393    0.6567 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.0995   -0.6264   -0.1511 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.4014   -0.1231    0.0156 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.2073    0.2589   -1.6993 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.1012    1.8406    0.7533 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.0021    1.9733   -0.7671 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7748    1.2975    0.6281 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.6897    0.3957    1.7051 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.5862   -0.4082   -1.1089 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6954   -1.3695    0.3857 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6799   -1.7365   -1.1469 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.0938    0.8126    0.2463 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1  8  1  0  0  0  0\r\n  1 17  1  0  0  0  0\r\n  2  8  2  0  0  0  0\r\n  3  4  1  0  0  0  0\r\n  3  7  1  0  0  0  0\r\n  3 16  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4  8  1  0  0  0  0\r\n  4  9  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 11  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6 12  1  0  0  0  0\r\n  6 13  1  0  0  0  0\r\n  7 14  1  0  0  0  0\r\n  7 15  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n8988\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.4\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n4\r\n5\r\n3\r\n2\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n8\r\n1 -0.65\r\n16 0.36\r\n17 0.5\r\n2 -0.57\r\n3 -0.9\r\n4 0.33\r\n7 0.27\r\n8 0.66\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n2\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n6\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 cation\r\n1 3 donor\r\n3 1 2 8 anion\r\n5 3 4 5 6 7 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n8\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0000231C00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n5.3688\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n30.502\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n10857977 72 18335975480092840840\r\n20096714 4 18059851822174406292\r\n21040471 1 18270677700817365756\r\n23552423 10 18113623378259395166\r\n24536 1 18261384602548072693\r\n29004967 10 18412265034335638138\r\n5084963 1 17845936367354760394\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n147.92\r\n2.86\r\n1.26\r\n0.75\r\n0.39\r\n0.06\r\n-0.02\r\n-0.01\r\n-0.35\r\n-0.03\r\n-0.04\r\n-0.04\r\n-0.02\r\n0.32\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n294.065\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n89.2\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$\r\n', 40, NULL, NULL, NULL),
+(42, 'L-N-methyl tyrosine', 'L', '519723\r\n  -OEChem-08271309073D\r\n\r\n 27 27  0     1  0  0  0  0  0999 V2000\r\n   -1.7158   -1.4419   -1.4325 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -2.1293   -1.6961    0.7833 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.4401   -0.5260   -0.5333 O   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1763    1.0007    0.3092 N   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.8528    0.5507   -0.1158 C   0  0  1  0  0  0  0  0  0  0  0  0\r\n   -0.7903    1.0524    0.8746 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.6107    0.6296    0.4972 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.1090   -0.5693    0.9787 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    1.3680    1.4499   -0.3225 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.9078   -0.9662   -0.1747 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.1971    0.5609   -0.6297 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.4021   -0.9594    0.6306 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.6612    1.0598   -0.6707 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.1783   -0.1450   -0.1942 C   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.6228    0.9443   -1.1147 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.0079    0.6891    1.8889 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -0.8272    2.1484    0.9429 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.1836    2.0194    0.3593 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.5187   -1.2085    1.6283 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    0.9726    2.3885   -0.6999 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -3.9670    0.8609   -1.6577 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -5.1492    1.0314   -0.3609 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -4.3697   -0.5192   -0.5944 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    2.7939   -1.8994    1.0099 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    3.2606    1.6982   -1.3139 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n   -1.7674   -2.4209   -1.4646 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n    4.6332   -1.3833   -0.1164 H   0  0  0  0  0  0  0  0  0  0  0  0\r\n  1 10  1  0  0  0  0\r\n  1 26  1  0  0  0  0\r\n  2 10  2  0  0  0  0\r\n  3 14  1  0  0  0  0\r\n  3 27  1  0  0  0  0\r\n  4  5  1  0  0  0  0\r\n  4 11  1  0  0  0  0\r\n  4 18  1  0  0  0  0\r\n  5  6  1  0  0  0  0\r\n  5 10  1  0  0  0  0\r\n  5 15  1  0  0  0  0\r\n  6  7  1  0  0  0  0\r\n  6 16  1  0  0  0  0\r\n  6 17  1  0  0  0  0\r\n  7  8  2  0  0  0  0\r\n  7  9  1  0  0  0  0\r\n  8 12  1  0  0  0  0\r\n  8 19  1  0  0  0  0\r\n  9 13  2  0  0  0  0\r\n  9 20  1  0  0  0  0\r\n 11 21  1  0  0  0  0\r\n 11 22  1  0  0  0  0\r\n 11 23  1  0  0  0  0\r\n 12 14  2  0  0  0  0\r\n 12 24  1  0  0  0  0\r\n 13 14  1  0  0  0  0\r\n 13 25  1  0  0  0  0\r\nM  END\r\n> <PUBCHEM_COMPOUND_CID>\r\n519723\r\n\r\n> <PUBCHEM_CONFORMER_RMSD>\r\n0.6\r\n\r\n> <PUBCHEM_CONFORMER_DIVERSEORDER>\r\n1\r\n24\r\n3\r\n20\r\n21\r\n27\r\n25\r\n8\r\n2\r\n11\r\n4\r\n23\r\n18\r\n16\r\n17\r\n13\r\n15\r\n22\r\n19\r\n5\r\n14\r\n12\r\n10\r\n7\r\n26\r\n6\r\n9\r\n\r\n> <PUBCHEM_MMFF94_PARTIAL_CHARGES>\r\n21\r\n1 -0.65\r\n10 0.66\r\n11 0.27\r\n12 -0.15\r\n13 -0.15\r\n14 0.08\r\n18 0.36\r\n19 0.15\r\n2 -0.57\r\n20 0.15\r\n24 0.15\r\n25 0.15\r\n26 0.5\r\n27 0.45\r\n3 -0.53\r\n4 -0.9\r\n5 0.33\r\n6 0.14\r\n7 -0.14\r\n8 -0.15\r\n9 -0.15\r\n\r\n> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>\r\n4\r\n\r\n> <PUBCHEM_PHARMACOPHORE_FEATURES>\r\n7\r\n1 1 acceptor\r\n1 2 acceptor\r\n1 3 donor\r\n1 4 cation\r\n1 4 donor\r\n3 1 2 10 anion\r\n6 7 8 9 12 13 14 rings\r\n\r\n> <PUBCHEM_HEAVY_ATOM_COUNT>\r\n14\r\n\r\n> <PUBCHEM_ATOM_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>\r\n1\r\n\r\n> <PUBCHEM_BOND_DEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_BOND_UDEF_STEREO_COUNT>\r\n0\r\n\r\n> <PUBCHEM_ISOTOPIC_ATOM_COUNT>\r\n0\r\n\r\n> <PUBCHEM_COMPONENT_COUNT>\r\n1\r\n\r\n> <PUBCHEM_CACTVS_TAUTO_COUNT>\r\n2\r\n\r\n> <PUBCHEM_CONFORMER_ID>\r\n0007EE2B00000001\r\n\r\n> <PUBCHEM_MMFF94_ENERGY>\r\n29.2939\r\n\r\n> <PUBCHEM_FEATURE_SELFOVERLAP>\r\n35.579\r\n\r\n> <PUBCHEM_SHAPE_FINGERPRINT>\r\n11031198 65 16950567644756160912\r\n11401426 45 18259703398415410816\r\n12932764 1 16226035725980496680\r\n13221675 6 18334013869533584561\r\n13296908 3 18201439232981049576\r\n13839132 238 13046206252644039906\r\n14115302 16 18343865523804476957\r\n14128692 85 18341332275184668624\r\n14911166 2 18410853235593779725\r\n14993402 34 18410008797826290125\r\n15207287 21 16271925995512812133\r\n15775835 57 17749391455428740638\r\n16945 1 18261104145420692952\r\n18186145 218 17603863438245831628\r\n19422 9 18336835289458696335\r\n20201158 50 18202285775182501830\r\n20279233 1 17060618901968101190\r\n20281407 28 16845577517372111380\r\n20523700 14 18408603660372641814\r\n20645476 183 18333730213051415859\r\n21119208 17 18335703823390380116\r\n23402539 116 17632009750364031281\r\n23402655 69 18040434356465043452\r\n23559900 14 18272651256176654848\r\n25 1 17531245024067676984\r\n2748010 2 16391558718881680168\r\n465052 167 17984149425028320007\r\n528886 8 18113334210885416376\r\n74978 22 18060133297193425513\r\n81228 2 16271107924517911048\r\n93112 12 18333452062052182357\r\n9939556 21 18409168839382584196\r\n\r\n> <PUBCHEM_SHAPE_MULTIPOLES>\r\n265.52\r\n6.7\r\n1.52\r\n1.02\r\n0.15\r\n0.19\r\n-0.07\r\n0\r\n-1.63\r\n0.31\r\n-0.01\r\n0.13\r\n0.16\r\n-0.34\r\n\r\n> <PUBCHEM_SHAPE_SELFOVERLAP>\r\n545.553\r\n\r\n> <PUBCHEM_SHAPE_VOLUME>\r\n153\r\n\r\n> <PUBCHEM_COORDINATE_TYPE>\r\n2\r\n5\r\n10\r\n\r\n$$$$', NULL, 12, NULL, NULL),
+(43, 'L-aad', 'L', '', 44, NULL, 5, NULL),
+(44, 'D-aad', 'D', '', 43, NULL, 5, NULL),
+(45, 'L-thr-4c', 'L', '', 46, NULL, 5, NULL),
+(46, 'D-thr-4c', 'D', '', 45, NULL, 5, NULL),
+(47, 'L-ala-oh', 'L', '', 48, NULL, 5, NULL),
+(48, 'D-ala-oh', 'D', '', 47, NULL, 5, NULL),
+(49, 'L-dhb', 'L', '', 50, NULL, 5, NULL),
+(50, 'D-dhb', 'D', '', 49, NULL, 5, NULL),
+(51, 'L-hpg', 'L', '', 52, NULL, 5, NULL),
+(52, 'D-hpg', 'D', '', 51, NULL, 5, NULL),
+(53, 'L-hpg2cl', 'L', '', 54, NULL, 5, NULL),
+(54, 'D-hpg2cl', 'D', '', 53, NULL, 5, NULL),
+(55, 'L-tyrb-o', 'L', '', 56, NULL, 5, NULL),
+(56, 'D-tyrb-o', 'D', '', 55, NULL, 5, NULL),
+(57, 'L-dhpg', 'L', '', 58, NULL, 5, NULL),
+(58, 'D-dhpg', 'D', '', 57, NULL, 5, NULL),
+(59, 'L-pic', 'L', '', 60, NULL, 5, NULL),
+(60, 'D-pic', 'D', '', 59, NULL, 5, NULL),
+(61, 'L-abu', 'L', '', 62, NULL, 5, NULL),
+(62, 'D-abu', 'D', '', 61, NULL, 5, NULL),
+(63, 'L-dpp', 'L', '', 64, NULL, 5, NULL),
+(64, 'D-dpp', 'D', '', 63, NULL, 5, NULL),
+(65, 'L-pip', 'L', '', 66, NULL, 5, NULL),
+(66, 'D-pip', 'D', '', 65, NULL, 5, NULL),
+(67, 'L-phg', 'L', '', 68, NULL, 5, NULL),
+(68, 'D-phg', 'D', '', 67, NULL, 5, NULL),
+(69, 'L-orn-oh', 'L', '', 70, NULL, 5, NULL),
+(70, 'D-orn-oh', 'D', '', 69, NULL, 5, NULL),
+(71, 'L-ala-b', 'L', '', 72, NULL, 5, NULL),
+(72, 'D-ala-b', 'D', '', 71, NULL, 5, NULL),
+(73, 'L-hiv', 'L', '', 74, NULL, 5, NULL),
+(74, 'D-hiv', 'D', '', 73, NULL, 5, NULL),
+(75, 'L-bmt', 'L', '', 76, NULL, 5, NULL),
+(76, 'D-bmt', 'D', '', 75, NULL, 5, NULL),
+(77, 'L-4-mha', 'L', '', 78, NULL, 5, NULL),
+(78, 'D-4-mha', 'D', '', 77, NULL, 5, NULL),
+(79, 'L-dap', 'L', '', 80, NULL, 5, NULL),
+(80, 'D-dap', 'D', '', 79, NULL, 5, NULL),
+(81, 'L-inactive', 'L', '', 82, NULL, 5, NULL),
+(82, 'D-inactive', 'D', '', 81, NULL, 5, NULL),
+(83, 'L-aeo', 'L', '', 84, NULL, 5, NULL),
+(84, 'D-aeo', 'D', '', 83, NULL, 5, NULL),
+(85, 'L-lys-oh', 'L', '', 86, NULL, 5, NULL),
+(86, 'D-lys-oh', 'D', '', 85, NULL, 5, NULL),
+(87, 'L-acol', 'L', '', 88, NULL, 5, NULL),
+(88, 'D-acol', 'D', '', 87, NULL, 5, NULL),
+(89, 'L-topa', 'L', '', 90, NULL, 5, NULL),
+(90, 'D-topa', 'D', '', 89, NULL, 5, NULL),
+(91, 'L-sal', 'L', '', 92, NULL, 5, NULL),
+(92, 'D-sal', 'D', '', 91, NULL, 5, NULL),
+(93, 'L-ahp', 'L', '', 94, NULL, 5, NULL),
+(94, 'D-ahp', 'D', '', 93, NULL, 5, NULL),
+(95, 'L-glu3me', 'L', '', 96, NULL, 5, NULL),
+(96, 'D-glu3me', 'D', '', 95, NULL, 5, NULL),
+(97, 'L-dab', 'L', '', 98, NULL, 5, NULL),
+(98, 'D-dab', 'D', '', 97, NULL, 5, NULL),
+(99, 'L-dhbu-3oh', 'L', '', 100, NULL, 5, NULL),
+(100, 'D-dhbu-3oh', 'D', '', 99, NULL, 5, NULL),
+(101, 'L-asp-3oh', 'L', '', 102, NULL, 5, NULL),
+(102, 'D-asp-3oh', 'D', '', 101, NULL, 5, NULL),
+(103, 'L-thr-4cl', 'L', '', 104, NULL, 5, NULL),
+(104, 'D-thr-4cl', 'D', '', 103, NULL, 5, NULL),
+(105, 'L-ala/val', 'L', '', 106, NULL, 5, NULL),
+(106, 'D-ala/val', 'D', '', 105, NULL, 5, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_substrate_modification`
+-- Table structure for table `databaseInput_substrate_modification`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_substrate_modification` (
@@ -1886,7 +1715,7 @@ CREATE TABLE IF NOT EXISTS `databaseInput_substrate_modification` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `databaseInput_type`
+-- Table structure for table `databaseInput_type`
 --
 
 CREATE TABLE IF NOT EXISTS `databaseInput_type` (
@@ -1897,28 +1726,33 @@ CREATE TABLE IF NOT EXISTS `databaseInput_type` (
   `pfamId` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` longtext COLLATE utf8_unicode_ci NOT NULL,
   `pfamGraphic` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `smashName` varchar(50) COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
 
 --
--- Daten für Tabelle `databaseInput_type`
+-- Dumping data for table `databaseInput_type`
 --
 
-INSERT INTO `databaseInput_type` (`id`, `name`, `isModification`, `pfamName`, `pfamId`, `description`, `pfamGraphic`) VALUES
-(1, 'A', 0, 'AMP-binding (+ AMP-binding C)', 'PF00501', 'Adenylation-Domain\r\nSpecific activation of amino acid by adenylation\r\nPfam recognises different domains even though it''s only one.', '{"type" : "pfama","text" : "A-Domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}'),
-(2, 'C', 0, 'Condensation', 'PF00668', 'Condensation Domain\r\nBuilds peptide bond between two amino acids, each covalenty bound to a thiolation domain. It has a specificity for the chirality of the donor amino acid and for the acceptor amino acid. Thus the latter specificity is the same as that of the following adenylation domain.\r\nPfam also recognises epimerisation domains as condensation domains.', '{"type" : "pfama","text" : "C-Domain","colour" : "#ff5353","display": "true","startStyle" : "curved","endStyle" : "curved"}'),
-(3, 'T', 0, 'PP-binding', 'PF00550', 'Thiolation Domain\r\nDomain covalently carrying amino acids and peptides via thioester bond.', '{"type" : "pfama","text" : "T-Domain","colour" : "#FF00FF","display" : "true","startStyle" : "curved","endStyle" : "curved"}'),
-(4, 'TE', 0, '', '', 'Thioesterase Domain\r\nSynthesis terminating domain, which can introduce a heterocycle depending on the amino acid sequence.', '{"type" : "pfama","text" : "TE-Domain","colour" : "#0040FF","display" : "true",\r\n"startStyle" : "curved","endStyle" : "curved"}'),
-(5, 'E', 0, 'Condensation', 'PF00668', 'Epimerisation Domain\r\nRacemises the amino acid to be introduced. Specificity for chirality given by condensation domain.\r\nAny sole condensation domain at the end of a synthesase in Pfam is an epimerisation domain.', '{"type" : "pfama","text" : "E-Domain","colour" : "#F4FA58","display" : "true","startStyle" : "curved","endStyle" : "curved"}'),
-(6, 'Nm', 0, NULL, NULL, '', ''),
-(7, 'Om', 0, NULL, NULL, '', ''),
-(8, 'M', 0, NULL, NULL, '', ''),
-(9, 'Cy', 0, NULL, NULL, '', '');
+INSERT INTO `databaseInput_type` (`id`, `name`, `isModification`, `pfamName`, `pfamId`, `description`, `pfamGraphic`, `smashName`) VALUES
+(1, 'A', 0, 'AMP-binding (+ AMP-binding C)', 'PF00501', 'Adenylation-Domain\r\nSpecific activation of amino acid by adenylation\r\nPfam recognises different domains even though it''s only one.', '{"type" : "pfama","text" : "A-Domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}', 'AMP-binding'),
+(2, 'C', 0, 'Condensation', 'PF00668', 'Condensation Domain\r\nBuilds peptide bond between two amino acids, each covalenty bound to a thiolation domain. It has a specificity for the chirality of the donor amino acid and for the acceptor amino acid. Thus the latter specificity is the same as that of the following adenylation domain.\r\nPfam also recognises epimerisation domains as condensation domains.', '{"type" : "pfama","text" : "C-Domain","colour" : "#ff5353","display": "true","startStyle" : "curved","endStyle" : "curved"}', NULL),
+(3, 'T', 0, 'PP-binding', 'PF00550', 'Thiolation Domain\r\nDomain covalently carrying amino acids and peptides via thioester bond.', '{"type" : "pfama","text" : "T-Domain","colour" : "#FF00FF","display" : "true","startStyle" : "curved","endStyle" : "curved"}', 'PCP'),
+(4, 'TE', 0, '', 'PF00975.13', 'Thioesterase Domain\r\nSynthesis terminating domain, which can introduce a heterocycle depending on the amino acid sequence.', '{"type" : "pfama","text" : "TE-Domain","colour" : "#0040FF","display" : "true",\r\n"startStyle" : "curved","endStyle" : "curved"}', 'Thioesterase'),
+(5, 'E', 0, 'Condensation', 'PF00668', 'Epimerisation Domain\r\nRacemises the amino acid to be introduced. Specificity for chirality given by condensation domain.\r\nAny sole condensation domain at the end of a synthesase in Pfam is an epimerisation domain.', '{"type" : "pfama","text" : "E-Domain","colour" : "#F4FA58","display" : "true","startStyle" : "curved","endStyle" : "curved"}', 'Epimerization'),
+(6, 'Cy', 0, NULL, NULL, '', '', NULL),
+(7, 'M', 0, NULL, NULL, '', '', NULL),
+(8, 'Nm', 0, '', '', 'N-methylation-domain', '{"type" : "pfama","text" : "A-Domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}', 'nMT'),
+(9, 'Om', 0, '', '', 'O methylation domain', '{"type" : "pfama","text" : "O-methylation-Domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}', 'oMT'),
+(10, 'C_L', 0, '', '', 'Condensation Domain\r\nBuilds peptide bond between two amino acids, each covalenty bound to a thiolation domain. It has a specificity for the chirality of the donor amino acid and for the acceptor amino acid. Thus the latter specificity is the same as that of the following adenylation domain.\r\nPfam also recognises epimerisation domains as condensation domains.', '{"type" : "pfama","text" : "C-Domain","colour" : "#ff5353","display": "true","startStyle" : "curved","endStyle" : "curved"}', 'Condensation_LCL'),
+(11, 'C_D', 0, '', '', 'Condensation Domain\r\nBuilds peptide bond between two amino acids, each covalenty bound to a thiolation domain. It has a specificity for the chirality of the donor amino acid and for the acceptor amino acid. Thus the latter specificity is the same as that of the following adenylation domain.\r\nPfam also recognises epimerisation domains as condensation domains.', '{"type" : "pfama","text" : "C-Domain(D)","colour" : "#ff5353","display": "true","startStyle" : "curved","endStyle" : "curved"}', 'Condensation_DCL'),
+(12, 'NCOM', 0, '', '', 'N terminal communication domain', '{"type" : "pfama","text" : "N-terminal-communication-Domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}', 'NRPS-COM_Nterm'),
+(13, 'CCOM', 0, '', '', 'C-terminal communication domain', '{"type" : "pfama","text" : "C-terminal communication domain","colour" : "#82FA58","display" : "true","startStyle" : "curved",  "endStyle" : "curved"}', 'NRPS-COM_Cterm');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_domainorder`
+-- Table structure for table `designerGui_domainorder`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_domainorder` (
@@ -1936,7 +1770,7 @@ CREATE TABLE IF NOT EXISTS `designerGui_domainorder` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=82 ;
 
 --
--- Daten für Tabelle `designerGui_domainorder`
+-- Dumping data for table `designerGui_domainorder`
 --
 
 INSERT INTO `designerGui_domainorder` (`id`, `nrp_id`, `domain_id`, `order`, `designerStart`, `designerStop`, `gene_id`) VALUES
@@ -1956,7 +1790,7 @@ INSERT INTO `designerGui_domainorder` (`id`, `nrp_id`, `domain_id`, `order`, `de
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_nrp`
+-- Table structure for table `designerGui_nrp`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_nrp` (
@@ -1974,7 +1808,7 @@ CREATE TABLE IF NOT EXISTS `designerGui_nrp` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
 
 --
--- Daten für Tabelle `designerGui_nrp`
+-- Dumping data for table `designerGui_nrp`
 --
 
 INSERT INTO `designerGui_nrp` (`id`, `owner_id`, `name`, `description`, `created`, `modified`, `designed`, `construct_id`) VALUES
@@ -1985,7 +1819,7 @@ INSERT INTO `designerGui_nrp` (`id`, `owner_id`, `name`, `description`, `created
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_species`
+-- Table structure for table `designerGui_species`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_species` (
@@ -1998,7 +1832,7 @@ CREATE TABLE IF NOT EXISTS `designerGui_species` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `designerGui_substrateorder`
+-- Table structure for table `designerGui_substrateorder`
 --
 
 CREATE TABLE IF NOT EXISTS `designerGui_substrateorder` (
@@ -2012,7 +1846,7 @@ CREATE TABLE IF NOT EXISTS `designerGui_substrateorder` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=58 ;
 
 --
--- Daten für Tabelle `designerGui_substrateorder`
+-- Dumping data for table `designerGui_substrateorder`
 --
 
 INSERT INTO `designerGui_substrateorder` (`id`, `nrp_id`, `substrate_id`, `order`) VALUES
@@ -2028,7 +1862,7 @@ INSERT INTO `designerGui_substrateorder` (`id`, `nrp_id`, `substrate_id`, `order
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_admin_log`
+-- Table structure for table `django_admin_log`
 --
 
 CREATE TABLE IF NOT EXISTS `django_admin_log` (
@@ -2043,10 +1877,10 @@ CREATE TABLE IF NOT EXISTS `django_admin_log` (
   PRIMARY KEY (`id`),
   KEY `django_admin_log_6340c63c` (`user_id`),
   KEY `django_admin_log_37ef4eb4` (`content_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=222 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=235 ;
 
 --
--- Daten für Tabelle `django_admin_log`
+-- Dumping data for table `django_admin_log`
 --
 
 INSERT INTO `django_admin_log` (`id`, `action_time`, `user_id`, `content_type_id`, `object_id`, `object_repr`, `action_flag`, `change_message`) VALUES
@@ -2269,13 +2103,26 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `user_id`, `content_type_id
 (217, '2013-09-06 10:18:41', 2, 7, '39', 'Penicillium chrysogenumL-delta-(alpha-Aminoadipoyl)-L-cysteinyl-D-valine synthetase', 1, ''),
 (218, '2013-09-06 10:20:28', 2, 19, '34', 'Actinomycin', 1, ''),
 (219, '2013-09-06 10:21:38', 2, 7, '40', 'Streptomyces chrysomallus subsp. fumigatusacm', 1, ''),
-(220, '2013-09-15 12:16:54', 1, 4, '5', 'sbspks', 1, ''),
-(221, '2013-09-15 12:17:13', 1, 4, '5', 'sbspks', 2, 'Changed password and is_active.');
+(220, '2013-09-16 10:21:55', 1, 4, '5', 'sbspks', 1, ''),
+(221, '2013-09-16 10:22:06', 1, 4, '5', 'sbspks', 2, 'Changed password and is_active.'),
+(222, '2013-09-16 12:40:19', 1, 12, '10', 'C_L', 1, ''),
+(223, '2013-09-16 12:40:58', 1, 12, '11', 'C_D', 1, ''),
+(224, '2013-09-16 12:41:04', 1, 12, '1', 'A', 2, 'Changed smashName.'),
+(225, '2013-09-16 12:43:03', 1, 12, '4', 'TE', 2, 'Changed smashName.'),
+(226, '2013-09-16 12:43:14', 1, 12, '4', 'TE', 2, 'Changed pfamId.'),
+(227, '2013-09-16 12:44:07', 1, 12, '12', 'NCOM', 1, ''),
+(228, '2013-09-16 12:44:53', 1, 12, '13', 'CCOM', 1, ''),
+(229, '2013-09-16 12:45:15', 1, 12, '3', 'T', 2, 'Changed smashName.'),
+(230, '2013-09-16 12:45:46', 1, 12, '11', 'C_D', 2, 'Changed smashName.'),
+(231, '2013-09-16 12:45:55', 1, 12, '10', 'C_L', 2, 'Changed smashName.'),
+(232, '2013-09-16 12:46:35', 1, 12, '5', 'E', 2, 'Changed smashName.'),
+(233, '2013-09-16 12:47:26', 1, 12, '9', 'Om', 2, 'Changed description, pfamGraphic and smashName.'),
+(234, '2013-09-16 12:47:56', 1, 12, '8', 'Nm', 2, 'Changed description, pfamGraphic and smashName.');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_content_type`
+-- Table structure for table `django_content_type`
 --
 
 CREATE TABLE IF NOT EXISTS `django_content_type` (
@@ -2288,7 +2135,7 @@ CREATE TABLE IF NOT EXISTS `django_content_type` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=36 ;
 
 --
--- Daten für Tabelle `django_content_type`
+-- Dumping data for table `django_content_type`
 --
 
 INSERT INTO `django_content_type` (`id`, `name`, `app_label`, `model`) VALUES
@@ -2331,7 +2178,7 @@ INSERT INTO `django_content_type` (`id`, `name`, `app_label`, `model`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_evolution`
+-- Table structure for table `django_evolution`
 --
 
 CREATE TABLE IF NOT EXISTS `django_evolution` (
@@ -2344,7 +2191,7 @@ CREATE TABLE IF NOT EXISTS `django_evolution` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
--- Daten für Tabelle `django_evolution`
+-- Dumping data for table `django_evolution`
 --
 
 INSERT INTO `django_evolution` (`id`, `version_id`, `app_label`, `label`) VALUES
@@ -2354,7 +2201,7 @@ INSERT INTO `django_evolution` (`id`, `version_id`, `app_label`, `label`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_project_version`
+-- Table structure for table `django_project_version`
 --
 
 CREATE TABLE IF NOT EXISTS `django_project_version` (
@@ -2365,7 +2212,7 @@ CREATE TABLE IF NOT EXISTS `django_project_version` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
--- Daten für Tabelle `django_project_version`
+-- Dumping data for table `django_project_version`
 --
 
 INSERT INTO `django_project_version` (`id`, `signature`, `when`) VALUES
@@ -2379,7 +2226,7 @@ INSERT INTO `django_project_version` (`id`, `signature`, `when`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `django_session`
+-- Table structure for table `django_session`
 --
 
 CREATE TABLE IF NOT EXISTS `django_session` (
@@ -2391,13 +2238,13 @@ CREATE TABLE IF NOT EXISTS `django_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Daten für Tabelle `django_session`
+-- Dumping data for table `django_session`
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('016lovoq1er42u9z91dqjrbi6mcivys6', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-29 12:16:38'),
 ('1ollfkongkllk8weh35cx2vbf2a1kyla', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-23 08:36:14'),
 ('2iogxe5p1f0g57espinujeoijy9s2blm', 'MWEyNTcwOTUzOTc5YjJkNGJhMDMzNjdmNjZkNzk0ZDJhZDRiNWNjYjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQJ1Lg==', '2013-09-13 13:30:20'),
+('7gmipuh48wmvow6nhdf3e6ey6xyo6m45', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-30 10:21:46'),
 ('bcgg12r58exsxsdfgivf1cypj3b6jw1w', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-26 13:30:47'),
 ('hxna3pn0n0rhtc2ppdh5ds0db3hooyql', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-10 12:44:27'),
 ('k5sd7dmjzta0elmqdl9t3r04r7keis91', 'NTVkODViYTRmZTUxZmZjYTBiNmM0NThhNjA1MmE4MGQ3NTgzOTBiMzqAAn1xAS4=', '2013-09-19 14:30:54'),
@@ -2407,12 +2254,13 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('qw3f2jha9pn2hmjb0vcdeqqmdr2jchu2', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-13 12:34:43'),
 ('rrdbud8s2wsu7z4di6ibhzjff7786opy', 'NTVkODViYTRmZTUxZmZjYTBiNmM0NThhNjA1MmE4MGQ3NTgzOTBiMzqAAn1xAS4=', '2013-09-20 10:21:42'),
 ('x8x8uttrz8onc6i05kwrh7j4xidno55e', 'ZTY2Mzk3YzRlMzA0NmMzODNiMDdhMTliZDNhYTg5YThkODEwYjdjNzqAAn1xAVgKAAAAdGVzdGNvb2tpZXECWAYAAAB3b3JrZWRxA3Mu', '2013-09-10 12:44:23'),
+('z291jja3cc4kt00yvshlceu1zufdoon0', 'MzE0ZWQ1NjY3M2EyMDZlOGI5NzY4YzE4ZmJjN2NiYjBkNjkwNTM2MjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==', '2013-09-30 12:38:18'),
 ('zst3oiysl243ghqr5z42lfuhtola4ymv', 'NTVkODViYTRmZTUxZmZjYTBiNmM0NThhNjA1MmE4MGQ3NTgzOTBiMzqAAn1xAS4=', '2013-09-11 16:46:13');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_annotation`
+-- Table structure for table `fragment_annotation`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_annotation` (
@@ -2427,7 +2275,7 @@ CREATE TABLE IF NOT EXISTS `fragment_annotation` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_feature`
+-- Table structure for table `fragment_feature`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_feature` (
@@ -2444,7 +2292,7 @@ CREATE TABLE IF NOT EXISTS `fragment_feature` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_gene`
+-- Table structure for table `fragment_gene`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_gene` (
@@ -2460,7 +2308,7 @@ CREATE TABLE IF NOT EXISTS `fragment_gene` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=91 ;
 
 --
--- Daten für Tabelle `fragment_gene`
+-- Dumping data for table `fragment_gene`
 --
 
 INSERT INTO `fragment_gene` (`id`, `owner_id`, `name`, `description`, `sequence`, `origin`, `viewable`) VALUES
@@ -2493,7 +2341,7 @@ INSERT INTO `fragment_gene` (`id`, `owner_id`, `name`, `description`, `sequence`
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_qualifier`
+-- Table structure for table `fragment_qualifier`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_qualifier` (
@@ -2508,7 +2356,7 @@ CREATE TABLE IF NOT EXISTS `fragment_qualifier` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `fragment_reference`
+-- Table structure for table `fragment_reference`
 --
 
 CREATE TABLE IF NOT EXISTS `fragment_reference` (
@@ -2526,7 +2374,7 @@ CREATE TABLE IF NOT EXISTS `fragment_reference` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_construct`
+-- Table structure for table `gibson_construct`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_construct` (
@@ -2545,7 +2393,7 @@ CREATE TABLE IF NOT EXISTS `gibson_construct` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=23 ;
 
 --
--- Daten für Tabelle `gibson_construct`
+-- Dumping data for table `gibson_construct`
 --
 
 INSERT INTO `gibson_construct` (`id`, `owner_id`, `name`, `description`, `genbank_id`, `shape`, `created`, `modified`, `processed`) VALUES
@@ -2559,7 +2407,7 @@ INSERT INTO `gibson_construct` (`id`, `owner_id`, `name`, `description`, `genban
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_constructfragment`
+-- Table structure for table `gibson_constructfragment`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_constructfragment` (
@@ -2581,41 +2429,41 @@ CREATE TABLE IF NOT EXISTS `gibson_constructfragment` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=115 ;
 
 --
--- Daten für Tabelle `gibson_constructfragment`
+-- Dumping data for table `gibson_constructfragment`
 --
 
 INSERT INTO `gibson_constructfragment` (`id`, `construct_id`, `fragment_id`, `order`, `direction`, `start_feature_id`, `start_offset`, `end_feature_id`, `end_offset`, `concentration`) VALUES
-(21, 3, 6, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(22, 3, 7, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(27, 4, 9, 2, 'r', NULL, 0, NULL, 0, '100.0'),
-(28, 4, 8, 0, 'r', NULL, 0, NULL, 0, '100.0'),
-(29, 4, 9, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(80, 17, 58, 0, 'f', NULL, 0, NULL, 0, '100.0'),
-(81, 17, 59, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(82, 17, 60, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(83, 17, 61, 3, 'f', NULL, 0, NULL, 0, '100.0'),
-(84, 17, 62, 4, 'f', NULL, 0, NULL, 0, '100.0'),
-(85, 17, 63, 5, 'f', NULL, 0, NULL, 0, '100.0'),
-(99, 20, 76, 0, 'f', NULL, 0, NULL, 0, '100.0'),
-(100, 20, 77, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(101, 20, 78, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(102, 20, 79, 3, 'f', NULL, 0, NULL, 0, '100.0'),
-(103, 20, 80, 4, 'f', NULL, 0, NULL, 0, '100.0'),
-(104, 20, 81, 5, 'f', NULL, 0, NULL, 0, '100.0'),
-(106, 21, 82, 0, 'f', NULL, 0, NULL, 0, '100.0'),
-(107, 21, 83, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(108, 21, 84, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(109, 22, 85, 0, 'f', NULL, 0, NULL, 0, '100.0'),
-(110, 22, 86, 1, 'f', NULL, 0, NULL, 0, '100.0'),
-(111, 22, 87, 2, 'f', NULL, 0, NULL, 0, '100.0'),
-(112, 22, 88, 3, 'f', NULL, 0, NULL, 0, '100.0'),
-(113, 22, 89, 4, 'f', NULL, 0, NULL, 0, '100.0'),
-(114, 22, 90, 5, 'f', NULL, 0, NULL, 0, '100.0');
+(21, 3, 6, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(22, 3, 7, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(27, 4, 9, 2, 'r', NULL, 0, NULL, 0, 100.0),
+(28, 4, 8, 0, 'r', NULL, 0, NULL, 0, 100.0),
+(29, 4, 9, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(80, 17, 58, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(81, 17, 59, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(82, 17, 60, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(83, 17, 61, 3, 'f', NULL, 0, NULL, 0, 100.0),
+(84, 17, 62, 4, 'f', NULL, 0, NULL, 0, 100.0),
+(85, 17, 63, 5, 'f', NULL, 0, NULL, 0, 100.0),
+(99, 20, 76, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(100, 20, 77, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(101, 20, 78, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(102, 20, 79, 3, 'f', NULL, 0, NULL, 0, 100.0),
+(103, 20, 80, 4, 'f', NULL, 0, NULL, 0, 100.0),
+(104, 20, 81, 5, 'f', NULL, 0, NULL, 0, 100.0),
+(106, 21, 82, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(107, 21, 83, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(108, 21, 84, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(109, 22, 85, 0, 'f', NULL, 0, NULL, 0, 100.0),
+(110, 22, 86, 1, 'f', NULL, 0, NULL, 0, 100.0),
+(111, 22, 87, 2, 'f', NULL, 0, NULL, 0, 100.0),
+(112, 22, 88, 3, 'f', NULL, 0, NULL, 0, 100.0),
+(113, 22, 89, 4, 'f', NULL, 0, NULL, 0, 100.0),
+(114, 22, 90, 5, 'f', NULL, 0, NULL, 0, 100.0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_pcrsettings`
+-- Table structure for table `gibson_pcrsettings`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_pcrsettings` (
@@ -2637,18 +2485,18 @@ CREATE TABLE IF NOT EXISTS `gibson_pcrsettings` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
--- Daten für Tabelle `gibson_pcrsettings`
+-- Dumping data for table `gibson_pcrsettings`
 --
 
 INSERT INTO `gibson_pcrsettings` (`id`, `construct_id`, `repeats`, `volume_each`, `error_margin`, `buffer_s`, `buffer_d`, `dntp_s`, `dntp_d`, `enzyme_s`, `enzyme_d`, `primer_d`, `template_d`) VALUES
-(3, 3, 1, '12.5', 10, '10.0', '1.0', '10.0', '0.8', '2.5', '2.5', '0.4', '100.0'),
-(4, 4, 1, '12.5', 10, '10.0', '1.0', '10.0', '0.8', '2.5', '2.5', '0.4', '100.0'),
-(8, 20, 1, '12.5', 10, '10.0', '1.0', '10.0', '0.8', '2.5', '2.5', '0.4', '100.0');
+(3, 3, 1, 12.5, 10, 10.0, 1.0, 10.0, 0.8, 2.5, 2.5, 0.4, 100.0),
+(4, 4, 1, 12.5, 10, 10.0, 1.0, 10.0, 0.8, 2.5, 2.5, 0.4, 100.0),
+(8, 20, 1, 12.5, 10, 10.0, 1.0, 10.0, 0.8, 2.5, 2.5, 0.4, 100.0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_primer`
+-- Table structure for table `gibson_primer`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_primer` (
@@ -2666,35 +2514,35 @@ CREATE TABLE IF NOT EXISTS `gibson_primer` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=89 ;
 
 --
--- Daten für Tabelle `gibson_primer`
+-- Dumping data for table `gibson_primer`
 --
 
 INSERT INTO `gibson_primer` (`id`, `name`, `construct_id`, `flap_id`, `stick_id`, `boxplot`, `concentration`) VALUES
-(7, 'test_construct-nrp-rev', 3, 14, 13, '', '5.0'),
-(10, 'test_construct-LacI-fwd', 3, 20, 19, '', '5.0'),
-(15, 'h-p-rev', 4, 30, 29, '', '5.0'),
-(16, 'h-p-fwd', 4, 32, 31, '', '5.0'),
-(17, 'h-haaallo-rev', 4, 34, 33, '', '5.0'),
-(18, 'h-haaallo-fwd', 4, 36, 35, '', '5.0'),
-(19, 'h-haaallo-rev', 4, 38, 37, '', '5.0'),
-(20, 'h-haaallo-fwd', 4, 40, 39, '', '5.0'),
-(77, 'hanna Gibson Construct-type:A id:11-rev', 20, 154, 153, '', '5.0'),
-(78, 'hanna Gibson Construct-type:A id:11-fwd', 20, 156, 155, '', '5.0'),
-(79, 'hanna Gibson Construct-type:T id:13-rev', 20, 158, 157, '', '5.0'),
-(80, 'hanna Gibson Construct-type:T id:13-fwd', 20, 160, 159, '', '5.0'),
-(81, 'hanna Gibson Construct-type:C id:25-rev', 20, 162, 161, '', '5.0'),
-(82, 'hanna Gibson Construct-type:C id:25-fwd', 20, 164, 163, '', '5.0'),
-(83, 'hanna Gibson Construct-type:A id:26-rev', 20, 166, 165, '', '5.0'),
-(84, 'hanna Gibson Construct-type:A id:26-fwd', 20, 168, 167, '', '5.0'),
-(85, 'hanna Gibson Construct-type:T id:24-rev', 20, 170, 169, '', '5.0'),
-(86, 'hanna Gibson Construct-type:T id:24-fwd', 20, 172, 171, '', '5.0'),
-(87, 'hanna Gibson Construct-type:TE id:29-rev', 20, 174, 173, '', '5.0'),
-(88, 'hanna Gibson Construct-type:TE id:29-fwd', 20, 176, 175, '', '5.0');
+(7, 'test_construct-nrp-rev', 3, 14, 13, '', 5.0),
+(10, 'test_construct-LacI-fwd', 3, 20, 19, '', 5.0),
+(15, 'h-p-rev', 4, 30, 29, '', 5.0),
+(16, 'h-p-fwd', 4, 32, 31, '', 5.0),
+(17, 'h-haaallo-rev', 4, 34, 33, '', 5.0),
+(18, 'h-haaallo-fwd', 4, 36, 35, '', 5.0),
+(19, 'h-haaallo-rev', 4, 38, 37, '', 5.0),
+(20, 'h-haaallo-fwd', 4, 40, 39, '', 5.0),
+(77, 'hanna Gibson Construct-type:A id:11-rev', 20, 154, 153, '', 5.0),
+(78, 'hanna Gibson Construct-type:A id:11-fwd', 20, 156, 155, '', 5.0),
+(79, 'hanna Gibson Construct-type:T id:13-rev', 20, 158, 157, '', 5.0),
+(80, 'hanna Gibson Construct-type:T id:13-fwd', 20, 160, 159, '', 5.0),
+(81, 'hanna Gibson Construct-type:C id:25-rev', 20, 162, 161, '', 5.0),
+(82, 'hanna Gibson Construct-type:C id:25-fwd', 20, 164, 163, '', 5.0),
+(83, 'hanna Gibson Construct-type:A id:26-rev', 20, 166, 165, '', 5.0),
+(84, 'hanna Gibson Construct-type:A id:26-fwd', 20, 168, 167, '', 5.0),
+(85, 'hanna Gibson Construct-type:T id:24-rev', 20, 170, 169, '', 5.0),
+(86, 'hanna Gibson Construct-type:T id:24-fwd', 20, 172, 171, '', 5.0),
+(87, 'hanna Gibson Construct-type:TE id:29-rev', 20, 174, 173, '', 5.0),
+(88, 'hanna Gibson Construct-type:TE id:29-fwd', 20, 176, 175, '', 5.0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_primerhalf`
+-- Table structure for table `gibson_primerhalf`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_primerhalf` (
@@ -2707,7 +2555,7 @@ CREATE TABLE IF NOT EXISTS `gibson_primerhalf` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=177 ;
 
 --
--- Daten für Tabelle `gibson_primerhalf`
+-- Dumping data for table `gibson_primerhalf`
 --
 
 INSERT INTO `gibson_primerhalf` (`id`, `cfragment_id`, `top`, `length`) VALUES
@@ -2759,7 +2607,7 @@ INSERT INTO `gibson_primerhalf` (`id`, `cfragment_id`, `top`, `length`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_settings`
+-- Table structure for table `gibson_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_settings` (
@@ -2776,18 +2624,18 @@ CREATE TABLE IF NOT EXISTS `gibson_settings` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
--- Daten für Tabelle `gibson_settings`
+-- Dumping data for table `gibson_settings`
 --
 
 INSERT INTO `gibson_settings` (`id`, `construct_id`, `mg_salt`, `na_salt`, `ss_safety`, `min_anneal_tm`, `min_primer_tm`, `min_overlap`) VALUES
-(3, 3, '0.00', '0.050', 3, 50, 60, 20),
-(4, 4, '0.00', '0.050', 3, 50, 60, 20),
-(8, 20, '0.00', '0.050', 3, 50, 60, 20);
+(3, 3, 0.00, 0.050, 3, 50, 60, 20),
+(4, 4, 0.00, 0.050, 3, 50, 60, 20),
+(8, 20, 0.00, 0.050, 3, 50, 60, 20);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `gibson_warning`
+-- Table structure for table `gibson_warning`
 --
 
 CREATE TABLE IF NOT EXISTS `gibson_warning` (
@@ -2802,7 +2650,7 @@ CREATE TABLE IF NOT EXISTS `gibson_warning` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `registration_registrationprofile`
+-- Table structure for table `registration_registrationprofile`
 --
 
 CREATE TABLE IF NOT EXISTS `registration_registrationprofile` (
@@ -2816,7 +2664,7 @@ CREATE TABLE IF NOT EXISTS `registration_registrationprofile` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `south_migrationhistory`
+-- Table structure for table `south_migrationhistory`
 --
 
 CREATE TABLE IF NOT EXISTS `south_migrationhistory` (
@@ -2825,10 +2673,10 @@ CREATE TABLE IF NOT EXISTS `south_migrationhistory` (
   `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
 
 --
--- Daten für Tabelle `south_migrationhistory`
+-- Dumping data for table `south_migrationhistory`
 --
 
 INSERT INTO `south_migrationhistory` (`id`, `app_name`, `migration`, `applied`) VALUES
@@ -2841,41 +2689,42 @@ INSERT INTO `south_migrationhistory` (`id`, `app_name`, `migration`, `applied`) 
 (7, 'fragment', '0002_auto__add_field_gene_viewable', '2013-09-09 08:17:23'),
 (8, 'designerGui', '0002_auto__chg_field_nrp_construct__add_field_domainorder_gene', '2013-09-09 11:51:57'),
 (9, 'databaseInput', '0002_auto__add_field_substrate_user__add_field_origin_user__add_field_cds_u', '2013-09-11 19:34:16'),
-(10, 'databaseInput', '0003_auto__add_field_type_pfamGraphic', '2013-09-12 12:37:34');
+(10, 'databaseInput', '0003_auto__add_field_type_pfamGraphic', '2013-09-12 12:37:34'),
+(11, 'databaseInput', '0004_auto__add_field_substrate_smashName__add_field_type_smashName__chg_fie', '2013-09-16 12:38:02');
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `auth_group_permissions`
+-- Constraints for table `auth_group_permissions`
 --
 ALTER TABLE `auth_group_permissions`
   ADD CONSTRAINT `group_id_refs_id_f4b32aac` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   ADD CONSTRAINT `permission_id_refs_id_6ba0f519` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`);
 
 --
--- Constraints der Tabelle `auth_permission`
+-- Constraints for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
   ADD CONSTRAINT `content_type_id_refs_id_d043b34a` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`);
 
 --
--- Constraints der Tabelle `auth_user_groups`
+-- Constraints for table `auth_user_groups`
 --
 ALTER TABLE `auth_user_groups`
   ADD CONSTRAINT `user_id_refs_id_40c41112` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `group_id_refs_id_274b862c` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`);
 
 --
--- Constraints der Tabelle `auth_user_user_permissions`
+-- Constraints for table `auth_user_user_permissions`
 --
 ALTER TABLE `auth_user_user_permissions`
   ADD CONSTRAINT `user_id_refs_id_4dc23c39` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `permission_id_refs_id_35d9ac25` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_cds`
+-- Constraints for table `databaseInput_cds`
 --
 ALTER TABLE `databaseInput_cds`
   ADD CONSTRAINT `user_id_refs_id_ee336d53` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -2883,22 +2732,22 @@ ALTER TABLE `databaseInput_cds`
   ADD CONSTRAINT `origin_id_refs_id_84c4703b` FOREIGN KEY (`origin_id`) REFERENCES `databaseInput_origin` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_domain`
+-- Constraints for table `databaseInput_domain`
 --
 ALTER TABLE `databaseInput_domain`
-  ADD CONSTRAINT `user_id_refs_id_8a5a6f28` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `cds_id_refs_id_c125f98e` FOREIGN KEY (`cds_id`) REFERENCES `databaseInput_cds` (`id`),
-  ADD CONSTRAINT `domainType_id_refs_id_19aecaa4` FOREIGN KEY (`domainType_id`) REFERENCES `databaseInput_type` (`id`);
+  ADD CONSTRAINT `domainType_id_refs_id_19aecaa4` FOREIGN KEY (`domainType_id`) REFERENCES `databaseInput_type` (`id`),
+  ADD CONSTRAINT `user_id_refs_id_8a5a6f28` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_domain_substrateSpecificity`
+-- Constraints for table `databaseInput_domain_substrateSpecificity`
 --
 ALTER TABLE `databaseInput_domain_substrateSpecificity`
   ADD CONSTRAINT `substrate_id_refs_id_1e8e4d24` FOREIGN KEY (`substrate_id`) REFERENCES `databaseInput_substrate` (`id`),
   ADD CONSTRAINT `domain_id_refs_id_a08cf1d5` FOREIGN KEY (`domain_id`) REFERENCES `databaseInput_domain` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_linkout`
+-- Constraints for table `databaseInput_linkout`
 --
 ALTER TABLE `databaseInput_linkout`
   ADD CONSTRAINT `user_id_refs_id_36052dc4` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -2906,41 +2755,41 @@ ALTER TABLE `databaseInput_linkout`
   ADD CONSTRAINT `linkoutType_id_refs_id_85a650b7` FOREIGN KEY (`linkoutType_id`) REFERENCES `databaseInput_linkouttype` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_modification`
+-- Constraints for table `databaseInput_modification`
 --
 ALTER TABLE `databaseInput_modification`
   ADD CONSTRAINT `domainType_id_refs_id_8a961dff` FOREIGN KEY (`domainType_id`) REFERENCES `databaseInput_type` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_origin`
+-- Constraints for table `databaseInput_origin`
 --
 ALTER TABLE `databaseInput_origin`
   ADD CONSTRAINT `user_id_refs_id_fddfc6bb` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `parent_id_refs_id_a1a829d3` FOREIGN KEY (`parent_id`) REFERENCES `databaseInput_origin` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_product`
+-- Constraints for table `databaseInput_product`
 --
 ALTER TABLE `databaseInput_product`
   ADD CONSTRAINT `user_id_refs_id_969d00c6` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_substrate`
+-- Constraints for table `databaseInput_substrate`
 --
 ALTER TABLE `databaseInput_substrate`
-  ADD CONSTRAINT `user_id_refs_id_2a47e280` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   ADD CONSTRAINT `enantiomer_id_refs_id_80f9cfa5` FOREIGN KEY (`enantiomer_id`) REFERENCES `databaseInput_substrate` (`id`),
-  ADD CONSTRAINT `parent_id_refs_id_80f9cfa5` FOREIGN KEY (`parent_id`) REFERENCES `databaseInput_substrate` (`id`);
+  ADD CONSTRAINT `parent_id_refs_id_80f9cfa5` FOREIGN KEY (`parent_id`) REFERENCES `databaseInput_substrate` (`id`),
+  ADD CONSTRAINT `user_id_refs_id_2a47e280` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `databaseInput_substrate_modification`
+-- Constraints for table `databaseInput_substrate_modification`
 --
 ALTER TABLE `databaseInput_substrate_modification`
   ADD CONSTRAINT `modification_id_refs_id_7df1fd5c` FOREIGN KEY (`modification_id`) REFERENCES `databaseInput_modification` (`id`),
   ADD CONSTRAINT `substrate_id_refs_id_0fd5611a` FOREIGN KEY (`substrate_id`) REFERENCES `databaseInput_substrate` (`id`);
 
 --
--- Constraints der Tabelle `designerGui_domainorder`
+-- Constraints for table `designerGui_domainorder`
 --
 ALTER TABLE `designerGui_domainorder`
   ADD CONSTRAINT `gene_id_refs_id_f4397561` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`),
@@ -2948,71 +2797,71 @@ ALTER TABLE `designerGui_domainorder`
   ADD CONSTRAINT `nrp_id_refs_id_de0421e2` FOREIGN KEY (`nrp_id`) REFERENCES `designerGui_nrp` (`id`);
 
 --
--- Constraints der Tabelle `designerGui_nrp`
+-- Constraints for table `designerGui_nrp`
 --
 ALTER TABLE `designerGui_nrp`
   ADD CONSTRAINT `construct_id_refs_id_a1a08db0` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`),
   ADD CONSTRAINT `owner_id_refs_id_b0afa479` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `designerGui_substrateorder`
+-- Constraints for table `designerGui_substrateorder`
 --
 ALTER TABLE `designerGui_substrateorder`
   ADD CONSTRAINT `nrp_id_refs_id_82e72640` FOREIGN KEY (`nrp_id`) REFERENCES `designerGui_nrp` (`id`),
   ADD CONSTRAINT `substrate_id_refs_id_9eb8fd0a` FOREIGN KEY (`substrate_id`) REFERENCES `databaseInput_substrate` (`id`);
 
 --
--- Constraints der Tabelle `django_admin_log`
+-- Constraints for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   ADD CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `django_evolution`
+-- Constraints for table `django_evolution`
 --
 ALTER TABLE `django_evolution`
   ADD CONSTRAINT `version_id_refs_id_946f97c5` FOREIGN KEY (`version_id`) REFERENCES `django_project_version` (`id`);
 
 --
--- Constraints der Tabelle `fragment_annotation`
+-- Constraints for table `fragment_annotation`
 --
 ALTER TABLE `fragment_annotation`
   ADD CONSTRAINT `gene_id_refs_id_64b20c84` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`);
 
 --
--- Constraints der Tabelle `fragment_feature`
+-- Constraints for table `fragment_feature`
 --
 ALTER TABLE `fragment_feature`
   ADD CONSTRAINT `gene_id_refs_id_6b73cc15` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`);
 
 --
--- Constraints der Tabelle `fragment_gene`
+-- Constraints for table `fragment_gene`
 --
 ALTER TABLE `fragment_gene`
   ADD CONSTRAINT `owner_id_refs_id_97a6e397` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `fragment_qualifier`
+-- Constraints for table `fragment_qualifier`
 --
 ALTER TABLE `fragment_qualifier`
   ADD CONSTRAINT `feature_id_refs_id_90cf6677` FOREIGN KEY (`feature_id`) REFERENCES `fragment_feature` (`id`);
 
 --
--- Constraints der Tabelle `fragment_reference`
+-- Constraints for table `fragment_reference`
 --
 ALTER TABLE `fragment_reference`
   ADD CONSTRAINT `gene_id_refs_id_8c400d20` FOREIGN KEY (`gene_id`) REFERENCES `fragment_gene` (`id`);
 
 --
--- Constraints der Tabelle `gibson_construct`
+-- Constraints for table `gibson_construct`
 --
 ALTER TABLE `gibson_construct`
   ADD CONSTRAINT `genbank_id_refs_id_12d92277` FOREIGN KEY (`genbank_id`) REFERENCES `fragment_gene` (`id`),
   ADD CONSTRAINT `owner_id_refs_id_be6da168` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Constraints der Tabelle `gibson_constructfragment`
+-- Constraints for table `gibson_constructfragment`
 --
 ALTER TABLE `gibson_constructfragment`
   ADD CONSTRAINT `construct_id_refs_id_4f15b550` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`),
@@ -3021,13 +2870,13 @@ ALTER TABLE `gibson_constructfragment`
   ADD CONSTRAINT `start_feature_id_refs_id_fe3ea4c3` FOREIGN KEY (`start_feature_id`) REFERENCES `fragment_feature` (`id`);
 
 --
--- Constraints der Tabelle `gibson_pcrsettings`
+-- Constraints for table `gibson_pcrsettings`
 --
 ALTER TABLE `gibson_pcrsettings`
   ADD CONSTRAINT `construct_id_refs_id_0d04e31b` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`);
 
 --
--- Constraints der Tabelle `gibson_primer`
+-- Constraints for table `gibson_primer`
 --
 ALTER TABLE `gibson_primer`
   ADD CONSTRAINT `construct_id_refs_id_31ba4b62` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`),
@@ -3035,25 +2884,25 @@ ALTER TABLE `gibson_primer`
   ADD CONSTRAINT `stick_id_refs_id_5a268703` FOREIGN KEY (`stick_id`) REFERENCES `gibson_primerhalf` (`id`);
 
 --
--- Constraints der Tabelle `gibson_primerhalf`
+-- Constraints for table `gibson_primerhalf`
 --
 ALTER TABLE `gibson_primerhalf`
   ADD CONSTRAINT `cfragment_id_refs_id_8044d746` FOREIGN KEY (`cfragment_id`) REFERENCES `gibson_constructfragment` (`id`);
 
 --
--- Constraints der Tabelle `gibson_settings`
+-- Constraints for table `gibson_settings`
 --
 ALTER TABLE `gibson_settings`
   ADD CONSTRAINT `construct_id_refs_id_fec4e6b3` FOREIGN KEY (`construct_id`) REFERENCES `gibson_construct` (`id`);
 
 --
--- Constraints der Tabelle `gibson_warning`
+-- Constraints for table `gibson_warning`
 --
 ALTER TABLE `gibson_warning`
   ADD CONSTRAINT `primer_id_refs_id_5c9bedd8` FOREIGN KEY (`primer_id`) REFERENCES `gibson_primer` (`id`);
 
 --
--- Constraints der Tabelle `registration_registrationprofile`
+-- Constraints for table `registration_registrationprofile`
 --
 ALTER TABLE `registration_registrationprofile`
   ADD CONSTRAINT `user_id_refs_id_954d2985` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);

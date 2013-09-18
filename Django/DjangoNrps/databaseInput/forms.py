@@ -24,3 +24,9 @@ class CdsForm(ModelForm):
 class OriginForm(ModelForm):
 	class Meta:
 		model = Origin
+
+class DomainForm(ModelForm):
+    class Meta:
+        model = Domain
+        fields = ['module', 'domainType', 'substrateSpecificity', 'description',
+        	'pfamStart', 'pfamStop', 'definedStart','definedStop']

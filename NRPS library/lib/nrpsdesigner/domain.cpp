@@ -229,8 +229,6 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST ID_NODE, BAD_CAST std::to_string(id()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST TYPE_NODE, BAD_CAST toString(type()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST MODULE_NODE, BAD_CAST std::to_string(module()).c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST PRODUCTID_NODE, BAD_CAST std::to_string(product()->id()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST GENEDESCRIPTION_NODE, BAD_CAST geneDescription().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST GENENAME_NODE, BAD_CAST geneName().c_str());
@@ -240,6 +238,11 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEPFAMLINKERAFTER_NODE, BAD_CAST nativePfamLinkerAfter().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERBEFORE_NODE, BAD_CAST nativeDefinedLinkerBefore().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERAFTER_NODE, BAD_CAST nativeDefinedLinkerAfter().c_str());
+
+    if (id() > 0) {
+        xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());
+        xmlTextWriterWriteElement(writer, BAD_CAST PRODUCTID_NODE, BAD_CAST std::to_string(product()->id()).c_str());
+    }
 }
 
 void Domain::endXml(xmlTextWriterPtr writer) const

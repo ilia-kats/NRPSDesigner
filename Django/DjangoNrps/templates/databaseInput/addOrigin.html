@@ -3,14 +3,25 @@
   <h3 id="myModalLabel">Add new origin</h3>
 </div>
 <div class="modal-body">
-  <form action="" method="post">{% csrf_token %}
+  <form id="addOriginForm" action="" method="post">
   {{ form.as_p }}
 
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <input type="submit" value="Submit Origin" class="btn btn-inverse" name="originSubmit"/></div>
+    <button id="submitOrigin" class="btn btn-inverse">Submit Origin</button>
   </div>
 
 </form>
 </div>
+
+<script>
+jQuery("#addOriginForm").on( "submit", function( event ) {
+event.preventDefault();
+console.log( jQuery(this).serialize() );
+});
+
+jQuery("#submitOrigin").button().click(function() {
+	alert(jQuery("#addOriginForm").serialize());
+});
+</script>

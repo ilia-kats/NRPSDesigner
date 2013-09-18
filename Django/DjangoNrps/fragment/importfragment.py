@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from django.shortcuts import render_to_response
 
-import simplejson as json
+import json
 from gibson.jsonresponses import JsonResponse, ERROR, RawJsonResponse
 
 from Bio import SeqIO

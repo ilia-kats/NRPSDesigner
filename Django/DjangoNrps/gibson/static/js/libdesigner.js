@@ -10,7 +10,7 @@ var libDesigner = new function()
     this.getConstructByID = function(cid, _suc)
     {
         AJAX.post({
-            url: '/gibthon/api/' + cid + '/getInfo/', 
+            url: gibthon_api_url + cid + '/getInfo/',
             success: function(data)
             {
                 _suc(new Construct(data));
@@ -111,7 +111,7 @@ function Construct(data)
     this.addFragment = function(f, position, direction, _suc)
     {
         AJAX.post({
-            url: '/gibthon/api/' + this.id + '/addFragment/', 
+            url: gibthon_api_url + this.id + '/addFragment/',
             data: {'fid': f.getID(), 'pos': position, 'dir':direction,}, 
             success: function(cf) {
                 if(jQuery.isFunction(_suc)) _suc(new ConstructFragment(cf, f));
@@ -126,7 +126,7 @@ function Construct(data)
     this.rmFragment = function(cfid, _suc)
     {
         AJAX.post({
-            url: '/gibthon/api/' + this.id + '/rmFragment/', 
+            url: gibthon_api_url + this.id + '/rmFragment/',
             data: {'cfid': cfid,}, 
             success: function() {if(_suc!=undefined) _suc();},
         });
@@ -135,7 +135,7 @@ function Construct(data)
     this.reorder = function(cfids, dirs, _suc)
     {
         AJAX.post({
-            url: '/gibthon/api/' + this.id + '/saveOrder/', 
+            url: gibthon_api_url + this.id + '/saveOrder/',
             data: {'cfid[]':cfids, 'direction[]':dirs,},
             success: function() {if(_suc!=undefined) _suc();},
         });
@@ -148,7 +148,7 @@ function Construct(data)
         if(desc!=undefined)
             this.desc = desc;
         AJAX.post({
-            url: '/gibthon/api/' + this.id + '/saveMeta/', 
+            url: gibthon_api_url + this.id + '/saveMeta/',
             data: {'name': this.name, 'desc': this.desc,}, 
         });
     }

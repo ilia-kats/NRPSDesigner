@@ -61,7 +61,7 @@ class NRP(models.Model):
 			domainSequence = cdsSequence[domainStart:domainStop]
 
 			domainGene = Gene.objects.create(owner = self.owner,
-				name = 'type:' + str(domain.domainType) + ' gene:' + str(domain.cds.geneName),
+				name = 'type:' + str(domain.domainType),# + ' gene:' + str(domain.cds.geneName),
 				description = 'NRPS designer',
 				sequence = domainSequence,
 				origin = 'ND',

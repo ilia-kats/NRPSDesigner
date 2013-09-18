@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <style type="text/css">
     .walkthrough-item div {
         padding: 1em 1.5em;
@@ -22,7 +23,7 @@ what's in the works.
 
 <div class='walkthrough-item'>
     <div class='walkthrough-image center'>
-        <img width='50%' src='/static/images/walkthrough/1.png'></img>
+        <img width='50%' src='{% static "images/walkthrough/1.png" %}'></img>
     </div>
     <p>
     Fragments can be imported from various sources including NCBI entrez and a
@@ -34,7 +35,7 @@ what's in the works.
 
 <div class='walkthrough-item'>
     <div class='walkthrough-image center'>
-        <img width='50%' src='/static/images/walkthrough/2.png'></img>
+        <img width='50%' src='{% static "images/walkthrough/2.png" %}'></img>
     </div>
     <p>
     Fragments can be cropped in the fragment view, in the `fragment' app.
@@ -51,7 +52,7 @@ what's in the works.
 
 <div class='walkthrough-item'>
     <div class='walkthrough-image center'>
-        <img width='50%' src='/static/images/walkthrough/3.png'></img>
+        <img width='50%' src='{% static "images/walkthrough/3.png" %}'></img>
     </div>
     <p>
     Drag and drop the fragments into their correct order in the Construct
@@ -64,7 +65,7 @@ what's in the works.
 
 <div class='walkthrough-item'>
     <div class='walkthrough-image center'>
-        <img width='50%' src='/static/images/walkthrough/4.png'></img>
+        <img width='50%' src='{% static "images/walkthrough/4.png" %}'></img>
     </div>
     <p>
     Enter the settings for the reaction(s) in the settings tab
@@ -75,7 +76,7 @@ what's in the works.
 
 <div class='walkthrough-item'>
     <div class='walkthrough-image center'>
-        <img width='50%' src='/static/images/walkthrough/5.png'></img>
+        <img width='50%' src='{% static "images/walkthrough/5.png" %}'></img>
     </div>
     <p>
     Click process to design your primers
@@ -86,7 +87,7 @@ what's in the works.
 
 <div class='walkthrough-item'>
     <div class='walkthrough-image center'>
-        <img width='50%' src='/static/images/walkthrough/6.png'></img>
+        <img width='50%' src='{% static "images/walkthrough/6.png" %}'></img>
     </div>
     <p>
     Warnings are displayed whenever gibthon detects a potential problem with your
