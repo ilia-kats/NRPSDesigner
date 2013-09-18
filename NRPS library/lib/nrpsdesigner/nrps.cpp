@@ -74,11 +74,11 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
     xmlTextWriterStartElement(writer, BAD_CAST DOMAINS_NODE);
     AbstractDatabaseConnector *dbconn = AbstractDatabaseConnector::getInstance();
     for (const auto &domain : *this) {
-        if (domain->id() > 0) {
-            dbconn->fillDomain(domain);
+        dbconn->fillDomain(domain);
+        if (domain->origin() != nullptr)
             originsToWrite.push_back(domain->origin());
+        if (domain->product() != nullptr)
             seenProducts.insert(domain->product());
-        }
         domain->toXml(writer);
     }
     xmlTextWriterEndElement(writer);
