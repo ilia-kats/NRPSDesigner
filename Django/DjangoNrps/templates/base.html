@@ -39,11 +39,7 @@
 <!--JS for Intro.js-->
 <script src="{% static "js/intro.js" %}"></script>
 
-
-{% block js-include %}{% endblock %}
-
 <script type="text/javascript">
-
 var STATIC_URL = "{{ STATIC_URL }}";
 
 jQuery.ajaxSetup({
@@ -56,6 +52,8 @@ jQuery.ajaxSetup({
 });
 
 </script>
+
+{% block js-include %}{% endblock %}
 
 {% block js %}{% endblock %}
 <style type="text/css">
