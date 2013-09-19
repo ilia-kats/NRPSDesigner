@@ -1,10 +1,11 @@
 from django.core.exceptions import ValidationError
+from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
+from Bio.Data.CodonTable import TranslationError
 
-def validate_coding_seq(sequence):
-	if not len(sequence) % 3:
-		msg = "Cds must have length which is a multiple of 3!"
-		raise ValidationError(msg)
-	if not sequence[0:3].upper() == "ATG":
-		msg = "Cds should be starting with ATG!"
-		raise ValidationError(msg)
+def validateCodingSeq(sequence):
+	try:
+		Seq(sequence, IUPAC.unambiguous_dna).translate(table="Bacterial", cds=True)
+	except TranslationError as e:
+		raise ValidationError(e)
 

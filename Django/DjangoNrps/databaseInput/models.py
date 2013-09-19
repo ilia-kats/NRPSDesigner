@@ -6,11 +6,13 @@ from django.contrib.contenttypes import generic
 
 from nrpsSMASH.analyzeNrpCds import nrpsSmash
 
+from .validators import validateCodingSeq
+
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     product = models.ForeignKey('Product', blank=True, null=True)
     geneName = models.CharField(max_length=100) 
-    dnaSequence = models.TextField()
+    dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
@@ -81,6 +83,13 @@ class Domain(models.Model):
 
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
+
+    def get_sequence(self):
+        cdsSequence = domain.cds.dnaSequence
+        domainStart = domain.definedStart - 1
+        domainStop  = domain.definedLinkerStop
+        domainSequence = cdsSequence[domainStart:domainStop]
+        return domainSequence
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)

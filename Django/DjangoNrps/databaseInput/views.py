@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.views.generic.base import TemplateView
 from django.views.generic import CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -10,12 +10,12 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth import get_user_model
 
 from django.forms.models import inlineformset_factory
-import pdb
+from django.contrib.auth.decorators import login_required
 
 import json
 import requests
 import time
-import pdb
+
 from xml.dom.minidom import parseString
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -23,6 +23,8 @@ from Bio.Alphabet import IUPAC
 
 from databaseInput.models import Origin, Cds, Domain
 from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm
+
+from gibson.jsonresponses import JsonResponse, ERROR
 
 # Create your views here.
 
@@ -55,21 +57,53 @@ from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm
 #                 domainFormSet = DomainFormSet(request.POST, instance = cds)
 #                 if domainFormSet.is_valid():
 #                     cds.save()
-#                     domainFormSet.save()
+#                     domainFormSet.save()pd
 #                     return HttpResponseRedirect("http://www.google.com")
 #                 else:
 #                     return HttpResponseRedirect("http://www.yahoo.com")
 
 #             return HttpResponseRedirect(reverse_lazy("pfam"))
 
-class OriginCreateView(CreateView):
-    template_name = 'databaseInput/addOrigin.html'
-    form_class = OriginForm
-    success_url=reverse_lazy('pfam')
+
+def origin_add(request):
+    t = loader.get_template('databaseInput/addOrigin.html')
+    c = RequestContext(request, {
+        'form':OriginForm(prefix='origin'),
+    })
+    return HttpResponse(t.render(c))
+
+@login_required
+def origin_ajax_save(request):
+    if request.method == "POST":
+        originForm = OriginForm(request.POST, prefix='origin')
+        if originForm.is_valid():
+            origin = originForm.save()
+            cdsForm = CdsForm(request.POST, prefix='cds')
+            try:
+                cdsForm._clean_fields()
+                initialDict = cdsForm.cleaned_data
+            except:
+                initialDict = {}
+            initialDict['origin'] = origin
+            updatedCdsForm = CdsForm(initial=initialDict,prefix='cds')
+
+            t = loader.get_template('databaseInput/cdsInputTab.html')
+            c = RequestContext(request, {
+            'form':updatedCdsForm,
+                })
+            return JsonResponse({'html': t.render(c)})
+
+        else:
+            t = loader.get_template('databaseInput/addOrigin.html')
+            c = RequestContext(request, {
+            'form':originForm,
+                })
+            return JsonResponse({'html': t.render(c)}, ERROR)
+
+
 
 def cdsInput(request):
     t = loader.get_template('databaseInput/cdsInput.html')
-    
     c = RequestContext(request, {
         'form':CdsForm(prefix='cds'),
     })
@@ -85,8 +119,17 @@ def domainInput(request):
             DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
             c = RequestContext(request, {
             'originSet':DomainFormSet(initial = initialDict),
-             })
-            return HttpResponse(t.render(c))
+                })
+            #return HttpResponse(t.render(c))
+            return JsonResponse({'html': t.render(c),})
+        else:
+            t = loader.get_template('databaseInput/cdsInputTab.html')
+            c = RequestContext(request, {
+            'form':cdsForm,
+                })
+            return JsonResponse({'html': t.render(c)}, ERROR)
+    
+
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
