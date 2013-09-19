@@ -17,7 +17,7 @@ partsURL = "http://parts.igem.org/cgi/xml/part.cgi?part=%s"
 #regexes for all possible parts - add more if you discover them!
 name_forms = ["^bba_[a-z][0-9]{0,15}$",
               "^psb[0-9a-z]{0,15}$"]
-import pdb
+
 def isValidPart(name):
     """
     Check if name is a valid part name
@@ -46,7 +46,7 @@ class Part:
                 return asoup.find(tag).string.strip()
             else:
                 return default
-        pdb.set_trace()
+
         #name, description, type, status, etc
         self.name = getTag(soup, "part_name")
         self.short_name = getTag(soup, "part_short_name")

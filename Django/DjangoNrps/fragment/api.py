@@ -195,7 +195,7 @@ def get_fragment(request, fid):
 def list_fragments(request):
     """Return metadata of all fragments owned by a user"""
     try:
-        frags = Gene.objects.filter(owner=request.user)
+        frags = Gene.objects.filter(owner=request.user, viewable__in=['L', 'G'])
     except ObjectDoesNotExist:
         return JsonResponse('Could not read fragments', ERROR)
     ret = []

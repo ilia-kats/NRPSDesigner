@@ -62,15 +62,15 @@ class Gene(models.Model):
 		('H', 'Hidden')
 	)
 
-	viewable = models	.CharField(max_length=1, choices = VIEWABLE_CHOICES, default = "L")
+	viewable = models.CharField(max_length=1, choices = VIEWABLE_CHOICES, default = "L")
 
 	def __unicode__(self):
 		return self.name
 	
 
-	def add(_record, _origin, _user, errors = False):
+	def add(_record, _origin, _user, _viewable='L', errors = False):
 		t = 0
-		g = Gene(owner=_user, name=_record.name,description=_record.description,sequence=_record.seq, origin=_origin)
+		g = Gene(owner=_user, name=_record.name,description=_record.description,sequence=_record.seq, origin=_origin, viewable=_viewable)
 		g.save()
 		for key,value in _record.annotations.items():
 			try:

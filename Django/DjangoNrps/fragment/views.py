@@ -22,7 +22,7 @@ def get_fragment(user, fid):
 
 @login_required
 def fragments(request):
-	gene_list = Gene.objects.all().filter(owner=request.user)
+	gene_list = Gene.objects.filter(owner=request.user, viewable__in=['L', 'G'])
 	t = loader.get_template('fragment/fragments.html')
 	c = RequestContext(request,{
 		'fragment_list':gene_list,
