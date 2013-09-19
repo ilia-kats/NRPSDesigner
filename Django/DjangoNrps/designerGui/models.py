@@ -56,10 +56,7 @@ class NRP(models.Model):
 			shape = 'c')
 		for count, domainId in enumerate(self.getDomainSequence()):
 			domain = Domain.objects.get(pk=domainId)
-			cdsSequence = domain.cds.dnaSequence
-			domainStart = domain.definedStart - 1
-			domainStop  = domain.definedLinkerStop
-			domainSequence = cdsSequence[domainStart:domainStop]
+			domainSequence = domain.get_sequence()
 
 			domainGene = Gene.objects.create(owner = self.owner,
 				name = 'type:' + str(domain.domainType),# + ' gene:' + str(domain.cds.geneName),

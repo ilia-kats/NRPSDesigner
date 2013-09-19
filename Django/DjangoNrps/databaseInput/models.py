@@ -84,6 +84,13 @@ class Domain(models.Model):
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
+    def get_sequence(self):
+        cdsSequence = domain.cds.dnaSequence
+        domainStart = domain.definedStart - 1
+        domainStop  = domain.definedLinkerStop
+        domainSequence = cdsSequence[domainStart:domainStop]
+        return domainSequence
+
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')))
