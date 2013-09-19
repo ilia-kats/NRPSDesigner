@@ -85,9 +85,9 @@ class Domain(models.Model):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
     def get_sequence(self):
-        cdsSequence = domain.cds.dnaSequence
-        domainStart = domain.definedStart - 1
-        domainStop  = domain.definedLinkerStop
+        cdsSequence = self.cds.dnaSequence
+        domainStart = self.definedStart - 1
+        domainStop  = self.definedLinkerStop
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
 

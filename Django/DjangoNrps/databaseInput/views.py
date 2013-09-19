@@ -28,6 +28,15 @@ from gibson.jsonresponses import JsonResponse, ERROR
 
 # Create your views here.
 
+from databaseInput.MSA.MSA import clustaloMSA
+
+def msa_view(request):
+    t = loader.get_template('databaseInput/MSA_test.html')
+    c = RequestContext(request,{
+            'jsonMSA': clustaloMSA('A')
+        })
+    return HttpResponse(t.render(c))
+
 # class PfamView(TemplateView):
 #     template_name = 'databaseInput/pfam.html'
 #     #form_class = CdsForm(prefix = 'cds')

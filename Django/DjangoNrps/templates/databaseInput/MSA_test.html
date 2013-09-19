@@ -1,8 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<title>Dokument zum Testen des Multiplen Sequence Alignments</title>
+
+</head>
+<body onLoad="init();draw(0,0,0);">
+
+	Change color-scheme:<select onchange="change_scheme(this.value); draw(0,0,0); ">
+		<option value="0">Joshua</option>
+		<option value="1">Nikos</option>
+		<option value="2">Nils</option>
+		<option value="7">Konrad</option>
+		<option value="21">Ilia</option>
+		<option value="3">Julia</option>
+		<option value="4">Tania</option>
+                
+	</select>
+	<div><canvas id="alignment"></canvas></div>
+
+
+		<br /><footer>iGEM Team Heidelberg 2013</footer></body>
+    
+</body>
+</html>
+
+<script>{% autoescape off %}
+var jsonMSA = {{ jsonMSA }};
+{% endautoescape %}
+console.log()
+
 var gCanvasElement; var size = 0; var clickX = 0; var clickY = 0; var Xpos = 0; var Ypos = 0; var hydrophobicity_array = 0; var click = 0; var scheme = 0; var fontsize = 8;
 var name_width = 15;
 var font_string  = "8pt monospace";
-var aln_len = affe.length;
-var numseq = $("#affe.List").children().length;
+var aln_len = jsonMSA.msaSeqs[0].length;
+var numseq = jsonMSA.msaSeqs.length;
 	hydrophobicity_array = new Array(numseq);
 	for(i = 0;i < numseq;i++){
 		hydrophobicity_array[i] = new Array(aln_len);
@@ -23,12 +54,12 @@ var element;var jump = 1;if(fontsize <= 8) {
 	document.addEventListener("keydown", onKeyDown, false);
 var a = new Array(numseq);
 for (var i = 0; i < a.length; i++) {
-    a[i] = new String (affe[i]);
+    a[i] = new String (jsonMSA.msaSeqs[i]);
 }
 
 var n = new Array(numseq);
 for (var i = 0; i < n.length; i++) {
-    n[i] = new String (affe[i]);
+    n[i] = new String (jsonMSA.msaNames[i]);
 }
 
 function Joshua_annotation(x,ctx) {
@@ -408,7 +439,7 @@ function init()
 div=document.getElementsByTagName('div')[0];
 	gCanvasElement = document.getElementById("alignment");
 	gCanvasElement.width=div.scrollWidth;
-	gCanvasElement.height=div.scrollHeight;
+	gCanvasElement.height=window.innerHeight;
 	gCanvasElement.addEventListener("mousedown", record_pos, false);
 	gCanvasElement.addEventListener("mouseup", record_pos, true);
 	gCanvasElement.addEventListener("click", reset_click, false);
@@ -556,3 +587,8 @@ for(i = draw.ypos;i < numseq;i++){
 }
 }
 }
+
+
+
+</script>
+
