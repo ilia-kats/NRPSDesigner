@@ -35,27 +35,27 @@
 	</form>
 </div>
 <script type="text/javascript">
-$(document).ready( function () {
-	$('button').button('disable');
-	$('#fragment_list').accordion('disable').sortable('disable');
-	$('button#settings')
+jQuery(document).ready( function () {
+	jQuery('button').button('disable');
+	jQuery('#fragment_list').accordion('disable').sortable('disable');
+	jQuery('button#settings')
 		.button({
 			icons:{primary:'ui-icon-check'}
 		})
 		.click(function(event) {
-			$.post('settings', $('form[action^="settings"]').serialize());
-			$('button').button('enable');
-			$('#fragment_list').accordion('enable').sortable('enable');
-			$('#settings-wrapper').load('settings')
+			jQuery.post('settings', jQuery('form[action^="settings"]').serialize());
+			jQuery('button').button('enable');
+			jQuery('#fragment_list').accordion('enable').sortable('enable');
+			jQuery('#settings-wrapper').load('settings')
 		});
-	$('button#cancel')
+	jQuery('button#cancel')
 		.button({
 			icons:{primary:'ui-icon-close'}
 		})
 		.click(function(event) {
-			$('button').button('enable');
-			$('#fragment_list').accordion('enable').sortable('enable');
-			$('#settings-wrapper').load('settings')
+			jQuery('button').button('enable');
+			jQuery('#fragment_list').accordion('enable').sortable('enable');
+			jQuery('#settings-wrapper').load('settings')
 		});
 });
 </script>

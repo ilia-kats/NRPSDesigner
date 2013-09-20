@@ -9,7 +9,7 @@
 	</tbody>
 </table>
 <script type="text/javascript">
-	$('#fragment_table').dataTable({
+	jQuery('#fragment_table').dataTable({
 		bAutoWidth: false,
 		bJQueryUI: true,
 		bLengthChange: false,
@@ -22,10 +22,10 @@
 			}
 		]
 	});
-	$('a[href^="add"]').click(function (event, ui) {
+	jQuery('a[href^="add"]').click(function (event, ui) {
 		event.preventDefault();
-		$.get(this.href);
+		jQuery.get(this.href);
 		refresh();
-		$('#fragment_browser').dialog('close');
+		jQuery('#fragment_browser').dialog('close');
 	});
 </script>
