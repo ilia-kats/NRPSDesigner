@@ -8,6 +8,7 @@ var fragment_base_url = '{% url 'fragment.views.fragments' %}';
 var fragment_api_url = fragment_base_url + 'api/';
 </script>
 
+<script src="{% static "js/ajax.js" %}" type="text/javascript"></script>
 <script src="{% static "js/cropform.js" %}" type="text/javascript"></script>
 <script src="{% static "js/jquery.ui.selectmenu.js" %}" type="text/javascript"></script>
 <script src="{% static "js/fragmentview.js" %}" type="text/javascript"></script>
@@ -19,13 +20,13 @@ var fragment_api_url = fragment_base_url + 'api/';
 {% block css-include%}
 <link rel="stylesheet" type="text/css" 
     href="{% static "css/jquery.ui.selectmenu.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/fragmentview.css" />
-<link rel="stylesheet" type="text/css" href="{% static "css/tipTip.css" />
-<link rel="stylesheet" type="text/css" href="{% static "css/formtools.css" />
+<link rel="stylesheet" type="text/css" href="{% static "css/fragmentview.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/tipTip.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/formtools.css" %}" />
 {% endblock %}
 
 {% block app-menu %}
-<a href="{% url 'fragment %}" id="library">Library</a>|
+<a href="{% url 'fragment.views.fragments' %}" id="library">Library</a>|
 <a href="{{ fragment.name }}.gb" id="download">Download</a>
 {% endblock %}
 
@@ -71,17 +72,17 @@ var fragment_api_url = fragment_base_url + 'api/';
 {% block js %}
 <script type="text/javascript">
 
-$(document).ready(function() {
-	$('a#download').button({
+jQuery(document).ready(function() {
+	jQuery('a#download').button({
 			icons:{primary:'ui-icon-link'}
 		});
-	$('a#library').button({
+	jQuery('a#library').button({
 		icons:{primary:'ui-icon-note'}
 	});
 
-	$('#fragment_info').load('getMeta/');
+	jQuery('#fragment_info').load('getMeta/');
 	
-	$('#sequence').load('getSeq/');
+	jQuery('#sequence').load('getSeq/');
 
 });
 

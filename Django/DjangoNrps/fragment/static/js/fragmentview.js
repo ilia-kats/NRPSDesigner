@@ -3,13 +3,13 @@ var httppat = /^http:\/\//i
 
 function px2em(input) 
 {
-    var emSize = parseFloat($('body').css("font-size"));
+    var emSize = parseFloat(jQuery('body').css("font-size"));
     return (input / emSize);
 }
 
 function em2px(input) 
 {
-    var emSize = parseFloat($('body').css("font-size"));
+    var emSize = parseFloat(jQuery('body').css("font-size"));
     return (input * emSize);
 }
 

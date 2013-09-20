@@ -56,9 +56,9 @@
 </div>
 
 <script type="text/javascript">
-$(window).ready(function() {
+jQuery(window).ready(function() {
 	console.log('make_magic form');
-	$('#settings_form').magicForm( {
+	jQuery('#settings_form').magicForm( {
 		save: function(e, data) {update(data[1].modified);},
 	});
 });
