@@ -7,6 +7,7 @@
                     {{originSet.management_form}}
 
             {{ domainForm.non_field_errors }}
+            <form>
             <div class="row">
               <div class="span3">
                 <div class="fieldWrapper">
@@ -87,8 +88,12 @@
 
 
             </div>
+
+                        <button class="btn msaGenButton" type="button">MSA LOL</button>
+
             </div>
-          
+
+          </form>
         
                                 {% endfor %}
 
@@ -97,3 +102,39 @@
  
   </div>
           <p><input type="submit" value="Send message" /></p>
+
+
+<div id="msaModal" class="modal hide fade fullScreenModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Multiple Sequence Alignment</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+jQuery(".msaGenButton").click(function(e) {
+  btn = e.delegateTarget;
+  domainFormArray = jQuery(btn).closest("form").serializeArray();
+  cdsFormArray = jQuery("#cdsInputTab").find("form").serializeArray();
+  
+  // convert "domain_set-0-module" to "domain_set-module"
+  // so that Django view can handle this as normal form with prefix "domain_set"...
+  domainFormArray = domainFormArray.map(function(x) {
+      splitName = x.name.split("-");
+      x.name = splitName[0]+"-"+splitName[2];
+      return x;
+    });
+  cdsAndDomainFormArray = cdsFormArray.concat(domainFormArray);
+
+  jQuery.post("{% url "msaDomainView" %}", cdsAndDomainFormArray, function(data){
+       jQuery("#msaModal .modal-body").html( data );
+       jQuery("#msaModal").modal("show");
+      });
+
+    });
+
+</script>

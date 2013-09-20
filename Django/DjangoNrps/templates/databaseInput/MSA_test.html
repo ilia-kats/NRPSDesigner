@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
-<title>Dokument zum Testen des Multiplen Sequence Alignments</title>
+<title>Multiple Sequence Alignment</title>
 
 </head>
 <body onLoad="init();draw(0,0,0);">
@@ -19,7 +19,7 @@
 	<div><canvas id="alignment"></canvas></div>
 
 
-		<br /><footer>iGEM Team Heidelberg 2013</footer></body>
+	</body>
     
 </body>
 </html>
@@ -523,9 +523,7 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 	ctx.closePath();
 	ctx.stroke();
 	ctx.font =  "12pt monospace";
-ctx.moveTo(600,40);
-ctx.lineTo(600,150);
-ctx.stroke();
+
 	for(j = 0; j < aln_len;j +=100 ){
 		ctx.fillStyle = "#0000000";
 		ctx.fillText(j, j / aln_len*  (canvas.width- xoffset)  + xoffset,25);

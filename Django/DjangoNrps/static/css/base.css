@@ -236,3 +236,15 @@ ul.errorlist li {
 #originChosenWrapper * {
 	data-placeholder: "Select existing origin"
 }
+
+/* for bootstrap mega modal */
+.fullScreenModal {
+    width: 80%;
+    height: 80%;
+    position: fixed;
+    margin: 0;
+    top:10%;
+    left: 10%;
+    right: 10%;
+
+}

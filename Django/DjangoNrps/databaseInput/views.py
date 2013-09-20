@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError, HttpResponseBadRequest
 from django.views.generic.base import TemplateView
 from django.views.generic import CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -28,14 +28,35 @@ from gibson.jsonresponses import JsonResponse, ERROR
 
 # Create your views here.
 
-from databaseInput.MSA.MSA import clustaloMSA
 
-def msa_view(request):
-    t = loader.get_template('databaseInput/MSA_test.html')
-    c = RequestContext(request,{
-            'jsonMSA': clustaloMSA('A')
-        })
-    return HttpResponse(t.render(c))
+def msa_domain_view(request):
+    if request.method == "POST":
+
+        cdsForm = CdsForm(request.POST, prefix="cds")
+        #import pdb;pdb.set_trace()
+        if cdsForm.is_valid():
+            #import pdb; pdb.set_trace()
+            cds = cdsForm.save()
+            # prefix for domainForm extracted from DomainFormSet by JS
+            domainForm = DomainForm(request.POST, prefix="domain_set")
+            if domainForm.is_valid():
+
+                initialDict = domainForm.cleaned_data
+
+                del initialDict['substrateSpecificity']
+                initialDict['cds'] = cds
+                domain = Domain.objects.create(**initialDict)
+                MSA = domain.align_same_type()
+                t = loader.get_template('databaseInput/MSA_test2.html')
+                c = RequestContext(request,{
+                    'jsonMSA': MSA
+                })
+                return HttpResponse(t.render(c))
+        else:
+            return HttpResponse("")
+    else:
+        return HttpResponse("")
+
 
 # class PfamView(TemplateView):
 #     template_name = 'databaseInput/pfam.html'
