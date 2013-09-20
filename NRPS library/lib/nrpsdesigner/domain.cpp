@@ -239,10 +239,10 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERBEFORE_NODE, BAD_CAST nativeDefinedLinkerBefore().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERAFTER_NODE, BAD_CAST nativeDefinedLinkerAfter().c_str());
 
-    if (id() > 0) {
+    if (origin() != nullptr)
         xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());
+    if (product() != nullptr)
         xmlTextWriterWriteElement(writer, BAD_CAST PRODUCTID_NODE, BAD_CAST std::to_string(product()->id()).c_str());
-    }
 }
 
 void Domain::endXml(xmlTextWriterPtr writer) const

@@ -4,13 +4,19 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import IUPAC
+
 from nrpsSMASH.analyzeNrpCds import nrpsSmash
+from databaseInput.MSA.MSA import msa_run
+from .validators import validateCodingSeq
 
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     product = models.ForeignKey('Product', blank=True, null=True)
     geneName = models.CharField(max_length=100) 
-    dnaSequence = models.TextField()
+    dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
@@ -82,6 +88,28 @@ class Domain(models.Model):
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
+    def get_sequence(self):
+        cdsSequence = self.cds.dnaSequence
+        domainStart = self.pfamStart
+        domainStop  = self.pfamStop
+        domainSequence = cdsSequence[domainStart:domainStop]
+        return domainSequence
+
+    def get_seq_object(self):
+        domainSequence = self.get_sequence()
+        domainSeqObject = Seq(domainSequence, IUPAC.unambiguous_dna)
+        return domainSeqObject
+
+    def get_seqrecord_object(self):
+        domainSeqObject = self.get_seq_object()
+        name = self.cds.geneName  + str(self.module) + str(self.domainType)
+        domainSeqRecord = SeqRecord(seq=domainSeqObject, name= name, id=name)
+        return domainSeqRecord
+
+    def align_same_type(self):
+        return self.domainType.align_same_type()
+
+
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D')))
@@ -114,6 +142,13 @@ class Type(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def align_same_type(self):
+        domains = Domain.objects.filter(domainType = self)
+        # just b/c db has some empty entries right now
+        domains = [dom for dom in domains if len(dom.get_sequence())>0]
+        domainSeqRecordList = [dom.get_seqrecord_object() for dom in domains]
+        return msa_run(domainSeqRecordList)
 
 class Linkout(models.Model):
     linkoutType = models.ForeignKey('LinkoutType')

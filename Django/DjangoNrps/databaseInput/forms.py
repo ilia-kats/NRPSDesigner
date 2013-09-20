@@ -20,10 +20,27 @@ class CdsForm(ModelForm):
 	class Meta:
 		model = Cds
 
+	# clean method now also strips white space of DNA Sequence
+	# and also checks if string is actually a FASTA file
+	# then copy FASTA file description into entry's description
+	def clean(self):
+		cleaned_data = super(CdsForm, self).clean()
+		if 'dnaSequence' in cleaned_data:
+			dnaSequence = cleaned_data.get("dnaSequence")
+
+			if dnaSequence[0] == ">":
+				splitDnaSequence= dnaSequence.splitlines()
+				description = cleaned_data.get("description","")
+				fastaDescription = splitDnaSequence[0][1:]
+				cleaned_data["description"] = description + "\nFASTA Description:" + fastaDescription
+				dnaSequence = ''.join(splitDnaSequence[1:])
+			cleaned_data["dnaSequence"] = ''.join(dnaSequence.split())
+		return cleaned_data
 
 class OriginForm(ModelForm):
 	class Meta:
 		model = Origin
+		fields = ['sourceType','source','species','description']
 
 class DomainForm(ModelForm):
     class Meta:

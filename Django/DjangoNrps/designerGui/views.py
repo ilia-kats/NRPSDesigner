@@ -17,6 +17,7 @@ import xml.etree.ElementTree as x
 import openbabel as ob
 import json
 
+
 @login_required
 def makeConstruct(request,pid):
     nrp = NRP.objects.get(pk=pid)

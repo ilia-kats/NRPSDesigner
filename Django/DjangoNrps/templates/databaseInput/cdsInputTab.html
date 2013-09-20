@@ -1,3 +1,9 @@
+<div class="progress progress-warning progress-striped active">
+    <div class="bar" style="width: 36%"></div>
+    <span>Hmm calculated!</span>
+</div>
+
+
 
         {{ form.non_field_errors }}
         <form id="cdsFormForDomainPrediction">
@@ -25,7 +31,7 @@
           <div class="span3">
 <a href="{% url 'addOrigin' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Origin</a>
 
-<div class="modal fade" id="myModal"></div>
+<div class="modal hide fade"  id="myModal"></div>
 
 
 
@@ -48,6 +54,8 @@
 // code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/ 
 // adapted from coffeescript to javascript
 // enables use of Bootstrap modal to load other html pages
+
+
     jQuery("a[data-toggle=modal]").click(function() {
   var target, url;
   target = jQuery(this).attr('data-target');
@@ -56,14 +64,19 @@
 });
 
 	predictDomains = function(){
+    jQuery("#tabs").tabs("disable",1);
 		jQuery.post("{% url "getDomainForm" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
-			jQuery("#domainInput").html( data);
+      if (data[0] === AJAX_ERROR){
+        jQuery("#cdsInputTab").html(data[1].html);
+      } else {
+			 jQuery("#domainInput").html( data[1].html);
 
               jQuery( "#accordion" ).accordion({
                 heightStyle: "content",
                 collapsible: true
               });
-			jQuery("#tabs").tabs("enable",1);
+			 jQuery("#tabs").tabs("enable",1);
+      }
 
 		});
 		
@@ -75,6 +88,9 @@
         jQuery(document).ready(function() {
           jQuery('#originChosenWrapper > select > option').filter(':first').html('');
           jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
+
+          jQuery("#cdsFormForDomainPrediction").change(function() {
+            jQuery("#tabs").tabs("disable",1);})
 
         });
 

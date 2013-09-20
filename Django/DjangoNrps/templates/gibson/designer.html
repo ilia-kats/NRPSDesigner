@@ -142,8 +142,8 @@ var gibthon_api_url = gibthon_base_url + 'api/';
     		//this is the bit that makes all a link with the class of 'thisPane' stay within the tab
     		//a href tags that are not of the class 'thisPane' will open outside the tab
     load: function(event, ui) {
-    $(ui.panel).delegate('a.thisPane', 'click', function(event) {
-        $(ui.panel).load(this.href);
+    jQuery(ui.panel).delegate('a.thisPane', 'click', function(event) {
+        jQuery(ui.panel).load(this.href);
         event.preventDefault();
     });
     }

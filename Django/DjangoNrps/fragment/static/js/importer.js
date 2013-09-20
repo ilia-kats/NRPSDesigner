@@ -21,7 +21,7 @@ var importer_form_html = '' +
 
 var busy = '<div style="text-align:center;margin-top:1.5em;">' +
 '	<h2>Please Wait...</h2>' +
-'	<img src="/static/images/spinner.gif" alt="Loading" />' +
+'	<img src="' + STATIC_URL + 'images/spinner.gif" alt="Loading" />' +
 '	<h3 id="title"></h3>' +
 '</div>';
 
@@ -46,12 +46,12 @@ var entrez_results = '' +
 
 (function( $, undefined ) {
 
-$.widget("ui.importer", {
+jQuery.widget("ui.importer", {
 	_create: function() {
 		var self = this;
 		this.updated = false; //set to true to reload the page on close		
 		
-		this.$dlg = $(this.element[0])
+		this.$dlg = jQuery(this.element[0])
 			.html(importer_html)
 			.dialog({
 				autoOpen:false,
@@ -74,8 +74,8 @@ $.widget("ui.importer", {
 	close: function() { this.$dlg.dialog('close');},		
 	_show_main: function() { //show the main window
 		var self = this;
-		var $new = $(document.createElement('div'));
-		$new.load('/fragment/import/', {}, function () {
+		var $new = jQuery(document.createElement('div'));
+		$new.load(fragment_base_url + 'import/', {}, function () {
 			self._normal_size();
 			$new.find('#parts').click(function() {
 				self._show_parts();
@@ -96,15 +96,15 @@ $.widget("ui.importer", {
 	{
 		if(title == undefined)
 			title = "";
-		var $busy = $(document.createElement('div'));
+		var $busy = jQuery(document.createElement('div'));
 		$busy.html(busy);
 		$busy.find('#title').text(title);
 		this.$content.html($busy);
 	},
 	_show_parts: function(){
 		var self = this;
-		var $new = $(document.createElement('div')).html(importer_form_html);
-		$new.find('#form_holder').load('/fragment/import/part/', {}, function(){
+		var $new = jQuery(document.createElement('div')).html(importer_form_html);
+		$new.find('#form_holder').load(fragment_base_url + 'import/part/', {}, function(){
 			$new.find('#add_form').submit(function() {
 				return false;
 			});
@@ -119,16 +119,16 @@ $.widget("ui.importer", {
 		}).click(function() {
 			self.updated = true;
 			$new.find('div.extender-item input').each(function() {
-				var name = $(this).val();
-				var $state = $(this).siblings('.status');
+				var name = jQuery(this).val();
+				var $state = jQuery(this).siblings('.status');
 				if($state.hasClass('status-ok')) //we've already imported this one!
 					return; //let's not do it again!
-				var $error = $(this).siblings('.extender-error').slideUp('fast');
+				var $error = jQuery(this).siblings('.extender-error').slideUp('fast');
 				
 				$state
 					.removeClass('status-error')
 					.addClass('status-busy');
-				$.getJSON('import/part/go/', {'part': name,}, function(data){
+				jQuery.getJSON('import/part/go/', {'part': name,}, function(data){
 					console.log("DATA: status:" + data[0] + " value:" + data[1])
 					if(data[0] != 0) //if error
 					{
@@ -149,11 +149,11 @@ $.widget("ui.importer", {
 	},
 	_show_manual: function(){
 		var self = this;
-		var $new = $(document.createElement('div')).html(importer_form_html);
+		var $new = jQuery(document.createElement('div')).html(importer_form_html);
 		$new.find('#form_holder').load('/fragment/import/manual/', {}, function(){
 			var $form = $new.find('#add_form').submit(function() {
 				//submit via AJAX instead
-				$.getJSON($form.attr('action'), $form.serialize(), function(data) {
+				jQuery.getJSON($form.attr('action'), $form.serialize(), function(data) {
 					if(data[0] != 0) //error
 					{
 						console.log("Error: " + data[1]);
@@ -209,7 +209,7 @@ $.widget("ui.importer", {
 	},
 	_show_entrez: function(error){
 		var self = this;
-		var $new = $(document.createElement('div')).html(importer_form_html);
+		var $new = jQuery(document.createElement('div')).html(importer_form_html);
 		
 		$new.find('#form_holder').load('/fragment/import/entrez/', {}, function(){
 			$new.find('#add_form').submit(function() {
@@ -238,7 +238,7 @@ $.widget("ui.importer", {
 	_show_upload: function(){
 		
 		var self = this;
-		var $new = $(document.createElement('div')).html(importer_form_html);
+		var $new = jQuery(document.createElement('div')).html(importer_form_html);
 		
 		$new.find('#form_holder').load('/fragment/import/upload/', {}, function(){
 			$new.find('#add_form').submit(function() {
@@ -246,9 +246,9 @@ $.widget("ui.importer", {
 			});
 			//show the whole kaboodle
 			self.$content.fadeOut('fast', function() {
-				$(this).html($new)
+				jQuery(this).html($new)
 					.find('#fileupload').fileupload();
-				$(this).fadeIn('fast');
+				jQuery(this).fadeIn('fast');
 				self._auto_size();
 			});
 			self.updated = true;
@@ -279,7 +279,7 @@ $.widget("ui.importer", {
 	},
 	_show: function($new){
 		this.$content.fadeOut('fast', function() {
-			$(this)
+			jQuery(this)
 				.html($new)
 				.fadeIn('fast');
 		});
@@ -290,7 +290,7 @@ $.widget("ui.importer", {
 		var self = this;
 		var data = this.$content.find('#add_form').serialize();
 		this._show_busy("Searching NCBI Entrez...");
-		$.getJSON('/fragment/import/entrez/search/', data, function(data) {
+		jQuery.getJSON('/fragment/import/entrez/search/', data, function(data) {
 			if(data[0] != 0)
 				self._show_entrez(data[1]);
 			else
@@ -321,7 +321,7 @@ $.widget("ui.importer", {
 	},
 	_entrez_show_results: function(errors){//ignore errors and show results
 		var self = this;
-		var $results = $(document.createElement('div'));
+		var $results = jQuery(document.createElement('div'));
 		$results.html(entrez_results);
 		var $results_tbl = $results.find('#results');
 		
@@ -395,7 +395,7 @@ $.widget("ui.importer", {
 	_full_size: function()
 	{
 		//set position and height;
-		this.$dlg.dialog('option', 'height',  ($(window).height() - 10));
+		this.$dlg.dialog('option', 'height',  (jQuery(window).height() - 10));
 		this.$dlg.dialog('option', 'position','center');
 	},
 	_normal_size: function()
@@ -440,7 +440,7 @@ var make_row = function(summary)
  *  Displays the error message if one accurs.
  *  Actions which return values (other than OK or ERROR) are not supported
  * 
- *  usage: $(SELECTOR).loader({commands: [{	'desc': 'Command Description',
+ *  usage: jQuery(SELECTOR).loader({commands: [{	'desc': 'Command Description',
  * 											'url': '/url/to/call/',
  * 											'data': {	'the': 'data to post',
  * 														'to': 'the url'}, 
@@ -463,7 +463,7 @@ var loader_html = '' +
 
 (function( $, undefined ) {
 
-$.widget("ui.loader", {
+jQuery.widget("ui.loader", {
 	options: {
 		commands: [], //a list of commands, in the form [{'desc': DESCRIPTION, 'url': URL, 'data': DATA}, etc]
 		autostart: false, //should the actions start immediately?
@@ -480,9 +480,9 @@ $.widget("ui.loader", {
 		}
 		
 		var self = this;
-		var $new = $(document.createElement('div')).html(loader_html);
-		this.$el = $(this.element[0]).fadeOut('fast', function() {
-			$(this).html($new).fadeIn('fast', function() {
+		var $new = jQuery(document.createElement('div')).html(loader_html);
+		this.$el = jQuery(this.element[0]).fadeOut('fast', function() {
+			jQuery(this).html($new).fadeIn('fast', function() {
 				if(self.options.autoStart)
 				{
 					self._started = true;
@@ -528,7 +528,7 @@ $.widget("ui.loader", {
 		var type = cmd.type;
 		if(type == undefined)
 			type = 'GET'; //default to GET
-		$.ajax({
+		jQuery.ajax({
 			'url': cmd.url,
 			'data': cmd.data,
 			'type': type,
