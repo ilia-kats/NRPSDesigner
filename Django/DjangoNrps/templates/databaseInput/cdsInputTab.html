@@ -11,11 +11,20 @@
           <div class="span3">
                    <div class="fieldWrapper">
             {{ form.origin.errors }}
-            <label for="id_subject"></label>
+            <label for="id_origin"></label>
             <div id="originChosenWrapper" class = "chosenWrapper">
               {{ form.origin }} <br/>
             </div>
             </div>
+
+            <div class="fieldWrapper">
+            {{ form.product.errors }}
+            <label for="id_product"></label>
+            <div id="productChosenWrapper" class = "chosenWrapper">
+              {{ form.product }} <br/>
+            </div>
+            </div>
+
             <div class="fieldWrapper">
               {{ form.dnaSequence.errors }}
               <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
@@ -31,8 +40,10 @@
           <div class="span3">
 <a href="{% url 'addOrigin' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Origin</a>
 
-<div class="modal hide fade"  id="myModal"></div>
 
+<a href="{% url 'addProduct' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Product</a>
+
+<div class="modal hide fade"  id="myModal"></div>
 
 
             <div class="fieldWrapper">
@@ -64,7 +75,8 @@
 });
 
 	predictDomains = function(){
-    jQuery("#tabs").tabs("disable",1);
+	jQuery("ul.errorlist").remove();
+	jQuery("#tabs").tabs("disable",1);
 		jQuery.post("{% url "getDomainForm" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#cdsInputTab").html(data[1].html);
@@ -83,18 +95,21 @@
 	};
 
 
+{% if not isAjax %}
+jQuery(document).ready(function() {
+{% endif %}
 
-
-        jQuery(document).ready(function() {
-          jQuery('#originChosenWrapper > select > option').filter(':first').html('');
-          jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
-
+          jQuery('#id_cds-product > option').filter(':first').html('');
+          jQuery('#id_cds-origin > option').filter(':first').html('');
+          jQuery("#id_cds-product, #id_cds-origin").select2({placeholder: "Choose existing"});
           jQuery("#cdsFormForDomainPrediction").change(function() {
-            jQuery("#tabs").tabs("disable",1);})
+           jQuery("#tabs").tabs("disable",1);});
 
-        });
+   
 
-
+{% if not isAjax %}
+});
+{% endif %}
 
     // function activateTabs(data){
     //     console.log(data);
