@@ -3,27 +3,6 @@
 <head>
 <title>Multiple Sequence Alignment</title>
 
-</head>
-<body onLoad="init();draw(0,0,0);">
-
-	Change color-scheme:<select onchange="change_scheme(this.value); draw(0,0,0); ">
-		<option value="0">Joshua</option>
-		<option value="1">Nikos</option>
-		<option value="2">Nils</option>
-		<option value="7">Konrad</option>
-		<option value="21">Ilia</option>
-		<option value="3">Julia</option>	
-		<option value="4">Tania</option>
-                
-	</select>
-	<div><canvas id="alignment"></canvas></div>
-
-
-	</body>
-    
-</body>
-</html>
-
 <script>{% autoescape off %}
 var jsonMSA = {{ jsonMSA }};
 {% endautoescape %}
@@ -436,10 +415,10 @@ function reset_click()
 }
 function init()
 {
-div=document.getElementsByTagName('div')[0];
+div=document.getElementById('msaDrawzone');
 	gCanvasElement = document.getElementById("alignment");
-	gCanvasElement.width=div.scrollWidth;
-	gCanvasElement.height=window.innerHeight;
+	gCanvasElement.width=1 * jQuery(div).parents(".modal").width();
+	gCanvasElement.height=3 * jQuery(div).parents(".modal").height();
 	gCanvasElement.addEventListener("mousedown", record_pos, false);
 	gCanvasElement.addEventListener("mouseup", record_pos, true);
 	gCanvasElement.addEventListener("click", reset_click, false);
@@ -585,8 +564,25 @@ for(i = draw.ypos;i < numseq;i++){
 }
 }
 }
-
-
-
+init();draw(0,0,0);
 </script>
+</head>
 
+<body>
+
+	Change color-scheme:<select onchange="change_scheme(this.value); draw(0,0,0); ">
+		<option value="0">Joshua</option>
+		<option value="1">Nikos</option>
+		<option value="2">Nils</option>
+		<option value="7">Konrad</option>
+		<option value="21">Ilia</option>
+		<option value="3">Julia</option>	
+		<option value="4">Tania</option>
+                
+	</select>
+	<div id="msaDrawzone"><canvas id="alignment"></canvas></div>
+
+
+	</body>
+    
+</html>

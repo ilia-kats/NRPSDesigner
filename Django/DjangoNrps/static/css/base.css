@@ -242,7 +242,7 @@ ul.errorlist li {
 /* for bootstrap mega modal */
 .fullScreenModal {
     width: 80%;
-    height: 80%;
+    height: 90%;
     position: fixed;
     margin: 0;
     top:10%;
