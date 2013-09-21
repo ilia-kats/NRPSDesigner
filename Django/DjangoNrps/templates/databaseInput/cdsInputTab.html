@@ -64,7 +64,8 @@
 });
 
 	predictDomains = function(){
-    jQuery("#tabs").tabs("disable",1);
+	jQuery("ul.errorlist").remove();
+	jQuery("#tabs").tabs("disable",1);
 		jQuery.post("{% url "getDomainForm" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#cdsInputTab").html(data[1].html);
