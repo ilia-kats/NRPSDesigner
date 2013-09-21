@@ -28,7 +28,7 @@
                 <div class="fieldWrapper">
                   {{ domainForm.substrateSpecificity.errors }}
                   <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
-                  <div class = "chosenWrapper multipleChosenWrapper">
+                  <div class = "domainSelect2Wrapper">
 
                     {{ domainForm.substrateSpecificity }}
                   </div>
@@ -136,5 +136,8 @@ jQuery(".msaGenButton").click(function(e) {
       });
 
     });
+
+jQuery(".domainSelect2Wrapper").children().select2();
+jQuery(".domainSelect2Wrapper").children().css("width","100%")
 
 </script>

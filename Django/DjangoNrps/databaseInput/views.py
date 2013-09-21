@@ -22,7 +22,7 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
 from databaseInput.models import Origin, Cds, Domain
-from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm
+from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm, ProductForm
 
 from gibson.jsonresponses import JsonResponse, ERROR
 
@@ -95,6 +95,13 @@ def msa_domain_view(request):
 #             return HttpResponseRedirect(reverse_lazy("pfam"))
 
 
+def product_add(request):
+    t = loader.get_template("databaseInput/addProduct.html")
+    c = RequestContext(request, {
+        'form': ProductForm(prefix='product')
+        })
+    return HttpResponse(t.render(c))
+
 def origin_add(request):
     t = loader.get_template('databaseInput/addOrigin.html')
     c = RequestContext(request, {
@@ -103,17 +110,47 @@ def origin_add(request):
     return HttpResponse(t.render(c))
 
 @login_required
+def product_ajax_save(request):
+    if request.method == "POST":
+        productForm = ProductForm(request.POST, prefix='product')
+        if productForm.is_valid():
+            product = productForm.save()
+            product.user = request.user
+            product.save()
+            cdsForm = CdsForm(request.POST, prefix='cds')
+           
+            cdsForm.full_clean()
+            initialDict = cdsForm.cleaned_data
+      
+            initialDict['product'] = product
+            updatedCdsForm = CdsForm(initial=initialDict,prefix='cds')
+
+            t = loader.get_template('databaseInput/cdsInputTab.html')
+            c = RequestContext(request, {
+            'form':updatedCdsForm,
+                })
+            return JsonResponse({'html': t.render(c)})
+
+        else:
+            t = loader.get_template('databaseInput/addProduct.html')
+            c = RequestContext(request, {
+            'form':productForm,
+                })
+            return JsonResponse({'html': t.render(c)}, ERROR)
+
+@login_required
 def origin_ajax_save(request):
     if request.method == "POST":
         originForm = OriginForm(request.POST, prefix='origin')
         if originForm.is_valid():
             origin = originForm.save()
+            origin.user = request.user
+            origin.save()
             cdsForm = CdsForm(request.POST, prefix='cds')
-            try:
-                cdsForm._clean_fields()
-                initialDict = cdsForm.cleaned_data
-            except:
-                initialDict = {}
+           
+            cdsForm.full_clean()
+            initialDict = cdsForm.cleaned_data
+      
             initialDict['origin'] = origin
             updatedCdsForm = CdsForm(initial=initialDict,prefix='cds')
 
@@ -132,14 +169,15 @@ def origin_ajax_save(request):
 
 
 
-def cdsInput(request):
+def cds_input(request):
     t = loader.get_template('databaseInput/cdsInput.html')
     c = RequestContext(request, {
         'form':CdsForm(prefix='cds'),
+        'isAjax':False
     })
     return HttpResponse(t.render(c))
 
-def domainInput(request):
+def domain_prediction(request):
     if request.method == "POST":
         cdsForm = CdsForm(request.POST, prefix='cds')
         if cdsForm.is_valid():
@@ -156,6 +194,7 @@ def domainInput(request):
             t = loader.get_template('databaseInput/cdsInputTab.html')
             c = RequestContext(request, {
             'form':cdsForm,
+            'isAjax': True
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
     

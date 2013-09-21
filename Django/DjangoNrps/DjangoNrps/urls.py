@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView, sauceFunc, cdsInput
+from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 admin.autodiscover()
