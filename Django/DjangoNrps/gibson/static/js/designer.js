@@ -1204,7 +1204,8 @@ var df = DisplayFragment.prototype = new Container();
 		if(!this._drag && (get_cursor() == 'auto'))
 		{
 			set_cursor('pointer');
-			this.alpha = 0.8;
+            if (this._f.getViewable() != 'H')
+                this.alpha = 0.8;
 			stage.update();
 		}
 	}
@@ -1249,14 +1250,16 @@ var df = DisplayFragment.prototype = new Container();
 	 **/
 	df.onPress = function(ev)
 	{
-		var self = this;
-		
-		this._mousedownEvent = ev;
-		this._mouse_down = this._get_mev(ev);
-		
-		this._mouse_offset = bound_rads(this._mouse_down.a - d2r(this._props.rotation));
-		stage.onMouseMove = function(e) {self.onDrag(e);};
-		stage.onMouseUp = function(e) {stage.onMouseMove = null; stage.onMouseUp = null;};
+        if (this._f.getViewable() != 'H') {
+            var self = this;
+
+            this._mousedownEvent = ev;
+            this._mouse_down = this._get_mev(ev);
+
+            this._mouse_offset = bound_rads(this._mouse_down.a - d2r(this._props.rotation));
+            stage.onMouseMove = function(e) {self.onDrag(e);};
+            stage.onMouseUp = function(e) {stage.onMouseMove = null; stage.onMouseUp = null;};
+        }
 	}
 	
 	df.onDragStart = function(ev)

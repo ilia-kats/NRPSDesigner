@@ -59,7 +59,7 @@ def get_gene(usr, fid):
 		fid = int(fid)
 	except ValueError:
 		raise Http404
-	return Gene.objects.get(id = fid, owner=usr)
+	return Gene.objects.get(Q(owner=usr) | Q(viewable='G'), id = fid)
 
 def read_meta(g):
 	"""Return JSON-ready metadata about a fragment"""
@@ -80,6 +80,7 @@ def read_meta(g):
 			'id': g.id,
 			'name': g.name,
 			'desc': g.description,
+			'viewable': g.viewable,
 			'refs': refs,
 			'annots': annots,
 			'origin': g.get_origin_display(),
@@ -189,6 +190,7 @@ def get_fragment(request, fid):
         'name': g.name,
         'desc': g.description,
         'length': g.length(),
+        'viewable': g.viewable
     })
 
 @login_required

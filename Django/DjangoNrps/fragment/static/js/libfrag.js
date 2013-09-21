@@ -108,6 +108,7 @@ function Fragment(data)
 	this.getName = function() {return name;};
     this.getDesc = function() {return desc;};
 	this.getLength = function() {return length;};
+    this.getViewable = function() {return viewable;};
 
 	//if the sequence has not already been fetched, it will be streamed, otherwise
 	//complete_fn will be called immediately
@@ -235,6 +236,7 @@ function Fragment(data)
 	var name = data.name;
 	var desc = data.desc;
 	var length = data.length;
+    var viewable = data.viewable;
 
 	//Data which might get filled in by subsequent AJAX calls
 	var sequence = null;
