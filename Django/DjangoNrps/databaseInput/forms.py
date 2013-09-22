@@ -1,4 +1,4 @@
-from databaseInput.models import Origin, Cds, Domain, Substrate, Modification
+from databaseInput.models import Origin, Cds, Domain, Substrate, Modification, Product
 from django.forms.models import inlineformset_factory, formset_factory
 from django.forms import ModelForm, HiddenInput, ModelChoiceField, Form
 
@@ -47,3 +47,8 @@ class DomainForm(ModelForm):
         model = Domain
         fields = ['module', 'domainType', 'substrateSpecificity', 'description',
         	'pfamStart', 'pfamStop', 'definedStart','definedStop']
+
+class ProductForm(ModelForm):
+	class Meta:
+		model = Product
+		fields = ['name','description']

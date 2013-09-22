@@ -1,0 +1,1 @@
+NRPSDesigner curation privileges request on {{ site.name }}

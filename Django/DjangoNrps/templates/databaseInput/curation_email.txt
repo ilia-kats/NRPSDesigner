@@ -1,0 +1,5 @@
+Username: {{ user.username }}
+Name: {{ user.first_name }} {{ user.last_name }}
+Request:
+
+{{ request_text }}

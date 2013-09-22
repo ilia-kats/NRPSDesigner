@@ -19,21 +19,17 @@
 <script>
 
 
-jQuery("#submitOrigin").button().click(function() {
+jQuery("#submitOrigin").click(function() {
     jQuery.post("{% url "saveOrigin" %}", jQuery("#addOriginForm, #cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#myModal").html(data[1].html);
       } else {
         jQuery("#tabs").tabs("disable",1);
         jQuery("#cdsInputTab").html(data[1].html);
-        jQuery('#originChosenWrapper > select > option').filter(':first').html('');
-        jQuery('#originChosenWrapper').children().select2({placeholder: "Choose existing"});
 
-        jQuery("#cdsFormForDomainPrediction").change(function() {
-        jQuery("#tabs").tabs("disable",1);})
-
+        jQuery("#tabs").tabs("disable",1);
+      }
         jQuery("#myModal").modal('hide')
-    }
-  });
+    });
   });
 </script>
