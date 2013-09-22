@@ -8,7 +8,7 @@
 <!-- <h3>Delete Account</h3>
 <p>To delete your account, <a href='/user/delete'>click here</a>.</p>
 </div>-->
-
+{% if not user.is_superuser and not user.is_staff and not user|in_group:"curator" %}
 <a href="#requestCurationDlg" role="button" class="btn" data-toggle="modal">Request database curation privileges</a>
 <div id="requestCurationDlg" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="requestCurationDlgTitle" aria-hidden="true">
     <div class="modal-header">
@@ -32,5 +32,5 @@ jQuery(function(){
     });
 });
 </script>
-
+{% endif %}
 {% endblock %}
