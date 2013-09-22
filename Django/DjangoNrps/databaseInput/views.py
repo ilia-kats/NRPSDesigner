@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth import get_user_model
 
 from django.forms.models import inlineformset_factory
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 import json
 #import requests
@@ -26,9 +26,13 @@ from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm, Pro
 
 from gibson.jsonresponses import JsonResponse, ERROR
 
-# Create your views here.
+def is_curator(user):
+    if user:
+        return user.is_superuser or user.is_staff or user.groups.filter(name='curator').count() > 0
+    return False
 
-
+@login_required
+@user_passes_test(is_curator)
 def msa_domain_view(request):
     if request.method == "POST":
 
@@ -94,7 +98,8 @@ def msa_domain_view(request):
 
 #             return HttpResponseRedirect(reverse_lazy("pfam"))
 
-
+@login_required
+@user_passes_test(is_curator)
 def product_add(request):
     t = loader.get_template("databaseInput/addProduct.html")
     c = RequestContext(request, {
@@ -102,6 +107,8 @@ def product_add(request):
         })
     return HttpResponse(t.render(c))
 
+@login_required
+@user_passes_test(is_curator)
 def origin_add(request):
     t = loader.get_template('databaseInput/addOrigin.html')
     c = RequestContext(request, {
@@ -110,6 +117,7 @@ def origin_add(request):
     return HttpResponse(t.render(c))
 
 @login_required
+@user_passes_test(is_curator)
 def product_ajax_save(request):
     if request.method == "POST":
         productForm = ProductForm(request.POST, prefix='product')
@@ -139,6 +147,7 @@ def product_ajax_save(request):
             return JsonResponse({'html': t.render(c)}, ERROR)
 
 @login_required
+@user_passes_test(is_curator)
 def origin_ajax_save(request):
     if request.method == "POST":
         originForm = OriginForm(request.POST, prefix='origin')
@@ -167,8 +176,8 @@ def origin_ajax_save(request):
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
 
-
-
+@login_required
+@user_passes_test(is_curator)
 def cds_input(request):
     t = loader.get_template('databaseInput/cdsInput.html')
     c = RequestContext(request, {
@@ -177,6 +186,8 @@ def cds_input(request):
     })
     return HttpResponse(t.render(c))
 
+@login_required
+@user_passes_test(is_curator)
 def domain_prediction(request):
     if request.method == "POST":
         cdsForm = CdsForm(request.POST, prefix='cds')
