@@ -83,15 +83,15 @@ jQuery.ajaxSetup({
 			<div id="primary-menu">
 				{% if user.is_authenticated %}
 				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="5">
-					<a href="/user/profile/" id="user_tab_profile" class="user_tab">Logged in as {{ user }}</a>
+				<a href="{% url 'userprofile' %}" id="user_tab_profile" class="user_tab">Logged in as {{ user }}</a>
 					<ul class="ui-widget-content ui-corner-bottom">
-						<li><a href="/user/profile/">Profile</a></li>
-						<li><a href="/user/logout">Log out</a></li>
+						<li><a href="{% url 'userprofile' %}">Profile</a></li>
+						<li><a href="{% url 'auth_logout' %}">Log out</a></li>
 					</ul>
 				</span>
 				{% else %}
-				<span class="user_tab"><a href="user/login/" id="user_tab_login" class="user_tab">Log in</a></span>
-				<span class="user_tab"><a href="user/register/" id="user_tab_register" class="user_tab">Register</a></span>
+				<span class="user_tab"><a href="{% url 'auth_login' %}" id="user_tab_login" class="user_tab">Log in</a></span>
+				<span class="user_tab"><a href="{% url 'registration_register' %}" id="user_tab_register" class="user_tab">Register</a></span>
 				{% endif %}
 				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="4">
 					<a href="/help/" id="user_tab_help" class="user_tab">Help</a>
@@ -108,9 +108,9 @@ jQuery.ajaxSetup({
 					</ul>
 				</span>
 				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="2">
-					<a href="/" id="user_tab_home" class="user_tab">Home</a>
+					<a href="{%url 'home' %}" id="user_tab_home" class="user_tab">Home</a>
 					<ul class="ui-widget-content ui-corner-bottom">
-						<li><a href="/">Home</a></li>
+						<li><a href="{% url 'home' %}">Home</a></li>
 					</ul>
 				</span>	
 			</div>
