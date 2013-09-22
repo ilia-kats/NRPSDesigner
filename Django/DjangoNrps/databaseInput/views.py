@@ -47,7 +47,7 @@ def msa_domain_view(request):
                 initialDict['cds'] = cds
                 domain = Domain.objects.create(**initialDict)
                 MSA = domain.align_same_type()
-                t = loader.get_template('databaseInput/MSA_test2.html')
+                t = loader.get_template('databaseInput/MSA_test.html')
                 c = RequestContext(request,{
                     'jsonMSA': MSA
                 })
