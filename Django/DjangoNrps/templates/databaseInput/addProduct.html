@@ -19,7 +19,7 @@
 <script>
 
 
-jQuery("#submitProduct").button().click(function() {
+jQuery("#submitProduct").click(function() {
     jQuery.post("{% url "saveProduct" %}", jQuery("#addProductForm, #cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#myModal").html(data[1].html);

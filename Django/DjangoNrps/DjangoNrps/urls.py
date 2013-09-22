@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView
+from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView, request_curation_privs
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth import login
 from registration import signals
@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 	url(r'^$', HomeTemplateView.as_view(), name='home'),
 	url(r'^admin/', include(admin.site.urls)),
+	url(r'^user/requestCurationPrivs', request_curation_privs, name="submitCurationRequest"),
     url(r'^user/profile', ProfileTemplateView.as_view(), name="userprofile"),
     url(r'^user/', include('registration.backends.default.urls')),
     url(r'^users/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
