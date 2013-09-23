@@ -55,7 +55,10 @@ class Origin(models.Model):
     user = models.ForeignKey('auth.User', blank=True, null=True)
 
     def __unicode__(self):
-        return self.species
+        if self.sourceType == "Species":
+            return self.species
+        else:
+            return self.source
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
