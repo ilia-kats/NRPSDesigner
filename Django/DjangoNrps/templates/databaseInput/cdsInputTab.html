@@ -79,7 +79,7 @@
         jQuery("#cdsInputTab").html(data[1].html);
       } else {
 			   taskId = data[1].taskId;
-         setTimeout(checkCeleryStatus(taskId), 500);
+         setTimeout(function(){checkCeleryStatus(taskId);}, 500);
       }
 
 		});
@@ -93,7 +93,7 @@ checkCeleryStatus = function(taskId){
         getPredictedDomains(taskId);
       }else{
         jQuery("#statusLog").html(data.output);
-        setTimeout(checkCeleryStatus(taskId), 500);
+        setTimeout(function(){checkCeleryStatus(taskId);}, 500);
       }
   });
 }
