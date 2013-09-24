@@ -1,9 +1,4 @@
-<div class="progress progress-warning progress-striped active">
-    <div class="bar" style="width: 36%"></div>
-    <span>Hmm calculated!</span>
-</div>
-
-
+{{task_id}}
 
         {{ form.non_field_errors }}
         <form id="cdsFormForDomainPrediction">
@@ -57,6 +52,8 @@
               {{ form.description }}
             </div>
           </div>
+          <div class="span4" id="statusLog">
+           </div>
         </div>
         </form>
 
@@ -77,23 +74,48 @@
 	predictDomains = function(){
 	jQuery("ul.errorlist").remove();
 	jQuery("#tabs").tabs("disable",1);
-		jQuery.post("{% url "getDomainForm" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
+		jQuery.post("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#cdsInputTab").html(data[1].html);
       } else {
-			 jQuery("#domainInput").html( data[1].html);
-
-              jQuery( "#accordion" ).accordion({
-                heightStyle: "content",
-                collapsible: true
-              });
-			 jQuery("#tabs").tabs("enable",1);
+			   taskId = data[1].taskId;
+         setTimeout(checkCeleryStatus(taskId), 50);
       }
 
 		});
 		
 	};
 
+checkCeleryStatus = function(taskId){
+  jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
+      if (data.status === "ready"){
+        jQuery("#statusLog").append("Domain prediction task finished!")
+        getPredictedDomains(taskId);
+      }else{
+        jQuery("#statusLog").html(data.output);
+        setTimeout(checkCeleryStatus(taskId), 50);
+      }
+  });
+}
+
+getPredictedDomains = function(taskId){
+  jQuery("ul.errorlist").remove();
+    jQuery.post("{% url "getPredictedDomainFormsetBase" %}" +taskId, jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
+      if (data[0] === AJAX_ERROR){
+        jQuery("#cdsInputTab").html(data[1].html);
+      } else {
+       jQuery("#domainInput").html( data[1].html);
+
+              jQuery( "#accordion" ).accordion({
+                heightStyle: "content",
+                collapsible: true
+              });
+       jQuery("#tabs").tabs("enable",1);
+       jQuery("#tabs").tabs( "option", "active", 1);
+      }
+
+    });
+  };
 
 {% if not isAjax %}
 jQuery(document).ready(function() {

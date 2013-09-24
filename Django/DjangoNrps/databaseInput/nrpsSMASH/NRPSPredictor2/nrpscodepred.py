@@ -234,6 +234,7 @@ def run_nrpscodepred(options):
           sortedscores.append(score)
           sortedhits2.append(i)
       sortedhits = sortedhits2
+
       #Write output to txt file
       outfile1.write(querysig34codes[querysignames.index(k)] + "\t" + k + "\n")
       if len(sortedhits) > 0:

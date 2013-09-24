@@ -17,19 +17,16 @@ from substrates_nrps import *
 import os
 import utils
 
+from celeryHelper.helpers import update_celery_task_state_log
+
 def run_nrps_substr_spec_predictions(pksnrpsvars, seq_record, options):
     #Predict NRPS A domain specificities with NRPSPredictor and Minowa et al. method
-    logging.info("Predicting NRPS A domain substrate specificities by " \
-        "NRPSPredictor")
+
     # first extract A domains
     pksnrpsvars.nrpsnames, pksnrpsvars.nrpsseqs = extract_nrps_genes(pksnrpsvars.pksnrpscoregenes, pksnrpsvars.domaindict, seq_record, extra_aa=120)
     if len(pksnrpsvars.nrpsnames) > 0:
         run_nrpspredictor(seq_record, pksnrpsvars.nrpsnames, pksnrpsvars.nrpsseqs, options)
         run_minowa_predictor_nrps(pksnrpsvars.pksnrpscoregenes, pksnrpsvars.domaindict, seq_record, options)
-
-def parse_substr_spec_predictions(pksnrpsvars, options):
-    #Read and parse all substrate specificity prediction output files
-    parse_nrps_preds(options, pksnrpsvars)
 
 def parse_nrps_preds(options, pksnrpsvars):
     pksnrpsvars.minowa_nrps_preds = {}
@@ -76,6 +73,34 @@ def parse_nrps_preds(options, pksnrpsvars):
             pksnrpsvars.nrps_code_preds[tabs[0]] = tabs[1]
             pksnrpsvars.nrps_code_preds_details[tabs[0]] = "<b> NRPSPredictor2 Stachelhaus code prediction:</b><br>\n" + tabs[1] + "<br><br>\n\n"
 
+#not in db yet
+# aaa
+# mpro
+# dhb
+# pgly
+# aeo
+#4mha
+#pico
+#phg
+# dha
+# scy
+# pip
+#bmt
+#adds
+#HIV VS 2HIVA????
+#bht
+#4pPro
+#ala-b
+#dht
+#sal
+#tcl
+#hyv-d
+#iva
+#vol
+#mal
+#mmal
+#mxmal
+#emal
 
 def calculate_consensus_prediction(pksnrpsvars):
     #Combine substrate specificity predictions into consensus prediction
@@ -87,6 +112,7 @@ def calculate_consensus_prediction(pksnrpsvars):
     'iva','vol','mal','mmal','mxmal','emal','nrp','pk','Gly','Ala','Val','Leu','Ile','Met','Pro','Phe','Trp','Ser','Thr','Asn','Gln','Tyr',
     'Cys','Lys','Arg','His','Asp','Glu','Mpro','23Dhb','34Dhb','2Hiva','Orn','Pgly','Dab','Bala','Aeo','4Mha','Pico','Aaa','Dha','Scy','Pip',
     'Bmt','Adds','DHpg','DHB','nrp','pk']
+
     for feature in pksnrpsvars.pksnrpscoregenes:
         locus = utils.get_gene_id(feature)
         nra = 0
