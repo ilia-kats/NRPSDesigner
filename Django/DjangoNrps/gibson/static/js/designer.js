@@ -1529,15 +1529,22 @@ var fc = FragmentContainer.prototype = new Container();
 				min_i = i;
 			}
 		}
-		//add the fragment
-		
-		df._drag = true;
-		this.addFragAt(df, min_i);
-		df.setRotation(p.a - df._mouse_offset);
-		df.setAngle(_2PI*df.getLength()/this._eff_length);
 
-		//begin the dragging!
-		df.onDragStart(jQuery.Event('mousemove'));
+        var ch1 = this.children[this._bound(min_i - 1)];
+        var ch2 = this.children[this._bound(min_i)];
+        if (ch1.f().getViewable() != 'H' || ch2.f().getViewable() != 'H' || Math.abs(ch1.getOrder() - ch2.getOrder()) != 1) {
+            //add the fragment
+
+            df._drag = true;
+            this.addFragAt(df, min_i);
+            df.setRotation(p.a - df._mouse_offset);
+            df.setAngle(_2PI*df.getLength()/this._eff_length);
+
+            //begin the dragging!
+            df.onDragStart(jQuery.Event('mousemove'));
+            return true;
+        } else
+            return false;
 	}
 	
 	/**
@@ -1769,6 +1776,8 @@ var fc = FragmentContainer.prototype = new Container();
 	{
 		var ipo = this._bound(i + offset);
 		var imo = this._bound(i - offset);
+        if (this.children[ipo].f().getViewable() == 'H')
+            return;
 		
 		var t = this.children[i];
 		this.children[i] = this.children[ipo];
@@ -2073,21 +2082,22 @@ var d = Designer.prototype = new Container();
                                                    event.pageY - o.top);
                     if( (p.x*p.x + p.y*p.y) < F.joinRadius * F.joinRadius )
                     {
-                        //try and avoid being clobbered by high speed
-                        //mice
-                        jf.off('drag');
-                        if(jf.data('cf'))
-                        {
-                            jf.off('dragstop');
-                            jf.on('dragstop', function(ev,ui){
-                                jf.remove(); //remove from the DOM
-                                //but don't tell the server anything
-                            });
+                        if (self.join(jf)) {
+                            //try and avoid being clobbered by high speed
+                            //mice
+                            jf.off('drag');
+                            if(jf.data('cf'))
+                            {
+                                jf.off('dragstop');
+                                jf.on('dragstop', function(ev,ui){
+                                    jf.remove(); //remove from the DOM
+                                    //but don't tell the server anything
+                                });
+                            }
+                            //stop ui.mouse from getting confused...
+                            jQuery(document).mouseup();
+                            return false; //triggers 'stop'
                         }
-                        self.join(jf);
-                        //stop ui.mouse from getting confused...
-                        jQuery(document).mouseup();
-                        return false; //triggers 'stop'
                     }
                     return true;
                 });
@@ -2181,7 +2191,7 @@ var d = Designer.prototype = new Container();
 		var df = new DisplayFragment(f,cf);
 
 		df._fs.fill = c;		
-		this._fc.add(df);
+		return this._fc.add(df);
 	}
 	
 	d._initInfo = function()
@@ -2214,10 +2224,11 @@ var d = Designer.prototype = new Container();
 		
 		//set remove callback
 		var self = this;
-		this._jQueryinfo.find('#fragment_remove')
-			.unbind('click')
-			.click(function() {self.hideInfo();self._fc.rm(df);});
-		
+        var removebtn = this._jQueryinfo.find('#fragment_remove').unbind('click');
+        if (df.f().getViewable() == 'H')
+            removebtn.button("option", "disabled", true);
+        else
+            removebtn.button("option", "disabled", false).click(function() {self.hideInfo();self._fc.rm(df);});
 		//binding to click means it gets triggered immediately
 		this._jQuerycanvas.mousedown(function() {self.hideInfo();});
 	}

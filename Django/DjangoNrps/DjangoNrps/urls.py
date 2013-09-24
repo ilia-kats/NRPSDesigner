@@ -1,7 +1,9 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView
+from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView, request_curation_privs
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.auth import login
+from registration import signals
 
 admin.autodiscover()
 
@@ -9,11 +11,12 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'DjangoNrps.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-	url(r'^$', HomeTemplateView.as_view()),
+	url(r'^$', HomeTemplateView.as_view(), name='home'),
 	url(r'^admin/', include(admin.site.urls)),
-    url(r'^user/profile', ProfileTemplateView.as_view()),
-    url(r'^user/', include('registration.backends.simple.urls')),
-    url(r'^user/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
+	url(r'^user/requestCurationPrivs', request_curation_privs, name="submitCurationRequest"),
+    url(r'^user/profile', ProfileTemplateView.as_view(), name="userprofile"),
+    url(r'^user/', include('registration.backends.default.urls')),
+    url(r'^users/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
     url(r'^tool/', include('designerGui.urls')),
     url(r'^gibthon/', include('gibson.urls')),
     url(r'^fragment/', include('fragment.urls')),
@@ -22,3 +25,9 @@ urlpatterns = patterns('',
 )   
 
 urlpatterns += staticfiles_urlpatterns()
+
+def login_on_activation(user, request, **kwargs):
+    user.backend='django.contrib.auth.backends.ModelBackend'
+    login(request, user)
+
+signals.user_activated.connect(login_on_activation)

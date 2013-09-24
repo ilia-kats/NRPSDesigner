@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerEr
 from django.views.generic.base import TemplateView
 from django.views.generic import CreateView
 from django.core.urlresolvers import reverse_lazy
+from django.core.mail import send_mail
 from django.template import loader, RequestContext
 
 from django.views.generic.detail import DetailView
@@ -10,7 +11,10 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth import get_user_model
 
 from django.forms.models import inlineformset_factory
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.contrib.sites.models import RequestSite
 
 from celery.result import AsyncResult
 
@@ -29,7 +33,13 @@ from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm, Pro
 from gibson.jsonresponses import JsonResponse, ERROR
 
 
+def is_curator(user):
+    if user:
+        return user.is_superuser or user.is_staff or user.groups.filter(name='curator').count() > 0
+    return False
 
+@login_required
+@user_passes_test(is_curator)
 def msa_domain_view(request):
     if request.method == "POST":
 
@@ -95,7 +105,8 @@ def msa_domain_view(request):
 
 #             return HttpResponseRedirect(reverse_lazy("pfam"))
 
-
+@login_required
+@user_passes_test(is_curator)
 def product_add(request):
     t = loader.get_template("databaseInput/addProduct.html")
     c = RequestContext(request, {
@@ -103,6 +114,8 @@ def product_add(request):
         })
     return HttpResponse(t.render(c))
 
+@login_required
+@user_passes_test(is_curator)
 def origin_add(request):
     t = loader.get_template('databaseInput/addOrigin.html')
     c = RequestContext(request, {
@@ -111,6 +124,7 @@ def origin_add(request):
     return HttpResponse(t.render(c))
 
 @login_required
+@user_passes_test(is_curator)
 def product_ajax_save(request):
     if request.method == "POST":
         productForm = ProductForm(request.POST, prefix='product')
@@ -140,6 +154,7 @@ def product_ajax_save(request):
             return JsonResponse({'html': t.render(c)}, ERROR)
 
 @login_required
+@user_passes_test(is_curator)
 def origin_ajax_save(request):
     if request.method == "POST":
         originForm = OriginForm(request.POST, prefix='origin')
@@ -168,8 +183,8 @@ def origin_ajax_save(request):
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
 
-
-
+@login_required
+@user_passes_test(is_curator)
 def cds_input(request):
     t = loader.get_template('databaseInput/cdsInput.html')
     c = RequestContext(request, {
@@ -178,6 +193,8 @@ def cds_input(request):
     })
     return HttpResponse(t.render(c))
 
+@login_required
+@user_passes_test(is_curator)
 def domain_prediction(request):
     if request.method == "POST":
         cdsForm = CdsForm(request.POST, prefix='cds')
@@ -230,6 +247,21 @@ class UserDetailView(DetailView):
     model = get_user_model()
     template_name = 'databaseInput/user_detail.html'
     slug_field = "username"
+
+@login_required
+def request_curation_privs(request):
+    if request.method == "POST" and "text" in request.POST:
+        subject = loader.get_template('databaseInput/curation_email_subject.txt')
+        text = loader.get_template('databaseInput/curation_email.txt')
+        if Site._meta.installed:
+            site = Site.objects.get_current()
+        else:
+            site = RequestSite(request)
+        ctxt = RequestContext(request, {'request_text': request.POST['text'], 'site': site})
+        subject = subject.render(ctxt)
+        subject = ''.join(subject.splitlines())
+        send_mail(subject, text.render(ctxt), request.user.email, settings.CURATION_REQUEST_RECIPIENTS)
+    return HttpResponse()
 
 #def sauceFunc(request):
     ##first read FASTA file and translate sequence to protein!
