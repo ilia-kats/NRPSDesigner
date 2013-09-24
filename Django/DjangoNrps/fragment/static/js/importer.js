@@ -150,7 +150,7 @@ jQuery.widget("ui.importer", {
 	_show_manual: function(){
 		var self = this;
 		var $new = jQuery(document.createElement('div')).html(importer_form_html);
-		$new.find('#form_holder').load('/fragment/import/manual/', {}, function(){
+        $new.find('#form_holder').load(fragment_base_url + 'import/manual/', {}, function(){
 			var $form = $new.find('#add_form').submit(function() {
 				//submit via AJAX instead
 				jQuery.getJSON($form.attr('action'), $form.serialize(), function(data) {
@@ -211,7 +211,7 @@ jQuery.widget("ui.importer", {
 		var self = this;
 		var $new = jQuery(document.createElement('div')).html(importer_form_html);
 		
-		$new.find('#form_holder').load('/fragment/import/entrez/', {}, function(){
+        $new.find('#form_holder').load(fragment_base_url + 'import/entrez/', {}, function(){
 			$new.find('#add_form').submit(function() {
 				self._entrez_search();
 				return false;
@@ -240,14 +240,14 @@ jQuery.widget("ui.importer", {
 		var self = this;
 		var $new = jQuery(document.createElement('div')).html(importer_form_html);
 		
-		$new.find('#form_holder').load('/fragment/import/upload/', {}, function(){
+        $new.find('#form_holder').load(fragment_base_url + 'import/upload/', {}, function(){
 			$new.find('#add_form').submit(function() {
 				return false;
 			});
 			//show the whole kaboodle
 			self.$content.fadeOut('fast', function() {
 				jQuery(this).html($new)
-					.find('#fileupload').fileupload();
+					.find('#fileupload').fileupload({dataType: 'json'});
 				jQuery(this).fadeIn('fast');
 				self._auto_size();
 			});
@@ -290,7 +290,7 @@ jQuery.widget("ui.importer", {
 		var self = this;
 		var data = this.$content.find('#add_form').serialize();
 		this._show_busy("Searching NCBI Entrez...");
-		jQuery.getJSON('/fragment/import/entrez/search/', data, function(data) {
+        jQuery.getJSON(fragment_base_url + 'import/entrez/search/', data, function(data) {
 			if(data[0] != 0)
 				self._show_entrez(data[1]);
 			else
@@ -303,7 +303,7 @@ jQuery.widget("ui.importer", {
 		for( i in ids)
 		{
 			cmds.push({'desc': "Fetching info for id '" + ids[i] + "'", 
-				'url': '/fragment/import/entrez/summary/', 
+                'url': fragment_base_url + 'import/entrez/summary/',
 				'data': {'id': ids[i],},});
 		} 
 		var s = '';
@@ -371,7 +371,7 @@ jQuery.widget("ui.importer", {
 			{
 				var id = ids[i];
 				commands.push( {'desc': "Importing id '" + id + "'...", 
-								'url':'/fragment/import/entrez/import/',
+								'url':fragment_base_url + 'import/entrez/import/',
 								'data': {'id': id,}, });
 			}
 			var s = '';
@@ -452,7 +452,7 @@ var make_row = function(summary)
 var loader_html = '' + 
 '<div style="text-align:center;margin-top:1.5em;">' +
 '	<h2>Please Wait...</h2>' +
-'	<img src="/static/images/spinner.gif" alt="Loading" style="margin-bottom:.5em;" />' +
+'	<img src="' + STATIC_URL + 'images/spinner.gif" alt="Loading" style="margin-bottom:.5em;" />' +
 '	<h3 id="title"></h3>' +
 '	<h4 id="current"></h4>' +
 '	<h5 id="text_progress" style="margin-bottom:.2em;"></h5>' +

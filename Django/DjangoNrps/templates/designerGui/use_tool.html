@@ -339,8 +339,7 @@
 </br>
 
 
-<div class="row-fluid">
-<div class="container-narrow">
+<div class="row">
 <div class="span8" id="params" >
     <div class="box" data-intro="Lorem ipsum..." data-step="2">
         <p>Please choose an organism to express your non-ribosomal peptide!</p>
@@ -370,7 +369,6 @@
         <button id="monomer_add">Add monomer</button><button id="save"> Save </button><button id="submit">Design construct</button></div>
     </div>
 </div>
-</div>
 
 <div class="span4" id="struct">
     <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;" data-intro="Lorem ipsum..." data-step="4">
@@ -380,8 +378,10 @@
             </div>
     </div>
 </div>
-<br>
-<div class="span8">
-<a class="btn" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how this works!</a>
+</div>
+<div class="row">
+    <div class="span12">
+        <button class="btn" onclick="introJs().start();">Show me how this works!</a>
+    </div>
 </div>
 {% endblock %}
