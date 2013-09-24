@@ -4,14 +4,19 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+from celery.contrib.methods import task
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 
 from nrpsSMASH.analyzeNrpCds import nrpsSmash
 from databaseInput.MSA.MSA import msa_run
-from .validators import validateCodingSeq
+from databaseInput.validators import validateCodingSeq
 
+from celeryHelper.helpers import update_celery_task_state_log
+
+from time import sleep
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     product = models.ForeignKey('Product', blank=True, null=True)
@@ -28,8 +33,10 @@ class Cds(models.Model):
         verbose_name = "Coding sequence"
         verbose_name_plural = "Coding sequences"
 
-    # uses nrpsSMASH stuff in order to generate initial input for formset  
+    # uses nrpsSMASH stuff in order to generate initial input for formset
+    @task()
     def predictDomains(self):
+        update_celery_task_state_log("-Automated domain prediction started..")
         initialDicts = []
         allDomainTypes = [x.smashName for x in Type.objects.all()]
         nrpsSmashResult = nrpsSmash(self.dnaSequence)

@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# django celery
+import djcelery
+djcelery.setup_loader()
+CELERY_IMPORTS=("databaseInput.models")
+CELERY_TRACK_STARTED = True
+CELERY_RESULT_BACKEND = "amqp"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -45,7 +51,9 @@ INSTALLED_APPS = (
     'annoying',
     'fragment',
     'gibson',
-    'south'
+    'south',
+    'djcelery',
+    'celeryHelper'
 )
 
 MIDDLEWARE_CLASSES = (

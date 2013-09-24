@@ -6,7 +6,7 @@ from os import path
 import os
 import shutil
 from hmmscanparser import parse_hmmscan_results
-from substrates import run_nrps_substr_spec_predictions, parse_substr_spec_predictions, calculate_consensus_prediction, generate_domainnamesdict
+from substrates import run_nrps_substr_spec_predictions, calculate_consensus_prediction, generate_domainnamesdict, parse_nrps_preds
 
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -14,6 +14,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.Alphabet import IUPAC
 
+from celeryHelper.helpers import update_celery_task_state_log
 
 # main input
 #withinclustergenes example
@@ -22,6 +23,7 @@ from Bio.Alphabet import IUPAC
 #  decide later on regarding how to best set those options for server etc
 #  possibly convert options from argparse.Namespace to dictionary
 #  but for now use this as a hack.. WHICH has terrible side-effects
+
 
 def nrpsSmash(dnaSeq):
     options = Namespace()
@@ -64,7 +66,7 @@ def specific_analysis(seq_record, options):
     pksnrpsvars = annotate_pksnrps(pksnrpsvars, seq_record)
     if len(pksnrpsvars.pksnrpscoregenes) > 0:
         run_nrps_substr_spec_predictions(pksnrpsvars, seq_record, options)
-        parse_substr_spec_predictions(pksnrpsvars, options)
+        parse_nrps_preds(options, pksnrpsvars)
         calculate_consensus_prediction(pksnrpsvars)
         generate_domainnamesdict(pksnrpsvars)
     return pksnrpsvars
@@ -88,6 +90,7 @@ def run_nrpspks_specific_hmmer(seq_record, withinclustergenes, pksnrpsvars):
     # note from HMMER3 documentation: "TC thresholds are
 	# generally considered to be the score of the lowest-scoring known true positive that
 	# is above all known false positives."
+    update_celery_task_state_log("-Scanning for NRP domains using HMMER3")
     nrpspksdomain_opts = ["--cut_tc"]
     nrpspksdomain_results = utils.run_hmmscan(utils.get_full_path(__file__, "nrpspksdomains.hmm"), nrpspksfasta, nrpspksdomain_opts)
     hmmlengthsdict = utils.hmmlengths(utils.get_full_path(__file__, "nrpspksdomains.hmm"))

@@ -21,7 +21,8 @@ urlpatterns = patterns('',
     url(r'^gibthon/', include('gibson.urls')),
     url(r'^fragment/', include('fragment.urls')),
     url(r'^input/', include('databaseInput.urls')),
-)
+    url(r'^celery/',include('celeryHelper.urls')),
+)   
 
 urlpatterns += staticfiles_urlpatterns()
 

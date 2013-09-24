@@ -16,6 +16,8 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib.sites.models import RequestSite
 
+from celery.result import AsyncResult
+
 import json
 #import requests
 import time
@@ -29,6 +31,7 @@ from databaseInput.models import Origin, Cds, Domain
 from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm, ProductForm
 
 from gibson.jsonresponses import JsonResponse, ERROR
+
 
 def is_curator(user):
     if user:
@@ -197,7 +200,23 @@ def domain_prediction(request):
         cdsForm = CdsForm(request.POST, prefix='cds')
         if cdsForm.is_valid():
             cds = cdsForm.save(commit=False)
-            initialDict = cds.predictDomains()
+            #test_task = cds.predictDomains.delay()
+            task = cds.predictDomains.delay()
+            return JsonResponse({'taskId': task.id})
+        else:
+            t = loader.get_template('databaseInput/cdsInputTab.html')
+            c = RequestContext(request, {
+            'form':cdsForm,
+            'isAjax': True,
+                })
+            return JsonResponse({'html': t.render(c)}, ERROR)
+    
+def get_predicted_domain_formset(request, task_id):
+ if request.method == "POST":
+        cdsForm = CdsForm(request.POST, prefix='cds')
+        if cdsForm.is_valid():
+            cds = cdsForm.save(commit=False)
+            initialDict = AsyncResult(task_id).get()
             t = loader.get_template('databaseInput/domainInput.html')
             DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
             c = RequestContext(request, {
@@ -209,11 +228,14 @@ def domain_prediction(request):
             t = loader.get_template('databaseInput/cdsInputTab.html')
             c = RequestContext(request, {
             'form':cdsForm,
-            'isAjax': True
+            'isAjax': True,
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
-    
 
+# kind of hacky view in order to be able to call get_predicted_domain_formset
+# with task_id from JS and be able to use reverse url lookup
+def get_predicted_domain_formset_base(request):
+    return HttpRequest("igem <3")
 
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'

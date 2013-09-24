@@ -513,6 +513,7 @@ def run_minowa_a(infile2, outfile):
         score = str(scoredict[i])
         hmm_scores.append(score)
 
+
       out_file.write("Substrate:")
       out_file.write("\t")
       out_file.write("Score:")
