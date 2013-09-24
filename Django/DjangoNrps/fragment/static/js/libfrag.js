@@ -15,7 +15,7 @@ var libFrag = new function()
 	this.getByID = function(id, _suc)
 	{
 		AJAX.post({
-			url: '/fragment/api/'+id+'/', 
+			url: fragment_api_url + id+'/',
 			success: function(data)
 			{
 				_suc(new Fragment(data));
@@ -24,22 +24,26 @@ var libFrag = new function()
 	};
 
     //Fetch all available fragments, returned in a list
-	this.getAll = function(_suc)
+	this.getAll = function()
 	{
-       AJAX.post({
-           url: '/fragment/api/listAll/',
-           success: function(data)
-           {
-               var frags = new Array();
-               for(f in data)
+        var _suc = Array.prototype.slice.call(arguments,-1)[0];
+        postdata = {
+            url: fragment_api_url + 'listAll/',
+            success: function(data)
+            {
+                var frags = new Array();
+                for(f in data)
                 {
                     frags.push(new Fragment(data[f]));
                 }
                 _suc(frags);
-           },
-       });
+            },
+        };
+        if (arguments.length > 1)
+            postdata['data'] = {'type': Array.prototype.slice.call(arguments, 0, -1)};
+        AJAX.post(postdata);
 	}
-    
+
     /*
      * Return fragment colors
      */
@@ -104,6 +108,7 @@ function Fragment(data)
 	this.getName = function() {return name;};
     this.getDesc = function() {return desc;};
 	this.getLength = function() {return length;};
+    this.getViewable = function() {return viewable;};
 
 	//if the sequence has not already been fetched, it will be streamed, otherwise
 	//complete_fn will be called immediately
@@ -117,7 +122,7 @@ function Fragment(data)
 
 		//stream the sequence from the server
 		AJAX.stream({
-			url: '/fragment/api/' + id + '/getSeq/',
+			url: fragment_api_url + id + '/getSeq/',
 			success: function(data)
 			{
 				sequence = new String();
@@ -158,9 +163,9 @@ function Fragment(data)
 
 		//fetch the metadata from the server
 		AJAX.post({
-			url: '/fragment/api/' + id + '/getMeta/',
+			url: fragment_api_url + id + '/getMeta/',
 			success: function(ret){
-				meta = ret;
+				metadata = ret;
 				complete_fn(ret);
 			},
 			error: function() {},
@@ -171,7 +176,7 @@ function Fragment(data)
 	{
 		metadata = new_meta;
 		AJAX.post({
-			url: '/fragment/api/' + id + '/setMeta/',
+			url: fragment_api_url + id + '/setMeta/',
 			success: success_cb,
 			error: fail_cb,
 			data: metadata,
@@ -181,7 +186,7 @@ function Fragment(data)
 	this.getFeats = function(success_fn)
 	{
 		AJAX.post({
-			url: '/fragment/api/' + id + '/getFeats/',
+			url: fragment_api_url + id + '/getFeats/',
 			success: success_fn,
 			error: function(err)
 			{
@@ -205,7 +210,7 @@ function Fragment(data)
     this.crop = function(cropsettings, cb)
     {
         AJAX.post({
-            url: '/fragment/api/'+ id + '/crop/',
+            url: fragment_api_url + id + '/crop/',
             data: cropsettings,
             success: function(data){
                 if(jQuery.isFunction(cb)) cb(data);
@@ -231,10 +236,11 @@ function Fragment(data)
 	var name = data.name;
 	var desc = data.desc;
 	var length = data.length;
+    var viewable = data.viewable;
 
 	//Data which might get filled in by subsequent AJAX calls
 	var sequence = null;
-	var metadata = null;
+	var metadata = ('annots' in data && 'refs' in data) ? data : null;
 }
 
 // ============================================ Widgets
@@ -329,29 +335,49 @@ jQuery.widget("ui.jFragmentSelector", {
 
         this.frags = new Array();
         //fetch the fragments
-        libFrag.getAll(function(frags){
+        libFrag.getAll("Expression_Plasmid", "Plasmid_Backbone", "Promoter", "RBS", "Terminator", function(frags){
+            var categories = new Array();
+            for (f in frags)
+            {
+                frags[f].getMeta(function(meta){
+                    if ('annots' in meta && 'part_type' in meta['annots'])
+                    {
+                        if (!(meta['annots']['part_type'] in categories))
+                            categories[meta['annots']['part_type']] = new Array();
+                        categories[meta['annots']['part_type']].push(frags[f]);
+                    }
+                })
+            }
             //remove the loading screen
             self.jQueryfragView.empty();
             //add in the fragments one by one
-            for(f in frags)
+            for (c in categories)
             {
-                self.frags.push(frags[f]);
-                jQuery('<div/>').addClass('JFS_fragHolder')
-                .append( jQuery('<div/>').jFragment({
-                    fragment: frags[f], 
-                    color: libFrag.getNextColor(),
-                    helper: function(){
-                        return jQuery('<div/>').jFragment({
-                            draggable:false,
-                            fragment: jQuery(this).jFragment('getFragment'),
-                        }).appendTo(self.jQueryel);
-                    },
-                    containment: self.options.containment,
-                    zIndex:200,
-                }))
-                .data('f', f)
-                .appendTo(self.jQueryfragView);
+                var header = jQuery('<h5>' + c + '</h5>');
+                var div = jQuery('<div/>');
+                for (f in categories[c])
+                {
+                    self.frags.push(categories[c][f]);
+                    jQuery('<div/>').addClass('JFS_fragHolder')
+                    .append( jQuery('<div/>').jFragment({
+                        fragment: categories[c][f],
+                        color: libFrag.getNextColor(),
+                        helper: function(){
+                            return jQuery('<div/>').jFragment({
+                                draggable:false,
+                                fragment: jQuery(this).jFragment('getFragment'),
+                            }).appendTo(self.jQueryel);
+                        },
+                        containment: self.options.containment,
+                        zIndex:200,
+                    }))
+                    .data('f', categories[c][f])
+                    .appendTo(div);
+                }
+                header.appendTo(self.jQueryfragView);
+                div.appendTo(self.jQueryfragView);
             }
+            self.jQueryfragView.accordion({collapsible: true, heightStyle: "content"});
             self.jQuerynumItems.text(frags.length);
         });
 

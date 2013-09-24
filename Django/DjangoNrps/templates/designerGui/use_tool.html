@@ -5,7 +5,7 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
-    var nrpEnabledEffects = false
+    var nrpEnabledEffects = false;
     var monomers = [
         {% for aa in substrates %}
             {id: {{ forloop.counter0 }}, text: '{{ aa.name }}', lid: {% firstof aa.L aa.D %}, did:  
@@ -23,7 +23,7 @@
     ];
     var animationDuration = 300;
     var structAR = 16 / 9;
-    var pid = {{pid}}
+    var pid = {{pid}};
 
     function getMonomers()
     {

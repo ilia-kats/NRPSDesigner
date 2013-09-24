@@ -3,7 +3,7 @@
  *
  */
 
-$.widget('ui.cropform', {
+jQuery.widget('ui.cropform', {
     options: {
         start: 0,
         end: 0,
@@ -13,7 +13,7 @@ $.widget('ui.cropform', {
     _create: function()
     {
         var self = this;
-        var el = $(this.element[0]);
+        var el = jQuery(this.element[0]);
         this.el = el;
         this.new_settings = el.find('#new_settings');
         this.result_type = el.find('select#result_type');
@@ -37,7 +37,7 @@ $.widget('ui.cropform', {
             width: 200,
             change: function(ev, ui)
             {
-                var act = $(ui.option).val();
+                var act = jQuery(ui.option).val();
                 if(act == 'new')
                     self.enableNewSettings();
                 else if(act == 'overwrite')
@@ -53,10 +53,10 @@ $.widget('ui.cropform', {
         });
 
         var o = this.options;
-        this.name = $('#new_name').val(o.fragment.getName()+'_crop'); 
-        this.desc = $('#new_desc').val(o.fragment.getDesc()); 
-        this.start = $('#range_from').text(this.options.start);
-        this.end = $('#range_to').text(this.options.end);
+        this.name = jQuery('#new_name').val(o.fragment.getName()+'_crop');
+        this.desc = jQuery('#new_desc').val(o.fragment.getDesc());
+        this.start = jQuery('#range_from').text(this.options.start);
+        this.end = jQuery('#range_to').text(this.options.end);
 
     },
     setRange: function(start, end)
@@ -93,7 +93,7 @@ $.widget('ui.cropform', {
             new_name: this.name.val(),
             new_desc: this.desc.val(),
         }, function(id){
-            if($('#go_new').is(':checked'))
+            if(jQuery('#go_new').is(':checked'))
                 window.location = '/fragment/'+id;
             else
                 location.reload();

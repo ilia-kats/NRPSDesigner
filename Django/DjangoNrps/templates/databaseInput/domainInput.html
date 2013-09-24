@@ -1,0 +1,143 @@
+<div id="accordion">
+
+          {% for domainForm in originSet %}
+
+          <h3> Domain {{ forloop.counter }} </h3>
+          <div>
+                    {{originSet.management_form}}
+
+            {{ domainForm.non_field_errors }}
+            <form>
+            <div class="row">
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.module.errors }}
+                  <label for="id_module">Module: <br/> </label>
+                  {{ domainForm.module }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.domainType.errors }}
+                  <label for="id_domainType">Domain Type: <br/> </label>
+                  {{ domainForm.domainType }}
+                </div>
+              </div>
+              <div class="span3">
+
+
+                <div class="fieldWrapper">
+                  {{ domainForm.substrateSpecificity.errors }}
+                  <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
+                  <div class = "domainSelect2Wrapper">
+
+                    {{ domainForm.substrateSpecificity }}
+                  </div>
+
+
+
+
+                </div>
+
+              </div>
+
+              <div class="span3">
+                
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamStart.errors }}
+                  <label for="id_module">Pfam Start: <br/> </label>
+                  {{ domainForm.pfamStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamStop.errors }}
+                  <label for="id_domainType">Pfam Stop: <br/> </label>
+                  {{ domainForm.pfamStop }}
+                </div>
+              </div>
+              <div class="span3">
+                
+                </div>
+              </div>
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.definedStart.errors }}
+                  <label for="id_module">definedStart: <br/> </label>
+                  {{ domainForm.definedStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.definedStop.errors }}
+                  <label for="id_domainType">definedStop: <br/> </label>
+                  {{ domainForm.definedStop}}
+                </div>
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.description.errors }}
+                  <label for="id_module">Description: <br/> </label>
+                  {{ domainForm.description }}
+                </div>
+
+      
+
+
+
+
+            </div>
+
+                        <button class="btn msaGenButton" type="button">MSA LOL</button>
+
+            </div>
+
+          </form>
+        
+                                {% endfor %}
+
+
+
+ 
+  </div>
+          <p><input type="submit" value="Send message" /></p>
+
+
+<div id="msaModal" class="modal hide fade fullScreenModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Multiple Sequence Alignment</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+jQuery(".msaGenButton").click(function(e) {
+  btn = e.delegateTarget;
+  domainFormArray = jQuery(btn).closest("form").serializeArray();
+  cdsFormArray = jQuery("#cdsInputTab").find("form").serializeArray();
+  
+  // convert "domain_set-0-module" to "domain_set-module"
+  // so that Django view can handle this as normal form with prefix "domain_set"...
+  domainFormArray = domainFormArray.map(function(x) {
+      splitName = x.name.split("-");
+      x.name = splitName[0]+"-"+splitName[2];
+      return x;
+    });
+  cdsAndDomainFormArray = cdsFormArray.concat(domainFormArray);
+
+  jQuery.post("{% url "msaDomainView" %}", cdsAndDomainFormArray, function(data){
+       jQuery("#msaModal .modal-body").html( data );
+       jQuery("#msaModal").modal("show");
+      });
+
+    });
+
+jQuery(".domainSelect2Wrapper").children().select2();
+jQuery(".domainSelect2Wrapper").children().css("width","100%")
+
+</script>

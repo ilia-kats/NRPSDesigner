@@ -15,5 +15,5 @@ urlpatterns = patterns('',
 					url(r'^structure/', make_structure, name="Structure"),
 					url(r'^submit/', submit_nrp, name="submitNRP"),
 					url(r'^api/(?P<pid>\d+)', saveNrpMonomers, name = "saveNrpMonomers" ),
-					url(r'^domainSequence/(?P<pid>\d+)', DomainSequenceView.as_view(), name="domainSequence")
+					url(r'^(?P<pid>\d+)/domainSequence/', DomainSequenceView.as_view(), name="domainSequence")
 					)

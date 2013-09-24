@@ -4,6 +4,7 @@ import subprocess
 from xml.dom.minidom import parseString
 import json
 
+from DjangoNrps.settings import DATABASES
 from databaseInput.models import Substrate, Domain
 from gibson.models import Construct, ConstructFragment
 from fragment.models import Gene
@@ -55,13 +56,10 @@ class NRP(models.Model):
 			shape = 'c')
 		for count, domainId in enumerate(self.getDomainSequence()):
 			domain = Domain.objects.get(pk=domainId)
-			cdsSequence = domain.cds.dnaSequence
-			domainStart = domain.definedStart - 1
-			domainStop  = domain.definedLinkerStop
-			domainSequence = cdsSequence[domainStart:domainStop]
+			domainSequence = domain.get_sequence()
 
 			domainGene = Gene.objects.create(owner = self.owner,
-				name = 'type:' + str(domain.domainType) + ' gene:' + str(domain.cds.geneName),
+				name = 'type:' + str(domain.domainType),# + ' gene:' + str(domain.cds.geneName),
 				description = 'NRPS designer',
 				sequence = domainSequence,
 				origin = 'ND',
@@ -119,7 +117,14 @@ class NRP(models.Model):
 
 	def designDomains(self):
 		# call NRPS Designer C++ program
-		rawXmlOutput = subprocess.check_output('nrpsdesigner -m '+self.getPeptideSequenceAsString(), shell=True)
+		dbSettings = {
+			'--mysql-host '     : DATABASES['default']['HOST'],
+			'--mysql-port '     : DATABASES['default']['PORT'],
+			'--mysql-user '     : DATABASES['default']['USER'],
+			'--mysql-password  ': DATABASES['default']['PASSWORD']
+			}
+		dbCmds = ' '.join([k+v for k,v in dbSettings.items() if v!=''])
+		rawXmlOutput = subprocess.check_output('nrpsdesigner ' +dbCmds +' -m '+self.getPeptideSequenceAsString(), shell=True)
 
 		# parse xml to extract domain list
 		designerDom = parseString(rawXmlOutput)

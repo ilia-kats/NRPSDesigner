@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block css-include %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/datatable.css" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/fragment.css" />
+<link rel="stylesheet" type="text/css" href="{% static "css/datatable.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/fragment.css" %}" />
 {% endblock %}
 
 
 {% block js-include %}
-<script src="{{ STATIC_URL }}/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}/js/fragmentlist.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}/js/importer.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}/js/formtools.js" type="text/javascript"></script>
+<script type="text/javascript">
+var fragment_base_url = '{% url 'fragment.views.fragments' %}';
+var fragment_api_url = fragment_base_url + 'api/';
+</script>
+<script src="{% static "js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/fragmentlist.js" %}" type="text/javascript"></script>
+<script src="{% static "js/importer.js" %}" type="text/javascript"></script>
+<script src="{% static "js/formtools.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block app-menu %}
@@ -47,7 +53,7 @@
 				</td>
 				<td>
 					<p class="table-para">
-					<input class="selected-check" id="{{fragment.id}}-checkbox" 
+					<input class="selected-check" id="{{fragment.id}}-checkbox"
 							type="checkbox" name="selected" value="{{fragment.id}}"/>
 					</p>
 				</td>
@@ -88,43 +94,43 @@ var delete_html = '<div style="text-align:center;margin-top:1.5em;">' +
 var handle_updated_selection = function(event, data){
 	if( data['selected'] != 0 )
 	{
-		$('#delete_btn').button('enable');
-		$('#download_btn').button('enable');
+		jQuery('#delete_btn').button('enable');
+		jQuery('#download_btn').button('enable');
 	}
 	else
 	{
-		$('#delete_btn').button('disable');
-		$('#download_btn').button('disable');
+		jQuery('#delete_btn').button('disable');
+		jQuery('#download_btn').button('disable');
 	}
 }
 
 var show_delete_dialog = function(){
-	var num = $('#fragment_table').fragmentList('getNumSelected');
+	var num = jQuery('#fragment_table').fragmentList('getNumSelected');
 	var s = ''
 	if(num > 1)
 		s = 's'
 	var text = num + " fragment" + s;
-	$('#delete_contents').html(delete_html)
+	jQuery('#delete_contents').html(delete_html)
 		.find('#num-frags-del')
 			.text(text);
-	
-	$('#cancel-delete').button({
+
+	jQuery('#cancel-delete').button({
 		label:"Cancel",
 		icons:{primary:'ui-icon-cancel'}
 	}).click(function() {
-		$('#confirm_delete').dialog('close');
+		jQuery('#confirm_delete').dialog('close');
 	});
-	
-	$('#delete-form').submit(function() {
+
+	jQuery('#delete-form').submit(function() {
 		return false;
 	});
-	
-	$('#confirm-delete').button({
+
+	jQuery('#confirm-delete').button({
 		label:"Delete",
 		icons:{primary:'ui-icon-trash'}
 	}).click(function() {
 		var commands = new Array();
-		var ids = $('#fragment_table').fragmentList('getList');
+		var ids = jQuery('#fragment_table').fragmentList('getList');
 		for(i in ids)
 		{
 			var id = ids[i];
@@ -134,23 +140,23 @@ var show_delete_dialog = function(){
 							'type': 'POST',});
 		}
 
-		$('#confirm_delete').loader({	'commands': commands,
+		jQuery('#confirm_delete').loader({	'commands': commands,
 										'autoStart': true,
 										'done': function(errors) {location.reload();},
 										'title': 'Deleting Fragments...',});
 
 	});
-	
-	$('#confirm_delete').dialog('open');
+
+	jQuery('#confirm_delete').dialog('open');
 };
 
-$(document).ready(function() {
-	
-	$('#fragment_table').fragmentList({
+jQuery(document).ready(function() {
+
+	jQuery('#fragment_table').fragmentList({
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
 	});
-	
-	$('#fragment_table').dataTable({
+
+	jQuery('#fragment_table').dataTable({
 		bAutoWidth: false,
 		bJQueryUI: true,
 		aoColumns: [
@@ -165,35 +171,35 @@ $(document).ready(function() {
 			},
 		]
 	});
-	
-	$('#fragment_form_open').button({
+
+	jQuery('#fragment_form_open').button({
 		label:"Add new fragment",
 		icons:{primary:'ui-icon-plusthick'}
 	}).click(function () {
-		$('#fragment_form')
+		jQuery('#fragment_form')
 			.importer()
 			.importer('open');
 	});
-	
-	$('#download_btn').button({
+
+	jQuery('#download_btn').button({
 		label:"Download",
 		icons:{primary:'ui-icon-link'},
 		disabled: true,
 	}).click(function () {
-		$('#select_form')
+		jQuery('#select_form')
 			.prop('action', 'download/')
 			.submit();
-	});	
-	
-	$('#delete_btn').button({
+	});
+
+	jQuery('#delete_btn').button({
 		label:"Delete Selection",
 		icons:{primary:'ui-icon-trash'},
 		disabled: true,
 	}).click(function() {
 		show_delete_dialog();
 	});
-	
-	$('#confirm_delete').dialog({
+
+	jQuery('#confirm_delete').dialog({
 		autoOpen:false,
 		resizable:false,
 		modal:true,
@@ -203,7 +209,7 @@ $(document).ready(function() {
 		height:"auto",
 		width:"580"
 	});
-	
+
 });
 
 </script>

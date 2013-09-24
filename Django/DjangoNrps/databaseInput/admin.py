@@ -17,6 +17,13 @@ class CdsInLine(generic.GenericTabularInline):
 	model = Linkout
 	extra = 1
 
+class ProductInLine(generic.GenericTabularInline):
+    model = Linkout
+    extra = 1
+
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductInLine]
+
 class CdsAdmin(admin.ModelAdmin):
 	inlines = [CdsInLine]
 
@@ -39,7 +46,7 @@ admin.site.register(Substrate, SubstrateAdmin)
 admin.site.register(Origin, OriginAdmin)
 admin.site.register(Cds, CdsAdmin)
 admin.site.register(Type)
-admin.site.register(Product)
+admin.site.register(Product, ProductAdmin)
 admin.site.register(LinkoutType)
 admin.site.register(Modification)
 

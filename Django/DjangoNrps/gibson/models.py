@@ -454,7 +454,7 @@ class Construct(models.Model):
 				cf.save()
 				self.processed = False
 		self.save()
-	
+
 	def process(self, new=True):
 		"""Calculate primers for the construct which are at least
 		settings.min_overlap in length and have melting temparatures at or above

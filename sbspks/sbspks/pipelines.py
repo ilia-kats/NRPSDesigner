@@ -12,6 +12,8 @@ class SbspksPipeline(object):
     spiders = 0
     data = []
 
+    names = {'ala': 'alanine', 'gly': 'Glycine', 'ser': 'serine', 'phe': 'phenylalanine', 'leu': 'leucine', 'thr': 'threonine', 'tyr': 'tyrosine', 'gln': 'glutamine', 'asn': 'asparagine', 'orn': 'ornithine', 'asp': 'aspartic acid', 'glu': 'glutamic acid', 'val': 'valine', 'ile': 'isoleucine', 'trp': 'tryptophan', 'his': 'histidine', 'lys': 'lysine', 'arg': 'arginine', 'met': 'methionine', 'cys': 'cysteine', 'pro': 'proline'}
+
     @classmethod
     def open_spider(cls, spider):
         cls.spiders += 1
@@ -59,11 +61,23 @@ class SbspksPipeline(object):
                     domain.save() # need pk for many-to-many
                     if d['dtype'] == 'A' or d['dtype'] == 'C':
                         try:
-                            try:
-                                s = Substrate.objects.get(name="L-%s" % d['substrate'])
-                            except Substrate.DoesNotExist:
-                                s = Substrate(name=d['substrate'], chirality='L', user=user)
+                            if d['substrate'] in cls.names:
+                                if d['substrate'] != 'gly':
+                                    substr = "L-%s" % cls.names[d['substrate']]
+                                else:
+                                    substr = cls.names[d['substrate']]
+                                s = Substrate.objects.get(name=substr)
+                            else:
+                                substr = d['substrate']
+                                s = Substrate(name='L-%s' % d['substrate'], chirality='L', user=user)
                                 s.save()
+                                sd = Substrate(name='D-%s' %d['substrate'], chirality='D', user=user)
+                                sd.save()
+                                s.enantiomer = sd
+                                sd.enantiomer = s
+                                s.save()
+                                sd.save()
+                                cls.names[d['substrate']] = d['substrate']
                                 domain.substrateSpecificity.add(s)
                         except KeyError as e:
                             print "KeyError:"

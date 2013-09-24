@@ -13,7 +13,7 @@ from django.db.models import Q
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
-import simplejson as json
+import json
 from gibson.jsonresponses import JsonResponse, RawJsonResponse, ERROR
 
 ## Helpful functions
@@ -59,7 +59,7 @@ def get_gene(usr, fid):
 		fid = int(fid)
 	except ValueError:
 		raise Http404
-	return Gene.objects.get(id = fid, owner=usr)
+	return Gene.objects.get(Q(owner=usr) | Q(viewable='G'), id = fid)
 
 def read_meta(g):
 	"""Return JSON-ready metadata about a fragment"""
@@ -80,6 +80,7 @@ def read_meta(g):
 			'id': g.id,
 			'name': g.name,
 			'desc': g.description,
+			'viewable': g.viewable,
 			'refs': refs,
 			'annots': annots,
 			'origin': g.get_origin_display(),
@@ -189,13 +190,20 @@ def get_fragment(request, fid):
         'name': g.name,
         'desc': g.description,
         'length': g.length(),
+        'viewable': g.viewable
     })
 
 @login_required
 def list_fragments(request):
     """Return metadata of all fragments owned by a user"""
+    args = {'owner': request.user, 'viewable__in': ['L', 'G']}
     try:
-        frags = Gene.objects.filter(owner=request.user)
+        if 'type[]' in request.POST:
+            args['annotations__key__exact'] = 'part_type'
+            args['annotations__value__in'] = request.POST.getlist('type[]')
+            frags = Gene.objects.select_related('annotations').filter(**args)
+        else:
+            frags = Gene.objects.filter(**args)
     except ObjectDoesNotExist:
         return JsonResponse('Could not read fragments', ERROR)
     ret = []

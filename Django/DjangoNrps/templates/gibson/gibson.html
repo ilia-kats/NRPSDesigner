@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block css-include %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/datatable.css" />
+<link rel="stylesheet" type="text/css" href="{% static "css/datatable.css" %}" />
 <style type="text/css">
 #fragment_list h3 {
 	padding:10px;
@@ -25,13 +27,13 @@ td ul {
 
 
 {% block js-include %}
-<script src="{{ STATIC_URL }}/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}/js/ajax.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}/js/gibson.js" type="text/javascript"></script>
+<script src="{% static "js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/ajax.js" %}" type="text/javascript"></script>
+<script src="{% static "js/gibson.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block app-menu %}
-<a href="/gibthon/" id="library">Library</a>|
+<a href="{% url 'gibson.views.constructs' %}" id="library">Library</a>|
 <button id="save">Save</button>
 <button id="delete">Delete</button>
 |

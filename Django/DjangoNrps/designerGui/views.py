@@ -15,7 +15,8 @@ import math
 import json
 import xml.etree.ElementTree as x
 import openbabel as ob
-import simplejson
+import json
+
 
 @login_required
 def makeConstruct(request,pid):
@@ -27,8 +28,8 @@ def makeConstruct(request,pid):
     constructId = con.pk
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
-    domainSequenceTabLink = reverse('domainSequence', kwargs = {'cid' : pid})
-    jsonOutput = simplejson.dumps({"constructId": constructId,
+    domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
+    jsonOutput = json.dumps({"constructId": constructId,
         'designTabLink': designTabLink,
         'primerTabLink': primerTabLink,
         'domainSequenceTablLink': domainSequenceTabLink})
@@ -104,8 +105,8 @@ class SpeciesListView(ListView):
         context['modifications'] = modfs.values()
         #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
         
-        
-        aas = Substrate.objects.all()
+
+        aas = Substrate.objects.exclude(structure='')
         realAas = []
         for aa in aas:
             if not hasattr(aa.parent, 'name'):

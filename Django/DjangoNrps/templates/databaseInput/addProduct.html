@@ -1,0 +1,34 @@
+
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Add new product</h3>
+</div>
+<div class="modal-body">
+  <form id="addProductForm" action="" method="post">
+  {{ form.as_p }}
+
+  </div>
+  <div class="modal-footer">
+    <button id="closeProductModal" class="btn" data-dismiss="modal" type="button" aria-hidden="true">Close</button>
+    <button id="submitProduct" type="button" class="btn btn-inverse">Submit Product</button>
+  </div>
+
+</form>
+</div>
+
+<script>
+
+
+jQuery("#submitProduct").click(function() {
+    jQuery.post("{% url "saveProduct" %}", jQuery("#addProductForm, #cdsFormForDomainPrediction").serialize(), function(data){
+      if (data[0] === AJAX_ERROR){
+        jQuery("#myModal").html(data[1].html);
+      } else {
+        jQuery("#tabs").tabs("disable",1);
+        jQuery("#cdsInputTab").html(data[1].html);
+
+        jQuery("#myModal").modal('hide')
+    }
+  });
+  });
+</script>

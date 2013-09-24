@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <style type='text/css'>
 #overview .fragment
 {
@@ -72,7 +73,7 @@ jQuery(document).ready( function(){
         <div class='primer-edit'>
             <div style='position:relative;'>
                 <div id='saving' style='display:none;'>
-                    <img src='/static/images/spinner.gif' size='25px' />
+                    <img src='{% static "images/spinner.gif" %}' size='25px' />
                     <h4>Saving</h4>
                 </div>
                 <div style='text-align:center'>

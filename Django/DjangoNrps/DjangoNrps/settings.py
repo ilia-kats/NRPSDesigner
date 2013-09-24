@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# django celery
+import djcelery
+djcelery.setup_loader()
+CELERY_IMPORTS=("databaseInput.models")
+CELERY_TRACK_STARTED = True
+CELERY_RESULT_BACKEND = "amqp"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -38,13 +44,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'databaseInput',
+    'DjangoNrps', # for templatetags
     'registration',
     'designerGui',
-    'django_evolution',
+    #'django_evolution',
     'annoying',
     'fragment',
     'gibson',
-    'south'
+    'south',
+    'djcelery',
+    'celeryHelper'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -123,3 +132,20 @@ STATICFILES_FINDERS = (
 )
 
 LOGIN_REDIRECT_URL = '/user/profile'
+ACCOUNT_ACTIVATION_DAYS = 7
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail.
+EMAIL_HOST = 'localhost'
+
+# Port for sending e-mail.
+EMAIL_PORT = 25
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+
+DEFAULT_FROM_EMAIL = 'kats@stud.uni-heidelberg.de'
+CURATION_REQUEST_RECIPIENTS = ['nikos.ignatiadis01@gmail.com', 'k.herbst@stud.uni-heidelberg.de', 'nilskurzawa@yahoo.de', 'kats@stud.uni-heidelberg.de']
