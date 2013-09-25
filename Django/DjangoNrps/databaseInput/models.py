@@ -183,6 +183,13 @@ class Substrate(models.Model):
         bla = [self.parent is not None]
         pass
 
+    def can_be_added(self):
+        if self.can_be_added_by_adenylation_domain() or self.can_be_added_by_modification_domain():
+            return True
+        elif self.enantiomer is not None:
+            return self.enantiomer.can_be_added_by_adenylation_domain or self.enantiomer.can_be_added_by_modification_domain()
+        else:
+            return False
 
 class Modification(models.Model):
     name = models.CharField(max_length=100)
