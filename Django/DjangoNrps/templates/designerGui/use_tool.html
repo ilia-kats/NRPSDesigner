@@ -188,12 +188,16 @@
     }
 
     function makeConstruct(){
-      jQuery.post("{% url 'makeConstruct' pid %}").done(activateTabs);
+        jQuery.post("{% url 'makeConstruct' pid %}").done(function(data) {
+            if (data.taskId != undefined)
+                checkCeleryStatus(data.taskId, function(){}, function(){jQuery.post("{% url 'getConstruct' pid %}").done(activateTabs);});
+            else
+                activateTabs(data);
+        });
     }
 
     function activateTabs(data){
         console.log(data);
-        data = jQuery.parseJSON(data);
         constructId =  data["constructId"];
         if (constructId != 0) {
        jQuery("#primerTab").attr("href", data["primerTabLink"]);
@@ -339,7 +343,7 @@
 </br>
 
 
-<div class="row">
+<div class="row-fluid">
 <div class="span8" id="params" >
     <div class="box" data-intro="Lorem ipsum..." data-step="2">
         <p>Please choose an organism to express your non-ribosomal peptide!</p>
@@ -379,7 +383,7 @@
     </div>
 </div>
 </div>
-<div class="row">
+<div class="row-fluid">
     <div class="span12">
         <button class="btn" onclick="introJs().start();">Show me how this works!</a>
     </div>

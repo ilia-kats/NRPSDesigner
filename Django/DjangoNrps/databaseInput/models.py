@@ -36,10 +36,6 @@ class Cds(models.Model):
     # uses nrpsSMASH stuff in order to generate initial input for formset
     @task()
     def predictDomains(self):
-        logger = logging.getLogger()
-        tmpf = open('/tmp/test.txt', "w")
-        tmpf.write(str(logger))
-        tmpf.close()
         logging.getLogger('user_visible').info("Automated domain prediction started..")
         initialDicts = []
         allDomainTypes = [x.smashName for x in Type.objects.all()]
