@@ -114,7 +114,9 @@ class SpeciesListView(ListView):
         #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
         
 
-        aas = Substrate.objects.exclude(structure='')
+        aas = Substrate.objects.exclude(user__username='sbspks')
+        aas = filter(lambda x: x.can_be_added_by_adenylation_domain(), aas)
+
         realAas = []
         for aa in aas:
             if not hasattr(aa.parent, 'name'):

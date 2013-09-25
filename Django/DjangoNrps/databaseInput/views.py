@@ -38,18 +38,20 @@ def is_curator(user):
         return user.is_superuser or user.is_staff or user.groups.filter(name='curator').count() > 0
     return False
 
-@login_required
-@user_passes_test(is_curator)
 def msa_domain_view(request):
     if request.method == "POST":
 
         cdsForm = CdsForm(request.POST, prefix="cds")
         #import pdb;pdb.set_trace()
         if cdsForm.is_valid():
-            #import pdb; pdb.set_trace()
             cds = cdsForm.save()
+            # let's modify request.POST, so that the user still gets a 
+            # response, even if module number has not been entered yet
+            post = request.POST.copy()
+            post[u'domains-module'] = u'0'
+
             # prefix for domainForm extracted from DomainFormSet by JS
-            domainForm = DomainForm(request.POST, prefix="domain_set")
+            domainForm = DomainForm(post,  prefix="domains")
             if domainForm.is_valid():
 
                 initialDict = domainForm.cleaned_data
@@ -62,9 +64,12 @@ def msa_domain_view(request):
                 c = RequestContext(request,{
                     'jsonMSA': MSA
                 })
+
+                domain.delete(  )
+                cds.delete()
                 return HttpResponse(t.render(c))
         else:
-            return HttpResponse("")
+            return HttpResponse("")      #think of how to best handle errors..
     else:
         return HttpResponse("")
 
@@ -187,8 +192,9 @@ def origin_ajax_save(request):
 @user_passes_test(is_curator)
 def cds_input(request):
     t = loader.get_template('databaseInput/cdsInput.html')
+    cdsForm = CdsForm(prefix='cds')
     c = RequestContext(request, {
-        'form':CdsForm(prefix='cds'),
+        'form':cdsForm,
         'isAjax':False
     })
     return HttpResponse(t.render(c))
