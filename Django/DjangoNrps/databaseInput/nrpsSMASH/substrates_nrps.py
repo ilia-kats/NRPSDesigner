@@ -22,8 +22,6 @@ from NRPSPredictor2 import nrpscodepred
 from Minowa import minowa_A
 from utils import TemporaryDirectory
 
-from celeryHelper.helpers import update_celery_task_state_log
-
 def extract_nrps_genes(pksnrpscoregenes, domaindict, seq_record, extra_aa=0):
     nrpsnames = [] 
     nrpsseqs = []
@@ -44,7 +42,7 @@ def extract_nrps_genes(pksnrpscoregenes, domaindict, seq_record, extra_aa=0):
 
 def run_nrpspredictor(seq_record, nrpsnames, nrpsseqs, options):
     #NRPSPredictor: extract AMP-binding + 120 residues N-terminal of this domain, extract 8 Angstrom residues and insert this into NRPSPredictor
-    update_celery_task_state_log("-Predicting NRPS A domain substrate specificities by NRPSPredictor")
+    logging.getLogger('user_visible').info("Predicting NRPS A domain substrate specificities by NRPSPredictor")
     with TemporaryDirectory(change=True):
         nrpsseqs_file = "nrpsseqs.fasta"
 
@@ -81,7 +79,7 @@ def run_nrpspredictor(seq_record, nrpsnames, nrpsseqs, options):
 
 def run_minowa_predictor_nrps(pksnrpscoregenes, domaindict, seq_record, options):
     #Minowa method: extract AMP-binding domain, and run Minowa_A
-    update_celery_task_state_log("-Predicting NRPS A domain substrate specificities by Minowa et al. method")
+    logging.getLogger('user_visible').info("Predicting NRPS A domain substrate specificities by Minowa et al. method")
     nrpsnames2, nrpsseqs2 = extract_nrps_genes(pksnrpscoregenes, domaindict, seq_record, extra_aa=0)
     #Make Minowa output folder
     utils.writefasta(nrpsnames2, nrpsseqs2,

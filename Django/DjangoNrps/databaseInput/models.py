@@ -14,8 +14,8 @@ from nrpsSMASH.analyzeNrpCds import nrpsSmash
 from databaseInput.MSA.MSA import msa_run
 from databaseInput.validators import validateCodingSeq
 
-from celeryHelper.helpers import update_celery_task_state_log
-
+import logging
+import pdb
 from time import sleep
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
@@ -36,7 +36,11 @@ class Cds(models.Model):
     # uses nrpsSMASH stuff in order to generate initial input for formset
     @task()
     def predictDomains(self):
-        update_celery_task_state_log("-Automated domain prediction started..")
+        logger = logging.getLogger()
+        tmpf = open('/tmp/test.txt', "w")
+        tmpf.write(str(logger))
+        tmpf.close()
+        logging.getLogger('user_visible').info("Automated domain prediction started..")
         initialDicts = []
         allDomainTypes = [x.smashName for x in Type.objects.all()]
         nrpsSmashResult = nrpsSmash(self.dnaSequence)

@@ -87,15 +87,19 @@
 	};
 
 checkCeleryStatus = function(taskId){
-  jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
-      if (data.status === "ready"){
-        jQuery("#statusLog").append("Domain prediction task finished!")
-        getPredictedDomains(taskId);
-      }else{
-        jQuery("#statusLog").html(data.output);
-        setTimeout(function(){checkCeleryStatus(taskId);}, 500);
-      }
-  });
+    jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
+        if (data.status === "ready"){
+            jQuery("#statusLog").append("Domain prediction task finished!")
+            getPredictedDomains(taskId);
+        } else {
+            if (data.output != undefined) {
+                for (var i = 0; i < data.output.length; ++i)
+                    data.output[i] = "- " + data.output[i];
+                jQuery("#statusLog").html(data.output.join("<br/>"));
+            }
+            setTimeout(function(){checkCeleryStatus(taskId);}, 500);
+        }
+    });
 }
 
 getPredictedDomains = function(taskId){
