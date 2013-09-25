@@ -50,8 +50,8 @@ class Cds(models.Model):
         for predictedDomain in nrpsSmashResult.domaindict2['gene']:
             if predictedDomain[0] in allDomainTypes:
                 domainDict = {}
-                domainDict['pfamStart'] = predictedDomain[1]
-                domainDict['pfamStop']  = predictedDomain[2]
+                domainDict['pfamStart'] = 3*predictedDomain[1]+1
+                domainDict['pfamStop']  = 3*predictedDomain[2]+1
                 domainType = Type.objects.get(smashName = predictedDomain[0])
                 domainDict['domainType'] = domainType
                 domainDict['user'] = self.user #possibly improve this afterwards..
@@ -61,21 +61,30 @@ class Cds(models.Model):
                         substrate = Substrate.objects.get(smashName = specificity)
                         domainDict['substrateSpecificity'] = [substrate.pk]
                 initialDicts.append(domainDict)
+        module_code = self.type_list_to_modules([x['domainType'].name for x in initialDicts])
+        for i,module in enumerate(module_code):
+            initialDicts[i]['module'] = module
         return initialDicts
 
     def get_domain_type_name_list(self):
         return [x.domainType.name for x in self.domains.order_by('pfamStart')]
 
-
+    @staticmethod
     def type_list_to_modules(type_name_list):
         module_list = []
-        counter = count(0)
+        if type_name_list[0] in ['C_L','C_D']:
+            counter = count(0)
+        else:
+            counter = count(1)
         curr_count = counter.next()
         for domainTypeName in (type_name_list):
             if domainTypeName in ['C_L','C_D']:
                 curr_count = counter.next()
             module_list.append(curr_count)
         return module_list
+
+    def module_code(self):
+        return self.type_list_to_modules(self.get_domain_type_name_list())
 
 
 class Origin(models.Model):
@@ -126,7 +135,7 @@ class Domain(models.Model):
 
     def get_sequence(self):
         cdsSequence = self.cds.dnaSequence
-        domainStart = self.pfamStart
+        domainStart = self.pfamStart - 1
         domainStop  = self.pfamStop
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
