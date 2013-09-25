@@ -81,7 +81,7 @@
         jQuery("#domainGenerator").prop('disabled', false);
       } else {
 			   taskId = data[1].taskId;
-         setTimeout(checkCeleryStatus(taskId), 50);
+         setTimeout(function(){checkCeleryStatus(taskId);}, 500);
       }
 
 		});
@@ -95,7 +95,7 @@ checkCeleryStatus = function(taskId){
         getPredictedDomains(taskId);
       }else{
         jQuery("#statusLog").html(data.output);
-        setTimeout(checkCeleryStatus(taskId), 50);
+        setTimeout(function(){checkCeleryStatus(taskId);}, 500);
       }
   });
 }
