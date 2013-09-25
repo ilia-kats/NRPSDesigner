@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, makeConstruct, DomainSequenceView
+from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, getConstruct, makeConstruct, DomainSequenceView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -12,7 +12,7 @@ urlpatterns = patterns('',
 					url(r'^(?P<pid>\d+)/$', nrpDesigner, name = "nrpDesigner"),
 					url(r'^nrpselection/(?P<pid>\d+)$', SpeciesListView.as_view(), name="guiTool"),
 					url(r'^makeConstruct/(?P<pid>\d+)$', makeConstruct, name="makeConstruct"),
-					url(r'^getConstruct/(?P<pid>\d+)$', makeConstruct, name="getConstruct"),
+					url(r'^getConstruct/(?P<pid>\d+)$', getConstruct, name="getConstruct"),
 					url(r'^structure/', make_structure, name="Structure"),
 					url(r'^submit/', submit_nrp, name="submitNRP"),
 					url(r'^api/(?P<pid>\d+)', saveNrpMonomers, name = "saveNrpMonomers" ),

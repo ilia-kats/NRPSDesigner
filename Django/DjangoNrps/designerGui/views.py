@@ -34,7 +34,9 @@ def getConstruct(request, pid):
     nrp = NRP.objects.get(pk=pid)
     if not nrp.designed:
         return makeConstruct(request, pid)
-    con = nrp.constructId
+    elif nrp.construct is None:
+        con = nrp.makeConstruct()
+    con = nrp.construct
     constructId = con.pk
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
