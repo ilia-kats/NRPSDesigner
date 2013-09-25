@@ -6,6 +6,8 @@ from django.contrib.contenttypes import generic
 
 from celery.contrib.methods import task
 
+from itertools import count
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
@@ -40,6 +42,11 @@ class Cds(models.Model):
         initialDicts = []
         allDomainTypes = [x.smashName for x in Type.objects.all()]
         nrpsSmashResult = nrpsSmash(self.dnaSequence)
+        consensusPreds = nrpsSmashResult.consensuspreds
+        #import pdb;pdb.set_trace()
+        consensusKeys = sorted(consensusPreds)   #right now this will fail if >=10 A domains are returned!!!!!
+        consensusValues = [consensusPreds[key] for key in consensusKeys]
+        consensusValues = (x for x in consensusValues)
         for predictedDomain in nrpsSmashResult.domaindict2['gene']:
             if predictedDomain[0] in allDomainTypes:
                 domainDict = {}
@@ -48,8 +55,27 @@ class Cds(models.Model):
                 domainType = Type.objects.get(smashName = predictedDomain[0])
                 domainDict['domainType'] = domainType
                 domainDict['user'] = self.user #possibly improve this afterwards..
+                if domainType.name == "A":
+                    specificity = consensusValues.next()
+                    if specificity in [x.smashName for x in Substrate.objects.all()]:
+                        substrate = Substrate.objects.get(smashName = specificity)
+                        domainDict['substrateSpecificity'] = [substrate.pk]
                 initialDicts.append(domainDict)
         return initialDicts
+
+    def get_domain_type_name_list(self):
+        return [x.domainType.name for x in self.domains.order_by('pfamStart')]
+
+
+    def type_list_to_modules(type_name_list):
+        module_list = []
+        counter = count(0)
+        curr_count = counter.next()
+        for domainTypeName in (type_name_list):
+            if domainTypeName in ['C_L','C_D']:
+                curr_count = counter.next()
+            module_list.append(curr_count)
+        return module_list
 
 
 class Origin(models.Model):
@@ -78,9 +104,9 @@ class Product(models.Model):
 
 class Domain(models.Model):
     module = models.IntegerField()
-    cds = models.ForeignKey('Cds')
+    cds = models.ForeignKey('Cds', related_name = "domains")
     domainType = models.ForeignKey('Type')
-    substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True)
+    substrateSpecificity = models.ManyToManyField('Substrate', blank=True, null=True, related_name = "adenylationDomain")
     chirality = models.CharField(max_length=1, choices= (('L','L'),('D','D'),('N','None')), default='N')
     description = models.TextField(blank=True, null=True)
     pfamLinkerStart = models.IntegerField(blank=True, null=True)
@@ -105,13 +131,15 @@ class Domain(models.Model):
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
 
-    def get_seq_object(self):
+    def get_seq_object(self, protein= False):
         domainSequence = self.get_sequence()
         domainSeqObject = Seq(domainSequence, IUPAC.unambiguous_dna)
+        if protein:
+            domainSeqObject = domainSeqObject.translate()
         return domainSeqObject
 
-    def get_seqrecord_object(self):
-        domainSeqObject = self.get_seq_object()
+    def get_seqrecord_object(self, protein=False):
+        domainSeqObject = self.get_seq_object(protein=protein)
         name = self.cds.geneName  + str(self.module) + str(self.domainType)
         domainSeqRecord = SeqRecord(seq=domainSeqObject, name= name, id=name)
         return domainSeqRecord
@@ -133,6 +161,14 @@ class Substrate(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def can_be_added_by_adenylation_domain(self):
+        return len(self.adenylationDomain.all()) > 0
+
+    def can_be_added_by_modification_domain(self):
+        bla = [self.parent is not None]
+        pass
+
 
 class Modification(models.Model):
     name = models.CharField(max_length=100)
@@ -157,7 +193,7 @@ class Type(models.Model):
         domains = Domain.objects.filter(domainType = self)
         # just b/c db has some empty entries right now
         domains = [dom for dom in domains if len(dom.get_sequence())>0]
-        domainSeqRecordList = [dom.get_seqrecord_object() for dom in domains]
+        domainSeqRecordList = [dom.get_seqrecord_object(protein=True) for dom in domains]
         return msa_run(domainSeqRecordList)
 
 class Linkout(models.Model):

@@ -25,7 +25,7 @@
               <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
               {{ form.dnaSequence }} <br/>
               <div class="btn-group">
-                <input type="button" class="btn" onclick="predictDomains()" value="Generate Domains!"/>
+                <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()"> Generate Domains!</button>
 
               </div>
 
@@ -72,11 +72,13 @@
 });
 
 	predictDomains = function(){
+  jQuery("#domainGenerator").prop('disabled', true);
 	jQuery("ul.errorlist").remove();
 	jQuery("#tabs").tabs("disable",1);
 		jQuery.post("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#cdsInputTab").html(data[1].html);
+        jQuery("#domainGenerator").prop('disabled', false);
       } else {
 			   taskId = data[1].taskId;
          setTimeout(checkCeleryStatus(taskId), 50);
@@ -89,7 +91,7 @@
 checkCeleryStatus = function(taskId){
   jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
       if (data.status === "ready"){
-        jQuery("#statusLog").append("Domain prediction task finished!")
+        jQuery("#statusLog").append("-Domain prediction task finished!")
         getPredictedDomains(taskId);
       }else{
         jQuery("#statusLog").html(data.output);
@@ -112,6 +114,7 @@ getPredictedDomains = function(taskId){
               });
        jQuery("#tabs").tabs("enable",1);
        jQuery("#tabs").tabs( "option", "active", 1);
+       jQuery("#domainGenerator").prop('disabled', false);
       }
 
     });

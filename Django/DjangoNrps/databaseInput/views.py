@@ -38,8 +38,6 @@ def is_curator(user):
         return user.is_superuser or user.is_staff or user.groups.filter(name='curator').count() > 0
     return False
 
-@login_required
-@user_passes_test(is_curator)
 def msa_domain_view(request):
     if request.method == "POST":
 
