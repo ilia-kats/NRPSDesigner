@@ -97,7 +97,6 @@ class NRPListView(TemplateView):
         context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
         return context
 
- 
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
   model = Species
@@ -115,7 +114,6 @@ class SpeciesListView(ListView):
         
 
         aas = Substrate.objects.exclude(user__username='sbspks')
-        aas = filter(lambda x: x.can_be_added_by_adenylation_domain(), aas)
 
         realAas = []
         for aa in aas:
@@ -131,7 +129,6 @@ class SpeciesListView(ListView):
                 names[name][aa.chirality+'Children'] = aa.child.all()
                 #names[name]['name'] = name
             else:
-                tmp = aa.child.all()    
                 names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
         context['substrates'] = names.values()
         context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
