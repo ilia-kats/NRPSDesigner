@@ -156,6 +156,11 @@ class Domain(models.Model):
     def align_same_type(self):
         return self.domainType.align_same_type()
 
+    # introduce this function, so we can deduce which A domains are 
+    # specific for only 1 substrate
+    def number_of_specificities(self):
+        return len(self.substrateSpecificity.all())
+
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
@@ -172,7 +177,7 @@ class Substrate(models.Model):
         return self.name
 
     def can_be_added_by_adenylation_domain(self):
-        return len(self.adenylationDomain.all()) > 0
+        return len([x for x in self.adenylationDomain.all() if x.number_of_specificities() == 1]) > 0
 
     def can_be_added_by_modification_domain(self):
         bla = [self.parent is not None]
