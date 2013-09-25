@@ -44,10 +44,9 @@ def msa_domain_view(request):
         cdsForm = CdsForm(request.POST, prefix="cds")
         #import pdb;pdb.set_trace()
         if cdsForm.is_valid():
-            #import pdb; pdb.set_trace()
             cds = cdsForm.save()
             # prefix for domainForm extracted from DomainFormSet by JS
-            domainForm = DomainForm(request.POST, prefix="domain_set")
+            domainForm = DomainForm(request.POST, prefix="domains")
             if domainForm.is_valid():
 
                 initialDict = domainForm.cleaned_data
@@ -60,6 +59,9 @@ def msa_domain_view(request):
                 c = RequestContext(request,{
                     'jsonMSA': MSA
                 })
+
+                domain.delete(  )
+                cds.delete()
                 return HttpResponse(t.render(c))
         else:
             return HttpResponse("")
