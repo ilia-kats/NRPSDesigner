@@ -15,9 +15,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # django celery
 import djcelery
 djcelery.setup_loader()
-CELERY_IMPORTS=("databaseInput.models")
+BROKER_URL = 'django://'
+CELERY_IMPORTS=("databaseInput.models", "designerGui.models")
 CELERY_TRACK_STARTED = True
-CELERY_RESULT_BACKEND = "amqp"
+#CELERY_RESULT_BACKEND = "amqp"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -53,7 +54,8 @@ INSTALLED_APPS = (
     'gibson',
     'south',
     'djcelery',
-    'celeryHelper'
+    'celeryHelper',
+    'kombu.transport.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -130,6 +132,32 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'task_handler': {
+            'level': 'INFO',
+            'class': 'celeryHelper.helpers.TaskLogHandler',
+        }
+    },
+    'loggers': {
+        'user_visible': {
+            'handlers': ['task_handler'],
+            'propagate': True,
+            'level': 'INFO',
+        }
+    }
+}
 
 LOGIN_REDIRECT_URL = '/user/profile'
 ACCOUNT_ACTIVATION_DAYS = 7

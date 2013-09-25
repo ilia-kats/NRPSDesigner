@@ -81,24 +81,17 @@
         jQuery("#domainGenerator").prop('disabled', false);
       } else {
 			   taskId = data[1].taskId;
-         setTimeout(function(){checkCeleryStatus(taskId);}, 500);
+         setTimeout(function(){
+             checkCeleryStatus(taskId, function(log){
+                 for (var i = 0; i < log.length; ++i)
+                     log[i] = "- " + log[i];
+                 jQuery("#statusLog").html(log.join("<br/>"));
+             }, function(){getPredictedDomains(taskId);});}, 500);
       }
 
 		});
 		
 	};
-
-checkCeleryStatus = function(taskId){
-  jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
-      if (data.status === "ready"){
-        jQuery("#statusLog").append("-Domain prediction task finished!")
-        getPredictedDomains(taskId);
-      }else{
-        jQuery("#statusLog").html(data.output);
-        setTimeout(function(){checkCeleryStatus(taskId);}, 500);
-      }
-  });
-}
 
 getPredictedDomains = function(taskId){
   jQuery("ul.errorlist").remove();

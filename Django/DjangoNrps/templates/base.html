@@ -56,6 +56,20 @@ jQuery.ajaxSetup({
     }
 });
 
+function checkCeleryStatus(taskId, callbackProgress, callbackFinished)
+{
+    jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
+        if (data.status === "ready"){
+            callbackFinished();
+        } else {
+            if (data.output != undefined) {
+                callbackProgress(data.output);
+            }
+            setTimeout(function(){checkCeleryStatus(taskId, callbackProgress, callbackFinished);}, 500);
+        }
+    });
+}
+
 </script>
 
 {% block js-include %}{% endblock %}
