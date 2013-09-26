@@ -33,7 +33,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_URL = "/user/login"
+LOGIN_URL = "auth_login"
 
 # Application definition
 
@@ -159,7 +159,7 @@ LOGGING = {
     }
 }
 
-LOGIN_REDIRECT_URL = '/user/profile'
+LOGIN_REDIRECT_URL = 'userprofile'
 ACCOUNT_ACTIVATION_DAYS = 7
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
