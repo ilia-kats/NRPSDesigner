@@ -175,5 +175,13 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 
+#caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'open_babel_structs',
+    }
+}
+
 DEFAULT_FROM_EMAIL = 'kats@stud.uni-heidelberg.de'
 CURATION_REQUEST_RECIPIENTS = ['nikos.ignatiadis01@gmail.com', 'k.herbst@stud.uni-heidelberg.de', 'nilskurzawa@yahoo.de', 'kats@stud.uni-heidelberg.de']
