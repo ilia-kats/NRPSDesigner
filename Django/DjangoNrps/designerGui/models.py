@@ -66,7 +66,14 @@ class NRP(models.Model):
 
             domainGene = Gene.objects.create(owner = self.owner,
                 name = 'type:' + str(domain.domainType),# + ' gene:' + str(domain.cds.geneName),
-                description = 'NRPS designer',
+                description = ' '.join(['DNA sequence of',
+                    str(domain.domainType),
+                    'domain of module',
+                    str(domain.module),
+                    'of gene',
+                    str(domain.cds.geneName),
+                    'of origin',
+                    str(domain.cds.origin)]),
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
