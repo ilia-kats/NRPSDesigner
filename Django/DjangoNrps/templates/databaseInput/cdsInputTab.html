@@ -83,8 +83,9 @@
 			   taskId = data[1].taskId;
          setTimeout(function(){
              checkCeleryStatus(taskId, function(log){
-                 for (var i = 0; i < log.length; ++i)
-                     log[i] = "- " + log[i];
+                 logs = new Array()
+                 for (i in log)
+                     logs.push("- " + i + log[i];
                  jQuery("#statusLog").html(log.join("<br/>"));
              }, function(){getPredictedDomains(taskId);});}, 500);
       }

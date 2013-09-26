@@ -1,10 +1,30 @@
 {% load staticfiles %}
 
 {% block js-include %}
-<script src="{% static 'js/jquery.panzoom.min.js' %}"></script>
+<script src="{% static "js/spin.js" %}" type="text/javascript"></script>
+<script src="{% static 'js/jquery.panzoom.min.js' %}" type="text/javascript"></script>
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
+    var opts = {
+        lines: 15, // The number of lines to draw
+        length: 14, // The length of each line
+        width: 3, // The line thickness
+        radius: 8, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 0, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 0.6, // Rounds per second
+        trail: 62, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: 'auto', // Top position relative to parent in px
+        left: 'auto' // Left position relative to parent in px
+    };
+    var spinner = new Spinner(opts);
     var nrpEnabledEffects = false;
     var monomers = [
         {% for aa in substrates %}
@@ -188,15 +208,17 @@
     }
 
     function makeConstruct(){
-        jQuery.post("{% url 'makeConstruct' pid %}").done(function(data) {
-            if (data.taskId != undefined)
-                checkCeleryStatus(data.taskId, function(){}, function(){jQuery.post("{% url 'getConstruct' pid %}").done(activateTabs);});
+        submitCeleryJob("{% url 'makeConstruct' pid %}", undefined, function(){
+            if (arguments.length > 0)
+                activateTabs(arguments[0])
             else
-                activateTabs(data);
+                jQuery.post("{% url 'getConstruct' pid %}").done(activateTabs);
         });
     }
 
     function activateTabs(data){
+        spinner.stop();
+        jQuery("#progress").modal('hide');
         console.log(data);
         constructId =  data["constructId"];
         if (constructId != 0) {
@@ -281,6 +303,7 @@
         {% endif %} 
         nrpEnabledEffects = true;
         makeStruct();
+
         });
 
 </script>
@@ -341,7 +364,6 @@
 {% block content %}
 <h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
 </br>
-
 
 <div class="row-fluid">
 <div class="span8" id="params" >

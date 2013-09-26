@@ -1,10 +1,15 @@
 from django.db import models
 
 import subprocess
+import fcntl
+import os
+import select
 from xml.dom.minidom import parseString
 import json
+import logging
 
-from DjangoNrps.settings import DATABASES
+from django.conf import settings
+from django.db import connection
 from databaseInput.models import Substrate, Domain
 from gibson.models import Construct, ConstructFragment
 from fragment.models import Gene
@@ -23,7 +28,7 @@ class Species(models.Model):
         verbose_name_plural = "Species"
         verbose_name = "Modifications"
         verbose_name_plural = "Modifications"
-
+import pdb
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
     name = models.CharField(max_length=80)
@@ -118,18 +123,58 @@ class NRP(models.Model):
 
     @task()
     def designDomains(self):
+        lasterror = [None] # nonlocal only in python3
+        logger = logging.getLogger('user_visible')
+        xmlout = [""] # nonlocal only in python3
+        def processErr(lines):
+            lines = lines.splitlines()
+            for line in lines:
+                if line.startswith("WARNING: "):
+                    logger.warning(line[9:])
+                elif line.startswith("ERROR: "):
+                    lasterror[0] = line[7:]
+                    logger.error(lasterror[0])
+                elif line.startswith("INFO: "):
+                    logger.info(line[7:])
+                else:
+                    logger.error(line)
+        def processOut(lines):
+            xmlout[0] += lines
         # call NRPS Designer C++ program
         dbSettings = {
-            '--mysql-host '     : DATABASES['default']['HOST'],
-            '--mysql-port '     : DATABASES['default']['PORT'],
-            '--mysql-user '     : DATABASES['default']['USER'],
-            '--mysql-password  ': DATABASES['default']['PASSWORD']
+            '--mysql-host'     : settings.DATABASES[connection.alias]['HOST'],
+            '--mysql-port'     : settings.DATABASES[connection.alias]['PORT'],
+            '--mysql-user'     : settings.DATABASES[connection.alias]['USER'],
+            '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
-        dbCmds = ' '.join([k+v for k,v in dbSettings.items() if v!=''])
-        rawXmlOutput = subprocess.check_output('nrpsdesigner ' +dbCmds +' -m '+self.getPeptideSequenceAsString(), shell=True)
+        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString()]
+        for k,v in dbSettings.items():
+            if v:
+                args.extend([k, v])
+        child = subprocess.Popen(args, 1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        fds = (child.stdout.fileno(), child.stderr.fileno())
+        mask = fcntl.fcntl(fds[0], fcntl.F_GETFL)
+        fcntl.fcntl(fds[0], fcntl.F_SETFL, mask | os.O_NONBLOCK)
+        mask = fcntl.fcntl(fds[1], fcntl.F_GETFL)
+        fcntl.fcntl(fds[1], fcntl.F_SETFL, mask | os.O_NONBLOCK)
+        poll = select.poll()
+        mask = select.POLLIN | select. POLLPRI | select.POLLERR | select.POLLHUP
+        poll.register(fds[0], mask)
+        poll.register(fds[1], mask)
+        while child.poll() is None:
+            fdsready = poll.poll()
+            for fd in fdsready:
+                if fd[0] == fds[1] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
+                    readFrom(child.stderr, processErr)
+                elif fd[0] == fds[0] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
+                    readFrom(child.stdout, processOut)
+        if child.returncode != 0:
+            logger.error("NRPSDesigner returned errorcode %d" % child.returncode)
+            raise Exception("NRPSDesigner returned errorcode %d: %s" % (child.returncode, lasterror[0]))
 
         # parse xml to extract domain list
-        designerDom = parseString(rawXmlOutput)
+        designerDom = parseString(xmlout[0])
         domainDomList = designerDom.getElementsByTagName('domain')
         domainIdList = [int(domainDom.getElementsByTagName('id')[0].firstChild.data) for domainDom in domainDomList]
 
@@ -142,6 +187,14 @@ class NRP(models.Model):
         self.designed = True
         self.save()
 
+def readFrom(file, callback):
+    try:
+        lines = file.read()
+        while len(lines) > 0:
+            callback(lines)
+            lines = file.read()
+    except:
+        pass
 
 class SubstrateOrder(models.Model):
     nrp = models.ForeignKey('NRP', related_name='substrateOrder')
