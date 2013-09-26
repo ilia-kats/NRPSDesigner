@@ -203,7 +203,7 @@
         if (constructId != 0) {
        jQuery("#primerTab").attr("href", data["primerTabLink"]);
        jQuery("#constructTab").attr("href", data["designTabLink"]);
-       jQuery("#domainSequenceTab").attr("href", data["domainSequenceTabLink"]);
+       document.getElementById('domainSequenceIFrame').contentWindow.location.reload();
        jQuery("#tabs").tabs("enable",1);
        jQuery("#tabs").tabs("enable",2);
        jQuery("#tabs").tabs("enable",3);
