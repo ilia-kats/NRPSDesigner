@@ -226,7 +226,7 @@ def get_predicted_domain_formset(request, task_id):
             t = loader.get_template('databaseInput/domainInput.html')
             DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
             c = RequestContext(request, {
-            'originSet':DomainFormSet(initial = initialDict),
+            'domainFormSet':DomainFormSet(initial = initialDict),
                 })
             #return HttpResponse(t.render(c))
             return JsonResponse({'html': t.render(c),})
@@ -243,6 +243,51 @@ def get_predicted_domain_formset(request, task_id):
 def get_predicted_domain_formset_base(request):
     return HttpRequest("igem <3")
 
+@login_required
+def save_cds_domains(request):
+    if request.method == "POST":
+        DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm)
+        cdsForm = CdsForm(request.POST, prefix='cds')
+        if cdsForm.is_valid():
+            cds = cdsForm.save(commit=False)
+            cds.user = request.user
+            domainFormSet = DomainFormSet(request.POST, instance = cds)
+            if domainFormSet.is_valid():
+                cds.save()
+                domains = domainFormSet.save(commit=False)
+                for domain in domains:
+                    domain.user = request.user
+                    domain.save()
+                #if successful, render cds input form with clean form again!
+                t = loader.get_template('databaseInput/cdsInputTab.html')
+                cdsForm = CdsForm(prefix='cds')
+                c = RequestContext(request, {
+                        'form':cdsForm,
+                        'isAjax':True,
+                        'djangoSuccess': '<strong>Well done!</strong> Successfully added new coding sequence into database!'
+                         })
+                return JsonResponse({'html': t.render(c)})
+            else:
+                t = loader.get_template('databaseInput/domainInput.html')
+                c = RequestContext(request, {
+                     'domainFormSet':domainFormSet,
+                    })
+                return JsonResponse({'html': t.render(c)}, ERROR)
+        else:
+            # if cds form does not validate, return original page again..with appropriate error alert
+            # this view is just in case and should not be returned under normal circumstances
+            # as javascript checks for changes in input after prediction as well
+            t = loader.get_template('databaseInput/cdsInputTab.html')
+            c = RequestContext(request, {
+                    'form':cdsForm,
+                    'isAjax':True,
+                    'djangoError': '<strong>Woops..</strong>It appears the original Cds got tampered with after domain prediction. Please fix your input and try again!'
+                    })
+            return JsonResponse({'html': t.render(c)})
+    else:
+        # should not be accessed via get request
+        return HttpResponseBadRequest()
+
 class HomeTemplateView(TemplateView):
     template_name = 'home.html'
 
@@ -253,6 +298,7 @@ class UserDetailView(DetailView):
     model = get_user_model()
     template_name = 'databaseInput/user_detail.html'
     slug_field = "username"
+
 
 @login_required
 def request_curation_privs(request):

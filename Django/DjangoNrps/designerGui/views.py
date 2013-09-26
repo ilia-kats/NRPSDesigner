@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
+from django.views.decorators.cache import cache_page
 
 
 import math
@@ -116,6 +117,7 @@ class SpeciesListView(ListView):
         
 
         aas = Substrate.objects.exclude(user__username='sbspks')
+        aas = filter(lambda x: x.can_be_added(), aas)
 
         realAas = []
         for aa in aas:
@@ -150,7 +152,8 @@ def submit_nrp(request):
         monomerid = x.SubElement(monomerel, 'id')
         monomerid.text = monomer
     return HttpResponse(x.tostring(nrpxml, "utf8"), mimetype="text/xml")
-  
+
+@cache_page(365*24*60*60*15)  
 def make_structure(request):
     def makeResidue(mol, idx, aaatoms):
         res = mol.NewResidue()

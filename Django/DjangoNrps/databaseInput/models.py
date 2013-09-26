@@ -51,7 +51,7 @@ class Cds(models.Model):
             if predictedDomain[0] in allDomainTypes:
                 domainDict = {}
                 domainDict['pfamStart'] = 3*predictedDomain[1]+1
-                domainDict['pfamStop']  = 3*predictedDomain[2]+1
+                domainDict['pfamStop']  = 3*predictedDomain[2]+3
                 domainType = Type.objects.get(smashName = predictedDomain[0])
                 domainDict['domainType'] = domainType
                 domainDict['user'] = self.user #possibly improve this afterwards..

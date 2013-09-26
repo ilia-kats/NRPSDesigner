@@ -1,4 +1,27 @@
-{{task_id}}
+
+{% if djangoSuccess %}
+
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {% autoescape off %}
+    {{djangoSuccess}}
+{% endautoescape %}
+  
+</div>
+
+{% endif %}
+
+{% if djangoError %}
+
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {% autoescape off %}
+    {{djangoError}}
+{% endautoescape %}
+  
+</div>
+
+{% endif %}
 
         {{ form.non_field_errors }}
         <form id="cdsFormForDomainPrediction">
@@ -102,10 +125,6 @@ getPredictedDomains = function(taskId){
       } else {
        jQuery("#domainInput").html( data[1].html);
 
-              jQuery( "#accordion" ).accordion({
-                heightStyle: "content",
-                collapsible: true
-              });
        jQuery("#tabs").tabs("enable",1);
        jQuery("#tabs").tabs( "option", "active", 1);
        jQuery("#domainGenerator").prop('disabled', false);
