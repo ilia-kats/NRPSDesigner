@@ -45,10 +45,11 @@ class NRP(models.Model):
 
     def fullDelete(self):
         for gene in [x.gene for x in self.domainOrder.all()]:
-            if gene != None:
+            if gene is not None:
                 ConstructFragment.objects.filter(fragment = gene).delete()
                 gene.delete()
-        self.construct.delete()
+        if self.construct is not None:
+            self.construct.delete()
         self.delete()
 
     def makeConstruct(self):
