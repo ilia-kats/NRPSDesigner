@@ -94,30 +94,20 @@
   return jQuery(target).load(url);
 });
 
-	predictDomains = function(){
-  jQuery("#domainGenerator").prop('disabled', true);
-	jQuery("ul.errorlist").remove();
-	jQuery("#tabs").tabs("disable",1);
-		jQuery.post("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
-      if (data[0] === AJAX_ERROR){
+function predictDomains(){
+    jQuery("#domainGenerator").prop('disabled', true);
+    jQuery("ul.errorlist").remove();
+    jQuery("#tabs").tabs("disable",1);
+    submitCeleryJob("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), undefined, function(data){
         jQuery("#cdsInputTab").html(data[1].html);
         jQuery("#domainGenerator").prop('disabled', false);
-      } else {
-			   taskId = data[1].taskId;
-         setTimeout(function(){
-             checkCeleryStatus(taskId, function(log){
-                 logs = new Array()
-                 for (i in log)
-                     logs.push("- " + i + log[i];
-                 jQuery("#statusLog").html(log.join("<br/>"));
-             }, function(){getPredictedDomains(taskId);});}, 500);
-      }
+    }, function(data) {
+        taskId = data[1].taskId;
+        getPredictedDomains(taskId);
+    });
+};
 
-		});
-		
-	};
-
-getPredictedDomains = function(taskId){
+function getPredictedDomains(taskId){
   jQuery("ul.errorlist").remove();
     jQuery.post("{% url "getPredictedDomainFormsetBase" %}" +taskId, jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
       if (data[0] === AJAX_ERROR){

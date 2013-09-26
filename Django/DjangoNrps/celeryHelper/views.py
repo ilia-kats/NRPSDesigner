@@ -1,7 +1,7 @@
 import json
 
-from django.http import HttpResponse
-import pdb
+from gibson.jsonresponses import JsonResponse, ERROR
+
 from celery.result import AsyncResult
 def celery_task_log(request, task_id):
     task = AsyncResult(task_id)
@@ -18,7 +18,8 @@ def celery_task_log(request, task_id):
         out = {'status':'log', 'output':task_log}
     else:
         out = {'status': task.status}
-    return HttpResponse(json.dumps(out),  content_type="application/json")
+    out['taskId'] = task_id;
+    return JsonResponse(out)
 
 def celery_log_base(request):
     return HttpResponse("UGA UGA said the mRNA to the ribosome making it cry")

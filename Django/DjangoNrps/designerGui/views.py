@@ -2,7 +2,7 @@ from designerGui.models import Species, NRP, SubstrateOrder
 from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
-from gibson.jsonresponses import RawJsonResponse, JsonResponse, ERROR
+from gibson.jsonresponses import JsonResponse, ERROR
 
 from django.views.generic import ListView, CreateView, TemplateView
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
@@ -28,7 +28,7 @@ def makeConstruct(request,pid):
     if isinstance(con, bool) and con == True:
         return getConstruct(request, pid)
     else:
-        return RawJsonResponse({'taskId': con})
+        return JsonResponse({'taskId': con})
 
 @login_required
 def getConstruct(request, pid):
@@ -42,7 +42,7 @@ def getConstruct(request, pid):
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
     domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
-    return RawJsonResponse({"constructId": constructId,
+    return JsonResponse({"constructId": constructId,
                          'designTabLink': designTabLink,
                          'primerTabLink': primerTabLink,
                          'domainSequenceTablLink': domainSequenceTabLink})
