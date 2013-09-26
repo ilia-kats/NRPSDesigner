@@ -80,7 +80,7 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 				</li>
 	
 			</ul>
-			<iframe id="domainSequenceIFrame" src="domainSequence" style="width:100%;">
+			<iframe id="domainSequenceIFrame" src="" style="width:100%;">
 </iframe>
 
             
@@ -117,7 +117,7 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 	jQuery(document).ready( function($) {
 		//tabs
 		jQuery( "#tabs" ).tabs({
-			beforeLoad: function( event, ui ) {
+			beforeLoad: function(event, ui) {
 			    if ( (ui.tab.index() == 2 || ui.tab.index() ==0) && ui.tab.data( "loaded" ) ) {
 			      event.preventDefault();
 			      return;
@@ -125,7 +125,13 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 
 			    ui.jqXHR.success(function() {
 			      ui.tab.data( "loaded", true );
-		    });}, 
+		    });},
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=733698
+            activate: function(event, ui) {
+                if (ui.newTab.index() == 1) {
+                    jQuery("#domainSequenceIFrame").attr("src", "domainSequence");
+                }
+            },
 			ajaxOptions: {
 				error: function( xhr, status, index, anchor ) {
 					jQuery( anchor.hash ).html(
