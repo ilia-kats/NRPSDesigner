@@ -223,6 +223,8 @@ class NRP(models.Model):
                     readFrom(child.stderr, processErr)
                 elif fd[0] == fds[0] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
                     readFrom(child.stdout, processOut)
+        if child.returncode == -11:
+            lasterror[0] = "Segmentation fault"
         if child.returncode != 0:
             logger.error("NRPSDesigner returned errorcode %d" % child.returncode)
             raise Exception("NRPSDesigner returned errorcode %d: %s" % (child.returncode, lasterror[0]))

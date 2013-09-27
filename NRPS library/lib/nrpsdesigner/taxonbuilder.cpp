@@ -289,7 +289,7 @@ void TaxonBuilder::fetch(const std::shared_ptr<Taxon> &t) throw (NCBITaxonomyErr
     long httpcode;
     curl_easy_getinfo(m_handle, CURLINFO_RESPONSE_CODE, &httpcode);
     if (ret > 0)
-        throw NCBITaxonomyError(std::string("Something went wrong when fetching the NCBI taxonomy information. Error code: ") + std::to_string(ret) + std::string(";    ") + curl_easy_strerror(ret));
+        throw NCBITaxonomyError(std::string("Something went wrong when fetching the NCBI taxonomy information. Error code: ") + std::to_string(ret) + std::string("; ") + curl_easy_strerror(ret));
     if (httpcode != 200 && ret != CURLE_ABORTED_BY_CALLBACK)
         throw NCBITaxonomyError("The NCBI taxonomy database seems to be experiencing problems.");
     xmlParseChunk(ctxt, nullptr, 0, 1);

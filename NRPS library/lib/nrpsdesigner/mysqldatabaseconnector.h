@@ -35,6 +35,7 @@ public:
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError);
     virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError);
     virtual void fillOrigin(Origin*) throw (DatabaseError);
+    virtual bool  isDummy(const std::shared_ptr<Domain>&);
 
 private:
     bool testInitialized(bool except = true) throw (DatabaseError);

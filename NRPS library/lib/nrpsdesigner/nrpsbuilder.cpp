@@ -95,7 +95,16 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp) throw (NetworkError, NC
                     d->neighbors = amatchingdomainnodes;
                 else if (!anotmatchingdomainnodes->empty())
                     d->neighbors = anotmatchingdomainnodes;
-                else {
+                else if (db->isDummy(domain)) { // only domain in list
+                    if (!amatchingdomainnodes->empty() && anotmatchingdomainnodes->empty())
+                        d->neighbors = amatchingdomainnodes;
+                    else if (amatchingdomainnodes->empty() && !anotmatchingdomainnodes->empty())
+                        d->neighbors = anotmatchingdomainnodes;
+                    else {
+                        amatchingdomainnodes->insert(amatchingdomainnodes->end(), anotmatchingdomainnodes->begin(), anotmatchingdomainnodes->end());
+                        d->neighbors = amatchingdomainnodes;
+                    }
+                } else {
                     delete d;
                     d = nullptr;
                 }

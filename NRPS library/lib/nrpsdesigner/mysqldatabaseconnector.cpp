@@ -159,7 +159,6 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(const Mon
 {
     testInitialized();
     try {
-        std::vector<std::shared_ptr<D>> vec;
         m_stmtCoreDomainsSubstrate->setUInt(1, m.id());
         m_stmtCoreDomainsSubstrate->setUInt(2, m.enantiomerId());
         m_stmtCoreDomainsSubstrate->setString(3, t);
@@ -288,6 +287,11 @@ void MySQLDatabaseConnector::fillOrigin(Origin *ori) throw (DatabaseError)
         }
         throw makeException(e);
     }
+}
+
+bool MySQLDatabaseConnector::isDummy(const std::shared_ptr<Domain> &d)
+{
+    return d->id() == 0;
 }
 
 DatabaseError MySQLDatabaseConnector::makeException(const sql::SQLException &e) const

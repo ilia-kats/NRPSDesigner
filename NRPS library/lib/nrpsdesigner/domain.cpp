@@ -22,7 +22,7 @@
 using namespace nrps;
 
 Domain::Domain(DomainType t, uint32_t id)
-: m_type(t), m_id(id)
+: m_type(t), m_id(id), m_origin(nullptr), m_product(nullptr)
 {}
 
 std::size_t Domain::hash() const

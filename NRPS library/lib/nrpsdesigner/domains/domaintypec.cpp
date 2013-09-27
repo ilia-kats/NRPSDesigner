@@ -6,11 +6,11 @@
 using namespace nrps;
 
 DomainTypeC::DomainTypeC(uint32_t id)
-: Domain(DomainType::C, id)
+: Domain(DomainType::C, id), m_substrate(0), m_chirality(Configuration::L)
 {}
 
 DomainTypeC::DomainTypeC(uint32_t id, uint32_t substrate)
-: Domain(DomainType::C, id), m_substrate(substrate)
+: Domain(DomainType::C, id), m_substrate(substrate), m_chirality(Configuration::L)
 {}
 
 DomainTypeC::DomainTypeC(uint32_t id, uint32_t substrate, Configuration chirality)
