@@ -28,7 +28,23 @@ class Species(models.Model):
         verbose_name_plural = "Species"
         verbose_name = "Modifications"
         verbose_name_plural = "Modifications"
-import pdb
+
+    '''
+Depiction of basic NRP model dependencies (ForeignKeys, ManyToManyFields):
+
+ designerGui.NRP <----------------------- designerGui.DomainOrder  ---> databaseInput.Domain
+   ||                                                       /\
+   ||                                                       ||
+   \/                                                       ||
+  gibson.Construct <--- gibson.ConstructFragment ---> fragment.Gene
+
+
+Some comments regarding deletion considerations/strategies:
+*if domains get designed again(self.designDomains) -> delete (previous) DomainOrder [databaseInput.Domain objects obviously stay]
+*if construct gets created again -> manually delete previous fragment.Gene objects (in case DomainOrder did not point yet
+at appropriate fragment.Gene)-> gibson.ConstructFragment objects get deleted automatically
+    '''
+
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
     name = models.CharField(max_length=80)
@@ -43,19 +59,44 @@ class NRP(models.Model):
     def __unicode__(self):
         return self.name
 
+    def delete_dependencies(self):
+        [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
+        self.designed = False
+        self.domainOrder.all().delete()
+        if self.construct is not None:
+            [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
+            prev_construct = self.construct
+            self.construct = None
+            self.save()
+            prev_construct.delete()
+        pass
+
     def fullDelete(self):
         for gene in [x.gene for x in self.domainOrder.all()]:
             if gene is not None:
-                ConstructFragment.objects.filter(fragment = gene).delete()
                 gene.delete()
         if self.construct is not None:
-            self.construct.delete()
-        self.delete()
+            if len(self.construct.cf.all()) > 0 :
+                [x.fragment.delete() for x in self.construct.cf.all()]
+            self.construct.delete() #causes self to be deleted as well due to on cascade deletion in sql
+        else:
+            self.delete()
 
+    # for non-celery use , e.g. via Shell, make sure that NRP has been designed before using method below
     def makeConstruct(self):
         if not self.designed:
             task = self.designDomains.delay()
             return task.id
+        #import pdb;pdb.set_trace()
+        # clean up previous stuff
+        if self.construct is not None:
+            if len(self.construct.cf.all()) > 0 :
+                [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
+            prev_construct = self.construct
+            self.construct = None
+            self.save()
+            prev_construct.delete()
+
         name = self.name + ' Gibson Construct'
         nrpConstruct = Construct.objects.create(owner = self.owner,
             name = name,
@@ -131,6 +172,11 @@ class NRP(models.Model):
 
     @task()
     def designDomains(self):
+        #see deletion strategy in multiline comment above
+        if len(self.domainOrder.all())>0:
+            [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
+            self.domainOrder.all().delete() #possibly redundant?
+        self.designed = False
         lasterror = [None] # nonlocal only in python3
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3

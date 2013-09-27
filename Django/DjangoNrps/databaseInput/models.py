@@ -184,10 +184,10 @@ class Substrate(models.Model):
         pass
 
     def can_be_added(self):
-        if self.can_be_added_by_adenylation_domain() or self.can_be_added_by_modification_domain():
+        if self.can_be_added_by_adenylation_domain(): #or self.can_be_added_by_modification_domain():
             return True
         elif self.enantiomer is not None:
-            return self.enantiomer.can_be_added_by_adenylation_domain or self.enantiomer.can_be_added_by_modification_domain()
+            return self.enantiomer.can_be_added_by_adenylation_domain() #or self.enantiomer.can_be_added_by_modification_domain()
         else:
             return False
 
