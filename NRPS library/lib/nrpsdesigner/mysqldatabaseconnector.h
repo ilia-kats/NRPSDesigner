@@ -55,10 +55,12 @@ private:
     sql::PreparedStatement *m_stmtProduct;
     sql::Statement *m_stmtOrigin;
 
+    bool m_curatedOnly;
     std::string m_host;
     uint16_t m_port;
     std::string m_user;
     std::string m_password;
+    std::string m_curationGroup;
 };
 }
 

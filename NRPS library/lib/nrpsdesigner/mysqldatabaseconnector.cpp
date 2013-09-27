@@ -18,7 +18,7 @@ using namespace nrps;
 namespace po = boost::program_options;
 
 MySQLDatabaseConnector::MySQLDatabaseConnector()
-: AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomer(nullptr), m_stmtCoreDomainsSubstrate(nullptr), m_stmtCoreDomainsNoSubstrate(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtOrigin(nullptr)
+: AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomer(nullptr), m_stmtCoreDomainsSubstrate(nullptr), m_stmtCoreDomainsNoSubstrate(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtOrigin(nullptr), m_curatedOnly(true)
 {}
 
 MySQLDatabaseConnector::~MySQLDatabaseConnector()
@@ -53,7 +53,9 @@ po::options_description MySQLDatabaseConnector::options()
     options.add_options()("mysql-host", po::value<std::string>(&m_host)->default_value("127.0.0.1"), "host address")
                          ("mysql-port", po::value<uint16_t>(&m_port)->default_value(3306), "Port number to use for connection.")
                          ("mysql-user", po::value<std::string>(&m_user)->default_value("root"), "User for login.")
-                         ("mysql-password", po::value<std::string>(&m_password), "Password to use when connecting to server.");
+                         ("mysql-password", po::value<std::string>(&m_password), "Password to use when connecting to server.")
+                         ("curated-only", po::bool_switch(&m_curatedOnly), "Use only curated domains for prediction.")
+                         ("curation-group", po::value<std::string>(&m_curationGroup)->default_value("curator"), "Name of the curator user group.");
     return options;
 }
 
@@ -69,8 +71,31 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
     m_connection = driver->connect(server, m_user, m_password);
     m_connection->setSchema("nrps_designer");
     m_stmtMonomer = m_connection->prepareStatement("SELECT name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE id = ?;");
-    m_stmtCoreDomainsSubstrate = m_connection->prepareStatement("SELECT domain.id AS did, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product) ON (domain.id = substr_xref.domain_id AND domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id) WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ? ORDER BY IF(substr_xref.substrate_id = ?, 0, 1) ASC;");
-    m_stmtCoreDomainsNoSubstrate = m_connection->prepareStatement("SELECT domain.id AS did, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product) ON (domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id) WHERE dtype.name = ?;");
+    std::string stmtCoreDomainsSubstrate = "SELECT domain.id AS did, domain.module AS module, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
+    std::string stmtCoreDomainsNoSubstrate = "SELECT domain.id AS did, domain.module AS module, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
+    if (m_curatedOnly) {
+        std::string s = ", auth_user AS user, auth_group AS `group`, auth_user_groups AS user_xref";
+        stmtCoreDomainsSubstrate.append(s);
+        stmtCoreDomainsNoSubstrate.append(s);
+    }
+    stmtCoreDomainsSubstrate.append(") ON (domain.id = substr_xref.domain_id AND domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id");
+    stmtCoreDomainsNoSubstrate.append(") ON (domain.cds_id = cds.id AND cds.origin_id = origin.id AND cds.product_id = product.id AND domain.domainType_id = dtype.id");
+    if (m_curatedOnly) {
+        std::string s = " AND domain.user_id = user.id AND user.id = user_xref.user_id AND user_xref.group_id = group.id";
+        stmtCoreDomainsSubstrate.append(s);
+        stmtCoreDomainsNoSubstrate.append(s);
+    }
+    stmtCoreDomainsSubstrate.append(") WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ?");
+    stmtCoreDomainsNoSubstrate.append(") WHERE dtype.name = ?");
+    if (m_curatedOnly) {
+        std::string s = " AND group.name = ?";
+        stmtCoreDomainsSubstrate.append(s);
+        stmtCoreDomainsNoSubstrate.append(s);
+    }
+    stmtCoreDomainsSubstrate.append(";");
+    stmtCoreDomainsNoSubstrate.append(";");
+    m_stmtCoreDomainsSubstrate = m_connection->prepareStatement(stmtCoreDomainsSubstrate);
+    m_stmtCoreDomainsNoSubstrate = m_connection->prepareStatement(stmtCoreDomainsNoSubstrate);
 
     m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc FROM databaseInput_domain AS d INNER JOIN databaseInput_cds AS c ON d.cds_id = c.id WHERE d.id = ?;");
     m_stmtProduct = m_connection->prepareStatement("SELECT id, name, description FROM databaseInput_product WHERE id = ?;");
@@ -151,6 +176,8 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(const std
 {
     testInitialized();
     m_stmtCoreDomainsNoSubstrate->setString(1, t);
+    if (m_curatedOnly)
+        m_stmtCoreDomainsNoSubstrate->setString(2, "curator");
     return getCoreDomains<D>(m_stmtCoreDomainsNoSubstrate, f);
 }
 
@@ -162,7 +189,8 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(const Mon
         m_stmtCoreDomainsSubstrate->setUInt(1, m.id());
         m_stmtCoreDomainsSubstrate->setUInt(2, m.enantiomerId());
         m_stmtCoreDomainsSubstrate->setString(3, t);
-        m_stmtCoreDomainsSubstrate->setUInt(4, m.id());
+        if (m_curatedOnly)
+            m_stmtCoreDomainsSubstrate->setString(4, "curator");
         return getCoreDomains<D>(m_stmtCoreDomainsSubstrate, f);
     } catch (const sql::SQLException &e) {
         throw makeException(e);
@@ -183,6 +211,7 @@ std::vector<std::shared_ptr<D>> MySQLDatabaseConnector::getCoreDomains(sql::Prep
         else {
             while (res->next()) {
                 D *d = new D(res->getUInt("did"));
+                d->setModule(res->getUInt("module"));
                 Origin *ori = d->setOrigin(res->getUInt("orid"));
                 d->setProduct(res->getUInt("pid"));
                 f(d, res);
