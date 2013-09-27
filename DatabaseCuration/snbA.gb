@@ -1,0 +1,7 @@
+LOCUS       Annotations                                             22-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    110..1858
+                     /ugene_name="snbA"
+                     /ugene_group="prist_coding_sequences"
+//
