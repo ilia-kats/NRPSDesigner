@@ -63,12 +63,10 @@ class NRP(models.Model):
         [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
         self.designed = False
         self.domainOrder.all().delete()
+        SubstrateOrder.objects.filter(nrp = self).delete()
         if self.construct is not None:
             [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
-            prev_construct = self.construct
-            self.construct = None
             self.save()
-            prev_construct.delete()
         pass
 
     def fullDelete(self):
@@ -87,21 +85,15 @@ class NRP(models.Model):
         if not self.designed:
             task = self.designDomains.delay()
             return task.id
-        #import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         # clean up previous stuff
-        if self.construct is not None:
-            if len(self.construct.cf.all()) > 0 :
-                [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
-            prev_construct = self.construct
-            self.construct = None
-            self.save()
-            prev_construct.delete()
-
         name = self.name + ' Gibson Construct'
-        nrpConstruct = Construct.objects.create(owner = self.owner,
-            name = name,
-            description = 'NRPS designer',
-            shape = 'c')
+        if self.construct is None:
+            self.construct = Construct.objects.create(owner = self.owner,
+                name = name,
+                description = 'NRPS designer',
+                shape = 'c')
+
         for count, domainId in enumerate(self.getDomainSequence()):
             domain = Domain.objects.get(pk=domainId)
             domainSequence = domain.get_sequence()
@@ -121,7 +113,7 @@ class NRP(models.Model):
                 viewable = 'H')
 
             domainConstructFragment = ConstructFragment.objects.create(
-                construct = nrpConstruct,
+                construct = self.construct,
                 fragment = domainGene,
                 order = count,
                 direction = 'f'
@@ -131,7 +123,6 @@ class NRP(models.Model):
             domainOrder.gene = domainGene
             domainOrder.save()
 
-        self.construct = nrpConstruct
         self.save()
         return True
 
@@ -171,7 +162,7 @@ class NRP(models.Model):
         return pfamJson
 
     @task()
-    def designDomains(self):
+    def designDomains(self, cb=None):
         #see deletion strategy in multiline comment above
         if len(self.domainOrder.all())>0:
             [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]

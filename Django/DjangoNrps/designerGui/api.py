@@ -7,11 +7,7 @@ from databaseInput.models import Substrate
 def saveNrpMonomers(request,pid):
 	if request.method == 'POST':
 		nrp = NRP.objects.get(owner = request.user, pk = pid)
-
-		# first make sure that all previous substrate entries for the NRP get deleted
-		prevSubstrates = SubstrateOrder.objects.filter(nrp = nrp)
-		prevSubstrates.delete()
-		# also delete other stuff pointing
+		# delete other stuff pointing
 		nrp.delete_dependencies()
 		# now add the new list
 		for count, monomerId in enumerate(request.POST.getlist('as[]')):

@@ -131,7 +131,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
         } else if (data[1].status == "FAILED") {
             stop();
             var err = jQuery('<div id="message"/>');
-            err.append(jQuery('<button type="button" class="close" data-dismiss="alert">&times;</button>')).addClass("alert alert-block alert-error").append("<h4>ERROR</h4>").append(data[1].output);
+            err.append(jQuery('<button type="button" class="close" data-dismiss="alert">&times;</button>')).addClass("alert alert-block alert-error").append("<strong>ERROR:</strong> " + data[1].output);
             jQuery('#sub-container').prepend(err);
             if (callbackError != undefined)
                 callbackError(data);

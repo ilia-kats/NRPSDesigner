@@ -35,7 +35,7 @@ def getConstruct(request, pid):
     nrp = NRP.objects.get(pk=pid)
     if not nrp.designed:
         return makeConstruct(request, pid)
-    elif nrp.construct is None:
+    elif nrp.construct is None or nrp.construct.fragments.count() == 0:
         con = nrp.makeConstruct()
     con = nrp.construct
     constructId = con.pk
