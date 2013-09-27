@@ -1,0 +1,6 @@
+LOCUS       Annotations                                             22-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    1..882
+                     /ugene_name="vibB"
+//

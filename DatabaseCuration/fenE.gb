@@ -1,0 +1,7 @@
+LOCUS       Annotations                                             20-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    17..7681
+                     /ugene_name="fenE"
+                     /ugene_group="fengy_coding_sequences"
+//

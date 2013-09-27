@@ -1,0 +1,13 @@
+LOCUS       Annotations                                             19-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    1642..8055
+                     /ugene_name="arfA"
+                     /ugene_group="arthr_coding_sequences"
+     misc_feature    8237..21253
+                     /ugene_name="arfB"
+                     /ugene_group="arthr_coding_sequences"
+     misc_feature    21319..39093
+                     /ugene_name="arfC"
+                     /ugene_group="arthr_coding_sequences"
+//

@@ -1,0 +1,7 @@
+LOCUS       Annotations                                             20-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    1021..10416
+                     /ugene_name="ennia"
+                     /ugene_group="ennia_coding_sequences"
+//

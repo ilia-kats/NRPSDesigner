@@ -1,0 +1,13 @@
+LOCUS       Annotations                                             22-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    complement(11459..18751)
+                     /ugene_name="pvdD"
+                     /ugene_group="pyove_coding_sequences"
+     misc_feature    complement(18817..25386)
+                     /ugene_name="pvdJ"
+                     /ugene_group="pyove_coding_sequences"
+     misc_feature    complement(25390..40857)
+                     /ugene_name="pvdI"
+                     /ugene_group="pyove_coding_sequences"
+//

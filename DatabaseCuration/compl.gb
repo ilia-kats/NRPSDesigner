@@ -1,0 +1,16 @@
+LOCUS       Annotations                                             20-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    5664..12014
+                     /ugene_name="comA"
+                     /ugene_group="compl_coding_sequences"
+     misc_feature    12011..16606
+                     /ugene_name="comB"
+                     /ugene_group="compl_coding_sequences"
+     misc_feature    16705..31401
+                     /ugene_name="comC"
+                     /ugene_group="compl_coding_sequences"
+     misc_feature    31439..37933
+                     /ugene_name="comD"
+                     /ugene_group="compl_coding_sequences"
+//
