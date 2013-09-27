@@ -1,0 +1,16 @@
+LOCUS       Annotations                                             27-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    9359..16135
+                     /ugene_name="apdA"
+                     /ugene_group="anaba_coding_sequence"
+     misc_feature    16122..31304
+                     /ugene_name="apdB"
+                     /ugene_group="anaba_coding_sequence"
+     misc_feature    33477..37628
+                     /ugene_name="apdD"
+                     /ugene_group="anaba_coding_sequence"
+     misc_feature    37683..38474
+                     /ugene_name="apdE"
+                     /ugene_group="anaba_coding_sequence"
+//
