@@ -142,24 +142,28 @@ std::array<uint8_t, 2> Taxon::operator-(const Taxon &o) const
 
 std::array<uint8_t, 2> Taxon::diff(const Taxon &o, Taxon::Rank r) const
 {
+    if (id() == o.id())
+        return std::array<uint8_t, 2>({0, 0});
     std::array<uint8_t, 2> ret;
     int lca;
-    bool species = false;
+    bool tspecies = false, ospecies = false;
     for (lca = 0; lca < m_lineage.size() && lca < o.m_lineage.size() && m_lineage[lca]->id() == o.m_lineage[lca]->id(); ++lca) {
         if (m_lineage[lca]->rank() == r)
-            species = true;
+            tspecies = ospecies = true;
     }
     uint8_t tsp = 0, tssp = 0, osp = 0, ossp = 0;
     for (int i = lca; i < m_lineage.size(); ++i) {
-        !species ? ++tsp : ++tssp;
+        !tspecies ? ++tsp : ++tssp;
         if (m_lineage[i]->rank() == r)
-            species = true;
+            tspecies = true;
     }
+    !tspecies ? ++tsp : ++tssp;
     for (int i = lca; i < o.m_lineage.size(); ++i) {
-        !species ? ++osp : ++ossp;
+        !ospecies ? ++osp : ++ossp;
         if (o.m_lineage[i]->rank() == r)
-            species = true;
+            ospecies = true;
     }
+    !ospecies ? ++osp : ++ossp;
     ret[0] = std::max(tsp, osp);
     ret[1] = std::max(tssp, ossp);
     return ret;

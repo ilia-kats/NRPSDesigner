@@ -35,7 +35,7 @@ public:
         uint32_t id;
         std::string name;
     };
-    enum class Rank {NoRank, Superkingdom, Phylum, Class, Order, Family, Genus, Species};
+    enum class Rank {NoRank, Superkingdom, Phylum, Class, Order, Family, Genus, SpeciesGroup, Species};
 
     bool full() const;
     uint32_t id() const;

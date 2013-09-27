@@ -45,6 +45,7 @@
 #define RANK_ORDER "order"
 #define RANK_FAMILY "family"
 #define RANK_GENUS "genus"
+#define RANK_SPECIESGROUP "species group"
 #define RANK_SPECIES "species"
 
 #define TIME_FORMAT "%Y/%m/%d %H:%M:%S"
@@ -416,6 +417,8 @@ Taxon::Rank TaxonBuilder::parseRank(const char *r)
         return Taxon::Rank::Family;
     else if (!strcmp(r, RANK_GENUS))
         return Taxon::Rank::Genus;
+    else if (!strcmp(r, RANK_SPECIESGROUP))
+        return Taxon::Rank::SpeciesGroup;
     else if (!strcmp(r, RANK_SPECIES))
         return Taxon::Rank::Species;
 }
