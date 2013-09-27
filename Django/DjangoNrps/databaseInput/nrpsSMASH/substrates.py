@@ -83,7 +83,6 @@ def parse_nrps_preds(options, pksnrpsvars):
 # dha
 # scy
 # pip
-#bmt
 #adds
 #HIV VS 2HIVA????
 #bht
