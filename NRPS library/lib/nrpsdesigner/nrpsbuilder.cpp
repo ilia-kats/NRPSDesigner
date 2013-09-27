@@ -1,6 +1,7 @@
 #include "nrpsbuilder.h"
 #include "abstractdatabaseconnector.h"
 #include "origin.h"
+#include "product.h"
 
 #include <queue>
 #include <algorithm>
@@ -213,6 +214,12 @@ float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
     if (m_weightCache.count(key) == 0) {
         auto dist = *m_taxonCache.at(taxid1) - *m_taxonCache.at(taxid2);
         weight = dist[0] + dist[1];
+        if (!weight) // TODO: there could be multiple pathways producing the same product in the same organism
+            weight += (lhs->data->product()->id() != rhs->data->product()->id()) * 0.5;
+        if (!weight) {
+            if (std::abs(lhs->data->module() - rhs->data->module()) > 1)
+                weight += 0.3;
+        }
         m_weightCache.emplace(key, weight);
     } else
         weight = m_weightCache[key];
