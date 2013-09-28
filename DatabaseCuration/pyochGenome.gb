@@ -1,0 +1,16 @@
+LOCUS       Annotations                                             28-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    complement(12905..14572)
+                     /mismatches=10
+                     /ugene_name="pchD"
+                     /ugene_group="pyoch_coding"
+     misc_feature    15859..20256
+                     /mismatches=28
+                     /ugene_name="pchE"
+                     /ugene_group="pyoch_coding"
+     misc_feature    20172..25697
+                     /mismatches=36
+                     /ugene_name="pchF"
+                     /ugene_group="pyoch_coding"
+//
