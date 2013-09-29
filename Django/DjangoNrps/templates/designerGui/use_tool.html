@@ -194,7 +194,7 @@
        jQuery("#tabs").tabs("disable",3);
        jQuery("#primerTab").attr("href", "");
        jQuery("#constructTab").attr("href", "");
-       submitCeleryJob("{% url 'makeConstruct' pid %}", undefined, undefined, undefined, function(data){
+       submitCeleryJob("{% url 'makeConstruct' pid %}", {curatedonly: jQuery('#chk_curatedonly').prop("checked")}, undefined, undefined, function(data){
             if (data[1].constructId != undefined)
                 activateTabs(data);
             else
@@ -378,7 +378,8 @@
 
         <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
         <div>
-        <button id="monomer_add">Add monomer</button><button id="submit">Design construct</button></div>
+        <button id="monomer_add">Add monomer</button><button id="submit">Design construct</button>
+        <input type="checkbox" id="chk_curatedonly" checked="checked"/> <label for="chk_curatedonly" style="margin-bottom:0">Use curated domains only</label></div>
     </div>
 </div>
 

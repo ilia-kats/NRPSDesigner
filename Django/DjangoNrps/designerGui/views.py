@@ -23,12 +23,8 @@ import json
 def makeConstruct(request,pid):
     nrp = NRP.objects.get(pk=pid)
     nrp.designed = False
-    #import pdb; pdb.set_trace()
-    con = nrp.makeConstruct()
-    if isinstance(con, bool) and con == True:
-        return getConstruct(request, pid)
-    else:
-        return JsonResponse({'taskId': con})
+    #import pdb;pdb.set_trace()
+    return JsonResponse({'taskId': nrp.designDomains.delay(request.POST['curatedonly'].lower() in ("yes", "true", "t", "1")).id})
 
 @login_required
 def getConstruct(request, pid):

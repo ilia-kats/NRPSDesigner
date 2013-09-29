@@ -185,3 +185,4 @@ CACHES = {
 
 DEFAULT_FROM_EMAIL = 'kats@stud.uni-heidelberg.de'
 CURATION_REQUEST_RECIPIENTS = ['nikos.ignatiadis01@gmail.com', 'k.herbst@stud.uni-heidelberg.de', 'nilskurzawa@yahoo.de', 'kats@stud.uni-heidelberg.de']
+CURATION_GROUP = "curator"

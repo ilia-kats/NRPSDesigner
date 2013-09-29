@@ -162,7 +162,7 @@ class NRP(models.Model):
         return pfamJson
 
     @task()
-    def designDomains(self, cb=None):
+    def designDomains(self, curatedonly=True):
         #see deletion strategy in multiline comment above
         if len(self.domainOrder.all())>0:
             [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
@@ -193,6 +193,8 @@ class NRP(models.Model):
             '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
         args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString()]
+        if curatedonly:
+            args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
         for k,v in dbSettings.items():
             if v:
                 args.extend([k, v])
@@ -233,6 +235,7 @@ class NRP(models.Model):
             domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count)
         self.designed = True
         self.save()
+        self.makeConstruct()
 
 def readFrom(file, callback):
     try:
