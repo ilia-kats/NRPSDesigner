@@ -13,7 +13,7 @@ Django stuff
 =============
 Because we all LOVE packages (AND LOTS OF THEM), here is the list of stuff you will need to run everything. The Python packages can be installed with pip by running
 `pip install package`
-If you are on MacOSX or Linux, you need to run this as root:
+If you are on Mac OS X or Linux, you need to run this as root:
 `sudo pip install package`
 
 Main packages
@@ -33,11 +33,12 @@ Django packages
 Other stuff that is loaded by some of our python functions:
 -----------------------------------------------------------
 * __Requests__:Great library to do simple http requests!
-* __Biopython__: Just like bioperl but not in a crappy language!
+* __Biopython__ (>= 1.61): Just like bioperl but not in a crappy language!
 * __xhtml2pdf__: Also necessary for Gibthon..
 * __BeautifulSoup__: Beautiful soup!
 * __celery__: asynchronous scheduling framework
 * __kombu__: database-based message passing framework
+* __python-openbabel__: Python bindings to openbabel for 2D structure generation
 
 C++ stuff
 =============
@@ -53,7 +54,7 @@ Compilation
 ###*ix
 For an out-of-tree build, create a directory named 'build'. Chdir into the build directory and run
 `cmake path_to_NRPSDesigner_source`
-This will locate all required libraries and create a Makefile. Run `make` to compile.
+This will locate all required libraries and create a Makefile. Run `make` to compile, `make install` to install.
 
 ####MacOSX
 On MacOSX, both GCC 4.2 and Clang are available. Although GCC 4.2 is ancient and does not support C++11, Clang by default still links against the GCC C++ standard library. To successfully compile NRPSDesigner, Clang needs to be told to link against its own C++ standard library. This can be achieved by adding `-DCMAKE_CXX_FLAGS=-stdlib=libc++` to the CMake command-line or, if using the CMake GUI, adding `-stdlib=libc++`to `CMAKE_CXX_FLAGS`. Note that all C++ libraries the NRPSDesigner depends on, i.e. Boost.program_options and the MySQL C++ connector, need to also link against libc++.

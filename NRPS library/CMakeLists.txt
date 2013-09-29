@@ -32,5 +32,11 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
    add_definitions("-D_CXX_CLANG")
 endif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
+if (CMAKE_LIBRARY_ARCHITECTURE)
+    set (LIB_INSTALL_DIR lib${LIB_SUFFIX}/${CMAKE_LIBRARY_ARCHITECTURE})
+else (CMAKE_LIBRARY_ARCHITECTURE)
+    set (LIB_INSTALL_DIR lib${LIB_SUFFIX})
+endif (CMAKE_LIBRARY_ARCHITECTURE)
+
 add_subdirectory(lib)
 add_subdirectory(ui)
