@@ -148,10 +148,10 @@ var show_delete_dialog = function(){
 	jQuery('#confirm_delete').dialog('open');
 };
 	
-jQuery(document).ready(function() {
-	jQuery('button[id="add"]')
+jQuery(function() {
+	jQuery('#add')
 		.click(function(event){
-			jQuery.post('add', jQuery('form[action^="add"]').serialize(), function(data){
+			jQuery.post('add', jQuery('#peptide_add > form').serialize(), function(data){
 				console.log(data[1].html)
                 if(data[0] == 0)
                 {
@@ -164,6 +164,10 @@ jQuery(document).ready(function() {
 		.button({
 			icons:{primary:'ui-icon-plusthick'}
 		});
+    jQuery('#peptide_add > form').submit(function(e) {
+        jQuery('#add').click();
+        e.preventDefault();
+    });
 	
 	jQuery('#peptide_table').fragmentList({
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
@@ -192,7 +196,7 @@ jQuery(document).ready(function() {
 			sEmptyTable: '<button id="addc">Add new Peptide</button>'
 		}
 	});
-	jQuery('button[id="addc"]')
+	jQuery('#addc')
 		.click(function(event){
 			jQuery('#peptide_add').dialog('open');
 		})
