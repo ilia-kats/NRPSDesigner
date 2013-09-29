@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH
 )
 
 find_package(LibXml2 REQUIRED)
+find_package(CURL REQUIRED)
 find_package(MySQL REQUIRED)
 find_package(MySQLcpp REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options)
@@ -24,6 +25,7 @@ include_directories(
     ${LIBXML2_INCLUDE_DIR}
     ${MYSQL_INCLUDE_DIR}
     ${MYSQLCPP_INCLUDE_DIR}
+    ${CURL_INCLUDE_DIRS}
 )
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
