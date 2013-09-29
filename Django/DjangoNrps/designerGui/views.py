@@ -23,7 +23,6 @@ import json
 def makeConstruct(request,pid):
     nrp = NRP.objects.get(pk=pid)
     nrp.designed = False
-    #import pdb;pdb.set_trace()
     return JsonResponse({'taskId': nrp.designDomains.delay(request.POST['curatedonly'].lower() in ("yes", "true", "t", "1")).id})
 
 @login_required
@@ -57,7 +56,7 @@ def nrpDesigner(request, pid):
     else:
         raise Http404()
 
-@login_required 
+@login_required
 def peptide_add(request):
     if request.method == 'POST':
         form = NRPForm(request.POST, prefix='nrp')

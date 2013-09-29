@@ -225,8 +225,10 @@ float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
             weight += 0.6;
         else if (std::abs(diff) > 1)
             weight += 0.5;
-        else if (std::abs(diff) == 1)
+        else if (std::abs(diff) == 1 && rhs->data->type() != DomainType::C)
             weight += 0.4;
+        else if (std::abs(diff) == 0 && rhs->data->type() == DomainType::C)
+            weight += 0.1;
     }
     return weight;
 }
