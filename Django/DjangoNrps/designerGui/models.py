@@ -33,9 +33,9 @@ class Species(models.Model):
 Depiction of basic NRP model dependencies (ForeignKeys, ManyToManyFields):
 
  designerGui.NRP <----------------------- designerGui.DomainOrder  ---> databaseInput.Domain
-   ||                                                       ||
-   ||                                                       ||
-   \/                                                       \/
+   ||
+   ||
+   \/
   gibson.Construct <--- gibson.ConstructFragment ---> fragment.Gene
 
 
@@ -53,6 +53,7 @@ class NRP(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     designed = models.BooleanField(default=False)
+    indigoidineTagged = models.BooleanField(default=False)
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.ForeignKey('gibson.Construct', null=True, blank=True)
 
@@ -60,7 +61,6 @@ class NRP(models.Model):
         return self.name
 
     def delete_dependencies(self, all=True):
-        [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
         self.designed = False
         self.domainOrder.all().delete()
         if all:
@@ -152,9 +152,6 @@ class NRP(models.Model):
         self.save()
         return True
 
-
-
-
     def getPeptideSequence(self):
         monomers = self.monomers.order_by('substrateOrder').all()
         orderedMonomerIds = [int(monomer.pk) for monomer in monomers]
@@ -227,6 +224,8 @@ class NRP(models.Model):
         args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString()]
         if curatedonly:
             args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
+        if self.indigoidineTagged:
+            args.append("-t")
         for k,v in dbSettings.items():
             if v:
                 args.extend([k, v])
@@ -289,6 +288,3 @@ class DomainOrder(models.Model):
     order = models.PositiveIntegerField()
     designerStart = models.IntegerField(blank=True, null=True)
     designerStop = models.IntegerField(blank=True, null=True)
-    gene = models.ForeignKey('fragment.gene', null=True, blank=True)
-
-

@@ -150,6 +150,7 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
             tdomainnodes->push_back(t);
             m_graph.push_back(t);
         }
+        nrps.setIndigoidineTagged(true);
     }
 
     std::shared_ptr<std::vector<Node*>> goal(new std::vector<Node*>(1, m_endn));

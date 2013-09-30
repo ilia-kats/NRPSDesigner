@@ -12,12 +12,23 @@
 #define DOMAINS_NODE "domains"
 #define ORIGINS_NODE "origins"
 #define PRODUCTS_NODE "products"
+#define INDIGOIDINETAGGED_ATTR "indigoidinetagged"
 
 using namespace nrps;
 
 Nrps::Nrps(const std::vector<Monomer> &nrp)
-: std::vector<std::shared_ptr<Domain>>(), m_nrp(nrp)
+: std::vector<std::shared_ptr<Domain>>(), m_nrp(nrp), m_indigoidineTagged(false)
 {}
+
+bool Nrps::isIndigoidineTagged() const
+{
+    return m_indigoidineTagged;
+}
+
+void Nrps::setIndigoidineTagged(bool tagged)
+{
+    m_indigoidineTagged = tagged;
+}
 
 std::string Nrps::toXml() const
 {
@@ -71,6 +82,8 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
     xmlTextWriterSetIndentString(writer, BAD_CAST "    ");
     xmlTextWriterStartDocument(writer, nullptr, "UTF-8", nullptr);
     xmlTextWriterStartElement(writer, BAD_CAST NRPS_NODE);
+    if (m_indigoidineTagged)
+        xmlTextWriterWriteAttribute(writer, BAD_CAST INDIGOIDINETAGGED_ATTR, BAD_CAST INDIGOIDINETAGGED_ATTR);
     xmlTextWriterStartElement(writer, BAD_CAST DOMAINS_NODE);
     AbstractDatabaseConnector *dbconn = AbstractDatabaseConnector::getInstance();
     for (const auto &domain : *this) {

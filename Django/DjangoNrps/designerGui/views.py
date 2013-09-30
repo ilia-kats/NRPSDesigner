@@ -18,12 +18,14 @@ import xml.etree.ElementTree as x
 import openbabel as ob
 import json
 
+def toBool(x):
+    return str(x.lower()) in ("yes", "true", "t", "1")
 
 @login_required
 def makeConstruct(request,pid):
     nrp = NRP.objects.get(pk=pid)
     nrp.designed = False
-    return JsonResponse({'taskId': nrp.designDomains.delay(request.POST['curatedonly'].lower() in ("yes", "true", "t", "1")).id})
+    return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
 
 @login_required
 def getConstruct(request, pid):
@@ -80,14 +82,14 @@ def peptide_delete(request, cid):
     if peptide:
         peptide.fullDelete()
         if request.is_ajax():
-            return JsonResponse('/peptides') 
+            return JsonResponse('/peptides')
         return HttpResponseRedirect('/peptides')
     else:
         return HttpResponseNotFound()
 
 class NRPListView(TemplateView):
     template_name = 'designerGui/peptides.html'
-   
+
     def get_context_data(self, **kwargs):
         context = super(NRPListView, self).get_context_data(**kwargs)
         context['NRPform'] = NRPForm(prefix='nrp')
@@ -98,18 +100,18 @@ class NRPListView(TemplateView):
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
   model = Species
-  
+
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
         pid  = self.kwargs["pid"]
         context['pid'] = pid
         context['myFormSet'] = SubstrateFormSet()
-        
+
         modfs = Modification.objects.all()
         context['modifications'] = modfs.values()
         #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
-        
+
 
         aas = Substrate.objects.exclude(user__username='sbspks')
         aas = filter(lambda x: x.can_be_added(), aas)
@@ -135,6 +137,7 @@ class SpeciesListView(ListView):
         nrp = NRP.objects.get(pk= pid)
         substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
         context['substrateOrder'] = substrateOrder
+        context['indigoidineTagged'] = nrp.indigoidineTagged
 
         initialPic = nrp.getPeptideSequenceForStructView()
         context['initialPic'] = initialPic
@@ -148,7 +151,7 @@ def submit_nrp(request):
         monomerid.text = monomer
     return HttpResponse(x.tostring(nrpxml, "utf8"), mimetype="text/xml")
 
-@cache_page(365*24*60*60*15)  
+@cache_page(365*24*60*60*15)
 def make_structure(request):
     def makeResidue(mol, idx, aaatoms):
         res = mol.NewResidue()
@@ -243,11 +246,11 @@ def make_structure(request):
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
 
-    
+
 
 class DomainSequenceView(TemplateView):
     template_name = 'designerGui/domainSequence.html'
-   
+
     def get_context_data(self, **kwargs):
         context = super(DomainSequenceView, self).get_context_data(**kwargs)
         pid  = self.kwargs["pid"]

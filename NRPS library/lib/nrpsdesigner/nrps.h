@@ -17,6 +17,8 @@ class NRPSDESIGNER_EXPORT Nrps : public std::vector<std::shared_ptr<Domain>>
 {
 public:
     Nrps(const std::vector<Monomer>&);
+    bool isIndigoidineTagged() const;
+    void setIndigoidineTagged(bool);
     std::string toXml() const;
     void toXml(std::ostream&) const;
     void toXml(const std::string&) const;
@@ -25,6 +27,7 @@ public:
 
 private:
     const std::vector<Monomer>& m_nrp;
+    bool m_indigoidineTagged;
     void toXml(xmlTextWriterPtr) const;
 };
 }
