@@ -38,7 +38,7 @@ Other stuff that is loaded by some of our python functions:
 * __BeautifulSoup__: Beautiful soup!
 * __celery__: asynchronous scheduling framework
 * __kombu__: database-based message passing framework
-* __python-openbabel__: Python bindings to openbabel for 2D structure generation
+* __python-openbabel__: (>= 2.3.2) Python bindings to openbabel for 2D structure generation
 
 C++ stuff
 =============
@@ -60,4 +60,4 @@ This will locate all required libraries and create a Makefile. Run `make` to com
 On MacOSX, both GCC 4.2 and Clang are available. Although GCC 4.2 is ancient and does not support C++11, Clang by default still links against the GCC C++ standard library. To successfully compile NRPSDesigner, Clang needs to be told to link against its own C++ standard library. This can be achieved by adding `-DCMAKE_CXX_FLAGS=-stdlib=libc++` to the CMake command-line or, if using the CMake GUI, adding `-stdlib=libc++`to `CMAKE_CXX_FLAGS`. Note that all C++ libraries the NRPSDesigner depends on, i.e. Boost.program_options and the MySQL C++ connector, need to also link against libc++.
 
 ###Windows
-Launch the CMake graphical user interface, select the source and build directories (create a build directory for an out-of-tree build) and click `Configure`. CMake will now locate all required libraries. If it is unable to find some libraries, you will need to input the paths manually. Run Generate to generate a makefile in the format of your choice (we recommend using MinGW64 from http://sourceforge.net/projects/mingwbuilds/ inside an MSYS environment and use the MSYS Makefile generator). Note that no attempts to compile NRPSDesigner on Windows were made, so you might run into trouble.
+Launch the CMake graphical user interface, select the source and build directories (create a build directory for an out-of-tree build) and click `Configure`. CMake will now locate all required libraries. If it is unable to find some libraries, you will need to input the paths manually. Run `Generate` to generate a makefile in the format of your choice (we recommend using MinGW64 from http://sourceforge.net/projects/mingwbuilds/ inside an MSYS environment and use the MSYS Makefile generator). Note that no attempts to compile NRPSDesigner on Windows were made, so you might run into trouble.
