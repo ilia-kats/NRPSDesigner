@@ -1,7 +1,8 @@
+{% load staticfiles %}
 <div id='process_wrap'>
     <div id='processing' class='center'
         style='margin-top:1.5em;visibility:hidden;'>
-        <img src='{{ STATIC_URL }}/images/spinner.gif' />
+        <img src="{% static 'images/spinner.gif' %}" />
         <h4>Working...</h4>
     </div>
 	<div id='process_progress' style='width:80%;margin-left:auto;margin-right:auto;margin-top:2em;'>
@@ -31,10 +32,10 @@ function makeHttpObject() {
 
 	throw new Error("Could not create HTTP request object.");
 }
-	
+
 jQuery(window).ready( function() {
 	jQuery('#process_progress').progressbar({'value': 0,});
-	
+
 	jQuery('#process_btn').button({
 		icons: {primary: 'ui-icon-gear',},
         {% if not construct.fragments.all %}
@@ -50,7 +51,7 @@ jQuery(window).ready( function() {
 		h.onreadystatechange = function (){
 			p = parseInt(this.responseText.split(':').pop());
 			jQuery('#process_progress').progressbar('value', p);
-			if (p==100){
+			if (p==100 && this.readyState == 4){
 				//location.reload()
 				//jQuery( "#tabs" ).tabs( "option", "active", 4 );
 				jQuery("#tabs").tabs("load","primerTab")
