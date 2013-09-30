@@ -1,6 +1,7 @@
 {% load staticfiles %}
 <script src="{% static "js/primers.js" %}" type="text/javascript"></script>
 <script src="{% static "js/jquery.cookie-modified.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.prompt.js" %}" type="text/javascript"></script>
 
 <div id='buttons' class='ui-widget-content content fixed-width'>
 	<button id="download">Download Primers and Protocols</button>
@@ -127,7 +128,7 @@ jQuery(window).ready(function() {
 			jQuery.each(jQuery('#pcrform')[0].elements, function (i,e) {
 				settings.push('"' + e.name + '":"' + e.value + '"');
 			});
-			jQuery.post('primers/save', {"data":'[{"pcrsettings":{' + settings.join(',') + '},"fragments":[' + forms.join(',') + ']}]'});
+			jQuery.post('{% url 'gibson.views.primer_save' construct.pk %}', {"data":'[{"pcrsettings":{' + settings.join(',') + '},"fragments":[' + forms.join(',') + ']}]'});
 		});
 
 	var downloadTimer;
@@ -151,7 +152,7 @@ jQuery(window).ready(function() {
 				jQuery.cookie('fileDownloadToken', null);
 			}
 		},500);
-		window.location.href='{% url 'gibson.views.constructs' %}/{{ construct.id }}/primers/download?tk='+token;
+		window.location.href='{% url 'gibson.views.primer_download' construct.pk %}?tk='+token;
 	});
 });
 </script>
