@@ -19,7 +19,7 @@ from celery.contrib.methods import task
 class Species(models.Model):
     species = models.CharField(max_length=100)
     taxon_id = models.CharField(max_length=20)
-  
+
     def __unicode__(self):
         return str(species)
 
@@ -59,15 +59,18 @@ class NRP(models.Model):
     def __unicode__(self):
         return self.name
 
-    def delete_dependencies(self):
+    def delete_dependencies(self, all=True):
         [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
         self.designed = False
         self.domainOrder.all().delete()
-        SubstrateOrder.objects.filter(nrp = self).delete()
+        if all:
+            SubstrateOrder.objects.filter(nrp = self).delete()
         if self.construct is not None:
             [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
-            self.save()
-        pass
+            if self.construct.primer is not None:
+                [x.del_all() for x in self.construct.primer.all() if x is not None]
+            self.construct.reset()
+        self.save()
 
     def fullDelete(self):
         for gene in [x.gene for x in self.domainOrder.all()]:
@@ -93,7 +96,7 @@ class NRP(models.Model):
             else:
                 return False
 
-        # actual function 
+        # actual function
         if not self.designed or len(self.domainOrder.all()) == 0:
             task = self.designDomains.delay()
             return task.id
@@ -109,7 +112,7 @@ class NRP(models.Model):
             connectedDomains.append(domainTuple[1])
         connectedDomainList.append(connectedDomains)
 
-        # start creating construct        
+        # start creating construct
         name = self.name + ' Gibson Construct'
         if self.construct is None:
             self.construct = Construct.objects.create(owner = self.owner,
@@ -150,7 +153,7 @@ class NRP(models.Model):
         return True
 
 
-            
+
 
     def getPeptideSequence(self):
         monomers = self.monomers.order_by('substrateOrder').all()
@@ -196,10 +199,7 @@ class NRP(models.Model):
     @task()
     def designDomains(self, curatedonly=True):
         #see deletion strategy in multiline comment above
-        if len(self.domainOrder.all())>0:
-            [x.gene.delete() for x in self.domainOrder.all() if x.gene is not None]
-            self.domainOrder.all().delete() #possibly redundant?
-        self.designed = False
+        self.delete_dependencies(False)
         lasterror = [None] # nonlocal only in python3
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3
