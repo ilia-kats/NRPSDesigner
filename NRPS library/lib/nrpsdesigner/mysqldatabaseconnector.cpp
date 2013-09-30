@@ -233,7 +233,7 @@ std::vector<std::shared_ptr<RD>> MySQLDatabaseConnector::getCoreDomains(const st
     testInitialized();
     m_stmtCoreDomainsNoSubstrate->setString(1, t);
     if (m_curatedOnly)
-        m_stmtCoreDomainsNoSubstrate->setString(2, "curator");
+        m_stmtCoreDomainsNoSubstrate->setString(2, m_curationGroup);
     return getCoreDomains<D, initFunc, RD>(m_stmtCoreDomainsNoSubstrate, f);
 }
 
@@ -246,7 +246,7 @@ std::vector<std::shared_ptr<RD>> MySQLDatabaseConnector::getCoreDomains(const Mo
         m_stmtCoreDomainsSubstrate->setUInt(2, m.enantiomerId());
         m_stmtCoreDomainsSubstrate->setString(3, t);
         if (m_curatedOnly)
-            m_stmtCoreDomainsSubstrate->setString(4, "curator");
+            m_stmtCoreDomainsSubstrate->setString(4, m_curationGroup);
         return getCoreDomains<D, initFunc, RD>(m_stmtCoreDomainsSubstrate, f);
     } catch (const sql::SQLException &e) {
         throw makeException(e);
