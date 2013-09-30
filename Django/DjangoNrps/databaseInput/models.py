@@ -69,6 +69,10 @@ class Cds(models.Model):
     def get_domain_type_name_list(self):
         return [x.domainType.name for x in self.domains.order_by('pfamStart')]
 
+    # return list of actual domains rather than queryset..
+    def get_ordered_domain_list(self):
+        return list(self.domains.order_by('pfamStart'))
+
     @staticmethod
     def type_list_to_modules(type_name_list):
         module_list = []
@@ -83,8 +87,27 @@ class Cds(models.Model):
             module_list.append(curr_count)
         return module_list
 
+    # e.g. ATCATTE -> [1,1,2,2,2,2]
     def module_code(self):
         return self.type_list_to_modules(self.get_domain_type_name_list())
+
+    # get DNA sequence based on start and stop domain 
+    # should be actual domain objects, not IDs
+    def get_sequence(self, start_domain, stop_domain):
+        if start_domain.cds == self and stop_domain.cds == self:
+            domain_list = self.get_ordered_domain_list()
+            start_index = domain_list.index(start_domain)
+            stop_index  = domain_list.index(stop_domain)
+
+            # write custom functions for the below!!!
+            # With linker consideration maybe???
+            start_position = start_domain.pfamStart - 1
+            stop_position  = stop_domain.pfamStop
+            ##
+            return self.dnaSequence[start_position:stop_position]
+        else:
+            pass  #raise some error..
+
 
 
 class Origin(models.Model):
@@ -160,7 +183,6 @@ class Domain(models.Model):
     # specific for only 1 substrate
     def number_of_specificities(self):
         return len(self.substrateSpecificity.all())
-
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
