@@ -22,12 +22,12 @@ from time import sleep
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     product = models.ForeignKey('Product', blank=True, null=True)
-    geneName = models.CharField(max_length=100) 
+    geneName = models.CharField(max_length=100)
     dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
-   
+
     def __unicode__(self):
         return str(self.origin) + self.geneName
 
@@ -91,7 +91,7 @@ class Cds(models.Model):
     def module_code(self):
         return self.type_list_to_modules(self.get_domain_type_name_list())
 
-    # get DNA sequence based on start and stop domain 
+    # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
     def get_sequence(self, start_domain, stop_domain):
         if start_domain.cds == self and stop_domain.cds == self:
@@ -179,7 +179,7 @@ class Domain(models.Model):
     def align_same_type(self):
         return self.domainType.align_same_type()
 
-    # introduce this function, so we can deduce which A domains are 
+    # introduce this function, so we can deduce which A domains are
     # specific for only 1 substrate
     def number_of_specificities(self):
         return len(self.substrateSpecificity.all())
@@ -199,7 +199,7 @@ class Substrate(models.Model):
         return self.name
 
     def can_be_added_by_adenylation_domain(self):
-        return len([x for x in self.adenylationDomain.all() if x.number_of_specificities() == 1]) > 0
+        return self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').count() > 0
 
     def can_be_added_by_modification_domain(self):
         bla = [self.parent is not None]
