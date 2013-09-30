@@ -43,8 +43,8 @@ class Cds(models.Model):
         allDomainTypes = [x.smashName for x in Type.objects.all()]
         nrpsSmashResult = nrpsSmash(self.dnaSequence)
         consensusPreds = nrpsSmashResult.consensuspreds
-        #import pdb;pdb.set_trace()
-        consensusKeys = sorted(consensusPreds)   #right now this will fail if >=10 A domains are returned!!!!!
+        #code below still not nice, should probably adapt nrpsSMASH to give nicer output
+        consensusKeys = sorted(consensusPreds, key = lambda x: int(x.split('_A')[-1])) 
         consensusValues = [consensusPreds[key] for key in consensusKeys]
         consensusValues = (x for x in consensusValues)
         for predictedDomain in nrpsSmashResult.domaindict2['gene']:
