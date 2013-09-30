@@ -1,9 +1,9 @@
 # Gibson.models
-# 
+#
 # Contains three significant classes:
 #
 # 1) Construct
-# 	This is the main class of this app, containing all of the information 
+# 	This is the main class of this app, containing all of the information
 #   about the construct.
 #
 # 2) ConstructFragment
@@ -20,7 +20,7 @@
 #	Each primer is stored as two primerhalfs, one for the sticky end, one for the flappy end
 #
 # 2) Settings
-# 	A class separate from the Construct class for storing settings for each 
+# 	A class separate from the Construct class for storing settings for each
 #	construct. No huge benefit to it being separate from Construct, other than
 #	separating fairly different aspects. Also makes forms a bit easier.
 #
@@ -67,7 +67,7 @@ rules = [
 			)
 		]
 from south.modelsinspector import add_introspection_rules
-add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"]) 
+add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"])
 
 
 from fragment.models import Gene
@@ -109,7 +109,7 @@ class Settings(models.Model):
 	min_anneal_tm = models.PositiveSmallIntegerField(default=50)
 	min_primer_tm = models.PositiveSmallIntegerField(default=60)
 	min_overlap = models.PositiveSmallIntegerField(default=20)
-	
+
 	def __unicode__(self):
 		return 'Settings for ' + self.construct.name
 
@@ -126,31 +126,31 @@ class PCRSettings(models.Model):
 	enzyme_d = models.DecimalField(max_digits=3, decimal_places=1, default=2.5)
 	primer_d = models.DecimalField(max_digits=3, decimal_places=1, default=0.4)
 	template_d = models.DecimalField(max_digits=4, decimal_places=1, default=100)
-	
+
 	def m(self):
 		return self.repeats * (1+(self.error_margin/100))
-	
+
 	def buffer_v(self):
 		return self.m() * self.volume_each * self.buffer_d/self.buffer_s
-	
+
 	def dntp_v(self):
 		return self.m() * self.volume_each * self.dntp_d/self.dntp_s
-	
+
 	def enzyme_v(self):
 		return self.m() * self.enzyme_d/self.enzyme_s
-	
+
 	def primer_v(self, primer_s):
 		return self.m() * self.volume_each * self.primer_d/primer_s
-	
+
 	def template_v(self, template_s):
 		return self.m() * self.template_d/template_s
-	
+
 	def water_v(self, primer_t_s, primer_b_s, template_s):
 		return (self.m()*self.volume_each) - self.buffer_v() - self.dntp_v() - self.enzyme_v() - self.primer_v(primer_t_s) - self.primer_v(primer_b_s) - self.template_v(template_s)
-	
+
 	def total_v(self):
 		return self.m() * self.volume_each
-	
+
 
 class Warning(models.Model):
 	primer = models.ForeignKey('Primer', related_name='warning')
@@ -172,35 +172,35 @@ class Primer(models.Model):
 	stick = models.OneToOneField('PrimerHalf', related_name='stick')
 	boxplot = models.ImageField(upload_to='boxplots')
 	concentration = models.DecimalField(default=5, max_digits=4, decimal_places=1)
-	
+
 	def vol(self):
 		return self.construct.pcrsettings.primer_v(primer_s=self.concentration)
-	
+
 	class Meta:
 		ordering = ['stick']
-	
+
 	def __unicode__(self):
 		return self.name + ' (' + str(len(self.warning.all())) + ')'
-		
+
 	def csv(self):
 		# returns an array of info to generate a .csv file
 		return [self.name, self.length(), self.tm(), self.seq()]
-	
+
 	def length(self):
 		return len(self.seq())
-		
+
 	def seq(self):
 		return self.flap.seq() + self.stick.seq()
-	
+
 	def seq_pretty(self):
 		# lowerUPPER case for printing the primer
 		return str(self.flap.seq()).lower() + str(self.stick.seq()).upper()
-		
+
 	def tm(self):
 		return round(Tm_staluc(str(self.seq()),
 			50,
 			1000*float(self.construct.settings.na_salt)),2)
-		
+
 	def tm_len_anneal(self, target):
 		# extends the length of the annealing portion of the primer until its target tm is reached
 		while self.stick.tm() < target:
@@ -224,19 +224,19 @@ class Primer(models.Model):
 				)
 				break
 		self.flap.save()
-	
+
 	def del_all(self):
 		# delete the primer. requried because deleting self does not delete primerhalfs for some reason
 		self.flap.delete()
 		self.stick.delete()
 		self.delete()
-	
+
 	def self_prime_check(self):
 		u = UnaFolder(t=self.tm(), safety=self.construct.settings.ss_safety, mg_salt=self.construct.settings.mg_salt, na_salt=self.construct.settings.na_salt)
 		ret, image = u.self_prime(str(self.seq()))
 		print os.path.join(settings.MEDIA_ROOT, 'unafold/p-%s' % self.id)
 		os.rename(image, os.path.join(settings.MEDIA_ROOT, 'unafold/p-%s' % self.id))
-		
+
 		self.warning.all().filter(type='sp').delete()
 		self.save()
 		for warning in u.warnings:
@@ -244,10 +244,10 @@ class Primer(models.Model):
 				primer = self,
 				type = 'sp',
 				text = 'Potential self-priming of 3\' end! dG: %s' % warning[1],
-			)		
-	
+			)
+
 	def misprime_check(self):
-		u = UnaFolder(t=self.tm(), safety=self.construct.settings.ss_safety, 
+		u = UnaFolder(t=self.tm(), safety=self.construct.settings.ss_safety,
 				mg_salt=self.construct.settings.mg_salt, na_salt=self.construct.settings.na_salt)
 		if(self.stick.top):
 			target = str(self.stick.cfragment.sequence())
@@ -267,26 +267,26 @@ class PrimerHalf(models.Model):
 	cfragment = models.ForeignKey('ConstructFragment', related_name='ph')
 	top = models.BooleanField()
 	length = models.PositiveSmallIntegerField()
-	
+
 	def start(self):
 		"""return the start relative to the fragment's start"""
 		if self.top ^ self.isflap():
 			return self.cfragment.end() - self.length
 		else:
 			return self.cfragment.start()
-	
+
 	def end(self):
 		"""return end relative to the fragment's start"""
 		if self.top ^ self.isflap():
 			return self.cfragment.end()
 		else:
 			return self.cfragment.start() + self.length
-	
+
 	def isflap(self):
 		try: self.flap
 		except: return False
 		else: return True
-		
+
 	def extend(self):
 		"""Extend my length by one while I'm within the fragment"""
 		self.length += 1
@@ -295,35 +295,35 @@ class PrimerHalf(models.Model):
 			return False
 		else:
 			return True
-	
+
 	def seq_surround(self):
 		"""Get the primer plus some context"""
 		if self.top ^ self.isflap():
-			start = self.cfragment.end() - 50 
+			start = self.cfragment.end() - 50
 		else:
 			start = self.cfragment.start()
-	
+
 		if self.top ^ self.isflap():
 			end = self.cfragment.end()
 		else:
 			end = self.cfragment.start() + 50
-		
+
 		s = Seq(self.cfragment.fragment.sequence)
 		s = s[start:end]
 		if self.top: s = reverse_complement(s)
 		return s
-	
+
 	def seq(self):
 		s = Seq(self.cfragment.fragment.sequence)
 		s = s[self.start():self.end()]
 		if self.top: s = reverse_complement(s)
 		return s
-		
+
 	def tm(self):
 		return round(Tm_staluc(str(self.seq()),
 			50,
 			1000*float(self.cfragment.construct.settings.na_salt)),2)
-		
+
 	def __unicode__(self):
 		if self.isflap():
 			return self.flap.name + ' (flap): ' + str(self.seq()) + ' (' + str(self.tm()) + ')'
@@ -348,16 +348,16 @@ class Construct(models.Model):
 
 	def __unicode__(self):
 		return self.name
-		
+
 	def sequence(self):
 		dna = ''
 		for f in self.cf.all():
 			dna += f.sequence()
 		return dna
-	
+
 	def length(self):
 		return len(self.sequence())
-	
+
 	def features(self):
 		acc = 0
 		for fr in self.cf.all():
@@ -373,10 +373,10 @@ class Construct(models.Model):
 				f.end -= fr.start() - acc - 1
 				yield f
 			acc += fr.end() - fr.start() + 1
-	
+
 	def feature_count(self):
 		return sum(1 for f in self.features())
-	
+
 	def features_pretty(self):
 		acc = 0
 		for fr in self.cf.all():
@@ -392,7 +392,7 @@ class Construct(models.Model):
 				f.end -= fr.start() - acc - 1
 				yield f.pretty() + (' [reverse]' if fr.direction == 'r' else '')
 			acc += fr.end() - fr.start() + 1
-	
+
 	def gb(self):
 		g = SeqRecord(
 			Seq(self.sequence(),IUPAC.IUPACUnambiguousDNA()),
@@ -401,11 +401,11 @@ class Construct(models.Model):
 			description=self.description
 		)
 		g.features = [SeqFeature(
-			FeatureLocation(ExactPosition(f.start-1),ExactPosition(f.end)), 
-			f.type, qualifiers=dict([[q.name,q.data] for q in f.qualifiers.all()])) 
+			FeatureLocation(ExactPosition(f.start-1),ExactPosition(f.end)),
+			f.type, qualifiers=dict([[q.name,q.data] for q in f.qualifiers.all()]))
 			for f in self.features()]
 		return g.format('genbank')
-		
+
 	def add_fragment(self, fragment, order = 0, direction='f'):
 		if(order > len(self.fragments.all())):
 			order = len(self.fragments.all())
@@ -419,15 +419,15 @@ class Construct(models.Model):
 				i.save()
 		except Exception:
 			pass #probably not found
-			
-		cf = ConstructFragment.objects.create(construct=self,fragment=fragment, 
-				order = order, direction=direction, start_feature=None, 
+
+		cf = ConstructFragment.objects.create(construct=self,fragment=fragment,
+				order = order, direction=direction, start_feature=None,
 				end_feature=None, start_offset=0, end_offset=0)
 
 		self.processed = False
 		self.save()
 		return cf
-		
+
 	def delete_cfragment(self, cfid):
 		try:
 			cf = self.cf.get(id=cfid)
@@ -441,7 +441,7 @@ class Construct(models.Model):
 			return True
 		except:
 			return False
-	
+
 	def reorder_cfragments(self, cfids, directions):
 		for i,cfid in enumerate(cfids):
 			cf = self.cf.get(id=cfid)
@@ -510,15 +510,15 @@ class Construct(models.Model):
 				p.tm_len_anneal(self.settings.min_anneal_tm)
 			if self.settings.min_primer_tm > 0:
 				p.tm_len_primer(self.settings.min_primer_tm)
-			#p.self_prime_check()
-			#yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
-			#yield ' '*1024
-			#p.misprime_check()
-			#yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
-			#yield ' '*1024
+			p.self_prime_check()
+			yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
+			yield ' '*1024
+			p.misprime_check()
+			yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
+			yield ' '*1024
 		self.processed = True
 		self.save()
-		yield ':100'		
+		yield ':100'
 
 	def reprocess_primer(self, p):
 		"""Recalculate all the warnings associated with the given primer"""
@@ -537,7 +537,7 @@ class Construct(models.Model):
 	def last_modified(self):
 		"""Return the date/time that the construct was last modified as a formatted string"""
 		return self.modified.strftime('%c')
-	
+
 class ConstructFragment(models.Model):
 	construct = models.ForeignKey('Construct', related_name='cf')
 	fragment = models.ForeignKey('fragment.Gene', related_name='cf')
@@ -555,7 +555,7 @@ class ConstructFragment(models.Model):
 
 	class Meta:
 		ordering = ['order']
-	
+
 	def primer_top(self):
 		for ph in self.ph.all():
 			try: ph.stick
@@ -563,7 +563,7 @@ class ConstructFragment(models.Model):
 			else:
 				if ph.top:
 					return ph.stick
-	
+
 	def primer_bottom(self):
 		for ph in self.ph.all():
 			try: ph.stick
@@ -571,7 +571,7 @@ class ConstructFragment(models.Model):
 			else:
 				if not ph.top:
 					return ph.stick
-	
+
 	def features(self):
 		feat = []
 		for f in self.fragment.features.all():
@@ -582,25 +582,25 @@ class ConstructFragment(models.Model):
 				if (self.fragment.length() - f.end + 1) >= self.start() and (self.fragment.length() - f.start + 1) <=self.end():
 					feat.append(f)
 		return feat
-	
+
 	def start_is_relative(self):
 		if self.start_feature:
 			return True
 		return False
-	
+
 	def end_is_relative(self):
 		if self.end_feature:
 			return True
 		return False
-	
+
 	def is_relative(self):
 		return (self.end_feature != None) and (self.start_feature != None)
-		
+
 	def limit(self, index):
 		"""limit the index so that it is within the sequence"""
 		return sorted([0, index, self.fragment.length()])[1]
-	
-	def start(self): 
+
+	def start(self):
 		"""Note that feature indexes are stored in 'python' (0-offset, ends inclusive) not 'biologist' (1-offset, ends IDK)
 		   offsets are positive in the direction of the sequence
 		"""
@@ -616,7 +616,7 @@ class ConstructFragment(models.Model):
 			else:
 				r = self.start_offset
 		return self.limit(r)
-	
+
 	def end(self):
 		"""Note that feature indexes are stored in 'python' (0-offset, ends not
 		included) not 'biologist' (1-offset, ends IDK)
@@ -634,25 +634,25 @@ class ConstructFragment(models.Model):
 			else:
 				r = self.fragment.length() + self.end_offset
 		return self.limit(r)
-	
+
 	def sequence(self):
 		seq = self.fragment.sequence
 		if self.direction == 'r':
 			seq = str(reverse_complement(Seq(seq)))
 		return seq[self.start():self.end()]
-	
+
 	def tm(self):
 		return ((self.primer_top().stick.tm() + self.primer_bottom().stick.tm())/2)-4
-	
+
 	def time(self):
 		return (self.end()-self.start()+1)*45.0/1000
-	
+
 	def vol(self):
 		return self.construct.pcrsettings.template_v(self.concentration)
-	
+
 	def water_v(self):
 		return self.construct.pcrsettings.water_v(self.primer_top().concentration, self.primer_bottom().concentration, self.concentration)
-	
+
 	def __unicode__(self):
 		return self.construct.name + ' : ' + self.fragment.name + ' (' + str(self.order) + ')'
 
