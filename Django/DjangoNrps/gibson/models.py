@@ -37,6 +37,7 @@
 
 from django.db import models
 from django import forms
+from django.conf import settings
 from Bio.SeqUtils.MeltingTemp import Tm_staluc
 from Bio.Seq import reverse_complement, Seq
 
