@@ -21,6 +21,9 @@ std::string nrps::toString(DomainType t)
         case DomainType::Te:
             return "Te";
             break;
+        case DomainType::AOxA:
+            return "AOxA";
+            break;
         default:
             return std::string();
             break;
@@ -40,6 +43,8 @@ DomainType NRPSDESIGNER_EXPORT nrps::fromString(const std::string &s)
         return DomainType::E;
     else if (s == "Te")
         return DomainType::Te;
+    else if (s == "AOxA")
+        return DomainType::AOxA;
 }
 
 template<>

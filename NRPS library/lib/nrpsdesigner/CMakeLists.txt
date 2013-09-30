@@ -13,6 +13,7 @@ set(SRCS
     domains/domaintypet.cpp
     domains/domaintypee.cpp
     domains/domaintypete.cpp
+    domains/domaintypeaoxa.cpp
 
     global_enums.cpp
 
@@ -35,6 +36,7 @@ set(HEADERS
     domains/domaintypet.h
     domains/domaintypee.h
     domains/domaintypete.h
+    domains/domaintypeaoxa.h
     global_enums.h
     domain.h
     origin.h

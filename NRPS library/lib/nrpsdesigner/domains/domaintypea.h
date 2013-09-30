@@ -17,6 +17,8 @@ public:
     void setSubstrate(uint32_t);
 
 protected:
+    DomainTypeA(DomainType, uint32_t);
+    DomainTypeA(DomainType, uint32_t, uint32_t);
     virtual void writeXml(xmlTextWriterPtr) const;
 
 private:

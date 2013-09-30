@@ -39,6 +39,7 @@ Other stuff that is loaded by some of our python functions:
 * __celery__: asynchronous scheduling framework
 * __kombu__: database-based message passing framework
 * __python-openbabel__: (>= 2.3.2) Python bindings to openbabel for 2D structure generation
+* __UNAFold__ and __MFold utils__: required by Gibthon
 
 C++ stuff
 =============
