@@ -33,9 +33,9 @@ class Species(models.Model):
 Depiction of basic NRP model dependencies (ForeignKeys, ManyToManyFields):
 
  designerGui.NRP <----------------------- designerGui.DomainOrder  ---> databaseInput.Domain
-   ||                                                       /\
    ||                                                       ||
-   \/                                                       ||
+   ||                                                       ||
+   \/                                                       \/
   gibson.Construct <--- gibson.ConstructFragment ---> fragment.Gene
 
 
@@ -82,11 +82,34 @@ class NRP(models.Model):
 
     # for non-celery use , e.g. via Shell, make sure that NRP has been designed before using method below
     def makeConstruct(self):
-        if not self.designed:
+        # helper function
+        # check whether 2 domains are placed next to each other in the same coding sequence
+        def tupleIsConnected((x,y)):
+            if x.cds != y.cds:
+                return False
+            cdsDomainList = x.cds.get_ordered_domain_list()
+            if cdsDomainList.index(y) == cdsDomainList.index(x) + 1:
+                return True
+            else:
+                return False
+
+        # actual function 
+        if not self.designed or len(self.domainOrder.all()) == 0:
             task = self.designDomains.delay()
             return task.id
-        # import pdb;pdb.set_trace()
-        # clean up previous stuff
+
+        domains = list(self.getDomainModelSequence())
+        connectedDomainList = list()
+
+        connectedDomains = [domains[0]]
+        for domainTuple in zip(domains,domains[1:]):
+            if not tupleIsConnected(domainTuple):
+                connectedDomainList.append(connectedDomains)
+                connectedDomains = list()
+            connectedDomains.append(domainTuple[1])
+        connectedDomainList.append(connectedDomains)
+
+        # start creating construct        
         name = self.name + ' Gibson Construct'
         if self.construct is None:
             self.construct = Construct.objects.create(owner = self.owner,
@@ -94,20 +117,24 @@ class NRP(models.Model):
                 description = 'NRPS designer',
                 shape = 'c')
 
-        for count, domainId in enumerate(self.getDomainSequence()):
-            domain = Domain.objects.get(pk=domainId)
-            domainSequence = domain.get_sequence()
+        # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment
+        for count, connectedDomains in enumerate(connectedDomainList):
+
+            domain1 = connectedDomains[0]
+            domain2 = connectedDomains[-1]
+            domainSequence = domain1.cds.get_sequence(domain1,domain2)
 
             domainGene = Gene.objects.create(owner = self.owner,
-                name = 'type:' + str(domain.domainType),# + ' gene:' + str(domain.cds.geneName),
+                name = ','.join([x.domainType.name for x in connectedDomains]),
                 description = ' '.join(['DNA sequence of',
-                    str(domain.domainType),
-                    'domain of module',
-                    str(domain.module),
+                        ','.join(map(lambda x: ' '.join([str(x.domainType),
+                                            'domain of module',
+                                            str(x.module)]),
+                                        connectedDomains)),
                     'of gene',
-                    str(domain.cds.geneName),
+                    str(domain1.cds.geneName),
                     'of origin',
-                    str(domain.cds.origin)]),
+                    str(domain1.cds.origin)]),
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
@@ -119,12 +146,11 @@ class NRP(models.Model):
                 direction = 'f'
                 )
 
-            domainOrder = DomainOrder.objects.get(nrp = self, domain=domain, order = count )
-            domainOrder.gene = domainGene
-            domainOrder.save()
-
         self.save()
         return True
+
+
+            
 
     def getPeptideSequence(self):
         monomers = self.monomers.order_by('substrateOrder').all()
@@ -138,6 +164,12 @@ class NRP(models.Model):
     def getPeptideSequenceForStructView(self):
         return '?' + '&'.join(["as=%s" % monomerId for monomerId in self.getPeptideSequence()])
 
+    #returns actual domain objects
+    def getDomainModelSequence(self):
+        domains = self.designerDomains.order_by('domainOrder').all()
+        return domains
+
+    #returns IDs
     def getDomainSequence(self):
         domains = self.designerDomains.order_by('domainOrder').all()
         orderedDomainIds = [int(domain.pk) for domain in domains]
