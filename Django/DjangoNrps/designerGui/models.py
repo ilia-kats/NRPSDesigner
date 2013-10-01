@@ -201,17 +201,37 @@ class NRP(models.Model):
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3
         def processErr(lines):
+            cat = 0
+            def log():
+                if lasterror[0]is not None:
+                    return
+                if cat == 0:
+                    logger.error(lasterror[0])
+                elif cat == 1:
+                    logger.warning(lasterror[0])
+                elif cat == 2:
+                    logger.info(lasterror[0])
             lines = lines.splitlines()
             for line in lines:
                 if line.startswith("WARNING: "):
-                    logger.warning(line[9:])
+                    log()
+                    cat = 1
+                    lasterror[0] = line[9:]
                 elif line.startswith("ERROR: "):
+                    log()
+                    cat = 0
                     lasterror[0] = line[7:]
-                    logger.error(lasterror[0])
                 elif line.startswith("INFO: "):
-                    logger.info(line[7:])
+                    log()
+                    cat = 2
+                    lasterror[0] = line[6:]
+                elif line.startswith(" "):
+                    lasterror[0] += line.strip()
                 else:
-                    logger.error(line)
+                    log()
+                    cat = 0
+                    lasterror[0] = line
+            log()
         def processOut(lines):
             xmlout[0] += lines
         # call NRPS Designer C++ program
@@ -229,7 +249,7 @@ class NRP(models.Model):
         for k,v in dbSettings.items():
             if v:
                 args.extend([k, v])
-        child = subprocess.Popen(args, 1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen(args, 0, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         fds = (child.stdout.fileno(), child.stderr.fileno())
         mask = fcntl.fcntl(fds[0], fcntl.F_GETFL)

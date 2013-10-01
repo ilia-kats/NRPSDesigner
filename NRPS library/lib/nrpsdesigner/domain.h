@@ -34,6 +34,8 @@ public:
     const std::string& nativePfamLinkerAfter() const;
     const std::string& nativeDefinedLinkerBefore() const;
     const std::string& nativeDefinedLinkerAfter() const;
+    const std::string& determinedLinkerBefore() const;
+    const std::string& determinedLinkerAfter() const;
 
     void toXml(xmlTextWriterPtr) const;
 
@@ -59,6 +61,10 @@ public:
     void setNativeDefinedLinkerBefore(std::string&&);
     void setNativeDefinedLinkerAfter(const std::string&);
     void setNativeDefinedLinkerAfter(std::string&&);
+    void setDeterminedLinkerBefore(const std::string&);
+    void setDeterminedLinkerBefore(std::string&&);
+    void setDeterminedLinkerAfter(const std::string&);
+    void setDeterminedLinkerAfter(std::string&&);
 
 protected:
     Domain(DomainType, uint32_t);
@@ -83,6 +89,8 @@ private:
     std::string m_nativePfamLinkerAfter;
     std::string m_nativeDefinedLinkerBefore;
     std::string m_nativeDefinedLinkerAfter;
+    std::string m_determinedLinkerBefore;
+    std::string m_determinedLinkerAfter;
 };
 }
 

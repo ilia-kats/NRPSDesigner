@@ -186,7 +186,10 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
     }
     Node *cur = m_parents[m_endn];
     while (cur != m_startn) {
+        m_db->fillDomain(cur->data);
         nrps.push_back(cur->data);
+        cur->data->setDeterminedLinkerBefore(cur->data->nativeDefinedLinkerBefore().empty() ? cur->data->nativePfamLinkerBefore() : cur->data->nativeDefinedLinkerBefore());
+        cur->data->setDeterminedLinkerAfter(std::string());
         cur = m_parents[cur];
     }
     std::reverse(nrps.begin(), nrps.end());
@@ -267,10 +270,10 @@ float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
             weight += 0.6;
         else if (std::abs(diff) > 1)
             weight += 0.5;
-        else if (std::abs(diff) == 1 && rhs->data->type() != DomainType::C)
-            weight += 0.4;
+        else if (std::abs(diff) == 1)
+            weight += (rhs->data->type() != DomainType::C) ? 0.4 : 0.1;
         else if (std::abs(diff) == 0 && rhs->data->type() == DomainType::C)
-            weight += 0.1;
+            weight += 0.2;
     }
     return weight;
 }

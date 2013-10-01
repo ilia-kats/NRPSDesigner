@@ -16,6 +16,8 @@
 #define NATIVEPFAMLINKERAFTER_NODE "nativepfamlinkerafter"
 #define NATIVEDEFINEDLINKERBEFORE_NODE "nativedefinedlinkerbefore"
 #define NATIVEDEFINEDLINKERAFTER_NODE "nativedefinedlinkerafter"
+#define DETERMINEDLINKERBEFORE_NODE "determinedlinkerbefore"
+#define DETERMINEDLINKERAFTER_NODE "determinedlinkerafter"
 #define ORIGINID_NODE "originid"
 #define PRODUCTID_NODE "productid"
 
@@ -212,6 +214,36 @@ void Domain::setNativeDefinedLinkerAfter(std::string &&linker)
     m_nativeDefinedLinkerAfter = std::move(linker);
 }
 
+const std::string& Domain::determinedLinkerBefore() const
+{
+    return m_determinedLinkerBefore;
+}
+
+void Domain::setDeterminedLinkerBefore(const std::string &linker)
+{
+    m_determinedLinkerBefore = linker;
+}
+
+void Domain::setDeterminedLinkerBefore(std::string &&linker)
+{
+    m_determinedLinkerBefore = std::move(linker);
+}
+
+const std::string& Domain::determinedLinkerAfter() const
+{
+    return m_determinedLinkerAfter;
+}
+
+void Domain::setDeterminedLinkerAfter(const std::string &linker)
+{
+    m_determinedLinkerAfter = linker;
+}
+
+void Domain::setDeterminedLinkerAfter(std::string &&linker)
+{
+    m_determinedLinkerAfter = std::move(linker);
+}
+
 void Domain::toXml(xmlTextWriterPtr writer) const
 {
     startXml(writer);
@@ -238,6 +270,8 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEPFAMLINKERAFTER_NODE, BAD_CAST nativePfamLinkerAfter().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERBEFORE_NODE, BAD_CAST nativeDefinedLinkerBefore().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERAFTER_NODE, BAD_CAST nativeDefinedLinkerAfter().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DETERMINEDLINKERBEFORE_NODE, BAD_CAST determinedLinkerBefore().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DETERMINEDLINKERAFTER_NODE, BAD_CAST determinedLinkerAfter().c_str());
 
     if (origin() != nullptr)
         xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());

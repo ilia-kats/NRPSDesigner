@@ -298,23 +298,23 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw 
         d->setGeneName(res->getString("cgenename"));
         d->setGeneDescription(res->getString("cdesc"));
         std::string seq = res->getString("cdnaseq");
-        uint32_t lstart = res->getUInt("dpfamlinkerstart"), lstop = res->getUInt("dpfamlinkerstop"), start = res->getUInt("dpfamstart"), stop = res->getUInt("dpfamstop");
+        uint32_t lstart = res->getUInt("dpfamlinkerstart") - 1, lstop = res->getUInt("dpfamlinkerstop") - 1, start = res->getUInt("dpfamstart") - 1, stop = res->getUInt("dpfamstop") - 1; // database 1-based
         if (seq.size() > 0) {
             if (stop <= seq.size())
                 d->setDnaSequencePfam(seq.substr(start, stop - start + 1));
-            if (start <= seq.size())
+            if (start <= seq.size() && !res->isNull("dpfamlinkerstart"))
                 d->setNativePfamLinkerBefore(seq.substr(lstart, start - lstart));
-            if (lstop <= seq.size())
+            if (lstop <= seq.size() && !res->isNull("dpfamlinkerstop"))
                 d->setNativePfamLinkerAfter(seq.substr(stop + 1, lstop - stop));
-            lstart = res->getUInt("ddefinedlinkerstart");
-            lstop = res->getUInt("ddefinedlinkerstop");
-            start = res->getUInt("ddefinedstart");
-            stop = res->getUInt("ddefinedstop");
-            if (stop <= seq.size())
+            lstart = res->getUInt("ddefinedlinkerstart") - 1;
+            lstop = res->getUInt("ddefinedlinkerstop") - 1;
+            start = res->getUInt("ddefinedstart") - 1;
+            stop = res->getUInt("ddefinedstop") - 1;
+            if (stop <= seq.size() && !res->isNull("ddefinedstart") && !res->isNull("ddefinedstop"))
                 d->setDnaSequenceDefined(seq.substr(start, stop - start + 1));
-            if (lstart <= seq.size())
+            if (lstart <= seq.size() && !res->isNull("ddefinedstart") && !res->isNull("ddefinedlinkerstart"))
                 d->setNativeDefinedLinkerBefore(seq.substr(lstart, start - lstart));
-            if (lstop <= seq.size())
+            if (lstop <= seq.size() && !res->isNull("ddefinedstop") && !res->isNull("ddefinedlinkerstart"))
                 d->setNativeDefinedLinkerAfter(seq.substr(stop + 1, lstop - stop));
         }
         delete res;
