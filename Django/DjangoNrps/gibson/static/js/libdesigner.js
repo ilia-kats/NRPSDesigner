@@ -302,7 +302,7 @@ jQuery.widget('ui.constructPreview', {
         }).click( function() {
             self.boxplot.html('')
                 .dialog('open')
-                .load('primers/' + jQuery(this).attr('pid') + '/boxplot/');
+                .load(gibthon_primer_url + jQuery(this).attr('pid') + '/boxplot/');
         });
 
         jQuery(document).on('click', '.join .seq > .base', function() {
