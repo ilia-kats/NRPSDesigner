@@ -25,6 +25,14 @@ public:
     void toXml(const char*) const;
     void toXml(int) const;
 
+#ifdef WITH_SBOL
+    std::string toSbol() const;
+    void toSbol(std::ostream&) const;
+    void toSbol(const std::string&) const;
+    void toSbol(const char*) const;
+    void toSbol(int) const;
+#endif
+
 private:
     const std::vector<Monomer>& m_nrp;
     bool m_indigoidineTagged;

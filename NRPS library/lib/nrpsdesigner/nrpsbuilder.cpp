@@ -174,11 +174,11 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
         heap.pop();
         float weight = std::get<0>(n);
         Node *node = std::get<1>(n), *parent = std::get<2>(n);
-        if (m_parents.count(node) == 0) {
+        if (!m_parents.count(node)) {
             m_parents.emplace(node, parent);
             if (node == m_endn)
                 break;
-            if (node->neighbors.use_count() > 0)
+            if (node->neighbors.use_count())
                 for (size_t i = 0; i < node->neighbors->size(); ++i) {
                     heap.push(std::make_tuple(weight + makeWeight(node, node->neighbors->at(i)), node->neighbors->at(i), node));
                 }
@@ -235,7 +235,7 @@ std::shared_ptr<std::vector<Node*>> NrpsBuilder::makeCDomains(const Monomer &m, 
 Node* NrpsBuilder::makeNode(std::shared_ptr<Domain> d)
 {
     Node *n = new Node(d);
-    if (d->origin() != nullptr && m_taxonCache.count(d->origin()->taxId()) == 0) {
+    if (d->origin() != nullptr && !m_taxonCache.count(d->origin()->taxId())) {
         m_taxonCache.emplace(d->origin()->taxId(), TaxonBuilder::getInstance()->buildMany(d->origin()->taxId()));
     }
     return n;
@@ -256,7 +256,7 @@ float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
     uint32_t taxid1 = lhs->data->origin()->taxId(), taxid2 = rhs->data->origin()->taxId();
     std::pair<uint32_t, uint32_t> key(std::min(taxid1, taxid2), std::max(taxid1, taxid2));
     float weight;
-    if (m_weightCache.count(key) == 0) {
+    if (!m_weightCache.count(key)) {
         auto dist = *m_taxonCache.at(taxid1) - *m_taxonCache.at(taxid2);
         weight = dist[0] + dist[1];
         m_weightCache.emplace(key, weight);

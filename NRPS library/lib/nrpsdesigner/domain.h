@@ -38,6 +38,7 @@ public:
     const std::string& determinedLinkerAfter() const;
 
     void toXml(xmlTextWriterPtr) const;
+    std::string toString() const;
 
     void setId(uint32_t);
     void setModule(uint32_t);

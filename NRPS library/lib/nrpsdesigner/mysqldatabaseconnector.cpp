@@ -261,7 +261,7 @@ std::vector<std::shared_ptr<RD>> MySQLDatabaseConnector::getCoreDomains(sql::Pre
     try {
         std::vector<std::shared_ptr<RD>> vec;
         res = stmt->executeQuery();
-        if (res->rowsCount() == 0) {
+        if (!res->rowsCount()) {
             vec.emplace_back(new D(0));
         }
         else {
@@ -286,7 +286,7 @@ std::vector<std::shared_ptr<RD>> MySQLDatabaseConnector::getCoreDomains(sql::Pre
 
 void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw (DatabaseError)
 {
-    if (d->id() == 0)
+    if (!d->id())
         return;
     sql::ResultSet *res = nullptr;
     try {
@@ -299,7 +299,7 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw 
         d->setGeneDescription(res->getString("cdesc"));
         std::string seq = res->getString("cdnaseq");
         uint32_t lstart = res->getUInt("dpfamlinkerstart") - 1, lstop = res->getUInt("dpfamlinkerstop") - 1, start = res->getUInt("dpfamstart") - 1, stop = res->getUInt("dpfamstop") - 1; // database 1-based
-        if (seq.size() > 0) {
+        if (seq.size()) {
             if (stop <= seq.size())
                 d->setDnaSequencePfam(seq.substr(start, stop - start + 1));
             if (start <= seq.size() && !res->isNull("dpfamlinkerstart"))
@@ -342,7 +342,7 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw 
 
 void MySQLDatabaseConnector::fillOrigin(Origin *ori) throw (DatabaseError)
 {
-    if (ori->taxId() > 0)
+    if (ori->taxId())
         return;
     sql::ResultSet *res = nullptr;
     try {
@@ -376,7 +376,7 @@ void MySQLDatabaseConnector::fillOrigin(Origin *ori) throw (DatabaseError)
 
 bool MySQLDatabaseConnector::isDummy(const std::shared_ptr<Domain> &d)
 {
-    return d->id() == 0;
+    return !d->id();
 }
 
 DatabaseError MySQLDatabaseConnector::makeException(const sql::SQLException &e) const
