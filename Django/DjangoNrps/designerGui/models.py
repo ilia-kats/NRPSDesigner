@@ -241,7 +241,7 @@ class NRP(models.Model):
             '--mysql-user'     : settings.DATABASES[connection.alias]['USER'],
             '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
-        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString()]
+        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString(), "-o", "-"]
         if curatedonly:
             args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
         if self.indigoidineTagged:
