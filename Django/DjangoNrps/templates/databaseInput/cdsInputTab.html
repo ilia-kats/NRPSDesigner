@@ -1,3 +1,4 @@
+{% load bootstrap %}
 
 {% if djangoSuccess %}
 
@@ -24,9 +25,9 @@
 {% endif %}
 
         {{ form.non_field_errors }}
-        <form id="cdsFormForDomainPrediction">
+        <form class="form-horizontal" id="cdsFormForDomainPrediction">
         <div class="row">
-          <div class="span3">
+          <div class="col-md-3">
                    <div class="fieldWrapper">
             {{ form.origin.errors }}
             <label for="id_origin"></label>
@@ -43,19 +44,15 @@
             </div>
             </div>
 
-            <div class="fieldWrapper">
+            <div>
               {{ form.dnaSequence.errors }}
-              <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
-              {{ form.dnaSequence }} <br/>
-              <div class="btn-group">
-                <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()"> Generate Domains!</button>
-
-              </div>
+              {{ form.dnaSequence | bootstrap}}
+           
 
             </div>
           </div>
 
-          <div class="span3">
+          <div class="col-md-3">
 <a href="{% url 'addOrigin' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Origin</a>
 
 
@@ -64,22 +61,23 @@
 <div class="modal hide fade"  id="myModal"></div>
 
 
-            <div class="fieldWrapper">
-              {{ form.geneName.errors }}
-              <label for="id_message">Gene Name:<br/> </label>
-              {{ form.geneName }}
+            <div >
+
+              {{ form.geneName | bootstrap}}
             </div>
-            <div class="fieldWrapper">
-              {{ form.description.errors }}
-              <label for="id_sender">Description:<br/> </label>
-              {{ form.description }}
+            <div>
+              {{ form.description | bootstrap}}
             </div>
           </div>
-          <div class="span4" id="statusLog">
+          <div class="col-md-4" id="statusLog">
            </div>
         </div>
         </form>
 
+   <div class="btn-group">
+                <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()"> Generate Domains!</button>
+
+              </div>
 
 <script type="text/javascript">
 // code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/ 
@@ -97,7 +95,7 @@
 function predictDomains(){
     jQuery("#domainGenerator").prop('disabled', true);
     jQuery("ul.errorlist").remove();
-    jQuery("#tabs").tabs("disable",1);
+    jQuery("#domainInputTab").hide();
     submitCeleryJob("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), undefined, function(data){
         jQuery("#cdsInputTab").html(data[1].html);
         jQuery("#domainGenerator").prop('disabled', false);
@@ -114,9 +112,8 @@ function getPredictedDomains(taskId){
         jQuery("#cdsInputTab").html(data[1].html);
       } else {
        jQuery("#domainInput").html( data[1].html);
-
-       jQuery("#tabs").tabs("enable",1);
-       jQuery("#tabs").tabs( "option", "active", 1);
+       jQuery("#domainInputTab").show(); // show tab
+       jQuery("#tabs a[href='#domainInput']").tab("show"); //actually activate tab
        jQuery("#domainGenerator").prop('disabled', false);
       }
 
@@ -131,7 +128,7 @@ jQuery(document).ready(function() {
           jQuery('#id_cds-origin > option').filter(':first').html('');
           jQuery("#id_cds-product, #id_cds-origin").select2({placeholder: "Choose existing"});
           jQuery("#cdsFormForDomainPrediction").change(function() {
-           jQuery("#tabs").tabs("disable",1);});
+          jQuery("#domainInputTab").hide();});
 
    
 
