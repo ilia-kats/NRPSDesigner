@@ -1,6 +1,7 @@
 #ifndef NRPSDESIGNER_ORIGIN_H
 #define NRPSDESIGNER_ORIGIN_H
 
+#include "config.h"
 #include "nrpsdesigner_export.h"
 #include "global_enums.h"
 
@@ -9,7 +10,9 @@
 #include <unordered_set>
 #include <unordered_map>
 
+#ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
+#endif
 
 namespace nrps
 {
@@ -35,7 +38,9 @@ public:
     void setDescription(std::string&&);
     void setParent(Origin*);
 
+#ifdef WITH_INTERNAL_XML
     void toXml(xmlTextWriterPtr) const;
+#endif
     std::string toString() const;
 
     static Origin* makeOrigin(uint32_t);

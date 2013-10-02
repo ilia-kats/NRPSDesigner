@@ -33,7 +33,9 @@ int main(int argc, char *argv[])
     po::options_description options("General options");
     options.add_options()("help,h", "print this help")
                          ("monomers,m", po::value<std::string>(&monomersopt)->required(), "Comma-separated list of monomer ids for the NRP.")
+#ifdef WITH_INTERNAL_XML
                          ("outfile,o", po::value<std::string>(&outfile), "Path to output file in internal XML format. Use - for stdout.")
+#endif
 #ifdef WITH_SBOL
                          ("outsbol,s", po::value<std::string>(&outsbol), "Path to output file in SBOL format. Use - for stdout.")
 #endif
@@ -70,13 +72,14 @@ int main(int argc, char *argv[])
         std::free(monomersch);
 
         Nrps nrps = NrpsBuilder().build(monomers, indTag);
-
+#ifdef WITH_INTERNAL_XML
         if (!outfile.empty()) {
             if (outfile == "-")
                 nrps.toXml(std::cout);
             else
                 nrps.toXml(outfile);
         }
+#endif
 #ifdef WITH_SBOL
         if (!outsbol.empty()) {
             if (outsbol == "-")

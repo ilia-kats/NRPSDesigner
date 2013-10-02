@@ -66,7 +66,10 @@ class NRP(models.Model):
         if all:
             SubstrateOrder.objects.filter(nrp = self).delete()
         if self.construct is not None:
-            [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
+            for x in self.construct.cf.all():
+                if x.fragment is not None and x.fragment.origin == 'ND':
+                    x.fragment.delete()
+                x.delete()
             if self.construct.primer is not None:
                 [x.del_all() for x in self.construct.primer.all() if x is not None]
             self.construct.reset()
@@ -241,7 +244,7 @@ class NRP(models.Model):
             '--mysql-user'     : settings.DATABASES[connection.alias]['USER'],
             '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
-        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString(), "-o", "-"]
+        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString(), "-s", "-"]
         if curatedonly:
             args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
         if self.indigoidineTagged:
@@ -274,10 +277,17 @@ class NRP(models.Model):
             raise Exception("NRPSDesigner returned errorcode %d: %s" % (child.returncode, lasterror[0]))
 
         # parse xml to extract domain list
+        # can not use libsbol here, as it only supports reading from file
         designerDom = parseString(xmlout[0])
-        domainDomList = designerDom.getElementsByTagName('domain')
-        domainIdList = [int(domainDom.getElementsByTagName('id')[0].firstChild.data) for domainDom in domainDomList]
-
+        domainDomList = designerDom.getElementsByTagName('s:DnaComponent')
+        domainIdList = []
+        for comp in domainDomList:
+            cid = comp.attributes.getNamedItem("rdf:about").value[1:]
+            if cid.isdigit():
+                for didn in comp.getElementsByTagName('s:displayId'):
+                    did = didn.firstChild.data
+                    if did[0] == '_':
+                        domainIdList.append(int(did[1:]))
         prevDomains = DomainOrder.objects.filter(nrp = self)
         prevDomains.delete()
 

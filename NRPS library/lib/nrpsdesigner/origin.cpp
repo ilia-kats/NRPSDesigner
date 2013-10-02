@@ -139,6 +139,7 @@ void Origin::setTaxId(uint32_t taxid)
     }
 }
 
+#ifdef WITH_INTERNAL_XML
 void Origin::toXml(xmlTextWriterPtr writer) const
 {
     xmlTextWriterStartElement(writer, BAD_CAST ORIGIN_NODE);
@@ -152,6 +153,7 @@ void Origin::toXml(xmlTextWriterPtr writer) const
         xmlTextWriterWriteElement(writer, BAD_CAST PARENT_NODE, BAD_CAST std::to_string(parent()->id()).c_str());
     xmlTextWriterEndElement(writer);
 }
+#endif
 
 std::string Origin::toString() const
 {
