@@ -47,6 +47,7 @@ class Cds(models.Model):
         consensusKeys = sorted(consensusPreds)   #right now this will fail if >=10 A domains are returned!!!!!
         consensusValues = [consensusPreds[key] for key in consensusKeys]
         consensusValues = (x for x in consensusValues)
+        #import pdb; pdb.set_trace()
         for predictedDomain in nrpsSmashResult.domaindict2['gene']:
             if predictedDomain[0] in allDomainTypes:
                 domainDict = {}
