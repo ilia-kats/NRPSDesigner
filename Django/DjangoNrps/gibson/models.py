@@ -414,6 +414,7 @@ class Construct(models.Model):
         dc.display_id = str(self.name)
         dc.description = str(self.description)
         dc.sequence = sbol.DNASequence(doc, "#" + str(self.pk) + "_seq")
+        dc.sequence.nucleotides = str(self.sequence())
         acc = 1
         for cf in self.cf.all():
             dcf = sbol.DNAComponent(doc, "#" + str(cf.pk))
@@ -429,6 +430,7 @@ class Construct(models.Model):
             acc += cf.end() - cf.start()
             sa1.end = acc
             acc += 1
+            dc.annotations.append(sa1)
         return str(doc)
 
     def add_fragment(self, fragment, order = 0, direction='f'):
