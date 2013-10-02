@@ -54,9 +54,10 @@ def get_primer(user, pid):
 def download_genbank(request, cid):
 	con = get_construct(request.user, cid)
 	if con:
-		#response = HttpResponse(mimetype='chemical/seq-na-genbank')
-		response = HttpResponse(mimetype='text/plain')
+		response = HttpResponse(mimetype='chemical/seq-na-genbank')
+		#response = HttpResponse(mimetype='text/plain')
 		response.write(con.gb())
+		response['Content-Disposition'] = 'attachment; filename="%s.gb"' % con.name
 		return response
 	else:
 		return HttpResponseNotFound()
@@ -480,6 +481,7 @@ def download_sbol(request, cid):
     if con:
         response = HttpResponse(mimetype='text/xml')
         response.write(con.sbol())
+        response['Content-Disposition'] = 'attachment; filename="%s.sbol"' % con.name
         return response
     else:
         return HttpResponseNotFound()
@@ -526,6 +528,8 @@ def primer_download(request, cid):
 		zip.writestr(con.name+'/'+con.name+'.pdf', pdfbuffer.getvalue())
 		# add the gb
 		zip.writestr(con.name+'/'+con.name+'.gb', con.gb())
+		# add the sbol
+		zip.writestr(con.name + '/' + con.name + '.sbol', con.sbol())
 		# closing of buffers and return
 		csvbuffer.close()
 		pdfbuffer.close()

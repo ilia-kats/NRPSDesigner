@@ -39,6 +39,8 @@ from django.db import models
 from django import forms
 from django.conf import settings
 
+from fragment.models import Feature, Qualifier
+
 from Bio.SeqUtils.MeltingTemp import Tm_staluc
 from Bio.Seq import reverse_complement, Seq
 from Bio import SeqIO, Entrez
@@ -362,19 +364,44 @@ class Construct(models.Model):
 
     def features(self):
         acc = 0
+        ph_top = dict()
+        ph_bottom = dict()
         for fr in self.cf.all():
+            start = acc
             fe = fr.features()
             if fr.direction == 'r':
                 fe.reverse()
             for f in fe:
                 if fr.direction == 'r':
+                    f.reverse()
                     t  = f.start
-                    f.start = fr.fragment.length() - f.end + 1
-                    f.end = fr.fragment.length() - t + 1
+                    f.start = fr.fragment.length() - f.end - 1
+                    f.end = fr.fragment.length() - t - 1
                 f.start -= fr.start() - acc - 1
                 f.end -= fr.start() - acc - 1
                 yield f
-            acc += fr.end() - fr.start() + 1
+            acc += fr.end() - fr.start()
+            yield Feature(type="fragment", start=start, end=acc, direction=fr.direction, gene=fr.fragment)
+            if self.processed:
+                phs = fr.ph.all()
+                for ph in phs:
+                    if ph.top and not ph.isflap():
+                        ph_top[start + ph.start()] = ph
+                    elif not ph.top and ph.isflap():
+                        ph_bottom[start + ph.start()] = ph
+        l = self.length()
+        for start, stick in ph_top.iteritems():
+            start = start
+            primer = stick.stick
+            end = start + primer.length()
+            f = Feature(type="primer_bind", start=start, end=end, direction='r')
+            yield f
+        for start, flap in ph_bottom.iteritems():
+            start = start
+            primer = flap.flap
+            end = start + primer.length()
+            f = Feature(type="primer_bind", start=start, end=end, direction='f')
+            yield f
 
     def feature_count(self):
         return sum(1 for f in self.features())
@@ -402,10 +429,19 @@ class Construct(models.Model):
             name=self.name[0:8],
             description=self.description
         )
-        g.features = [SeqFeature(
-            FeatureLocation(ExactPosition(f.start-1),ExactPosition(f.end)),
+        g.features = []
+        for f in self.features():
+            sf = SeqFeature(
+            FeatureLocation(ExactPosition(f.start),ExactPosition(f.end)),
             f.type, qualifiers=dict([[q.name,q.data] for q in f.qualifiers.all()]))
-            for f in self.features()]
+            if f.direction == 'f':
+                sf._set_strand(1)
+            else:
+                sf._set_strand(-1)
+            g.features.append(sf)
+        #for f in self.cf.all():
+            #g.features.append(SeqFeature(
+                #FeatureLocation(ExactPosition())))
         return g.format('genbank')
 
     def sbol(self):
@@ -415,22 +451,42 @@ class Construct(models.Model):
         dc.description = str(self.description)
         dc.sequence = sbol.DNASequence(doc, "#" + str(self.pk) + "_seq")
         dc.sequence.nucleotides = str(self.sequence())
-        acc = 1
-        for cf in self.cf.all():
-            dcf = sbol.DNAComponent(doc, "#" + str(cf.pk))
-            dcf.display_id = str(cf.fragment.name)
-            dcf.description = str(cf.fragment.description)
-            sa1 = sbol.SequenceAnnotation(doc, "#" + str(cf.pk) + "_sa")
-            sa1.subcomponent = dcf
-            if cf.direction == 'f':
-                sa1.strand = '+'
+        fid = [1]
+        def makeAnnot(f, parent=dc):
+            dcf = sbol.DNAComponent(doc, "#dc_" + str(fid[0]))
+            dcf.display_id = str(f.type)
+            dcf.description = str(";".join(["%s:%s" % (q.name,q.data) for q in f.qualifiers.all()]))
+            sa = sbol.SequenceAnnotation(doc, "#sa_" + str(fid[0]))
+            sa.subcomponent = dcf
+            if f.direction == 'f':
+                sa.strand = '+'
             else:
-                sa1.strand = '-'
-            sa1.start = acc
-            acc += cf.end() - cf.start()
-            sa1.end = acc
-            acc += 1
-            dc.annotations.append(sa1)
+                sa.strand = '-'
+            sa.start = f.start + 1 # SBOL 1-based
+            sa.stop = f.end + 1
+            parent.annotations.append(sa)
+            fid[0] += 1
+            return dcf
+        fragments = {}
+        fragmentfeats = {}
+        for f in self.features():
+            try:
+                if f.gene is not None:
+                    if f.type == "fragment":
+                        fragments[f.gene] = f
+                    else:
+                        if f.gene in fragmentfeats:
+                            fragmentfeats[f.gene].append(f)
+                        else:
+                            fragmentfeats[f.gene] = [f]
+            except:
+                makeAnnot(f)
+        for gene, fragment in fragments.iteritems():
+            dcf = makeAnnot(fragment)
+            dcf.description = str(gene.description)
+            if gene in fragmentfeats:
+                for f in  fragmentfeats[gene]:
+                    makeAnnot(f, dcf)
         return str(doc)
 
     def add_fragment(self, fragment, order = 0, direction='f'):

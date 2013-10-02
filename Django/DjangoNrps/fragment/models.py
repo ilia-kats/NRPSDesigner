@@ -251,6 +251,12 @@ class Feature(models.Model):
     class Meta:
         ordering = ['start']
 
+    def reverse(self):
+        if self.direction == 'f':
+            self.direction = 'r'
+        else:
+            self.direction = 'f'
+
     def add(feature, g, origin=None):
         if (feature.location.end.position == 0):
             return
