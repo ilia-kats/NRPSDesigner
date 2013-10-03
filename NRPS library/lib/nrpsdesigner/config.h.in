@@ -1,0 +1,7 @@
+#ifndef NRPSDESIGNER_CONFIG_H
+#define NRPSDESIGNER_CONFIG_H
+
+#cmakedefine WITH_INTERNAL_XML
+#cmakedefine WITH_SBOL
+
+#endif

@@ -98,6 +98,7 @@ void Nrps::setIndigoidineTagged(bool tagged)
     m_indigoidineTagged = tagged;
 }
 
+#ifdef WITH_INTERNAL_XML
 std::string Nrps::toXml() const
 {
     xmlBufferPtr buf = xmlBufferCreate();
@@ -181,9 +182,9 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
     xmlTextWriterEndElement(writer);
     xmlTextWriterEndDocument(writer);
 }
+#endif
 
 #ifdef WITH_SBOL
-
 std::string Nrps::toSbol() const
 {
     SbolBuilder builder(*this);

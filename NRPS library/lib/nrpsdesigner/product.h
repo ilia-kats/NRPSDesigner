@@ -1,13 +1,16 @@
 #ifndef NRPSDESIGNER_PRODUCT_H
 #define NRPSDESIGNER_PRODUCT_H
 
+#include "config.h"
 #include "nrpsdesigner_export.h"
 
 #include <cstdint>
 #include <string>
 #include <unordered_map>
 
+#ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
+#endif
 
 namespace nrps
 {
@@ -25,7 +28,9 @@ public:
    void setDescription(const std::string&);
    void setDescription(std::string&&);
 
+#ifdef WITH_INTERNAL_XML
    void toXml(xmlTextWriterPtr) const;
+#endif
 
    static Product* makeProduct(uint32_t);
 

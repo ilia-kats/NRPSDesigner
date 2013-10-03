@@ -70,6 +70,7 @@ Product* Product::makeProduct(uint32_t id)
     return pw;
 }
 
+#ifdef WITH_INTERNAL_XML
 void Product::toXml(xmlTextWriterPtr writer) const
 {
     xmlTextWriterStartElement(writer, BAD_CAST PRODUCT_NODE);
@@ -78,3 +79,4 @@ void Product::toXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
     xmlTextWriterEndElement(writer);
 }
+#endif

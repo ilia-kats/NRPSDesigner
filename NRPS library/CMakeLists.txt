@@ -7,6 +7,13 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/kde
 )
 
+option(BUILD_STATIC "Link statically." OFF)
+if (BUILD_STATIC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++"
+    )
+endif(BUILD_STATIC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+
 find_package(LibXml2 REQUIRED)
 find_package(CURL REQUIRED)
 find_package(MySQL REQUIRED)
@@ -14,7 +21,7 @@ find_package(MySQLcpp REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options)
 
 set(CMAKE_CXX_FLAGS
-"${CMAKE_CXX_FLAGS} -std=c++11"
+    "${CMAKE_CXX_FLAGS} -std=c++11"
 )
 include(GenerateExportHeader)
 add_compiler_export_flags()
@@ -32,10 +39,10 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
    add_definitions("-D_CXX_CLANG")
 endif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
+option(WITH_INTERNAL_XML "Build internal XML support." ON)
 option(WITH_SBOL "Build SBOL support." ON)
 if (WITH_SBOL)
     find_package(SBOL REQUIRED)
-    add_definitions("-DWITH_SBOL")
     include_directories(${SBOL_INCLUDE_DIR})
 endif (WITH_SBOL)
 

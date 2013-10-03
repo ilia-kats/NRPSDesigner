@@ -20,7 +20,7 @@ Main packages
 --------------
 * __Python__ (2.7)
 * __Django__ (>= 1.5)
-* __MySQL__
+* __MySQL__ (>= 5.5.3)
 * __MySQL - Python connector__
 
 Django packages
@@ -33,13 +33,18 @@ Django packages
 Other stuff that is loaded by some of our python functions:
 -----------------------------------------------------------
 * __Requests__:Great library to do simple http requests!
-* __Biopython__ (>= 1.61): Just like bioperl but not in a crappy language!
+* __RabbitMQ__: Message broker required by Celery
+* __Biopython__ (>= 1.62): Just like bioperl but not in a crappy language!
 * __xhtml2pdf__: Also necessary for Gibthon..
 * __BeautifulSoup__: Beautiful soup!
 * __celery__: asynchronous scheduling framework
 * __kombu__: database-based message passing framework
 * __python-openbabel__: (>= 2.3.2) Python bindings to openbabel for 2D structure generation
 * __UNAFold__ and __MFold utils__: required by Gibthon
+* __HMMER__ (= 3.0): Hidden Markov Model based sequence analysis software used by antiSMASH
+* __MUSCLE__: multiple sequence alignment used by antiSMASH
+* __Clustal Omega__: multiple sequence alignment used by NRPSDesigner
+* __libSBOLpy__: Python bindings to the libSBOLc library
 
 C++ stuff
 =============
@@ -48,6 +53,7 @@ C++ stuff
 * __libXML__: C library for XML handling
 * __libcurl__: C library for HTTP
 * __Boost.program_options__: C++ library for command-line option parsing
+* __libSBOLc__: C library for SBOL IO
 * __GCC__ (>= 4.8) or a comparable compiler with C++11 support
 
 Compilation
