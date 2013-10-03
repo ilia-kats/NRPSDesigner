@@ -5,9 +5,9 @@
 	<div class="pad-content" style="padding:.2em;">
 		<div id='canvas_holder'>
 			<canvas id="cdesigner" style="display:block; height:100%; width:100%;"></canvas>
-					
+
 			<div id="fragment_clipping" style='display:none;'></div>
-			
+
 			<div class="fragment-info ui-corner-all" style='display:none;'>
 				<div class="fragment-data">
 					<h3 id="fragment_name">Name</h3>
@@ -18,9 +18,10 @@
 					<button id="fragment_remove">Remove</button>
 				</div>
 			</div>
-			
+
 		</div>
         <div id='frag_select_holder'>
+            <button class="btn" type="button" id="download_sbol">Download SBOL</button>
             <div id='frag_select'>
                 {%include 'fragment/jFragmentSelector.html' %}
             </div>
@@ -53,6 +54,11 @@
 		jQuery('#status').text(modified);
 		}
 		}
+		jQuery(function(){
+            jQuery("#download_sbol").click(function(){
+                window.location.href='{% url 'gibson.views.download_sbol' construct.pk %}';
+            })
+        });
 
 </script>
 

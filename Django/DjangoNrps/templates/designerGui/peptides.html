@@ -3,12 +3,13 @@
 {% load staticfiles %}
 
 {% block css-include %}
--<link rel="stylesheet" type="text/css" href="{% static "css/datatable.css" %}" />
+-<link rel="stylesheet" type="text/css" href="{% static "css/datatables.css" %}" />
 {% endblock %}
 
 
 {% block js-include %}
-<script src="{% static "js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.dataTables.js" %}" type="text/javascript"></script>
+<script src="{% static "js/datatables.js" %}" type="text/javascript"></script>
 <script src="{% static "js/fragmentlist.js" %}" type="text/javascript"></script>
 <script src="{% static "js/importer.js" %}" type="text/javascript"></script>
 {% endblock %}
@@ -20,8 +21,8 @@
   <button id="delete_btn">Delete</button>
 
 <div>
-	<table id="peptide_table">
-		<thead class="ui-widget-content">
+	<table class="datatable table table-hover table-bordered" id="peptide_table">
+		<thead>
 			<tr>
 				<th>Name</th>
 				<th>Description</th>
@@ -31,7 +32,7 @@
 				</th>
 			</tr>
 		</thead>		
-		<tbody class="ui-widget-content">
+		<tbody>
 			{% for nrp in nrpList %}
 				<tr>
 					<td>
@@ -148,10 +149,10 @@ var show_delete_dialog = function(){
 	jQuery('#confirm_delete').dialog('open');
 };
 	
-jQuery(document).ready(function() {
-	jQuery('button[id="add"]')
+jQuery(function() {
+	jQuery('#add')
 		.click(function(event){
-			jQuery.post('add', jQuery('form[action^="add"]').serialize(), function(data){
+			jQuery.post('add', jQuery('#peptide_add > form').serialize(), function(data){
 				console.log(data[1].html)
                 if(data[0] == 0)
                 {
@@ -164,6 +165,10 @@ jQuery(document).ready(function() {
 		.button({
 			icons:{primary:'ui-icon-plusthick'}
 		});
+    jQuery('#peptide_add > form').submit(function(e) {
+        jQuery('#add').click();
+        e.preventDefault();
+    });
 	
 	jQuery('#peptide_table').fragmentList({
 		selectChanged: function(event, data) {handle_updated_selection(event, data);},
@@ -192,7 +197,7 @@ jQuery(document).ready(function() {
 			sEmptyTable: '<button id="addc">Add new Peptide</button>'
 		}
 	});
-	jQuery('button[id="addc"]')
+	jQuery('#addc')
 		.click(function(event){
 			jQuery('#peptide_add').dialog('open');
 		})

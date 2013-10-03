@@ -2064,12 +2064,7 @@ var d = Designer.prototype = new Container();
 		stage.addChild(this);
 		stage.enableMouseOver(15);
 		
-		var self = this;
-		self._server.getInfo(self._cid, function(c) {self._gotInfo(c)});
-		
-		self._initInfo();
-		
-		stage.update();
+		this.update();
 
         //listen for items being dragged into the canvas
 		var o = this._jQuerycanvas.parent().offset();
@@ -2273,6 +2268,14 @@ var d = Designer.prototype = new Container();
 		
 		F.joinRadius = radius + 4.0 * F.width;
 	}
+
+	d.update = function()
+    {
+        var self = this;
+        self._server.getInfo(self._cid, function(c) {self._gotInfo(c)});
+        self._initInfo();
+        stage.update();
+    }
 	
 	d._gotInfo = function(con)
 	{
@@ -2288,7 +2291,7 @@ var d = Designer.prototype = new Container();
             {
                 dfs.push(new DisplayFragment(con.cfs[i].f, con.cfs[i]));
             }
-		
+		this._fc.removeAllChildren();
 		this._fc.addMulti(dfs);
 		
 		stage.update();

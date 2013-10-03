@@ -28,10 +28,16 @@ int main(int argc, char *argv[])
 {
     std::string monomersopt;
     std::string outfile;
+    std::string outsbol;
+    bool indTag = false;
     po::options_description options("General options");
     options.add_options()("help,h", "print this help")
                          ("monomers,m", po::value<std::string>(&monomersopt)->required(), "Comma-separated list of monomer ids for the NRP.")
-                         ("outfile,o", po::value<std::string>(&outfile)->default_value("-"), "Output file. Use - for stdout.");
+                         ("outfile,o", po::value<std::string>(&outfile), "Path to output file in internal XML format. Use - for stdout.")
+#ifdef WITH_SBOL
+                         ("outsbol,s", po::value<std::string>(&outsbol), "Path to output file in SBOL format. Use - for stdout.")
+#endif
+                         ("indigoidine-tag,t", po::bool_switch(&indTag), "Append an indigoidine tag to the NRP.");
     auto dbConn = AbstractDatabaseConnector::getInstance();
 
     TaxonBuilder *tb = TaxonBuilder::getInstance();
@@ -63,12 +69,22 @@ int main(int argc, char *argv[])
         }
         std::free(monomersch);
 
-        Nrps nrps = NrpsBuilder().build(monomers);
+        Nrps nrps = NrpsBuilder().build(monomers, indTag);
 
-        if (outfile == "-")
-            nrps.toXml(std::cout);
-        else
-            nrps.toXml(outfile);
+        if (!outfile.empty()) {
+            if (outfile == "-")
+                nrps.toXml(std::cout);
+            else
+                nrps.toXml(outfile);
+        }
+#ifdef WITH_SBOL
+        if (!outsbol.empty()) {
+            if (outsbol == "-")
+                nrps.toSbol(std::cout);
+            else
+                nrps.toSbol(outsbol);
+        }
+#endif
 
         delete dbConn;
         return 0;

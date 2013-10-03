@@ -11,10 +11,6 @@ jQuery(document).ready(function() {
 	} else {
 		jQuery('#user_tab_login').button({
 			icons:{primary:'ui-icon-tag'}
-		})
-		.click(function (event) {
-			event.preventDefault();
-			window.location.href="/user/login?next="+window.location.pathname;
 		});
 		jQuery('#user_tab_register').button({
 			icons:{primary:'ui-icon-key'}

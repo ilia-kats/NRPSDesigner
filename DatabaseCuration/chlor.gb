@@ -1,0 +1,13 @@
+LOCUS       Annotations                                             20-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    3511..12987
+                     /ugene_name="cepA"
+                     /ugene_group="chlor_coding_sequences"
+     misc_feature    13162..25395
+                     /ugene_name="cepB"
+                     /ugene_group="chlor_coding_sequences"
+     misc_feature    25415..30997
+                     /ugene_name="cepC"
+                     /ugene_group="chlor_coding_sequences"
+//

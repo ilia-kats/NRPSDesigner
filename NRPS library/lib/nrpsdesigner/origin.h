@@ -36,6 +36,7 @@ public:
     void setParent(Origin*);
 
     void toXml(xmlTextWriterPtr) const;
+    std::string toString() const;
 
     static Origin* makeOrigin(uint32_t);
 

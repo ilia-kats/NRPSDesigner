@@ -2,13 +2,14 @@ from designerGui.models import Species, NRP, SubstrateOrder
 from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
-from gibson.jsonresponses import RawJsonResponse, JsonResponse, ERROR
+from gibson.jsonresponses import JsonResponse, ERROR
 
 from django.views.generic import ListView, CreateView, TemplateView
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
+from django.views.decorators.cache import cache_page
 
 
 import math
@@ -17,31 +18,28 @@ import xml.etree.ElementTree as x
 import openbabel as ob
 import json
 
+def toBool(x):
+    return str(x.lower()) in ("yes", "true", "t", "1")
 
 @login_required
 def makeConstruct(request,pid):
     nrp = NRP.objects.get(pk=pid)
     nrp.designed = False
-    #import pdb; pdb.set_trace()
-    con = nrp.makeConstruct()
-    if isinstance(con, bool) and con == True:
-        return getConstruct(request, pid)
-    else:
-        return RawJsonResponse({'taskId': con})
+    return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
 
 @login_required
 def getConstruct(request, pid):
     nrp = NRP.objects.get(pk=pid)
     if not nrp.designed:
         return makeConstruct(request, pid)
-    elif nrp.construct is None:
+    elif nrp.construct is None or nrp.construct.fragments.count() == 0:
         con = nrp.makeConstruct()
     con = nrp.construct
     constructId = con.pk
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
     domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
-    return RawJsonResponse({"constructId": constructId,
+    return JsonResponse({"constructId": constructId,
                          'designTabLink': designTabLink,
                          'primerTabLink': primerTabLink,
                          'domainSequenceTablLink': domainSequenceTabLink})
@@ -60,7 +58,7 @@ def nrpDesigner(request, pid):
     else:
         raise Http404()
 
-@login_required 
+@login_required
 def peptide_add(request):
     if request.method == 'POST':
         form = NRPForm(request.POST, prefix='nrp')
@@ -84,14 +82,14 @@ def peptide_delete(request, cid):
     if peptide:
         peptide.fullDelete()
         if request.is_ajax():
-            return JsonResponse('/peptides') 
+            return JsonResponse('/peptides')
         return HttpResponseRedirect('/peptides')
     else:
         return HttpResponseNotFound()
 
 class NRPListView(TemplateView):
     template_name = 'designerGui/peptides.html'
-   
+
     def get_context_data(self, **kwargs):
         context = super(NRPListView, self).get_context_data(**kwargs)
         context['NRPform'] = NRPForm(prefix='nrp')
@@ -102,20 +100,21 @@ class NRPListView(TemplateView):
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
   model = Species
-  
+
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
         pid  = self.kwargs["pid"]
         context['pid'] = pid
         context['myFormSet'] = SubstrateFormSet()
-        
+
         modfs = Modification.objects.all()
         context['modifications'] = modfs.values()
         #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
-        
+
 
         aas = Substrate.objects.exclude(user__username='sbspks')
+        aas = filter(lambda x: x.can_be_added(), aas)
 
         realAas = []
         for aa in aas:
@@ -138,6 +137,7 @@ class SpeciesListView(ListView):
         nrp = NRP.objects.get(pk= pid)
         substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
         context['substrateOrder'] = substrateOrder
+        context['indigoidineTagged'] = nrp.indigoidineTagged
 
         initialPic = nrp.getPeptideSequenceForStructView()
         context['initialPic'] = initialPic
@@ -150,7 +150,8 @@ def submit_nrp(request):
         monomerid = x.SubElement(monomerel, 'id')
         monomerid.text = monomer
     return HttpResponse(x.tostring(nrpxml, "utf8"), mimetype="text/xml")
-  
+
+@cache_page(365*24*60*60*15)
 def make_structure(request):
     def makeResidue(mol, idx, aaatoms):
         res = mol.NewResidue()
@@ -245,11 +246,11 @@ def make_structure(request):
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
 
-    
+
 
 class DomainSequenceView(TemplateView):
     template_name = 'designerGui/domainSequence.html'
-   
+
     def get_context_data(self, **kwargs):
         context = super(DomainSequenceView, self).get_context_data(**kwargs)
         pid  = self.kwargs["pid"]

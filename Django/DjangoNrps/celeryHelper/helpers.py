@@ -14,8 +14,6 @@ except BaseException:
 
 class TaskLogHandler(Handler):
     def emit(self, record):
-        msg = self.format(record)
-        print msg
         try:
             task = AsyncResult(current_task.request.id)
             print task
@@ -23,7 +21,7 @@ class TaskLogHandler(Handler):
                 log = task.result['log']
             except:
                 log = []
-            log.append(msg)
+            log.append({record.levelname: self.format(record)})
             current_task.update_state(state='log', meta={'log': log})
         except BaseException as e:
             pass

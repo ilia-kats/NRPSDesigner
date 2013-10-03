@@ -22,12 +22,12 @@ from time import sleep
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
     product = models.ForeignKey('Product', blank=True, null=True)
-    geneName = models.CharField(max_length=100) 
+    geneName = models.CharField(max_length=100)
     dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
-   
+
     def __unicode__(self):
         return str(self.origin) + self.geneName
 
@@ -43,8 +43,8 @@ class Cds(models.Model):
         allDomainTypes = [x.smashName for x in Type.objects.all()]
         nrpsSmashResult = nrpsSmash(self.dnaSequence)
         consensusPreds = nrpsSmashResult.consensuspreds
-        #import pdb;pdb.set_trace()
-        consensusKeys = sorted(consensusPreds)   #right now this will fail if >=10 A domains are returned!!!!!
+        #code below still not nice, should probably adapt nrpsSMASH to give nicer output
+        consensusKeys = sorted(consensusPreds, key = lambda x: int(x.split('_A')[-1])) 
         consensusValues = [consensusPreds[key] for key in consensusKeys]
         consensusValues = (x for x in consensusValues)
         #import pdb; pdb.set_trace()
@@ -52,7 +52,7 @@ class Cds(models.Model):
             if predictedDomain[0] in allDomainTypes:
                 domainDict = {}
                 domainDict['pfamStart'] = 3*predictedDomain[1]+1
-                domainDict['pfamStop']  = 3*predictedDomain[2]+1
+                domainDict['pfamStop']  = 3*predictedDomain[2]+3
                 domainType = Type.objects.get(smashName = predictedDomain[0])
                 domainDict['domainType'] = domainType
                 domainDict['user'] = self.user #possibly improve this afterwards..
@@ -70,6 +70,10 @@ class Cds(models.Model):
     def get_domain_type_name_list(self):
         return [x.domainType.name for x in self.domains.order_by('pfamStart')]
 
+    # return list of actual domains rather than queryset..
+    def get_ordered_domain_list(self):
+        return list(self.domains.order_by('pfamStart'))
+
     @staticmethod
     def type_list_to_modules(type_name_list):
         module_list = []
@@ -84,8 +88,27 @@ class Cds(models.Model):
             module_list.append(curr_count)
         return module_list
 
+    # e.g. ATCATTE -> [1,1,2,2,2,2]
     def module_code(self):
         return self.type_list_to_modules(self.get_domain_type_name_list())
+
+    # get DNA sequence based on start and stop domain
+    # should be actual domain objects, not IDs
+    def get_sequence(self, start_domain, stop_domain):
+        if start_domain.cds == self and stop_domain.cds == self:
+            domain_list = self.get_ordered_domain_list()
+            start_index = domain_list.index(start_domain)
+            stop_index  = domain_list.index(stop_domain)
+
+            # write custom functions for the below!!!
+            # With linker consideration maybe???
+            start_position = start_domain.pfamStart - 1
+            stop_position  = stop_domain.pfamStop
+            ##
+            return self.dnaSequence[start_position:stop_position]
+        else:
+            pass  #raise some error..
+
 
 
 class Origin(models.Model):
@@ -157,11 +180,10 @@ class Domain(models.Model):
     def align_same_type(self):
         return self.domainType.align_same_type()
 
-    # introduce this function, so we can deduce which A domains are 
+    # introduce this function, so we can deduce which A domains are
     # specific for only 1 substrate
     def number_of_specificities(self):
         return len(self.substrateSpecificity.all())
-
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
@@ -178,17 +200,17 @@ class Substrate(models.Model):
         return self.name
 
     def can_be_added_by_adenylation_domain(self):
-        return len([x for x in self.adenylationDomain.all() if x.number_of_specificities() == 1]) > 0
+        return self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').count() > 0
 
     def can_be_added_by_modification_domain(self):
         bla = [self.parent is not None]
         pass
 
     def can_be_added(self):
-        if self.can_be_added_by_adenylation_domain() or self.can_be_added_by_modification_domain():
+        if self.can_be_added_by_adenylation_domain(): #or self.can_be_added_by_modification_domain():
             return True
         elif self.enantiomer is not None:
-            return self.enantiomer.can_be_added_by_adenylation_domain or self.enantiomer.can_be_added_by_modification_domain()
+            return self.enantiomer.can_be_added_by_adenylation_domain() #or self.enantiomer.can_be_added_by_modification_domain()
         else:
             return False
 

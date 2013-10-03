@@ -25,19 +25,19 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 <script src="{% static "js/designer.js" type="text/javascript" %}"></script>
 <script src="{% static "js/ajax.js" type="text/javascript" %}"></script>
 
-    
- 
+
+
 {% endblock %}
 
 
 {% block content %}
 <div>
-	
+
 	<div class="content center full-width">
 		<div id='tabs' class='left'>
 			<ul>
 
-		
+
 				<li>
 					<a href="{% url 'guiTool' nrp.pk %}" class='tab-link' data-intro="This is a tab" data-step="1">
 						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
@@ -50,7 +50,6 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 						<span class='ui-icon ui-icon-pencil tab-icon'></span>
 						Domains
 					</a>
-				</li>
 				</li>
 						<li>
 
@@ -78,12 +77,12 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 						Primers
 					</a>
 				</li>
-	
+
 			</ul>
-			<iframe id="domainSequenceIFrame" src="domainSequence" style="width:100%;">
+			<iframe id="domainSequenceIFrame" src="" style="width:100%;">
 </iframe>
 
-            
+
 		</div>
 	</div>
 </div>
@@ -117,7 +116,7 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 	jQuery(document).ready( function($) {
 		//tabs
 		jQuery( "#tabs" ).tabs({
-			beforeLoad: function( event, ui ) {
+			beforeLoad: function(event, ui) {
 			    if ( (ui.tab.index() == 2 || ui.tab.index() ==0) && ui.tab.data( "loaded" ) ) {
 			      event.preventDefault();
 			      return;
@@ -125,7 +124,13 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 
 			    ui.jqXHR.success(function() {
 			      ui.tab.data( "loaded", true );
-		    });}, 
+		    });},
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=733698
+            activate: function(event, ui) {
+                if (ui.newTab.index() == 1) {
+                    jQuery("#domainSequenceIFrame").attr("src", "domainSequence");
+                }
+            },
 			ajaxOptions: {
 				error: function( xhr, status, index, anchor ) {
 					jQuery( anchor.hash ).html(
@@ -148,9 +153,9 @@ var gibthon_api_url = gibthon_base_url + 'api/';
     });
     }
 		});
-		
 
-	
+
+
 	});
 
 
