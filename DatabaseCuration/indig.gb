@@ -1,7 +1,0 @@
-LOCUS       Annotations                                             22-SEP-2013
-UNIMARK     Annotations
-FEATURES             Location/Qualifiers
-     misc_feature    2459..6925
-                     /ugene_name="indC"
-                     /ugene_group="indig_coding_sequences"
-//

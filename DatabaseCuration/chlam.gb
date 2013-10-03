@@ -1,7 +1,0 @@
-LOCUS       Annotations                                             20-SEP-2013
-UNIMARK     Annotations
-FEATURES             Location/Qualifiers
-     misc_feature    3498..6404
-                     /ugene_name="cmlH"
-                     /ugene_group="chlam_coding_sequences"
-//

@@ -1,7 +1,0 @@
-LOCUS       Annotations                                             20-SEP-2013
-UNIMARK     Annotations
-FEATURES             Location/Qualifiers
-     misc_feature    1..17973
-                     /ugene_name="mps"
-                     /ugene_group="glyco_coding_sequences"
-//

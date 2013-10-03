@@ -1,8 +1,0 @@
-LOCUS       Annotations                                             20-SEP-2013
-UNIMARK     Annotations
-FEATURES             Location/Qualifiers
-     misc_feature    26..3850
-                     /mismatches=0
-                     /ugene_name="fenB"
-                     /ugene_group="fengy_coding_sequences"
-//

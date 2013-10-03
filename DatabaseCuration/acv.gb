@@ -1,7 +1,0 @@
-LOCUS       Annotations                                             27-SEP-2013
-UNIMARK     Annotations
-FEATURES             Location/Qualifiers
-     misc_feature    1110..12350
-                     /ugene_name="acvA"
-                     /ugene_group="acv_coding_sequences"
-//

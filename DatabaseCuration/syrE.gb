@@ -1,7 +1,0 @@
-LOCUS       Annotations                                             22-SEP-2013
-UNIMARK     Annotations
-FEATURES             Location/Qualifiers
-     misc_feature    285..28415
-                     /mismatches=0
-                     /ugene_name="syrE"
-//
