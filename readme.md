@@ -33,13 +33,17 @@ Django packages
 Other stuff that is loaded by some of our python functions:
 -----------------------------------------------------------
 * __Requests__:Great library to do simple http requests!
-* __Biopython__ (>= 1.61): Just like bioperl but not in a crappy language!
+* __RabbitMQ__: Message broker required by Celery
+* __Biopython__ (>= 1.62): Just like bioperl but not in a crappy language!
 * __xhtml2pdf__: Also necessary for Gibthon..
 * __BeautifulSoup__: Beautiful soup!
 * __celery__: asynchronous scheduling framework
 * __kombu__: database-based message passing framework
 * __python-openbabel__: (>= 2.3.2) Python bindings to openbabel for 2D structure generation
 * __UNAFold__ and __MFold utils__: required by Gibthon
+* __HMMER__ (= 3.0): Hidden Markov Model based sequence analysis software used by antiSMASH
+* __muscle__: multiple sequence alignment used by antiSMASH
+* __Clustal Omega__: multiple sequence alignment used by NRPSDesigner
 
 C++ stuff
 =============
