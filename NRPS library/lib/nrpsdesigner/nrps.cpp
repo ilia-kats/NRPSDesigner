@@ -33,7 +33,9 @@ public:
         m_doc = createDocument();
         DNAComponent *nrps = createDNAComponent(m_doc, "#nrps");
         setDNAComponentDisplayID(nrps, "NRPS");
+        size_t start = 1;
         for (size_t i = 0; i < m_nrps.size(); ++i) {
+            m_start = 1;
             const auto &domain = m_nrps[i];
             m_did = std::to_string(domain->id());
             m_id = std::to_string(i);
@@ -41,7 +43,7 @@ public:
             setDNAComponentDisplayID(m_dc, std::string("_").append(m_did).c_str());
             setDNAComponentDescription(m_dc, domain->toString().c_str());
             SequenceAnnotation *rootsa = createSequenceAnnotation(m_doc, std::string("#sal1_").append(m_id).c_str());
-            setSequenceAnnotationStart(rootsa, m_start);
+            setSequenceAnnotationStart(rootsa, start);
             setSequenceAnnotationSubComponent(rootsa, m_dc);
             setSequenceAnnotationStrand(rootsa, STRAND_FORWARD);
             addSequenceAnnotation(nrps, rootsa);
@@ -50,7 +52,8 @@ public:
             makeSubAnnotation(domain->dnaSequenceDefined().empty() ? domain->dnaSequencePfam() : domain->dnaSequenceDefined(), "d", "domain ");
             if (!domain->determinedLinkerAfter().empty())
                 makeSubAnnotation(domain->determinedLinkerAfter(), "la", "linker after domain ");
-            setSequenceAnnotationEnd(rootsa, m_start++);
+            start += m_start;
+            setSequenceAnnotationEnd(rootsa, start++);
         }
         DNASequence *ds = createDNASequence(m_doc, "#seq");
         setDNASequenceNucleotides(ds, m_seq.c_str());
@@ -69,7 +72,7 @@ private:
         SequenceAnnotation *sa = createSequenceAnnotation(m_doc, std::string("#sa").append(id).append(m_id).c_str());
         setSequenceAnnotationStart(sa, m_start);
         m_start += seq.size();
-        setSequenceAnnotationEnd(sa, m_start);
+        setSequenceAnnotationEnd(sa, m_start - 1);
         setSequenceAnnotationSubComponent(sa, dc);
         addSequenceAnnotation(m_dc, sa);
         m_seq.append(seq);

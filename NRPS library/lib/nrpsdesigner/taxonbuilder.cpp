@@ -281,7 +281,7 @@ void TaxonBuilder::parseDump(const std::shared_ptr<Taxon> &t) throw (TaxonomyDum
 
 void TaxonBuilder::fetch(const std::shared_ptr<Taxon> &t) throw (NCBITaxonomyError, std::logic_error, std::system_error)
 {
-    std::string url = s_url + std::to_string(t->m_id);
+    std::string url = s_url + std::to_string(t->id());
     xmlParserCtxtPtr ctxt = xmlCreatePushParserCtxt(nullptr, nullptr, nullptr, 0, url.c_str());
     CURLcode ret = curl_easy_setopt(m_handle, CURLOPT_URL, url.c_str());
     ret = curl_easy_setopt(m_handle, CURLOPT_WRITEDATA, ctxt);

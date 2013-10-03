@@ -44,7 +44,7 @@ class Cds(models.Model):
         nrpsSmashResult = nrpsSmash(self.dnaSequence)
         consensusPreds = nrpsSmashResult.consensuspreds
         #code below still not nice, should probably adapt nrpsSMASH to give nicer output
-        consensusKeys = sorted(consensusPreds, key = lambda x: int(x.split('_A')[-1])) 
+        consensusKeys = sorted(consensusPreds, key = lambda x: int(x.split('_A')[-1]))
         consensusValues = [consensusPreds[key] for key in consensusKeys]
         consensusValues = (x for x in consensusValues)
         for predictedDomain in nrpsSmashResult.domaindict2['gene']:
@@ -93,7 +93,7 @@ class Cds(models.Model):
 
     # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
-    def get_sequence(self, start_domain, stop_domain):
+    def get_sequence(self, start_domain, stop_domain, linker_before=0, linker_after=0):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
             start_index = domain_list.index(start_domain)
@@ -101,8 +101,8 @@ class Cds(models.Model):
 
             # write custom functions for the below!!!
             # With linker consideration maybe???
-            start_position = start_domain.pfamStart - 1
-            stop_position  = stop_domain.pfamStop
+            start_position = start_domain.pfamStart - linker_before - 1
+            stop_position  = stop_domain.pfamStop + linker_after
             ##
             return self.dnaSequence[start_position:stop_position]
         else:
