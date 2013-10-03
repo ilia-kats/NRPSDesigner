@@ -20,7 +20,7 @@ Main packages
 --------------
 * __Python__ (2.7)
 * __Django__ (>= 1.5)
-* __MySQL__
+* __MySQL__ (>= 5.5.3)
 * __MySQL - Python connector__
 
 Django packages
@@ -42,7 +42,7 @@ Other stuff that is loaded by some of our python functions:
 * __python-openbabel__: (>= 2.3.2) Python bindings to openbabel for 2D structure generation
 * __UNAFold__ and __MFold utils__: required by Gibthon
 * __HMMER__ (= 3.0): Hidden Markov Model based sequence analysis software used by antiSMASH
-* __muscle__: multiple sequence alignment used by antiSMASH
+* __MUSCLE__: multiple sequence alignment used by antiSMASH
 * __Clustal Omega__: multiple sequence alignment used by NRPSDesigner
 * __libSBOLpy__: Python bindings to the libSBOLc library
 
