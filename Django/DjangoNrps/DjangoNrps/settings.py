@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'djcelery',
     'celeryHelper',
     'kombu.transport.django',
+    'bootstrapform'
 )
 
 MIDDLEWARE_CLASSES = (
