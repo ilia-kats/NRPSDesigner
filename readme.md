@@ -44,6 +44,7 @@ Other stuff that is loaded by some of our python functions:
 * __HMMER__ (= 3.0): Hidden Markov Model based sequence analysis software used by antiSMASH
 * __muscle__: multiple sequence alignment used by antiSMASH
 * __Clustal Omega__: multiple sequence alignment used by NRPSDesigner
+* __libSBOLpy__: Python bindings to the libSBOLc library
 
 C++ stuff
 =============
@@ -52,6 +53,7 @@ C++ stuff
 * __libXML__: C library for XML handling
 * __libcurl__: C library for HTTP
 * __Boost.program_options__: C++ library for command-line option parsing
+* __libSBOLc__: C library for SBOL IO
 * __GCC__ (>= 4.8) or a comparable compiler with C++11 support
 
 Compilation
