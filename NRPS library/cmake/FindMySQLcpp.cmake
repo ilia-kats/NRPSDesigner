@@ -12,7 +12,7 @@
 # For details see the accompanying kde/COPYING-CMAKE-SCRIPTS file.
 
 if(WIN32)
-    find_path(MYSQLCPP_INCLUDE_DIR mysql_connection.h
+    find_path(MYSQLCPP_INCLUDE_DIR cppconn/driver.h
         PATHS
         $ENV{MYSQL_INCLUDE_DIR}
         $ENV{MYSQL_DIR}/include
@@ -20,7 +20,7 @@ if(WIN32)
         $ENV{SystemDrive}/MySQL/*/include
    )
 else(WIN32)
-    find_path(MYSQLCPP_INCLUDE_DIR mysql_connection.h
+    find_path(MYSQLCPP_INCLUDE_DIR cppconn/driver.h
         PATHS
         $ENV{MYSQL_INCLUDE_DIR}
         $ENV{MYSQL_DIR}/include
