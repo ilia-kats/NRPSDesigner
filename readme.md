@@ -8,6 +8,7 @@ Directory structure
 * __NRPS library/__: contains the C++ code for the NRPSDesigner executable
 * __sbspks__/: contains the scraping scripts that were used to scrape the SBSPKS database. These require Scrapy 0.16 as well as all packages needed for Django
 * __nrps_designer.sql__: Database dump.
+* __nrpsdesigner__: Executable compiled from the C++ code. This was compiled on Debian Wheezy and statically linked against libgcc and libstdc++. You may need to recompile to match your system's library versions (Boost, libXML etc.)
 
 Django stuff
 =============

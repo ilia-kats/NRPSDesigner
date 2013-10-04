@@ -15,10 +15,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # django celery
 import djcelery
 djcelery.setup_loader()
-BROKER_URL = 'django://'
+#BROKER_URL = 'django://'
 CELERY_IMPORTS=("databaseInput.models", "designerGui.models")
 CELERY_TRACK_STARTED = True
-#CELERY_RESULT_BACKEND = "amqp"
+CELERY_RESULT_BACKEND = "amqp"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -55,7 +55,7 @@ INSTALLED_APPS = (
     'south',
     'djcelery',
     'celeryHelper',
-    'kombu.transport.django',
+    #'kombu.transport.django',
 )
 
 MIDDLEWARE_CLASSES = (
