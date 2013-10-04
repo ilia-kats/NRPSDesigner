@@ -199,7 +199,7 @@ std::vector<std::shared_ptr<DomainTypeC>> MySQLDatabaseConnector::getCDomains(co
 
 std::vector<std::shared_ptr<DomainTypeT>> MySQLDatabaseConnector::getTDomains(DomainTPosition p) throw (DatabaseError)
 {
-    return getCoreDomains<DomainTypeT>(toString(DomainType::T),
+    return getCoreDomains<DomainTypeT>(p == DomainTPosition::BeforeC ? "Tstd" : "T_Ep",
                                        [&p](DomainTypeT *d, sql::ResultSet *res){
                                            d->setPosition(p);
                                        });
