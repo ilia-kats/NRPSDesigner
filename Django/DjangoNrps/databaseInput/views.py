@@ -247,6 +247,7 @@ def save_cds_domains(request):
                 for domain in domains:
                     domain.user = request.user
                     domain.save()
+                domainFormSet.save_m2m()
                 #if successful, render cds input form with clean form again!
                 t = loader.get_template('databaseInput/cdsInputTab.html')
                 cdsForm = CdsForm(prefix='cds')
