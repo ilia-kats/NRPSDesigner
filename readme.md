@@ -18,43 +18,43 @@ If you are on Mac OS X or Linux, you need to run this as root:
 
 Main packages
 --------------
-* __Python__ (2.7)
-* __Django__ (>= 1.5)
-* __MySQL__ (>= 5.5.3)
-* __MySQL - Python connector__
+* [__Python__](http://www.python.org) (2.7)
+* [__Django__](http://www.djangoproject.com) (>= 1.5)
+* [__MySQL__](http://www.mysql.com) (>= 5.5.3)
+* [__MySQL - Python connector__](http://sourceforge.net/projects/mysql-python/)
 
 Django packages
 ---------------
-* __django-registration__: Handles user login etc.
-* __django-annoying__: Gibthon uses it...
-* __south__: handles database schema changes
-* __django-celery__: integration of Celery into Django
+* [__django-registration__](https://bitbucket.org/ubernostrum/django-registration/): Handles user login etc.
+* [__django-annoying__](http://skorokithakis.github.io/django-annoying/): Gibthon uses it...
+* [__south__](http://south.aeracode.org/): handles database schema changes
+* [__django-celery__](http://celery.github.io/django-celery/): integration of Celery into Django
 
 Other stuff that is loaded by some of our python functions:
 -----------------------------------------------------------
-* __Requests__:Great library to do simple http requests!
-* __RabbitMQ__: Message broker required by Celery
-* __Biopython__ (>= 1.62): Just like bioperl but not in a crappy language!
-* __xhtml2pdf__: Also necessary for Gibthon..
-* __BeautifulSoup__: Beautiful soup!
-* __celery__: asynchronous scheduling framework
-* __kombu__: database-based message passing framework
-* __python-openbabel__: (>= 2.3.2) Python bindings to openbabel for 2D structure generation
-* __UNAFold__ and __MFold utils__: required by Gibthon
-* __HMMER__ (= 3.0): Hidden Markov Model based sequence analysis software used by antiSMASH
-* __MUSCLE__: multiple sequence alignment used by antiSMASH
-* __Clustal Omega__: multiple sequence alignment used by NRPSDesigner
-* __libSBOLpy__: Python bindings to the libSBOLc library
+* [__Requests__](http://docs.python-requests.org/en/latest/):Great library to do simple http requests!
+* [__RabbitMQ__](http://www.rabbitmq.com): Message broker required by Celery
+* [__Biopython__](http://www.biopython.org) (>= 1.62): Just like bioperl but not in a crappy language!
+* [__xhtml2pdf__](http://www.xhtml2pdf.com): Also necessary for Gibthon..
+* [__BeautifulSoup__](http://www.crummy.com/software/BeautifulSoup/): Beautiful soup!
+* [__celery__](http://celeryproject.org/): asynchronous scheduling framework
+* [__kombu__](https://github.com/celery/kombu): database-based message passing framework
+* [__python-openbabel__](http://www.openbabel.org): (>= 2.3.2) Python bindings to openbabel for 2D structure generation
+* [__UNAFold__ and __MFold utils__](http://dinamelt.rit.albany.edu/download.php): required by Gibthon
+* [__HMMER__](http://hmmer.janelia.org/) (= 3.0): Hidden Markov Model based sequence analysis software used by antiSMASH
+* [__MUSCLE__](http://www.drive5.com/muscle/): multiple sequence alignment used by antiSMASH
+* [__Clustal Omega__](http://www.clustal.org): multiple sequence alignment used by NRPSDesigner
+* [__libSBOLpy__](https://github.com/SynBioDex/libSBOLpy): Python bindings to the libSBOLc library
 
 C++ stuff
 =============
-* __CMake__: build system used by NRPSDesigner
-* __MySQL C++ connector__: C++ library for MySQL access
-* __libXML__: C library for XML handling
-* __libcurl__: C library for HTTP
-* __Boost.program_options__: C++ library for command-line option parsing
-* __libSBOLc__: C library for SBOL IO
-* __GCC__ (>= 4.8) or a comparable compiler with C++11 support
+* [__CMake__](http://www.cmake.org): build system used by NRPSDesigner
+* [__MySQL C++ connector__](http://www.mysql.com): C++ library for MySQL access
+* [__libXML__](http://www.xmlsoft.org): C library for XML handling
+* [__libcurl__](http://curl.haxx.se): C library for HTTP
+* [__Boost.program_options__](http://www.boost.org): C++ library for command-line option parsing
+* [__libSBOLc__](https://github.com/SynBioDex/libSBOLc) (fixed version from https://github.com/ilia-kats/libSBOLc required): C library for SBOL IO
+* [__GCC__](http://gcc.gnu.org) (>= 4.8) or a comparable compiler with C++11 support
 
 Compilation
 -----------
