@@ -32,9 +32,8 @@ from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm, Pro
 
 from gibson.jsonresponses import JsonResponse, ERROR
 
-def msa_domain_view(request):
+def do_msa(request):
     if request.method == "POST":
-
         cdsForm = CdsForm(request.POST, prefix="cds")
         #import pdb;pdb.set_trace()
         if cdsForm.is_valid():
@@ -53,7 +52,8 @@ def msa_domain_view(request):
                 del initialDict['substrateSpecificity']
                 initialDict['cds'] = cds
                 domain = Domain.objects.create(**initialDict)
-                MSA = domain.align_same_type()
+                task = domain.align_same_type.delay()
+                return JsonResponse({'taskId': task.id})
                 t = loader.get_template('databaseInput/MSA_test.html')
                 c = RequestContext(request,{
                     'jsonMSA': MSA
@@ -66,6 +66,17 @@ def msa_domain_view(request):
             return HttpResponse("")      #think of how to best handle errors..
     else:
         return HttpResponse("")
+
+def msa_domain_view(request, task_id):
+    msa = AsyncResult(task_id).get()
+    t = loader.get_template('databaseInput/MSA_test.html')
+    c = RequestContext(request,{
+        'jsonMSA': msa[1]
+        })
+    domain = Domain.objects.get(pk=msa[0])
+    domain.cds.delete()
+    domain.delete
+    return HttpResponse(t.render(c))
 
 
 # class PfamView(TemplateView):
@@ -206,30 +217,20 @@ def domain_prediction(request):
             return JsonResponse({'html': t.render(c)}, ERROR)
 
 def get_predicted_domain_formset(request, task_id):
- if request.method == "POST":
-        cdsForm = CdsForm(request.POST, prefix='cds')
-        if cdsForm.is_valid():
-            cds = cdsForm.save(commit=False)
-            initialDict = AsyncResult(task_id).get()
-            t = loader.get_template('databaseInput/domainInput.html')
-            DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
-            c = RequestContext(request, {
-            'domainFormSet':DomainFormSet(initial = initialDict),
-                })
-            #return HttpResponse(t.render(c))
-            return JsonResponse({'html': t.render(c),})
-        else:
-            t = loader.get_template('databaseInput/cdsInputTab.html')
-            c = RequestContext(request, {
-            'form':cdsForm,
-            'isAjax': True,
-                })
-            return JsonResponse({'html': t.render(c)}, ERROR)
+    if request.method == "POST":
+        initialDict = AsyncResult(task_id).get()
+        t = loader.get_template('databaseInput/domainInput.html')
+        DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm , extra=len(initialDict))
+        c = RequestContext(request, {
+        'domainFormSet':DomainFormSet(initial = initialDict),
+            })
+        #return HttpResponse(t.render(c))
+        return JsonResponse({'html': t.render(c),})
 
 # kind of hacky view in order to be able to call get_predicted_domain_formset
 # with task_id from JS and be able to use reverse url lookup
 def get_predicted_domain_formset_base(request):
-    return HttpRequest("igem <3")
+    return HttpResponse("igem <3")
 
 @login_required
 def save_cds_domains(request):

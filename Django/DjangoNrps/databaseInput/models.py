@@ -176,8 +176,9 @@ class Domain(models.Model):
         domainSeqRecord = SeqRecord(seq=domainSeqObject, name= name, id=name)
         return domainSeqRecord
 
+    @task()
     def align_same_type(self):
-        return self.domainType.align_same_type()
+        return (self.pk, self.domainType.align_same_type())
 
     # introduce this function, so we can deduce which A domains are
     # specific for only 1 substrate
