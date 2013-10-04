@@ -621,10 +621,8 @@ class Construct(models.Model):
                 p.tm_len_primer(self.settings.min_primer_tm)
             p.self_prime_check()
             yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
-            yield ' '*1024
             p.misprime_check()
             yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
-            yield ' '*1024
         self.processed = True
         self.save()
         yield ':100'

@@ -5,7 +5,7 @@ from fragment.views import get_fragment
 from gibson.jsonresponses import JsonResponse, ERROR
 
 from django.template import Context, loader, RequestContext
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
+from django.http import HttpResponse, StreamingHttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import condition
@@ -129,14 +129,13 @@ def primers(request, cid):
 	return HttpResponse(t.render(c))
 
 @login_required
-@condition(etag_func=None)
 def process(request, cid, new=True):
 	con = get_construct(request.user, cid)
 	if con:
 		#import pdb; pdb.set_trace()
 
 		try:
-			resp = HttpResponse(con.process(new), mimetype="text/plain")
+			resp = StreamingHttpResponse(con.process(new), mimetype="text/plain")
 			return resp
 		except:
 			print 'wok'
