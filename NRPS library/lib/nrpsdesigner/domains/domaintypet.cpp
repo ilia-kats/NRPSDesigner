@@ -25,8 +25,10 @@ void DomainTypeT::setPosition(DomainTPosition p)
     m_position = p;
 }
 
+#ifdef WITH_INTERNAL_XML
 void DomainTypeT::writeXml(xmlTextWriterPtr writer) const
 {
     Domain::writeXml(writer);
     xmlTextWriterWriteElement(writer, BAD_CAST POSITION_NODE, BAD_CAST nrps::toString(position()).c_str());
 }
+#endif

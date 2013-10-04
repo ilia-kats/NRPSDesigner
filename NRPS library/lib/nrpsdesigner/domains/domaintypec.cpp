@@ -40,9 +40,11 @@ void DomainTypeC::setChirality(Configuration c)
     m_chirality = c;
 }
 
+#ifdef WITH_INTERNAL_XML
 void DomainTypeC::writeXml(xmlTextWriterPtr writer) const
 {
     Domain::writeXml(writer);
     xmlTextWriterWriteElement(writer, BAD_CAST SUBSTRATE_NODE, BAD_CAST std::to_string(substrate()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST CHIRALITY_NODE, BAD_CAST nrps::toString(chirality()).c_str());
 }
+#endif

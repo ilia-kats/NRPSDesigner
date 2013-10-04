@@ -6,7 +6,7 @@
   {% autoescape off %}
     {{djangoSuccess}}
 {% endautoescape %}
-  
+
 </div>
 
 {% endif %}
@@ -18,7 +18,7 @@
   {% autoescape off %}
     {{djangoError}}
 {% endautoescape %}
-  
+
 </div>
 
 {% endif %}
@@ -82,7 +82,7 @@
 
 
 <script type="text/javascript">
-// code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/ 
+// code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/
 // adapted from coffeescript to javascript
 // enables use of Bootstrap modal to load other html pages
 
@@ -109,7 +109,7 @@ function predictDomains(){
 
 function getPredictedDomains(taskId){
   jQuery("ul.errorlist").remove();
-    jQuery.post("{% url "getPredictedDomainFormsetBase" %}" +taskId, jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
+    jQuery.post("{% url "getPredictedDomainFormsetBase" %}" +taskId).done(function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#cdsInputTab").html(data[1].html);
       } else {
@@ -133,7 +133,7 @@ jQuery(document).ready(function() {
           jQuery("#cdsFormForDomainPrediction").change(function() {
            jQuery("#tabs").tabs("disable",1);});
 
-   
+
 
 {% if not isAjax %}
 });
@@ -145,7 +145,7 @@ jQuery(document).ready(function() {
     //     constructId =  data["constructId"];
     //     if (constructId != 0) {
     //    jQuery("#tabs").tabs("enable",1);
-  
+
     //     } else {
     //         alert("ERROR");
     //     }

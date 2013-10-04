@@ -19,7 +19,9 @@ public:
 protected:
     DomainTypeA(DomainType, uint32_t);
     DomainTypeA(DomainType, uint32_t, uint32_t);
+#ifdef WITH_INTERNAL_XML
     virtual void writeXml(xmlTextWriterPtr) const;
+#endif
 
 private:
     uint32_t m_substrate;

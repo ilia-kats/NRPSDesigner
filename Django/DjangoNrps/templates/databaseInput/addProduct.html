@@ -19,16 +19,16 @@
 <script>
 
 
-jQuery("#submitProduct").click(function() {
+jQuery("#submitProduct").click(function(e) {
+    e.preventDefault();
     jQuery.post("{% url "saveProduct" %}", jQuery("#addProductForm, #cdsFormForDomainPrediction").serialize(), function(data){
-      if (data[0] === AJAX_ERROR){
-        jQuery("#myModal").html(data[1].html);
-      } else {
-        jQuery("#tabs").tabs("disable",1);
-        jQuery("#cdsInputTab").html(data[1].html);
-
-        jQuery("#myModal").modal('hide')
-    }
-  });
+        if (data[0] === AJAX_ERROR){
+            jQuery("#myModal").html(data[1].html);
+        } else {
+            jQuery("#tabs").tabs("disable",1);
+            jQuery("#myModal").modal('hide');
+            jQuery("#cdsInputTab").html(data[1].html);
+        }
+    });
   });
 </script>

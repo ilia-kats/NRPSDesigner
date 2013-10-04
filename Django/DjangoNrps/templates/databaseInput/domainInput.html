@@ -41,7 +41,7 @@
               </div>
 
               <div class="span3">
-                
+
               </div>
 
               <div class="span3">
@@ -58,7 +58,7 @@
                 </div>
               </div>
               <div class="span3">
-                
+
                 </div>
               </div>
               <div class="span3">
@@ -82,7 +82,7 @@
                   {{ domainForm.description }}
                 </div>
 
-      
+
 
 
 
@@ -94,12 +94,12 @@
             </div>
 
           </form>
-        
+
                                 {% endfor %}
 
 
 
- 
+
   </div>
           <button class="btn" id="saveCdsDomains" type="button">Save cds and domains!</button>
 
@@ -141,7 +141,7 @@ jQuery(".msaGenButton").click(function(e) {
   btn = e.delegateTarget;
   domainFormArray = jQuery(btn).closest("form").serializeArray();
   cdsFormArray = jQuery("#cdsInputTab").find("form").serializeArray();
-  
+
   // convert "domain_set-0-module" to "domain_set-module"
   // so that Django view can handle this as normal form with prefix "domain_set"...
   domainFormArray = domainFormArray.map(function(x) {
@@ -151,11 +151,13 @@ jQuery(".msaGenButton").click(function(e) {
     });
   cdsAndDomainFormArray = cdsFormArray.concat(domainFormArray);
 
-  jQuery.post("{% url "msaDomainView" %}", cdsAndDomainFormArray, function(data){
-       jQuery("#msaModal .modal-body").html( data );
-       jQuery("#msaModal").modal("show");
+  submitCeleryJob('{% url "doMsa" %}', cdsAndDomainFormArray, undefined, undefined, function(data){
+        taskId = data[1].taskId;
+        jQuery.post("{% url 'doMsa' %}" + taskId).done(function(data) {
+            jQuery("#msaModal").modal("show");
+            jQuery("#msaModal .modal-body").html( data );
+        });
       });
-
     });
 
 jQuery(".domainSelect2Wrapper").children().select2();

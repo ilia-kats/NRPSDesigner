@@ -1,0 +1,251 @@
+.navigation{
+    margin: 0px auto;
+    font-family:Arial, sans-serif;
+    font-size: 20px;
+    font-style: bold;
+    letter-spacing: 1.2px;
+}
+
+
+a.icon{
+    width:52px;
+    height:52px;
+    position:absolute;
+    top:0px;
+    left:0px;
+    cursor:pointer;
+}
+.team a.icon{
+    background:transparent url(../images/Team.png) no-repeat 0px 0px;
+}
+.project a.icon{
+    background:transparent url(../images/Project.png) no-repeat 0px 0px;
+}
+.notebook a.icon{
+    background:transparent url(../images/Notebook.png) no-repeat 0px 0px;
+}
+.parts a.icon{
+    background:transparent url(../images/Parts.png) no-repeat 0px 0px;
+}
+.software a.icon{
+    background:transparent url(../images/Software.png) no-repeat 0px 0px;
+}
+.safety a.icon{
+    background:transparent url(../images/Safety.png) no-repeat 0px 0px;
+}
+.human a.icon{
+    background:transparent url(../images/Human.png) no-repeat 0px 0px;
+}
+.navigation .item a.active{
+    background-position:0px -52px;
+}
+.item img.circle{
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:52px;
+    height:52px;
+    opacity:0.3;
+}
+.item h2{
+    position:relative;
+    height:52px;
+    color:#222;
+    font-size:13px;
+    font-family: Arial, sans-serif;
+    top:14px;
+    left:0px;
+    white-space: nowrap;
+    line-height:52px;
+    text-transform:uppercase;
+}
+.item-human h2{
+    position:relative;
+    height:52px;
+    color:#222;
+    font-size:13px;
+    font-family: Arial, sans-serif;
+    top:14px;
+    white-space: nowrap;
+    line-height:52px;
+    text-indent: -12%;
+    text-transform:uppercase;
+}
+.item-softnote h2{
+    position:relative;
+    height:52px;
+    color:#222;
+    font-size:13px;
+    font-family: Arial, sans-serif;
+    top:14px;
+    white-space: nowrap;
+    line-height:52px;
+    text-indent: 33%;
+    text-transform:uppercase;
+}
+.item-project h2{
+    position:relative;
+    height:52px;
+    color:#222;
+    font-size:13px;
+    font-family: Arial, sans-serif;
+    top:14px;
+    white-space: nowrap;
+    line-height:52px;
+    text-indent: 45%;
+    text-transform:uppercase;
+}
+.item-team h2{
+    position:relative;
+    height:52px;
+    color:#222;
+    font-size:13px;
+    font-family: Arial, sans-serif;
+    top:14px;
+    white-space: nowrap;
+    line-height:52px;
+    text-indent: 45%;
+    text-transform:uppercase;
+}
+.item h2.active{
+    color:#EEDF3E;
+    z-index:3;
+}
+.item ul{
+    list-style:none;
+    position:absolute;
+    top:60px;
+    left:25px;
+    display:none;
+    z-index:4;
+}
+.item ul li a{
+    font-size:12px;
+    text-decoration:none;
+    letter-spacing:1.2px;
+    /*text-transform: uppercase;*/
+    color:#000;
+    padding:3px;
+    float:left;
+    clear:both;
+    width:130px;
+    z-index:4;
+}
+.item-human ul li a:hover{
+    background-color:#999999;
+    color:#000000;
+    
+}
+.item-human h2.active{
+    color:#EEDF3E;
+    z-index:3;
+}
+.item-human ul{
+    list-style:none;
+    position:absolute;
+    top:60px;
+    left:25px;
+    display:none;
+    z-index:4;
+}
+.item-human ul li a{
+    font-size:12px;
+    text-decoration:none;
+    letter-spacing:1.2px;
+    /*text-transform: uppercase;*/
+    color:#000;
+    padding:3px;
+    float:left;
+    clear:both;
+    width:130px;
+    z-index:4;
+}
+.item-project ul li a:hover{
+    background-color:#999999;
+    color:#000000;
+    
+}
+.item-project h2.active{
+    color:#EEDF3E;
+    z-index:3;
+}
+.item-project ul{
+    list-style:none;
+    position:absolute;
+    top:60px;
+    left:25px;
+    display:none;
+    z-index:4;
+}
+.item-project ul li a{
+    font-size:12px;
+    text-decoration:none;
+    letter-spacing:1.2px;
+    /*text-transform: uppercase;*/
+    color:#000;
+    padding:3px;
+    float:left;
+    clear:both;
+    width:130px;
+    z-index:4;
+}
+.item-team ul li a:hover{
+    background-color:#999999;
+    color:#000000;
+    
+}
+.item-team h2.active{
+    color:#EEDF3E;
+    z-index:3;
+}
+.item-team ul{
+    list-style:none;
+    position:absolute;
+    top:60px;
+    left:25px;
+    display:none;
+    z-index:4;
+}
+.item-team ul li a{
+    font-size:12px;
+    text-decoration:none;
+    letter-spacing:1.2px;
+    /*text-transform: uppercase;*/
+    color:#000;
+    padding:3px;
+    float:left;
+    clear:both;
+    width:130px;
+    z-index:4;
+}
+.item-softnote ul li a:hover{
+    background-color:#999999;
+    color:#000000;
+    
+}
+.item-softnote h2.active{
+    color:#EEDF3E;
+    z-index:3;
+}
+.item-softnote ul{
+    list-style:none;
+    position:absolute;
+    top:60px;
+    left:25px;
+    display:none;
+    z-index:4;
+}
+.item-softnote ul li a{
+    font-size:12px;
+    text-decoration:none;
+    letter-spacing:1.2px;
+    /*text-transform: uppercase;*/
+    color:#000;
+    padding:3px;
+    float:left;
+    clear:both;
+    width:130px;
+    z-index:4;
+}
+
+

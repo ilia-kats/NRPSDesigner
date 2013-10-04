@@ -21,7 +21,11 @@
 
 		</div>
         <div id='frag_select_holder'>
-            <button class="btn" type="button" id="download_sbol">Download SBOL</button>
+            <div class="btn-group">
+                <button class="btn" type="button" id="download_sbol">Download SBOL</button>
+                <button class="btn" type="button" id="download_genbank">Download GenBank</button>
+                <button class="btn" type="button" onclick="jQuery('#tabs').tabs('option', 'active', 3);">Next</button>
+            </div>
             <div id='frag_select'>
                 {%include 'fragment/jFragmentSelector.html' %}
             </div>
@@ -57,7 +61,10 @@
 		jQuery(function(){
             jQuery("#download_sbol").click(function(){
                 window.location.href='{% url 'gibson.views.download_sbol' construct.pk %}';
-            })
+            });
+            jQuery("#download_genbank").click(function(){
+                window.location.href='{% url 'gibson.views.download_genbank' construct.pk %}';
+            });
         });
 
 </script>

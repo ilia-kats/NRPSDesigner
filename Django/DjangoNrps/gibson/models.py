@@ -39,10 +39,12 @@ from django.db import models
 from django import forms
 from django.conf import settings
 
+from fragment.models import Feature
+
 from Bio.SeqUtils.MeltingTemp import Tm_staluc
 from Bio.Seq import reverse_complement, Seq
 from Bio import SeqIO, Entrez
-from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
+from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation, ExactPosition
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
@@ -216,7 +218,7 @@ class Primer(models.Model):
         self.stick.save()
 
     def tm_len_primer(self, target):
-        # extends teh length of the flappy end of the primer until its target is reached
+        # extends the length of the flappy end of the primer until its target is reached
         while self.tm() < target:
             if not self.flap.extend():
                 w = Warning.objects.create(
@@ -310,15 +312,26 @@ class PrimerHalf(models.Model):
         else:
             end = self.cfragment.start() + 50
 
+        if self.cfragment.direction == 'r':
+            end = self.cfragment.end() - self.start()
+            start = end - self.length
         s = Seq(self.cfragment.fragment.sequence)
         s = s[start:end]
-        if self.top: s = reverse_complement(s)
+        if self.top ^ (self.cfragment.direction == 'r'):
+            s = reverse_complement(s)
         return s
 
     def seq(self):
         s = Seq(self.cfragment.fragment.sequence)
-        s = s[self.start():self.end()]
-        if self.top: s = reverse_complement(s)
+        if self.cfragment.direction == 'r':
+            end = self.cfragment.end() - self.start()
+            start = end - self.length
+        else:
+            start = self.start()
+            end = self.end()
+        s = s[start:end]
+        if self.top ^ (self.cfragment.direction == 'r'):
+            s = reverse_complement(s)
         return s
 
     def tm(self):
@@ -360,21 +373,46 @@ class Construct(models.Model):
     def length(self):
         return len(self.sequence())
 
-    def features(self):
+    def features(self, transform=True):
         acc = 0
+        ph_top = dict()
+        ph_bottom = dict()
         for fr in self.cf.all():
+            start = acc
             fe = fr.features()
             if fr.direction == 'r':
                 fe.reverse()
             for f in fe:
                 if fr.direction == 'r':
+                    f.reverse()
                     t  = f.start
-                    f.start = fr.fragment.length() - f.end + 1
-                    f.end = fr.fragment.length() - t + 1
-                f.start -= fr.start() - acc - 1
-                f.end -= fr.start() - acc - 1
+                    f.start = fr.fragment.length() - f.end - 1
+                    f.end = fr.fragment.length() - t - 1
+                if transform:
+                    f.start -= fr.start() - acc - 1
+                    f.end -= fr.start() - acc - 1
                 yield f
-            acc += fr.end() - fr.start() + 1
+            acc += fr.end() - fr.start()
+            yield Feature(type="fragment", start=start, end=acc, direction=fr.direction, gene=fr.fragment)
+            if self.processed:
+                phs = fr.ph.all()
+                for ph in phs:
+                    if ph.top and not ph.isflap():
+                        ph_top[start + ph.start()] = ph
+                    elif not ph.top and ph.isflap():
+                        ph_bottom[start + ph.start()] = ph
+        for start, stick in ph_top.iteritems():
+            start = start
+            primer = stick.stick
+            end = start + primer.length()
+            f = Feature(type="primer_bind", start=start, end=end, direction='r')
+            yield f
+        for start, flap in ph_bottom.iteritems():
+            start = start
+            primer = flap.flap
+            end = start + primer.length()
+            f = Feature(type="primer_bind", start=start, end=end, direction='f')
+            yield f
 
     def feature_count(self):
         return sum(1 for f in self.features())
@@ -396,16 +434,31 @@ class Construct(models.Model):
             acc += fr.end() - fr.start() + 1
 
     def gb(self):
+        l = self.length()
         g = SeqRecord(
             Seq(self.sequence(),IUPAC.IUPACUnambiguousDNA()),
             id=self.name[0:8],
             name=self.name[0:8],
             description=self.description
         )
-        g.features = [SeqFeature(
-            FeatureLocation(ExactPosition(f.start-1),ExactPosition(f.end)),
-            f.type, qualifiers=dict([[q.name,q.data] for q in f.qualifiers.all()]))
-            for f in self.features()]
+        g.features = []
+        for f in self.features():
+            t = f.type
+            if f.direction == 'f':
+                strand = 1
+            else:
+                strand = -1
+            if self.shape == 'c' and f.end > l:
+                f1 = FeatureLocation(ExactPosition(f.start), ExactPosition(l), strand)
+                f2 = FeatureLocation(ExactPosition(0), ExactPosition(f.end - l), strand)
+                if strand == 1:
+                    floc = CompoundLocation([f1, f2])
+                else:
+                    floc = CompoundLocation([f2, f1])
+            else:
+                floc = FeatureLocation(ExactPosition(f.start),ExactPosition(f.end), strand)
+            sf = SeqFeature(floc, f.type, qualifiers=dict([[q.name,q.data] for q in f.qualifiers.all()]))
+            g.features.append(sf)
         return g.format('genbank')
 
     def sbol(self):
@@ -414,21 +467,52 @@ class Construct(models.Model):
         dc.display_id = str(self.name)
         dc.description = str(self.description)
         dc.sequence = sbol.DNASequence(doc, "#" + str(self.pk) + "_seq")
-        acc = 1
-        for cf in self.cf.all():
-            dcf = sbol.DNAComponent(doc, "#" + str(cf.pk))
-            dcf.display_id = str(cf.fragment.name)
-            dcf.description = str(cf.fragment.description)
-            sa1 = sbol.SequenceAnnotation(doc, "#" + str(cf.pk) + "_sa")
-            sa1.subcomponent = dcf
-            if cf.direction == 'f':
-                sa1.strand = '+'
+        dc.sequence.nucleotides = str(self.sequence())
+        fid = [1]
+        l = self.length()
+        def makeAnnot(f, parent=dc):
+            if self.shape == 'c' and f.end > l and parent == dc:
+                end = f.end
+                f.end = l
+                makeAnnot(f, parent)
+                f.end = end - l
+                f.start = 0
+                makeAnnot(f, parent)
+                return
+            dcf = sbol.DNAComponent(doc, "#dc_" + str(fid[0]))
+            dcf.display_id = str(f.type)
+            dcf.description = str(";".join(["%s:%s" % (q.name,q.data) for q in f.qualifiers.all()]))
+            sa = sbol.SequenceAnnotation(doc, "#sa_" + str(fid[0]))
+            sa.subcomponent = dcf
+            if f.direction == 'f':
+                sa.strand = '+'
             else:
-                sa1.strand = '-'
-            sa1.start = acc
-            acc += cf.end() - cf.start()
-            sa1.end = acc
-            acc += 1
+                sa.strand = '-'
+            sa.start = f.start + 1 # SBOL 1-based
+            sa.end = f.end + 1
+            parent.annotations.append(sa)
+            fid[0] += 1
+            return dcf
+        fragments = {}
+        fragmentfeats = {}
+        for f in self.features(False): # sub-annotations relative to parent
+            try:
+                if f.gene is not None:
+                    if f.type == "fragment":
+                        fragments[f.gene] = f
+                    else:
+                        if f.gene in fragmentfeats:
+                            fragmentfeats[f.gene].append(f)
+                        else:
+                            fragmentfeats[f.gene] = [f]
+            except:
+                makeAnnot(f)
+        for gene, fragment in fragments.iteritems():
+            dcf = makeAnnot(fragment)
+            dcf.description = str(gene.description)
+            if gene in fragmentfeats:
+                for f in  fragmentfeats[gene]:
+                    makeAnnot(f, dcf)
         return str(doc)
 
     def add_fragment(self, fragment, order = 0, direction='f'):
@@ -537,10 +621,8 @@ class Construct(models.Model):
                 p.tm_len_primer(self.settings.min_primer_tm)
             p.self_prime_check()
             yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
-            yield ' '*1024
             p.misprime_check()
             yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
-            yield ' '*1024
         self.processed = True
         self.save()
         yield ':100'

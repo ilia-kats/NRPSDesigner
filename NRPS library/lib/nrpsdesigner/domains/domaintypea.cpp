@@ -33,9 +33,10 @@ void DomainTypeA::setSubstrate(uint32_t s)
     m_substrate = s;
 }
 
+#ifdef WITH_INTERNAL_XML
 void DomainTypeA::writeXml(xmlTextWriterPtr writer) const
 {
     Domain::writeXml(writer);
     xmlTextWriterWriteElement(writer, BAD_CAST SUBSTRATE_NODE, BAD_CAST std::to_string(substrate()).c_str());
 }
-
+#endif
