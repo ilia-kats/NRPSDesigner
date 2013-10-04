@@ -33,21 +33,18 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 {% block content %}
 <div>
 
-	<div class="content center full-width">
-		<div id='tabs' class='left'>
-			<ul>
+
+			<ul class="nav nav-tabs" id="tabs">
 
 
-				<li>
-					<a href="{% url 'guiTool' nrp.pk %}" class='tab-link' data-intro="This is a tab" data-step="1">
-						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
+				<li class="active">
+					<a data-target="#guiToolContent" href="{% url 'guiTool' nrp.pk %}" data-toggle="tab" data-intro="This is a tab" data-step="1">
 						NRP
 					</a>
 					</li>
 						<li>
 
-					<a id="domainSequence" href="#domainSequenceIFrame" class='tab-link'>
-						<span class='ui-icon ui-icon-pencil tab-icon'></span>
+					<a id="domainSequence" data-toggle="tab" href="#domainSequenceContent" class='tab-link'>
 						Domains
 					</a>
 				</li>
@@ -59,8 +56,8 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 					{% else %}
 					href = ""
 					{% endif %}
-					class='tab-link'>
-						<span class='ui-icon ui-icon-pencil tab-icon'></span>
+					data-toggle="tab"
+					data-target="#constructContent" >
 						Designer
 					</a>
 				</li>
@@ -72,21 +69,30 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 						{% else %}
 					href = ""
 						{% endif %}
-					class = 'tab-link'>
-						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
+					data-toggle="tab" 
+					data-target = "primersContent">
 						Primers
 					</a>
 				</li>
 
 			</ul>
-			<iframe id="domainSequenceIFrame" src="" style="width:100%;">
-</iframe>
+			
 
 
-		</div>
-	</div>
+		
 </div>
 
+<div class="tab-content">
+  <div class="tab-pane" id="guiToolContent">Loading...</div>
+    <div class="tab-pane" id="domainSequenceContent">
+<iframe id="domainSequenceIFrame" src="" style="width:100%;">
+</iframe>
+</div>
+  <div class="tab-pane" id="constructContent">Loading...</div>
+    <div class="tab-pane" id="constructContent">Loading...</div>
+    <div class="tab-pane" id="primersContent">Loading...</div>
+
+</div>
 
 {% endblock %}
 
@@ -114,47 +120,24 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 
 
 	jQuery(document).ready( function($) {
-		//tabs
-		jQuery( "#tabs" ).tabs({
-			beforeLoad: function(event, ui) {
-			    if ( (ui.tab.index() == 2 || ui.tab.index() ==0) && ui.tab.data( "loaded" ) ) {
-			      event.preventDefault();
-			      return;
-			    }
-
-			    ui.jqXHR.success(function() {
-			      ui.tab.data( "loaded", true );
-		    });},
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=733698
-            activate: function(event, ui) {
-                if (ui.newTab.index() == 1) {
-                    jQuery("#domainSequenceIFrame").attr("src", "domainSequence");
-                }
-            },
-			ajaxOptions: {
-				error: function( xhr, status, index, anchor ) {
-					jQuery( anchor.hash ).html(
-						"<p>ERROR: Failed to load this tab, status: " + status + " </p>");
-				}
-			},
-
-			{% if not nrp.construct %}
-			disabled: [ 1, 2 ,3],
-			{% endif %}
-
-
-			//make sure to include a comma between the ajaxoptions, and the load options
-    		//this is the bit that makes all a link with the class of 'thisPane' stay within the tab
-    		//a href tags that are not of the class 'thisPane' will open outside the tab
-    load: function(event, ui) {
-    jQuery(ui.panel).delegate('a.thisPane', 'click', function(event) {
-        jQuery(ui.panel).load(this.href);
-        event.preventDefault();
-    });
+		
+  jQuery("#tabs").bind("show", function(e) {    
+    var contentID  = jQuery(e.target).attr("data-target");
+    var contentURL = jQuery(e.target).attr("href");
+    if (typeof(contentURL) != 'undefined' & contentURL == "#domainSequenceContent"){
+    	console.log("blablu");
+    	jQuery("#domainSequenceIFrame").attr("src", "domainSequence");
     }
-		});
+    else if (typeof(contentURL) != 'undefined'){
+      jQuery(contentID).load(contentURL, function(){ jQuery("#tabs").tab(); });
+    }
+    else {
+      jQuery(contentID).tab('show');
+    }
+  });
 
-
+  // load first tab on initialization
+  //jQuery('#guiToolContent').load(jQuery("#tabs a:first").attr("href"));
 
 	});
 
