@@ -350,19 +350,22 @@
 </style>
 {% endblock %}
 {% block content %}
-<h2>Welcome to the NRPS Designer Software provided by the iGEM Team Heidelberg 2013</h2>
-</br>
+<h2>Welcome to the NRPS Designer Software by the iGEM Team Heidelberg 2013     
+</h2>
+<div style="text-align:center" class="span12">
+        <a class="btn" onclick="introJs().start();"><i class="icon icon-info-sign"></i> Lead me around</a>
+    </div>
 
 <div class="row-fluid">
 <div class="span8" id="params" >
-    <div class="box" data-intro="Lorem ipsum..." data-step="2">
+    <div class="box" data-intro="In this step you can select whether you want to attach a Indigoidine tag to your final NRP and if you want all domains used to be curated rather than domains entered by any user." data-step="2">
         <p>Options:</p>
         <div>
             <input type="checkbox" id="chk_curatedonly" checked="checked"/><label for="chk_curatedonly" style="margin-bottom:0">Use curated domains only</label>
             <input type="checkbox" id="chk_indigoidinetag"{% if indigoidineTagged %} checked="checked"{% endif %}/><label for="chk_indigoidinetag" style="margin-bottom:0">Tag NRP with Indigoidine</label>
         </div>
     </div>
-    <div class="box" data-intro="Lorem ipsum..." data-step="3">
+    <div class="box" data-intro="In this box you can choose the amino acid of your choice in L or D-form, if available. Press 'Add Monomer' in order to extend the peptide chain by 1 amino acid. Once you are done and you want to get your predicted domains, just press on 'Design Construct' " data-step="3">
         <p> Please choose amino acids you want to integrate into your peptide! </p>
         <div id="e23" style="width:100%"></div>
         <div id="monomer_chirality">
@@ -386,7 +389,7 @@
 </div>
 
 <div class="span4" id="struct">
-    <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;" data-intro="Lorem ipsum..." data-step="4">
+    <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;" data-intro="This box contains a visual representation of the peptide you are about to design a synthetic NRPS for." data-step="4">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
                 <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" style="height:100%;">
@@ -394,9 +397,5 @@
     </div>
 </div>
 </div>
-<div class="row-fluid">
-    <div class="span12">
-        <button class="btn" onclick="introJs().start();">Show me how this works!</a>
-    </div>
-</div>
+
 {% endblock %}

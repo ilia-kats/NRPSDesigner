@@ -171,7 +171,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 		<div class="fixed-width">
 			<div id="primary-menu">
 				{% if user.is_authenticated %}
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="5">
+				<span class="user_tab drop">
 				<a href="{% url 'userprofile' %}" id="user_tab_profile" class="user_tab">Logged in as {{ user }}</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="{% url 'userprofile' %}">Profile</a></li>
@@ -189,7 +189,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 						<li><a href="/help/primer/">Add NRPS into library</a></li>
 					</ul>
 				</span>-->
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="3">
+				<span class="user_tab drop">
 					<a href="/tools/" id="user_tab_tools" class="user_tab">Apps</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="{% url 'peptides' %}">NRPS Designer</a></li>
@@ -197,14 +197,14 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 						<li><a href="{% url 'fragment.views.fragments' %}">Manage Gibson fragments</a></li>
 					</ul>
 				</span>
-				<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="2">
+				<span class="user_tab drop">
 					<a href="{%url 'home' %}" id="user_tab_home" class="user_tab">Home</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="{% url 'home' %}">Home</a></li>
 					</ul>
 				</span>
 			</div>
-			<a href="/"><img src="{% static "img/LogoNRPSklein.png" %}" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
+			<a href="/"><img src="{% static "img/LogoNRPSklein.png" %}" style="height:90px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
 			<h2 id="main_title">NRPS Designer<!--:<span style="font-size:0.7em">{{ title|default:"Home" }}</span>--></h2>
 		</div>
 	</div>

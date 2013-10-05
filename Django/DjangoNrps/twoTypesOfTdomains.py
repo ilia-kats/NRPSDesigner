@@ -16,3 +16,4 @@ for tDomain in tDomains:
 	else:
 		tDomain.domainType = tStd
 	tDomain.save()
+
