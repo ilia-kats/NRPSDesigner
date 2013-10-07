@@ -76,9 +76,6 @@ class NRP(models.Model):
         self.save()
 
     def fullDelete(self):
-        for gene in [x.gene for x in self.domainOrder.all()]:
-            if gene is not None:
-                gene.delete()
         if self.construct is not None:
             if len(self.construct.cf.all()) > 0 :
                 [x.fragment.delete() for x in self.construct.cf.all()]
