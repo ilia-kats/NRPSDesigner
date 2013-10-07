@@ -77,8 +77,7 @@ class NRP(models.Model):
 
     def fullDelete(self):
         if self.construct is not None:
-            if len(self.construct.cf.all()) > 0 :
-                [x.fragment.delete() for x in self.construct.cf.all()]
+            self.delete_dependencies()
             self.construct.delete() #causes self to be deleted as well due to on cascade deletion in sql
         else:
             self.delete()
