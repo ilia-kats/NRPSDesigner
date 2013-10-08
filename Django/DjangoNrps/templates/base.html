@@ -190,7 +190,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 					</ul>
 				</span>-->
 				<span class="user_tab drop">
-					<a href="/tools/" id="user_tab_tools" class="user_tab">Apps</a>
+					<a href="#" id="user_tab_tools" class="user_tab">Apps</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="{% url 'peptides' %}">NRPS Designer</a></li>
 						<li><a href="{% url 'pfam' %}">Add NRPS into library</a></li>
@@ -204,7 +204,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 					</ul>
 				</span>
 			</div>
-			<a href="/"><img src="{% static "img/LogoNRPSklein.png" %}" style="height:90px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
+			<a href="{%url 'home' %}"><img src="{% static "img/LogoNRPSklein.png" %}" style="height:90px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
 			<h2 id="main_title">NRPS Designer<!--:<span style="font-size:0.7em">{{ title|default:"Home" }}</span>--></h2>
 		</div>
 	</div>
