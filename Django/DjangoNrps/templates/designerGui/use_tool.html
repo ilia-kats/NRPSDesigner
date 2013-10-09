@@ -41,7 +41,7 @@
     function getSelectableMonomers(current)
     {
         var selected = jQuery("#submit").parent();
-        spinopts = opts;
+        var spinopts = jQuery.extend({}, opts);
         spinopts.length = 7;
         spinopts.radius = 6;
         var div = jQuery('<div>').css("display", "inline-block").css("vertical-align", "bottom").css("height", 28).css("width", 28).css("margin-left", 10);
@@ -165,9 +165,18 @@
     {
         var monomer = jQuery(e.delegateTarget).parent();
         if (nrpEnabledEffects) {
-        monomer.animate({width:0, opacity: 0}, animationDuration, function(){monomer.remove();makeStruct();});
+        monomer.animate({width:0, opacity: 0}, animationDuration, function() {
+                monomer.remove();
+                makeStruct();
+                var selected = jQuery('#selected_monomers :input[type="checkbox"]');
+                if (selected.find(':checked').length == 0)
+                    jQuery(selected[selected.length - 1]).click();
+            });
         } else {
             monomer.remove();
+            var selected = jQuery('#selected_monomers :input[type="checkbox"]');
+            if (selected.find(':checked').length == 0)
+                jQuery(selected[selected.length - 1]).click();
         }
 
     }
