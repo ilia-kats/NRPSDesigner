@@ -47,6 +47,7 @@ class Cds(models.Model):
         consensusKeys = sorted(consensusPreds, key = lambda x: int(x.split('_A')[-1]))
         consensusValues = [consensusPreds[key] for key in consensusKeys]
         consensusValues = (x for x in consensusValues)
+        lasttdomain = None
         for predictedDomain in nrpsSmashResult.domaindict2['gene']:
             if predictedDomain[0] in allDomainTypes:
                 domainDict = {}
@@ -60,6 +61,14 @@ class Cds(models.Model):
                     if specificity in [x.smashName for x in Substrate.objects.all()]:
                         substrate = Substrate.objects.get(smashName = specificity)
                         domainDict['substrateSpecificity'] = [substrate.pk]
+                elif domainType.name == "T":
+                    lasttdomain = domainDict
+                elif (domainType.name == "C_L" or domainType.name == "C_D" or domainType.name == "C") and lasttdomain is not None:
+                    lasttdomain['domainType'] = Type.objects.get(name="Tstd")
+                    lasttdomain = None
+                elif domainType.name == "E" and lasttdomain is not None:
+                    lasttdomain['domainType'] = Type.objects.get(name="T_Ep")
+                    lasttdomain = None
                 initialDicts.append(domainDict)
         module_code = self.type_list_to_modules([x['domainType'].name for x in initialDicts])
         for i,module in enumerate(module_code):
@@ -251,7 +260,14 @@ class Type(models.Model):
         return self.name
 
     def align_same_type(self):
-        domains = Domain.objects.filter(domainType = self)
+        ttypes = ["T", "Tstd", "T_Ep"]
+        if self.name in ttypes:
+            types = []
+            for ttype in ttypes:
+                types.append(Type.objects.get(name=ttype))
+            domains = Domain.objects.filter(domainType__in=types)
+        else:
+            domains = Domain.objects.filter(domainType = self)
         # just b/c db has some empty entries right now
         domains = [dom for dom in domains if len(dom.get_sequence())>0]
         domainSeqRecordList = [dom.get_seqrecord_object(protein=True) for dom in domains]

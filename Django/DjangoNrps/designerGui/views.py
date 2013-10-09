@@ -134,7 +134,6 @@ def get_available_monomers(request):
         else:
             chirality = Substrate.objects.get(pk=monomers[selected]).chirality
         substrates = Substrate.objects.exclude(user__username='sbspks')
-        #import pdb;pdb.set_trace()
         if not toBool(request.POST['current']) or selected == len(monomers) - 1:
             aas = filter(lambda x: x.can_be_added(chirality, toBool(request.POST['curatedonly'])), substrates)
         else:
