@@ -1593,6 +1593,15 @@ var fc = FragmentContainer.prototype = new Container();
         Container.prototype.addChildAt.call(this, df, pos);
     }
 
+    /**
+     * removeAllChildren override
+     **/
+    fc.removeAllChildren = function()
+    {
+        this._hiddenFragments = 0;
+        Container.prototype.removeAllChildren.call(this);
+    }
+
 	/**
 	 * Remove a displayFragment
 	 * @method rm
