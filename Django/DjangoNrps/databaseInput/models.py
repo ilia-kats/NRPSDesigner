@@ -199,29 +199,35 @@ class Substrate(models.Model):
     def __unicode__(self):
         return self.name
 
-    def can_be_added_by_adenylation_domain(self):
-        return self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').count() > 0
+    def can_be_added_by_adenylation_domain(self, curatedonly=False):
+        domains = self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks')
+        if curatedonly:
+            domains = domains.filter(user__groups__name='curator')
+        return domains.count() > 0
 
-    def can_be_added_by_condensation_adenylation_domain(self, chirality):
-        return self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(chirality=chirality).count() > 0
+    def can_be_added_by_condensation_adenylation_domain(self, chirality, curatedonly=False):
+        domains =  self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(chirality=chirality)
+        if curatedonly:
+            domains = domains.filter(user__groups__name='curator')
+        return domains.count() > 0
 
     def can_be_added_by_modification_domain(self):
         bla = [self.parent is not None]
         pass
 
-    def can_be_added(self, previousChirality=None):
+    def can_be_added(self, previousChirality=None, curatedonly=False):
         if previousChirality is None:
-            if self.can_be_added_by_adenylation_domain(): #or self.can_be_added_by_modification_domain():
+            if self.can_be_added_by_adenylation_domain(curatedonly): #or self.can_be_added_by_modification_domain():
                 return True
             elif self.enantiomer is not None:
-                return self.enantiomer.can_be_added_by_adenylation_domain() #or self.enantiomer.can_be_added_by_modification_domain()
+                return self.enantiomer.can_be_added_by_adenylation_domain(curatedonly) #or self.enantiomer.can_be_added_by_modification_domain()
             else:
                 return False
         else:
-            if self.can_be_added_by_condensation_adenylation_domain(previousChirality): #or self.can_be_added_by_modification_domain():
+            if self.can_be_added_by_condensation_adenylation_domain(previousChirality, curatedonly): #or self.can_be_added_by_modification_domain():
                 return True
             elif self.enantiomer is not None:
-                return self.enantiomer.can_be_added_by_condensation_adenylation_domain(previousChirality) #or self.enantiomer.can_be_added_by_modification_domain()
+                return self.enantiomer.can_be_added_by_condensation_adenylation_domain(previousChirality, curatedonly) #or self.enantiomer.can_be_added_by_modification_domain()
             else:
                 return False
 

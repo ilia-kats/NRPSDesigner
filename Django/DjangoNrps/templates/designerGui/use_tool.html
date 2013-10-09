@@ -13,6 +13,18 @@
     var pid = {{pid}};
     var processing;
 
+    function primaryId(aa)
+    {
+        var id;
+        if ('lid' in aa)
+            id = aa['lid'];
+        else if ('did' in aa)
+            id = aa['did'];
+        else if ('nid' in aa)
+            id = aa['nid'];
+        return id;
+    }
+
     function getMonomers()
     {
         var ids = new Array();
@@ -26,7 +38,7 @@
         return new Array(ids, checked);
     }
 
-    function getSelectableMonomers()
+    function getSelectableMonomers(current)
     {
         var selected = jQuery("#submit").parent();
         spinopts = opts;
@@ -37,7 +49,7 @@
         var chosenmonomers = getMonomers();
         selected.append(div);
         spinner.spin(div[0]);
-        jQuery.ajax({type: "POST", url: "{%url 'selectableMonomers' %}", data: {monomer: chosenmonomers[0], selected: chosenmonomers[1]}, async: false}).done(function(data){monomers = data[1].monomers; monomersList = data[1].monomerslist; spinner.stop(); div.remove();});
+        jQuery.ajax({type: "POST", url: "{%url 'selectableMonomers' %}", data: {monomer: chosenmonomers[0], selected: chosenmonomers[1], curatedonly: jQuery('#chk_curatedonly').prop("checked"), current: current}, async: false}).done(function(data){monomers = data[1].monomers; monomersList = data[1].monomerslist; spinner.stop(); div.remove();});
     }
 
     function makeStruct()
@@ -54,19 +66,20 @@
         jQuery(e.delegateTarget).prop("checked", true).button("refresh");
         var select = jQuery("#e23");
         if (select.data("currMonomer").id != e.delegateTarget.id)
-            getSelectableMonomers();
+            getSelectableMonomers(true);
         select.select2("val", jQuery(e.delegateTarget).data("selectid"));
         select.data("currMonomer", e.delegateTarget);
         var data = select.select2("data");
         var monomerId = jQuery(e.target).attr("value");
-        if (monomerId == data.lid || data.LChildren.filter(function(value) {return value.id == monomerId}).length > 0) {
-            jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
-            jQuery("#monomer_chirality_L").click();
-        } else {
-            jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
-            jQuery("#monomer_chirality_D").click();
+        if (!('nid' in data)) {
+            if ('lid' in data && (monomerId == data.lid || data.LChildren.filter(function(value) {return value.id == monomerId}).length > 0)) {
+                jQuery("#monomer_chirality_L").click();
+            } else {
+                jQuery("#monomer_chirality_D").click();
+            }
         }
-        jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
+        jQuery("#monomer_chirality").buttonset("option", "disabled", 'lid' in data ^ 'did' in data);
+
         refreshModificationList();
         jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
     }
@@ -109,6 +122,10 @@
         var select = jQuery('#e23');
         var data = select.select2("data");
         var prefix;
+        if ('lid' in data && !('did' in data))
+            jQuery("#monomer_chirality_L").click();
+        else if (!('lid' in data) && 'did' in data)
+            jQuery("#monomer_chirality_D").click();
         if (jQuery("#monomer_chirality :checked").val() == 'L') {
             btn.attr("value", data.lid);
             prefix = "L-"
@@ -117,14 +134,14 @@
             prefix = "D-"
         }
         //clickable button should show if L- or D- except for glycine
-        if (data.lid == data.did) {
+        if ('nid' in data) {
             btn.button("option", "label", data.text);
         } else {
             btn.button("option", "label", prefix + data.text);
         }
         btn.data("selectid", data.id);
 
-        jQuery("#monomer_chirality").buttonset("option", "disabled", data.lid == data.did);
+        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data);
         makeStruct();
         refreshModificationList();
     }
@@ -157,11 +174,11 @@
     function addMonomer(e)
     {
         if (!processing)
-            getSelectableMonomers();
+            getSelectableMonomers(false);
         var dflt = monomersList[0];
         var close = jQuery("<button>", {html: 'delete'});
         var id =  new Date().getTime();
-        var aa = jQuery('<input type="checkbox" value="' + dflt['lid'] + '" id="' + id + '"/>');
+        var aa = jQuery('<input type="checkbox" value="' + primaryId(dflt) + '" id="' + id + '"/>');
         var label = jQuery('<label for="' + id + '" style="margin-bottom:0px"/>'); //margin: conflict with bootstrap
         aa.data("selectid", dflt.id);
         aa.data("modId", "");
@@ -184,13 +201,13 @@
     }
     function formatAA(aminoAcid) {
         // if (!aminoAcid.id) return aminoAcid.text; // optgroup
-        kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + aminoAcid.lid + "'/>" + aminoAcid.text;
+        kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + primaryId(aminoAcid) + "'/>" + aminoAcid.text;
         return kek;
     }
 
     function formatAAChild(aminoAcid) {
         // if (!aminoAcid.id) return aminoAcid.text; // optgroup
-        kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + aminoAcid.id + "'/>" + aminoAcid.text;
+        kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + primaryId(aminoAcid) + "'/>" + aminoAcid.text;
         return kek;
     }
 
@@ -275,9 +292,9 @@
         addMonomer();
         {% if monomer.substrate.hasParent %}
         tmpId = {{monomer.substrate.parent.pk}};
-        selectId = monomersList.filter(function(value) {return value.lid == tmpId || value.did == tmpId;})[0];
+        selectId = monomersList.filter(function(value) {return 'lid' in value && value.lid == tmpId || 'did' in value && value.did == tmpId;})[0];
         jQuery('#e23').select2("val", selectId.id, triggerChange = true);
-        if (tmpId == selectId.lid) {
+        if ('lid' in selectId && tmpId == selectId.lid) {
                 jQuery("#monomer_chirality_L").click();
         } else {
                 jQuery("#monomer_chirality_D").click();
@@ -291,7 +308,7 @@
         tmpId = {{monomer.substrate.pk}};
         selectId = monomersList.filter(function(value) {return value.lid == tmpId || value.did == tmpId;})[0];
         jQuery('#e23').select2("val", selectId.id, triggerChange = true);
-        if (tmpId == selectId.lid) {
+        if ('lid' in selectId && tmpId == selectId.lid) {
                 jQuery("#monomer_chirality_L").click();
         } else {
                 jQuery("#monomer_chirality_D").click();
@@ -302,7 +319,7 @@
         {% endfor %}
         {% endif %}
         processing = false;
-        getSelectableMonomers();
+        getSelectableMonomers(true);
         nrpEnabledEffects = true;
         makeStruct();
 
