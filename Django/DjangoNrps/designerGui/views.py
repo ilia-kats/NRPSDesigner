@@ -143,6 +143,45 @@ class SpeciesListView(ListView):
         context['initialPic'] = initialPic
         return context
 
+@login_required
+def get_available_monomers(request):
+    if request.method == 'POST' and "monomer[]" in request.POST and "selected" in request.POST:
+        monomers = request.POST.getlist("monomer[]")
+        selected = int(request.POST['selected'])
+        chirality = Substrate.objects.get(pk=monomers[selected]).chirality
+        if selected == len(monomers) - 1:
+            aas = filter(lambda x: x.can_be_added(chirality), Substrate.objects.exclude(user__username='sbspks'))
+        else:
+            following = Substrate.objects.get(pk=monomers[selected + 1])
+            aas = filter(lambda x: x.can_be_added(chirality) and following.can_be_added(x.chirality), Substrate.objects.exclude(user__username='sbspks'))
+    else:
+        aas = filter(lambda x: x.can_be_added(), Substrate.objects.exclude(user__username='sbspks'))
+    json = {}
+    minid = float("Inf")
+    for aa in aas:
+        if not hasattr(aa.parent, 'name'):
+            name = aa.name
+            if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
+                name = aa.name[2:]
+            if aa.pk in json:
+                key = aa.pk
+            elif aa.enantiomer is not None and aa.enantiomer.pk in json:
+                key = aa.enantiomer.pk
+            else:
+                key = None
+            if key is not None:
+                if key < minid:
+                    minid = key
+                json[key][aa.chirality.lower() + "id"] = aa.pk
+                json[key][aa.chirality+'Children'] = [{"text": c.name, "id": c.pk} for c in aa.child.all()]
+                #names[name]['name'] = name
+            else:
+                json[aa.pk] = {"id": aa.pk, "lid": aa.pk, "did":aa.pk, 'text': name, aa.chirality+'Children': [{"text": c.name, "id": c.pk} for c in aa.child.all()]}
+    jsonlist = json.values()
+    jsonlist.sort(lambda x,y: cmp(x['text'], y['text']))
+    return JsonResponse({"monomers": json, "monomerslist": jsonlist})
+
+
 def submit_nrp(request):
     nrpxml = x.Element('nrp')
     for monomer in request.POST.getlist("as[]"):

@@ -202,17 +202,28 @@ class Substrate(models.Model):
     def can_be_added_by_adenylation_domain(self):
         return self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').count() > 0
 
+    def can_be_added_by_condensation_adenylation_domain(self, chirality):
+        return self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(chirality=chirality).count() > 0
+
     def can_be_added_by_modification_domain(self):
         bla = [self.parent is not None]
         pass
 
-    def can_be_added(self):
-        if self.can_be_added_by_adenylation_domain(): #or self.can_be_added_by_modification_domain():
-            return True
-        elif self.enantiomer is not None:
-            return self.enantiomer.can_be_added_by_adenylation_domain() #or self.enantiomer.can_be_added_by_modification_domain()
+    def can_be_added(self, previousChirality=None):
+        if previousChirality is None:
+            if self.can_be_added_by_adenylation_domain(): #or self.can_be_added_by_modification_domain():
+                return True
+            elif self.enantiomer is not None:
+                return self.enantiomer.can_be_added_by_adenylation_domain() #or self.enantiomer.can_be_added_by_modification_domain()
+            else:
+                return False
         else:
-            return False
+            if self.can_be_added_by_condensation_adenylation_domain(previousChirality): #or self.can_be_added_by_modification_domain():
+                return True
+            elif self.enantiomer is not None:
+                return self.enantiomer.can_be_added_by_condensation_adenylation_domain(previousChirality) #or self.enantiomer.can_be_added_by_modification_domain()
+            else:
+                return False
 
 class Modification(models.Model):
     name = models.CharField(max_length=100)
