@@ -289,6 +289,15 @@ class UserDetailView(DetailView):
     template_name = 'databaseInput/user_detail.html'
     slug_field = "username"
 
+@login_required
+def change_password(request):
+    if request.method == "POST" and "oldpw" in request.POST and "newpw" in request.POST:
+        if not request.user.check_password(request.POST['oldpw']):
+            return JsonResponse({"field": "oldpw"}, ERROR)
+        else:
+            request.user.set_password(request.POST['newpw'])
+            request.user.save()
+            return JsonResponse({})
 
 @login_required
 def request_curation_privs(request):
