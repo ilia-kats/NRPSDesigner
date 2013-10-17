@@ -16,8 +16,10 @@ public:
     bool circularizing() const;
     void setCircularizing(bool);
 
+#ifdef WITH_INTERNAL_XML
 // protected:
 //     virtual void writeXml(xmlTextWriterPtr) const;
+#endif
 
 private:
     bool m_circularizing;

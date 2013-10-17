@@ -1,106 +1,106 @@
            <form>         {{domainFormSet.management_form}}  </form>
-        <div class = "panel-group" id="accordion">
+<div id="accordion">
 
           {% for domainForm in domainFormSet %}
 
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title"> 
-              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{forloop.counter}}">
-              Domain {{ forloop.counter }}
-              </a>
+          <h3> Domain {{ forloop.counter }} </h3>
+          <div>
 
-             </h4>
-            </div>
-            <div id="collapse{{forloop.counter}}" class="panel-collapse collapse">
-              <div class="panel-body">
-                {{ domainForm.non_field_errors }}
-                <form>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="fieldWrapper">
-                        {{ domainForm.module.errors }}
-                        <label for="id_module">Module: <br/> </label>
-                        {{ domainForm.module }}
-                      </div>
+            {{ domainForm.non_field_errors }}
+            <form>
+            <div class="row">
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.module.errors }}
+                  <label for="id_module">Module: <br/> </label>
+                  {{ domainForm.module }}
+                </div>
 
-                      <div class="fieldWrapper">
-                        {{ domainForm.domainType.errors }}
-                        <label for="id_domainType">Domain Type: <br/> </label>
-                        {{ domainForm.domainType }}
-                      </div>
-                    </div>
-                    <div class="col-md-3">
+                <div class="fieldWrapper">
+                  {{ domainForm.domainType.errors }}
+                  <label for="id_domainType">Domain Type: <br/> </label>
+                  {{ domainForm.domainType }}
+                </div>
+              </div>
+              <div class="span3">
 
 
-                      <div class="fieldWrapper">
-                        {{ domainForm.substrateSpecificity.errors }}
-                        <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
-                        <div class = "domainSelect2Wrapper">
+                <div class="fieldWrapper">
+                  {{ domainForm.substrateSpecificity.errors }}
+                  <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
+                  <div class = "domainSelect2Wrapper">
 
-                          {{ domainForm.substrateSpecificity }}
-                        </div>
-
-
-
-
-                      </div>
-
-                    </div>
-
-                   
-
-                    <div class="col-md-3">
-                      <div class="fieldWrapper">
-                        {{ domainForm.pfamStart.errors }}
-                        <label for="id_module">Pfam Start: <br/> </label>
-                        {{ domainForm.pfamStart }}
-                      </div>
-
-                      <div class="fieldWrapper">
-                        {{ domainForm.pfamStop.errors }}
-                        <label for="id_domainType">Pfam Stop: <br/> </label>
-                        {{ domainForm.pfamStop }}
-                      </div>
-                
-                    </div>
-                    <div class="col-md-3">
-                      <div class="fieldWrapper">
-                        {{ domainForm.definedStart.errors }}
-                        <label for="id_module">definedStart: <br/> </label>
-                        {{ domainForm.definedStart }}
-                      </div>
-
-                      <div class="fieldWrapper">
-                        {{ domainForm.definedStop.errors }}
-                        <label for="id_domainType">definedStop: <br/> </label>
-                        {{ domainForm.definedStop}}
-                      </div>
-                    </div>
-
-                    <div class="col-md-3">
-                      <div class="fieldWrapper">
-                        {{ domainForm.description.errors }}
-                        <label for="id_module">Description: <br/> </label>
-                        {{ domainForm.description }}
-                      </div>
-
-                    </div>
+                    {{ domainForm.substrateSpecificity }}
                   </div>
 
-                  <button class="btn msaGenButton" type="button">MSA!</button>
-                  </form>
+
+
+
                 </div>
+
+              </div>
+
+              <div class="span3">
+
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamStart.errors }}
+                  <label for="id_module">Pfam Start: <br/> </label>
+                  {{ domainForm.pfamStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.pfamStop.errors }}
+                  <label for="id_domainType">Pfam Stop: <br/> </label>
+                  {{ domainForm.pfamStop }}
+                </div>
+              </div>
+              <div class="span3">
+
+                </div>
+              </div>
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.definedStart.errors }}
+                  <label for="id_module">definedStart: <br/> </label>
+                  {{ domainForm.definedStart }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ domainForm.definedStop.errors }}
+                  <label for="id_domainType">definedStop: <br/> </label>
+                  {{ domainForm.definedStop}}
+                </div>
+              </div>
+
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ domainForm.description.errors }}
+                  <label for="id_module">Description: <br/> </label>
+                  {{ domainForm.description }}
+                </div>
+
+
+
+
+
+
             </div>
-          </div>
-    
-        {% endfor %}
-      </div>
-                        
+
+                        <button class="btn msaGenButton" type="button">MSA!</button>
+
+            </div>
+
+          </form>
+
+                                {% endfor %}
 
 
 
- 
+
+  </div>
           <button class="btn" id="saveCdsDomains" type="button">Save cds and domains!</button>
 
 
@@ -117,6 +117,11 @@
 
 <script type="text/javascript">
 
+              jQuery( "#accordion" ).accordion({
+                heightStyle: "content",
+                collapsible: true
+              });
+
 jQuery("#saveCdsDomains").click(function() {
   allForms = jQuery(Document).find("form").serialize()
   jQuery.post("{% url "saveCdsDomains" %}", allForms, function(data){
@@ -124,8 +129,8 @@ jQuery("#saveCdsDomains").click(function() {
          jQuery("#domainInput").html(data[1].html);
       } else {
       jQuery("#cdsInputTab").html( data[1].html);
-      jQuery("#domainInputTab").hide();
-      jQuery("#tabs a[href='#cdsInputTab']").tab("show");
+      jQuery("#tabs").tabs("disable",1);
+      jQuery("#tabs").tabs( "option", "active", 0);
       jQuery("#domainGenerator").prop('disabled', false);
       jQuery("#domainInput").html("");
   }
@@ -136,7 +141,7 @@ jQuery(".msaGenButton").click(function(e) {
   btn = e.delegateTarget;
   domainFormArray = jQuery(btn).closest("form").serializeArray();
   cdsFormArray = jQuery("#cdsInputTab").find("form").serializeArray();
-  
+
   // convert "domain_set-0-module" to "domain_set-module"
   // so that Django view can handle this as normal form with prefix "domain_set"...
   domainFormArray = domainFormArray.map(function(x) {
@@ -146,15 +151,16 @@ jQuery(".msaGenButton").click(function(e) {
     });
   cdsAndDomainFormArray = cdsFormArray.concat(domainFormArray);
 
-  jQuery.post("{% url "msaDomainView" %}", cdsAndDomainFormArray, function(data){
-       jQuery("#msaModal .modal-body").html( data );
-       jQuery("#msaModal").modal("show");
+  submitCeleryJob('{% url "doMsa" %}', cdsAndDomainFormArray, undefined, undefined, function(data){
+        taskId = data[1].taskId;
+        jQuery.post("{% url 'doMsa' %}" + taskId).done(function(data) {
+            jQuery("#msaModal").modal("show");
+            jQuery("#msaModal .modal-body").html( data );
+        });
       });
-
     });
 
 jQuery(".domainSelect2Wrapper").children().select2();
 jQuery(".domainSelect2Wrapper").children().css("width","100%")
-
 
 </script>

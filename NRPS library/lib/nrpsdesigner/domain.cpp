@@ -244,6 +244,7 @@ void Domain::setDeterminedLinkerAfter(std::string &&linker)
     m_determinedLinkerAfter = std::move(linker);
 }
 
+#ifdef WITH_INTERNAL_XML
 void Domain::toXml(xmlTextWriterPtr writer) const
 {
     startXml(writer);
@@ -283,6 +284,7 @@ void Domain::endXml(xmlTextWriterPtr writer) const
 {
     xmlTextWriterEndElement(writer);
 }
+#endif
 
 std::string Domain::toString() const
 {

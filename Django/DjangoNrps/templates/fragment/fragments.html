@@ -3,7 +3,7 @@
 {% load staticfiles %}
 
 {% block css-include %}
-<link rel="stylesheet" type="text/css" href="{% static "css/datatables.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/datatable.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/fragment.css" %}" />
 {% endblock %}
 
@@ -13,20 +13,24 @@
 var fragment_base_url = '{% url 'fragment.views.fragments' %}';
 var fragment_api_url = fragment_base_url + 'api/';
 </script>
-<script src="{% static "js/jquery.dataTables.js" %}" type="text/javascript"></script>
-<script src="{% static "js/datatables.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
 <script src="{% static "js/fragmentlist.js" %}" type="text/javascript"></script>
 <script src="{% static "js/importer.js" %}" type="text/javascript"></script>
 <script src="{% static "js/formtools.js" %}" type="text/javascript"></script>
 {% endblock %}
 
+{% block app-menu %}
+<button id="fragment_form_open"></button>|
+<button id="download_btn"></button>
+<button id="delete_btn"></button>
+{% endblock %}
 
 {% block content %}
 <div class="content fixed-width">
 
 <form id='select_form' method="post" enctype="multipart/form-data">
 {% csrf_token %}
-	<table id="fragment_table" class="datatable table table-hover table-bordered">
+	<table id="fragment_table">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -58,12 +62,6 @@ var fragment_api_url = fragment_base_url + 'api/';
 		</tbody>
 	</table>
 </form>
-</div>
-
-<div class="btn-group">
-	<button class="btn" id="fragment_form_open">Add</button>
-	<button class="btn" id="download_btn">Download</button>
-	<button class="btn" id="delete_btn">Delete</button>
 </div>
 {% endblock %}
 
@@ -174,7 +172,10 @@ jQuery(document).ready(function() {
 		]
 	});
 
-	jQuery('#fragment_form_open').button().click(function () {
+	jQuery('#fragment_form_open').button({
+		label:"Add new fragment",
+		icons:{primary:'ui-icon-plusthick'}
+	}).click(function () {
 		jQuery('#fragment_form')
 			.importer()
 			.importer('open');

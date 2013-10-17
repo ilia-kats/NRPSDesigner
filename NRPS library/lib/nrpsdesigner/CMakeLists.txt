@@ -3,7 +3,10 @@ project(libnrpsdesigner)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/domains
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
+
+configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SRCS
     monomer.cpp
@@ -49,6 +52,7 @@ set(HEADERS
     nrpsbuilder.h
     exceptions.h
     ${CMAKE_CURRENT_BINARY_DIR}/nrpsdesigner_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/config.h
 )
 
 if (UNIX)

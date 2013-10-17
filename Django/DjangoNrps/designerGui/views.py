@@ -112,28 +112,6 @@ class SpeciesListView(ListView):
         context['modifications'] = modfs.values()
         #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
 
-
-        aas = Substrate.objects.exclude(user__username='sbspks')
-        aas = filter(lambda x: x.can_be_added(), aas)
-
-        realAas = []
-        for aa in aas:
-            if not hasattr(aa.parent, 'name'):
-                realAas.append(aa)
-        names = {}
-        for aa in realAas:
-            name = aa.name
-            if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
-                name = aa.name[2:]
-            if name in names:
-                names[name][aa.chirality] = aa.pk
-                names[name][aa.chirality+'Children'] = aa.child.all()
-                #names[name]['name'] = name
-            else:
-                names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
-        context['substrates'] = names.values()
-        context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
-
         nrp = NRP.objects.get(pk= pid)
         substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
         context['substrateOrder'] = substrateOrder
@@ -142,6 +120,57 @@ class SpeciesListView(ListView):
         initialPic = nrp.getPeptideSequenceForStructView()
         context['initialPic'] = initialPic
         return context
+
+@login_required
+def get_available_monomers(request):
+    if request.method == 'POST' and "monomer[]" in request.POST and "selected" in request.POST:
+        monomers = request.POST.getlist("monomer[]")
+        selected = int(request.POST['selected'])
+        if toBool(request.POST['current']):
+            if selected > 0:
+                chirality = Substrate.objects.get(pk=monomers[selected - 1]).chirality
+            else:
+                chirality = None
+        else:
+            chirality = Substrate.objects.get(pk=monomers[selected]).chirality
+        substrates = Substrate.objects.exclude(user__username='sbspks')
+        if not toBool(request.POST['current']) or selected == len(monomers) - 1:
+            aas = filter(lambda x: x.can_be_added(chirality, toBool(request.POST['curatedonly'])), substrates)
+        else:
+            following = Substrate.objects.get(pk=monomers[selected + 1])
+            aas = filter(lambda x: x.can_be_added(chirality, toBool(request.POST['curatedonly'])) and following.can_be_added(x.chirality, toBool(request.POST['curatedonly'])), substrates)
+    else:
+        aas = filter(lambda x: x.can_be_added(), Substrate.objects.exclude(user__username='sbspks'))
+    json = {}
+    minid = float("Inf")
+    for aa in aas:
+        if aa.parent is None:
+            name = aa.name
+            if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
+                name = aa.name[2:]
+            if aa.pk in json:
+                key = aa.pk
+            elif aa.enantiomer is not None and aa.enantiomer.pk in json:
+                key = aa.enantiomer.pk
+            else:
+                key = None
+            if aa.enantiomer is None:
+                chirality = 'N'
+            else:
+                chirality = aa.chirality
+            if key is not None:
+                if key < minid:
+                    minid = key
+                json[key][chirality.lower() + "id"] = aa.pk
+                json[key][chirality+'Children'] = [{"text": c.name, "id": c.pk} for c in aa.child.all()]
+                #names[name]['name'] = name
+            else:
+                json[aa.pk] = {"id": aa.pk, chirality.lower() + "id": aa.pk, 'text': name, aa.chirality+'Children': [{"text": c.name, "id": c.pk} for c in aa.child.all()]}
+
+    jsonlist = json.values()
+    jsonlist.sort(lambda x,y: cmp(x['text'], y['text']))
+    return JsonResponse({"monomers": json, "monomerslist": jsonlist})
+
 
 def submit_nrp(request):
     nrpxml = x.Element('nrp')

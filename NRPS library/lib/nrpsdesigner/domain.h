@@ -1,6 +1,7 @@
 #ifndef NRPSDESIGNER_DOMAIN_H
 #define NRPSDESIGNER_DOMAIN_H
 
+#include "config.h"
 #include "nrpsdesigner_export.h"
 #include "global_enums.h"
 
@@ -9,7 +10,9 @@
 #include <memory>
 #include <unordered_map>
 
+#ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
+#endif
 
 namespace nrps
 {
@@ -37,7 +40,9 @@ public:
     const std::string& determinedLinkerBefore() const;
     const std::string& determinedLinkerAfter() const;
 
+#ifdef WITH_INTERNAL_XML
     void toXml(xmlTextWriterPtr) const;
+#endif
     std::string toString() const;
 
     void setId(uint32_t);
@@ -69,12 +74,15 @@ public:
 
 protected:
     Domain(DomainType, uint32_t);
+#ifdef WITH_INTERNAL_XML
     virtual void writeXml(xmlTextWriterPtr) const;
-
+#endif
 
 private:
+#ifdef WITH_INTERNAL_XML
     void startXml(xmlTextWriterPtr) const;
     void endXml(xmlTextWriterPtr) const;
+#endif
 
     DomainType m_type;
     uint32_t m_id;

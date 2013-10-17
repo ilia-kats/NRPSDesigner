@@ -44,7 +44,7 @@ Some comments regarding deletion considerations/strategies:
 *if construct gets created again -> manually delete previous fragment.Gene objects (in case DomainOrder did not point yet
 at appropriate fragment.Gene)-> gibson.ConstructFragment objects get deleted automatically
     '''
-
+import pdb
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
     name = models.CharField(max_length=80)
@@ -66,19 +66,18 @@ class NRP(models.Model):
         if all:
             SubstrateOrder.objects.filter(nrp = self).delete()
         if self.construct is not None:
-            [x.fragment.delete() for x in self.construct.cf.all() if x.fragment is not None]
+            for x in self.construct.cf.all():
+                if x.fragment is not None and x.fragment.origin == 'ND':
+                    x.fragment.delete()
+                x.delete()
             if self.construct.primer is not None:
                 [x.del_all() for x in self.construct.primer.all() if x is not None]
             self.construct.reset()
         self.save()
 
     def fullDelete(self):
-        for gene in [x.gene for x in self.domainOrder.all()]:
-            if gene is not None:
-                gene.delete()
         if self.construct is not None:
-            if len(self.construct.cf.all()) > 0 :
-                [x.fragment.delete() for x in self.construct.cf.all()]
+            self.delete_dependencies()
             self.construct.delete() #causes self to be deleted as well due to on cascade deletion in sql
         else:
             self.delete()
@@ -88,10 +87,10 @@ class NRP(models.Model):
         # helper function
         # check whether 2 domains are placed next to each other in the same coding sequence
         def tupleIsConnected((x,y)):
-            if x.cds != y.cds:
+            if x.domain.cds != y.domain.cds:
                 return False
-            cdsDomainList = x.cds.get_ordered_domain_list()
-            if cdsDomainList.index(y) == cdsDomainList.index(x) + 1:
+            cdsDomainList = x.domain.cds.get_ordered_domain_list()
+            if cdsDomainList.index(y.domain) == cdsDomainList.index(x.domain) + 1:
                 return True
             else:
                 return False
@@ -125,19 +124,19 @@ class NRP(models.Model):
 
             domain1 = connectedDomains[0]
             domain2 = connectedDomains[-1]
-            domainSequence = domain1.cds.get_sequence(domain1,domain2)
+            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, domain1.linkerBeforeLength, domain2.linkerAfterLength)
 
             domainGene = Gene.objects.create(owner = self.owner,
-                name = ','.join([x.domainType.name for x in connectedDomains]),
+                name = ','.join([x.domain.domainType.name for x in connectedDomains]),
                 description = ' '.join(['DNA sequence of',
-                        ','.join(map(lambda x: ' '.join([str(x.domainType),
+                        ','.join(map(lambda x: ' '.join([str(x.domain.domainType),
                                             'domain of module',
-                                            str(x.module)]),
+                                            str(x.domain.module)]),
                                         connectedDomains)),
                     'of gene',
-                    str(domain1.cds.geneName),
+                    str(domain1.domain.cds.geneName),
                     'of origin',
-                    str(domain1.cds.origin)]),
+                    str(domain1.domain.cds.origin)]),
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
@@ -166,7 +165,7 @@ class NRP(models.Model):
 
     #returns actual domain objects
     def getDomainModelSequence(self):
-        domains = self.designerDomains.order_by('domainOrder').all()
+        domains = DomainOrder.objects.filter(nrp=self).order_by('order')
         return domains
 
     #returns IDs
@@ -241,7 +240,7 @@ class NRP(models.Model):
             '--mysql-user'     : settings.DATABASES[connection.alias]['USER'],
             '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
-        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString(), "-o", "-"]
+        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString(), "-s", "-"]
         if curatedonly:
             args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
         if self.indigoidineTagged:
@@ -274,16 +273,32 @@ class NRP(models.Model):
             raise Exception("NRPSDesigner returned errorcode %d: %s" % (child.returncode, lasterror[0]))
 
         # parse xml to extract domain list
+        # can not use libsbol here, as it only supports reading from file
         designerDom = parseString(xmlout[0])
-        domainDomList = designerDom.getElementsByTagName('domain')
-        domainIdList = [int(domainDom.getElementsByTagName('id')[0].firstChild.data) for domainDom in domainDomList]
+        domainDomList = designerDom.getElementsByTagName('s:DnaComponent')
+        domainIdList = []
+        for comp in domainDomList:
+            cid = comp.attributes.getNamedItem("rdf:about").value[1:]
+            if cid.isdigit():
+                did = comp.getElementsByTagName('s:displayId')[0].firstChild.data
+                if did[0] != '_':
+                    raise Exception("Could not find domain ID, got %s instead." % did)
+                annots = comp.getElementsByTagName('s:SequenceAnnotation')
+                linkerbefore = 0
+                linkerafter = 0
+                for annot in annots:
+                    aid = annot.attributes.getNamedItem("rdf:about").value[1:]
+                    if aid.startswith("salb"):
+                        linkerbefore = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
+                    elif aid.startswith("sala"):
+                        linkerafter = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
+                domainIdList.append((int(did[1:]), linkerbefore, linkerafter))
 
         prevDomains = DomainOrder.objects.filter(nrp = self)
         prevDomains.delete()
-
         for count, domainId in enumerate(domainIdList):
-            domain = Domain.objects.get(pk = domainId)
-            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count)
+            domain = Domain.objects.get(pk = domainId[0])
+            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count, linkerBeforeLength=domainId[1], linkerAfterLength=domainId[2])
         self.designed = True
         self.save()
         self.makeConstruct()
@@ -306,5 +321,5 @@ class DomainOrder(models.Model):
     nrp = models.ForeignKey('NRP', related_name = 'domainOrder')
     domain = models.ForeignKey('databaseInput.Domain', related_name = 'domainOrder')
     order = models.PositiveIntegerField()
-    designerStart = models.IntegerField(blank=True, null=True)
-    designerStop = models.IntegerField(blank=True, null=True)
+    linkerBeforeLength = models.IntegerField(default=0)
+    linkerAfterLength = models.IntegerField(default=0)

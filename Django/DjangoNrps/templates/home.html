@@ -1,25 +1,40 @@
 {% extends "base.html" %}
 
-
+{% block no-app-menu %}
+{% endblock %}
 
 {% block content %}
 
-<div class="row">
-                <!--graphical abstract-->
-    <div class="col-sm-12">
-    <div class="jumbotron" data-intro="Lorem ipsum..." data-step="1">
-    <h1>NRPS Designer</h1>
-    <p>    Welcome to the NRPS Designer! The button below does absolutely nothing!</p>
-    <p> You can still try to push though! </p>
-    <p>
-    <a href="http://www.youtube.com/watch?v=oHg5SJYRHA0" class="btn btn-inverse btn-large">    </i>      push
-    </a>
-    </p>
-    </div>
+    <div class="hero-unit">
+    <h1>NRPSDesigner</h1>
+    <p>    Welcome to the NRPSDesigner of <a href="http://2013.igem.org/Team:Heidelberg"> iGEM Team Heidelberg 2013! </a> </p>
 
-    <div class="col-md-8">
-	<a class="btn" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how this works!</a>
-	</div>
-</div>
-</div>
+        {% if not user.is_authenticated %}
+
+<p>In order to get started, please choose one of the options below:
+    </p>
+    <div class="span8">
+    <div class="btn-group">
+
+   <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-heart"> </i> Register
+    </a>
+    <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+    </a>
+     
+    </div>
+    </div>
+    {% else %}
+   <p>Thanks for logging in, {{ user.username }}! </p>
+    <div class="span8">
+    <div class="btn-group">
+
+   <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-ok"> </i> Start designing
+    </a>
+    <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+    </a>
+  
+    </div>
+    </div>
+  
+    {% endif %}
 {% endblock %}

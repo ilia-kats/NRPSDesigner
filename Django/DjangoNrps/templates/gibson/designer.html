@@ -39,14 +39,14 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 
 
 				<li>
-					<a href="{% url 'guiTool' nrp.pk %}" class='tab-link' data-intro="This is a tab" data-step="1">
+					<a href="{% url 'guiTool' nrp.pk %}" class='tab-link' data-intro="Revisit this tab any time you want to see the structure of your NRP or change its sequence of monomers!" data-step="1">
 						<span class='ui-icon ui-icon-transferthick-e-w tab-icon'></span>
 						NRP
 					</a>
 					</li>
 						<li>
 
-					<a id="domainSequence" href="#domainSequenceIFrame" class='tab-link'>
+					<a id="domainSequence" href="#domainTab" class='tab-link'>
 						<span class='ui-icon ui-icon-pencil tab-icon'></span>
 						Domains
 					</a>
@@ -79,10 +79,9 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 				</li>
 
 			</ul>
-			<iframe id="domainSequenceIFrame" src="" style="width:100%;">
-</iframe>
-
-
+			<div id="domainTab" style="text-align:right">
+			<button type="button" class="btn" onclick="jQuery('#tabs').tabs('option', 'active', 2);">Next</button>
+			<iframe id="domainSequenceIFrame" src="" style="width:100%;border:0;margin-top:5px"></iframe>
 		</div>
 	</div>
 </div>
