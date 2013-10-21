@@ -209,16 +209,16 @@ class Substrate(models.Model):
         return self.name
 
     def can_be_added_by_adenylation_domain(self, curatedonly=False):
-        domains = self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks')
+        domains = self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(domainType__name='A')
         if curatedonly:
             domains = domains.filter(user__groups__name='curator')
         return domains.count() > 0
 
     def can_be_added_by_condensation_adenylation_domain(self, chirality, curatedonly=False):
-        domains =  self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(chirality=chirality)
+        domains =  self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks')
         if curatedonly:
             domains = domains.filter(user__groups__name='curator')
-        return domains.count() > 0
+        return domains.filter(domainType__name='A').count() > 0 and domains.filter(domainType__name='C_' + chirality).count() > 0
 
     def can_be_added_by_modification_domain(self):
         bla = [self.parent is not None]

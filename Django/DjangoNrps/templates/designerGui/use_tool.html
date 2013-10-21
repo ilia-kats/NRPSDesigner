@@ -287,7 +287,7 @@
         jQuery("#monomer_add").button().click(addMonomer).click();
         //jQuery("#save").button().click(save).parent().buttonset();
         jQuery("#submit").button().click(save).parent().buttonset();
-        jQuery("#chk_curatedonly").parent().buttonset();
+        jQuery("#chk_curatedonly").click(function() {getSelectableMonomers(true);}).parent().buttonset();
         jQuery("#structimg").panzoom({minScale:zoomMin, maxScale:zoomMax, contain: true});
         jQuery("#structzoom").slider({min:zoomMin, max:zoomMax, step:zoomStep, animation: "fast", orientation: "vertical", value: 1, slide: function(event, ui){jQuery("#structimg").panzoom("option", "contain", ui.value > 1 ? "invert" : true).panzoom("zoom", ui.value);}});
         jQuery("#structimg").load(function(e){
