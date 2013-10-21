@@ -3,45 +3,72 @@
 <head>
 <title>Multiple Sequence Alignment</title>
 
-<script>{% autoescape off %}
+<script>
+{% autoescape off %}
 var jsonMSA = {{ jsonMSA }};
 {% endautoescape %}
-console.log()
 
-var gCanvasElement; var size = 0; var clickX = 0; var clickY = 0; var Xpos = 0; var Ypos = 0; var hydrophobicity_array = 0; var click = 0; var scheme = 1; var fontsize = 8;
-var name_width = 15;
-var font_string  = "8pt monospace";
-var aln_len = jsonMSA.msaSeqs[0].length;
-var numseq = jsonMSA.msaSeqs.length;
-	hydrophobicity_array = new Array(numseq);
-	for(i = 0;i < numseq;i++){
-		hydrophobicity_array[i] = new Array(aln_len);
-	}
-function onKeyDown(evt) {
-var element;var jump = 1;if(fontsize <= 8) {
+// the following code is based on the Kalignvu tool by Timo Lassmann timolassmann@gmail.com
+
+MSAlignment = function(jsonMSA) {
+    this.gCanvasElement; this.size = 0; this.clickX = 0; this.clickY = 0; this.Xpos = 0; this.Ypos = 0; this.hydrophobicity_array = 0; this.click = 0;
+    this.fontsize = 8;
+    this.name_width = 15;
+    this.font_string  = "8pt monospace";
+    this.aln_len = jsonMSA.msaSeqs[0].length;
+    this.numseq = jsonMSA.msaSeqs.length;
+    this.hydrophobicity_array = new Array(this.numseq);
+    for(i = 0;i < this.numseq;i++){
+	this.hydrophobicity_array[i] = new Array(this.aln_len);
+    }
+    this.a = new Array(this.numseq);
+for (var i = 0; i < this.a.length; i++) {
+    this.a[i] = new String (jsonMSA.msaSeqs[i]);
+}
+
+    this.n = new Array(this.numseq);
+for (var i = 0; i < this.n.length; i++) {
+    this.n[i] = new String (jsonMSA.msaNames[i]);
+}
+    this.div = document.getElementById('msaDrawzone');
+    this.gCanvasElement = document.getElementById("alignment");
+    this.drawing = new Object()
+    this.drawing.xpos = 0;
+    this.drawing.ypos = 0;
+    
+    this.scheme = 2;
+    this.conservation_routine();
+}
+
+MSAlignment.prototype = new Object();
+
+MSAlignment.prototype.init = function()
+{
+	this.gCanvasElement.width=1 * jQuery(msa.div).parents(".modal").width();
+	this.gCanvasElement.height=3 * jQuery(msa.div).parents(".modal").height();
+	jQuery(this.gCanvasElement).on("mousedown", this, this.record_pos);
+	jQuery(this.gCanvasElement).on("mouseup", this, this.record_pos);
+	jQuery(document).on("keydown", this, this.onKeyDown);
+	jQuery(this.gCanvasElement).on("click", this, this.reset_click);
+}
+
+MSAlignment.prototype.onKeyDown = function(evt) {
+var msaObject = evt.data;
+var element;var jump = 1;
+if(msaObject.fontsize <= 8) {
 	jump = 5;
 }
-	if (evt.keyCode == 39) draw(Xpos+jump, Ypos ,0);
-	else if (evt.keyCode == 40)draw(Xpos,  Ypos+jump ,0);
-	else if (evt.keyCode == 38)draw(Xpos,  Ypos-jump ,0);
-	else if (evt.keyCode == 37)draw(Xpos-jump,  Ypos ,0);
-	else if (evt.keyCode == 189)draw(0, 0 , -4);
-	else if (evt.keyCode == 187)draw(0, 0 , 4);
-	else if (evt.keyCode == 109)draw(0, 0 , -4);
-	else if (evt.keyCode == 61)draw(0, 0 , 4);
-}
-	document.addEventListener("keydown", onKeyDown, false);
-var a = new Array(numseq);
-for (var i = 0; i < a.length; i++) {
-    a[i] = new String (jsonMSA.msaSeqs[i]);
+	if (evt.keyCode == 39) msaObject.draw(msaObject.Xpos+jump, msaObject.Ypos ,0);
+	else if (evt.keyCode == 40)msaObject.draw(msaObject.Xpos,  msaObject.Ypos+jump ,0);
+	else if (evt.keyCode == 38)msaObject.draw(msaObject.Xpos,  msaObject.Ypos-jump ,0);
+	else if (evt.keyCode == 37)msaObject.draw(msaObject.Xpos-jump,  msaObject.Ypos ,0);
+	else if (evt.keyCode == 189)msaObject.draw(0, 0 , -4);
+	else if (evt.keyCode == 187)msaObject.draw(0, 0 , 4);
+	else if (evt.keyCode == 109)msaObject.draw(0, 0 , -4);
+	else if (evt.keyCode == 61)msaObject.draw(0, 0 , 4);
 }
 
-var n = new Array(numseq);
-for (var i = 0; i < n.length; i++) {
-    n[i] = new String (jsonMSA.msaNames[i]);
-}
-
-function Joshua_annotation(x,ctx) {
+MSAlignment.prototype.Custom1_annotation = function(x,ctx) {
 switch (x){
 	case 'A':
 	case 'F':
@@ -81,7 +108,8 @@ switch (x){
 		break;
 }
 }
-function Nikos_annotation(x,ctx) {
+
+MSAlignment.prototype.Custom2_annotation = function(x,ctx) {
 switch (x){
 	case 'B':
 	case 'Z':
@@ -128,7 +156,8 @@ switch (x){
 		break;
 }
 }
-function hydro_annotation(x,ctx) {
+
+MSAlignment.prototype.hydro_annotation= function(x,ctx) {
 switch (x){
 	case -4:
 		ctx.fillStyle = "#00008b";
@@ -162,7 +191,8 @@ switch (x){
 		break;
 }
 }
-function kdval(x) {
+
+MSAlignment.prototype.kdval = function(x) {
 switch (x){
 	case 'A':
 		return 1.8;
@@ -244,7 +274,8 @@ switch (x){
 		break;
 }
 }
-function default_dna_annotation(x,ctx) {
+
+MSAlignment.prototype.default_dna_annotation = function(x,ctx) {
 switch (x){
 	case 'A':
 		ctx.fillStyle = "#8470ff";
@@ -266,7 +297,8 @@ switch (x){
 		break;
 }
 }
-function strong_dna_annotation(x,ctx) {
+
+MSAlignment.prototype.strong_dna_annotation = function(x,ctx) {
 switch (x){
 	case 'A':
 		ctx.fillStyle = "#32cd32";
@@ -287,63 +319,72 @@ switch (x){
 		ctx.fillStyle = "#ffffff";
 		break;
 }
-}
-function hydrophobicity(x) {
-var run  = 0;var c = 0;var score = 0;var tmp =  new Array (aln_len);var tmp_val =  new Array (aln_len);var kd = [1.8,0,2.5,-3.5,-3.5,2.8,-0.4,-3.2,4.5,0,-3.9,3.8,1.9,-3.5,0,-1.6,-3.5,-4.5,-0.8,-0.7,0,4.2,-0.9,0,-1.3,0];	if ( typeof hydrophobicity.window == 'undefined' ) {
-		hydrophobicity.window = x;
-		run  = 1;	}else{
-		if (hydrophobicity.window!= x ) {
-			hydrophobicity.window = x;
+};
+
+MSAlignment.prototype.hydrophobicity = function(x) {
+var run  = 0;var c = 0;var score = 0;
+var tmp =  new Array (this.aln_len);
+var tmp_val =  new Array (this.aln_len);
+// var kd = [1.8,0,2.5,-3.5,-3.5,2.8,-0.4,-3.2,4.5,0,-3.9,3.8,1.9,-3.5,0,-1.6,-3.5,-4.5,-0.8,-0.7,0,4.2,-0.9,0,-1.3,0];
+if ( typeof this.hydrophobicity.window == 'undefined' ) {
+		this.hydrophobicity.window = x;
+		run  = 1;	}else{ 
+		if (this.hydrophobicity.window!= x ) {
+			this.hydrophobicity.window = x;
 			run  = 1;		}
 	}
 	if (run == 1) {
-		for(i = 0;i < numseq;i++){
-			for(j = 0;j < aln_len;j++){
-				hydrophobicity_array[i][j] = -99;
+		for(i = 0;i < this.numseq;i++){
+			for(j = 0;j < this.aln_len;j++){
+				this.hydrophobicity_array[i][j] = -99;
 			}
 		}
-		for(i = 0;i < numseq;i++){
-			c  = 0;			for(j = 0;j < aln_len;j++){
-				if(a[i].charAt (j) >= 'A' && a[i].charAt (j) <= 'Z'){
-					tmp[c] = a[i].charAt(j);
+		for(i = 0;i < this.numseq;i++){
+			c  = 0;
+			for(j = 0;j < this.aln_len;j++){
+				if(this.a[i].charAt (j) >= 'A' && this.a[i].charAt (j) <= 'Z'){
+					tmp[c] = this.a[i].charAt(j);
 					c = c + 1;
 				}
 			}
-			for(j = 0;j < aln_len;j++){
+			for(j = 0;j < this.aln_len;j++){
 				tmp_val[j] = -99;
 			}
 			for (j = 0;j <= c - x;j++){
 				score = 0;
 				for ( g = 0; g < x;g++){
-					score += kdval (tmp[j+g]);
+					score += this.kdval (tmp[j+g]);
 				}
 				score =  score / x;
 				tmp_val[parseInt(j+ x/2)] = parseInt(score);
 			}
-			c  = 0;			for(j = 0;j < aln_len;j++){
-				if(a[i].charAt (j) >= 'A' && a[i].charAt (j) <= 'Z'){
-					hydrophobicity_array[i][j]  = tmp_val[c];
+			c  = 0;		
+			for(j = 0;j < this.aln_len;j++){
+				if(this.a[i].charAt (j) >= 'A' && this.a[i].charAt (j) <= 'Z'){
+					this.hydrophobicity_array[i][j]  = tmp_val[c];
 					c = c + 1;
 				}
 			}
 		}
 	}
-}
-function conservation_routine() {
-var run  = 0;var c = 0;var score = 0;var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";var tmp =  new Array (26);for(i = 0;i < aln_len;i++){
+};
+
+MSAlignment.prototype.conservation_routine = function() {
+var run  = 0;var c = 0;var score = 0;var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";var tmp =  new Array (26);
+for(i = 0;i < this.aln_len;i++){
 	for(j = 0;j < 26;j++){
 		tmp[j] = 0;
 	}
-	for(j = 0;j < numseq;j++){
-		c = alphabet.indexOf(a[j].charAt (i)) ;
+	for(j = 0;j < this.numseq;j++){
+		c = alphabet.indexOf(this.a[j].charAt (i)) ;
 		if(c != -1){
 			tmp[c] = tmp[c] + 1;
 		}
 	}
 	c = -1;
 	for(j = 0;j < 26;j++){
-		if(tmp[j] / numseq> c){
-			c = tmp[j] /numseq;
+		if(tmp[j] / this.numseq> c){
+			c = tmp[j] /this.numseq;
 		}
 	}
 	if (c > 0.9) score = 10;
@@ -355,17 +396,18 @@ var run  = 0;var c = 0;var score = 0;var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	else if (c > 0.3)score = 4;
 	else if (c > 0.2 )score = 3;
 	else score = 2;
-	for(j = 0;j < numseq;j++){
-		c = alphabet.indexOf(a[j].charAt (i)) ;
+	for(j = 0;j < this.numseq;j++){
+		c = alphabet.indexOf(this.a[j].charAt (i)) ;
 		if(c != -1){
-			hydrophobicity_array[j][i] = score;
+			this.hydrophobicity_array[j][i] = score;
 		}else{
-			hydrophobicity_array[j][i] = 2;
+			this.hydrophobicity_array[j][i] = 2;
 		}
 	}
 }
 }
-function  conservation_color(x,ctx) {
+
+MSAlignment.prototype.conservation_color = function(x,ctx) {
 switch (x){
 	case 10:
 		ctx.fillStyle = "#0000ff";
@@ -397,191 +439,189 @@ switch (x){
 		break;
 }
 }
-function change_scheme(val)
+
+MSAlignment.prototype.change_scheme = function(val)
 {
 	if(val > 6){
-		hydrophobicity(val);
-		scheme = 5;
+		this.hydrophobicity(val);
+		this.scheme = 5;
 	}else if(val ==2){
-		conservation_routine();
-		scheme = 2 ;
+		this.conservation_routine();
+		this.scheme = 2 ;
 	}else{
-	scheme = val;
+	this.scheme = val;
 }
 }
-function reset_click()
+
+MSAlignment.prototype.reset_click = function(evt)
 {
-	click = 0;
+	evt.data.click = 0;
 }
-function init()
+
+
+MSAlignment.prototype.record_pos = function(e)
 {
-div=document.getElementById('msaDrawzone');
-	gCanvasElement = document.getElementById("alignment");
-	gCanvasElement.width=1 * jQuery(div).parents(".modal").width();
-	gCanvasElement.height=3 * jQuery(div).parents(".modal").height();
-	gCanvasElement.addEventListener("mousedown", record_pos, false);
-	gCanvasElement.addEventListener("mouseup", record_pos, true);
-	gCanvasElement.addEventListener("click", reset_click, false);
-}
-function record_pos(e)
-{
+var msaObject = e.data;
 var x;
 var y;
 var x_move;
 var y_move;
-var xoffset = name_width*(fontsize + 4) +10;if (e.pageX || e.pageY) {
+var xoffset = msaObject.name_width*(msaObject.fontsize + 4) +10;
+if (e.pageX || e.pageY) {
 	x = e.pageX;
 	y = e.pageY;
-}	else {
+} else {
 	x = e.clientX +document.body.scrollLeft + document.documentElement.scrollLeft;
 y = e.clientY +document.body.scrollTop + document.documentElement.scrollTop;
 }
-	x -= gCanvasElement.offsetLeft;
-	y -= gCanvasElement.offsetTop;
+	x -= msaObject.gCanvasElement.offsetLeft;
+	y -= msaObject.gCanvasElement.offsetTop;
 if(y <  50 && x > xoffset){
- x_move = parseInt((x- xoffset) / (gCanvasElement.width- xoffset) * aln_len);
+ x_move = parseInt((x- xoffset) / (msaObject.gCanvasElement.width- xoffset) * msaObject.aln_len);
  y_move = Ypos;
-	draw(x_move, y_move,0);
-	click = 0;
+	msaObject.draw(x_move, y_move,0);
+	msaObject.click = 0;
 }
-if(click == 0){
- clickX = x;
- clickY = y;
-	click = 1;
+if(msaObject.click == 0){
+ msaObject.clickX = x;
+ msaObject.clickY = y;
+	msaObject.click = 1;
 }else{
-	x_move = Xpos+ parseInt((clickX - x) /  (fontsize + 4));
-	y_move = Ypos+ parseInt((clickY - y) /  (fontsize + 4));
+	x_move = msaObject.Xpos+ parseInt((msaObject.clickX - x) /  (msaObject.fontsize + 4));
+	y_move = msaObject.Ypos+ parseInt((msaObject.clickY - y) /  (msaObject.fontsize + 4));
 if(x_move < 0){
 	x_move = 0;
 }
-	draw(x_move, y_move,0);
-	click = 0;
+	msaObject.draw(x_move, y_move,0);
+	msaObject.click = 0;
 }
 }
-function showValue(newValue)
+
+// maybe improved...
+MSAlignment.prototype.showValue = function(newValue)
 {
 	document.getElementById("range").innerHTML=newValue;
 }
-function draw(x,y,size) {
-var yoffset = 50;var xoffset = 0;if ( typeof draw.xpos == 'undefined' ) {
-	draw.xpos = 0;
-}
-if(typeof draw.ypos == 'undefined' ) {
-	draw.ypos = 0;
-}
+
+MSAlignment.prototype.draw = function(x,y,size) {
+var yoffset = 50;var xoffset = 0;
 if(x !=  0) {
-	draw.xpos = parseInt(x);}
+	this.drawing.xpos = parseInt(x);}
 if(y !=  0) {
-	draw.ypos = parseInt(y);}
-if(draw.ypos +10 >  numseq ) {
-	draw.ypos = numseq - 10;
+	this.drawing.ypos = parseInt(y);}
+if(this.drawing.ypos +10 >  this.numseq ) {
+	this.drawing.ypos = this.numseq - 10;
 }
-if(draw.xpos +10 >  aln_len ) {
-	draw.xpos = aln_len - 10;
+if(this.drawing.xpos +10 >  this.aln_len ) {
+	this.drawing.xpos = this.aln_len - 10;
 }
-if(draw.ypos < 0 ) {
-	draw.ypos = 0;
+if(this.drawing.ypos < 0 ) {
+	this.drawing.ypos = 0;
 }
-if(draw.xpos  <  0  ) {
-	draw.xpos = 0;
+if(this.drawing.xpos  <  0  ) {
+	this.drawing.xpos = 0;
 }
 if(size != 0){
-	fontsize = fontsize + size;
-	if(fontsize  <  4  ) 	fontsize = 4;
-	if(fontsize  > 96  ) 	fontsize = 96;
-	font_string = fontsize +  "pt monospace";
+	this.fontsize = this.fontsize + size;
+	if(this.fontsize  <  4  ) 	this.fontsize = 4;
+	if(this.fontsize  > 96  ) 	this.fontsize = 96;
+	this.font_string = this.fontsize +  "pt monospace";
 }
-Xpos = draw.xpos;xoffset = name_width*(fontsize + 4) +10;var canvas = document.getElementById("alignment");
-if (canvas.getContext) {
-var ctx = canvas.getContext("2d");
-ctx.clearRect(0,0,canvas.width,canvas.height);
+this.Xpos = this.drawing.xpos;xoffset = this.name_width*(this.fontsize + 4) +10;//var canvas = document.getElementById("alignment");
+if (this.gCanvasElement.getContext) {
+var ctx = this.gCanvasElement.getContext("2d");
+ctx.clearRect(0,0,this.gCanvasElement.width,this.gCanvasElement.height);
 	ctx.beginPath();
 	ctx.moveTo(xoffset,30);
-	ctx.lineTo(canvas.width,30);
+	ctx.lineTo(this.gCanvasElement.width,30);
 	ctx.strokeStyle = "#000";
 	ctx.closePath();
 	ctx.stroke();
 	ctx.font =  "12pt monospace";
 
-	for(j = 0; j < aln_len;j +=100 ){
+	for(j = 0; j < this.aln_len;j +=100 ){
 		ctx.fillStyle = "#0000000";
-		ctx.fillText(j, j / aln_len*  (canvas.width- xoffset)  + xoffset,25);
+		ctx.fillText(j, j / this.aln_len*  (this.gCanvasElement.width- xoffset)  + xoffset,25);
 		ctx.beginPath();
-		ctx.moveTo( j / aln_len*  (canvas.width- xoffset)  + xoffset,25);
-		ctx.lineTo( j / aln_len*  (canvas.width- xoffset)  + xoffset,35);
+		ctx.moveTo( j / this.aln_len*  (this.gCanvasElement.width- xoffset)  + xoffset,25);
+		ctx.lineTo( j / this.aln_len*  (this.gCanvasElement.width- xoffset)  + xoffset,35);
 		ctx.strokeStyle = "#000";
 		ctx.closePath();
 		ctx.stroke();
 	}
 	ctx.beginPath();
-	ctx.rect((Xpos /  aln_len) *  (canvas.width- xoffset)  + xoffset , 10, 3, 40);
+	ctx.rect((this.Xpos /  this.aln_len) *  (this.gCanvasElement.width- xoffset)  + xoffset , 10, 3, 40);
 	ctx.fillStyle = "#F62817";
 	ctx.fill();
 	ctx.fillStyle = "#000000";
-if((numseq - draw.ypos) * (fontsize + 4) <  canvas.height-yoffset){
-	draw.ypos  =  parseInt(numseq  -  parseInt((canvas.height-yoffset)   /    ( fontsize  + 4))); 	if(draw.ypos < 0 ) {
-		draw.ypos = 0;
+if((this.numseq - this.drawing.ypos) * (this.fontsize + 4) <  this.gCanvasElement.height-yoffset){
+	this.drawing.ypos  =  parseInt(this.numseq  -  parseInt((this.gCanvasElement.height-yoffset)   /    ( this.fontsize  + 4))); 	
+	if(this.drawing.ypos < 0 ) {
+		this.drawing.ypos = 0;
 	}
 }
-Ypos = draw.ypos;	ctx.font = font_string;
-for(i = draw.ypos;i < numseq;i++){
-	for(j = 0; j < name_width;j++){
-		ctx.fillText(n[i].charAt (j), (j+1) * (fontsize + 4), (i+1  - draw.ypos)*(fontsize+4)+yoffset);
+this.Ypos = this.drawing.ypos;	ctx.font = this.font_string;
+for(i = this.drawing.ypos;i < this.numseq;i++){
+	for(j = 0; j < this.name_width;j++){
+		ctx.fillText(this.n[i].charAt (j), (j+1) * (this.fontsize + 4), (i+1  - this.drawing.ypos)*(this.fontsize+4)+yoffset);
 	}
-	for(j = draw.xpos; j < aln_len;j++){
-		switch (parseInt(scheme)){
+	for(j = this.drawing.xpos; j < this.aln_len;j++){
+		switch (parseInt(this.scheme)){
 			case 0:
-				Joshua_annotation(a[i].charAt (j),ctx);
+				this.Custom1_annotation(this.a[i].charAt (j),ctx);
 				break;
 			case 1:
-				Nikos_annotation(a[i].charAt (j),ctx);
+				this.Custom2_annotation(this.a[i].charAt (j),ctx);
 				break;
 			case 2:
-				conservation_color(hydrophobicity_array[i][j] ,ctx);
+				this.conservation_color(this.hydrophobicity_array[i][j] ,ctx);
 				break;
 			case 3:
-				default_dna_annotation(a[i].charAt (j) ,ctx);
+				this.default_dna_annotation(this.a[i].charAt (j) ,ctx);
 				break;
 			case 4:
-				strong_dna_annotation(a[i].charAt (j) ,ctx);
+				this.strong_dna_annotation(this.a[i].charAt (j) ,ctx);
 				break;
 			case 5:
-				hydro_annotation(hydrophobicity_array[i][j] ,ctx);
+				this.hydro_annotation(this.hydrophobicity_array[i][j] ,ctx);
 				break;
 			default:
-				Joshua_annotation(a[i].charAt (j),ctx);
+				this.conservation_color(this.hydrophobicity_array[i][j] ,ctx);
 				break;
 }
 		ctx.beginPath();
-		ctx.rect((j-draw.xpos) * (fontsize + 4)-4+xoffset, (i  - draw.ypos)*(fontsize+4)+yoffset +4, (fontsize + 4), (fontsize + 4));
+		ctx.rect((j-this.drawing.xpos) * (this.fontsize + 4)-4+xoffset, (i  - this.drawing.ypos)*(this.fontsize+4)+yoffset +4, (this.fontsize + 4), (this.fontsize + 4));
 		ctx.fill();
 	ctx.fillStyle = "#000000";
-		ctx.fillText(a[i].charAt (j), (j-draw.xpos) * (fontsize + 4)+xoffset, (i+1  - draw.ypos)*(fontsize+4)+yoffset);
-		if((j-draw.xpos)* (fontsize + 4)> canvas.width){
-			j = aln_len
+		ctx.fillText(this.a[i].charAt (j), (j-this.drawing.xpos) * (this.fontsize + 4)+xoffset, (i+1  -this.drawing.ypos)*(this.fontsize+4)+yoffset);
+		if((j-this.drawing.xpos)* (this.fontsize + 4)> this.gCanvasElement.width){
+			j = this.aln_len
 		}
 	}
 }
 }
 }
-init();draw(0,0,0);
+/*init();draw(0,0,0);*/
+msa = new MSAlignment(jsonMSA);
+msa.init();msa.draw(0,0,0);
 </script>
 </head>
 
 <body>
 
-	Change color-scheme:<select onchange="change_scheme(this.value); draw(0,0,0); ">
-		<!--<option value="0">Joshua</option>-->
-		<option value="1">Clustal-like</option>
-		<option value="2">Conservation</option>
-		<option value="7">Hydro 7</option>
-		<option value="21">Hydro 21</option>
-		<!--<option value="3">Julia</option>
-		<option value="4">Tania</option>-->
+	Change color-scheme:<select onchange="msa.change_scheme(this.value); msa.draw(0,0,0); ">
+		<option value="2" selected>Conservation</option>
+		<option value="0">Custom1</option>
+		<option value="1">Custom2</option>
+		<option value="7">Hydrophobicity1</option>
+		<option value="10">Hydrophobicity2</option>
+		<option value="3">Default DNA Annotation</option>	
+		<option value="4">Strong DNA Annotation</option>
+                
 	</select>
 	<div id="msaDrawzone"><canvas id="alignment"></canvas></div>
 
 
 	</body>
-
+    
 </html>
