@@ -10,13 +10,6 @@ Monomer::Monomer(uint32_t id)
 : m_id(id), m_parentId(0), m_enantiomerId(0), m_name(), m_configuration(Configuration::L)
 {}
 
-Monomer::Monomer(Monomer&& other)
-: m_id(other.m_id), m_parentId(other.m_parentId), m_enantiomerId(other.m_enantiomerId), m_name(std::move(other.m_name)), m_configuration(other.m_configuration), m_modifications(other.m_modifications)
-{}
-
-Monomer::~Monomer()
-{}
-
 uint32_t Monomer::id() const
 {
     return m_id;

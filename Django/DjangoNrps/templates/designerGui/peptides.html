@@ -38,7 +38,13 @@ Welcome to your collection of non-ribosomal peptides. Choose one of your existin
 			{% for nrp in nrpList %}
 				<tr>
 					<td>
-						<a href={% url 'nrpDesigner' nrp.pk %}>{{ nrp.name }}</a>
+                        <div class="btn-group">
+                            <a href="{% url 'nrpDesigner' nrp.pk %}" class="btn btn-small">{{ nrp.name }}</a>
+                            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{%url 'createLibrary' nrp.pk %}">Create library</a></li>
+                            </ul>
+                        </div>
 					</td>
 					<td>
 						{{ nrp.description|truncatewords:10 }}

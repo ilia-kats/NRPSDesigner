@@ -35,6 +35,7 @@ public:
     virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) throw (DatabaseError);
     virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() throw (DatabaseError);
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError);
+    virtual std::shared_ptr<Domain> createDomain(uint32_t) throw (DatabaseError);
     virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError);
     virtual void fillOrigin(Origin*) throw (DatabaseError);
     virtual bool  isDummy(const std::shared_ptr<Domain>&);
@@ -48,6 +49,7 @@ private:
     template<class D, class initFunc, class RD=D>
     std::vector<std::shared_ptr<RD>> getCoreDomains(sql::PreparedStatement*, const initFunc&) throw (DatabaseError);
     Monomer makeMonomer(sql::ResultSet*);
+    void fillDomain(const std::shared_ptr<Domain>&, sql::ResultSet*) throw (DatabaseError);
     DatabaseError makeException(const sql::SQLException &e) const;
 
     sql::Connection *m_connection;
@@ -57,6 +59,7 @@ private:
     sql::PreparedStatement *m_stmtCoreDomainsSubstrate;
     sql::PreparedStatement *m_stmtCoreDomainsNoSubstrate;
     sql::PreparedStatement *m_stmtDomain;
+    sql::PreparedStatement *m_stmtDomainSubstrate;
     sql::PreparedStatement *m_stmtProduct;
     sql::Statement *m_stmtOrigin;
 

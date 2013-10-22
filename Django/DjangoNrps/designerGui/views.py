@@ -87,6 +87,7 @@ def peptide_delete(request, cid):
     else:
         return HttpResponseNotFound()
 
+
 class NRPListView(TemplateView):
     template_name = 'designerGui/peptides.html'
 
@@ -96,6 +97,7 @@ class NRPListView(TemplateView):
         context['title'] = 'NRPS Designer'
         context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
         return context
+
 
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
@@ -117,22 +119,43 @@ class SpeciesListView(ListView):
         context['substrateOrder'] = substrateOrder
         context['indigoidineTagged'] = nrp.indigoidineTagged
 
-        initialPic = nrp.getPeptideSequenceForStructView()
-        context['initialPic'] = initialPic
+        context['initialPic'] = nrp.getPeptideSequenceForStructView()
         return context
 
 @login_required
+def createLibrary(request, pid):
+    t = loader.get_template('designerGui/createlibrary.html')
+    c = RequestContext(request)
+    nrp = NRP.objects.get(pk= pid)
+    substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+    c['substrateOrder'] = substrateOrder
+    c['indigoidineTagged'] = nrp.indigoidineTagged
+    c['pid'] = pid
+    initialPic = nrp.getPeptideSequenceForStructView()
+    c['initialPic'] = initialPic
+    c['scaffold'] = nrp.monomers.order_by('substrateOrder')
+    return HttpResponse(t.render(c))
+
+def processLibrary(request, pid):
+    if request.method == 'POST':
+        data = json.loads(request.raw_post_data)
+        return JsonResponse(data)
+
+@login_required
 def get_available_monomers(request):
-    if request.method == 'POST' and "monomer[]" in request.POST and "selected" in request.POST:
+    if request.method == 'POST' and "monomer[]" in request.POST:
         monomers = request.POST.getlist("monomer[]")
-        selected = int(request.POST['selected'])
+        if 'selected' in request.POST:
+            selected = int(request.POST['selected'])
+        else:
+            selected = len(monomers) - 1
         if toBool(request.POST['current']):
             if selected > 0:
                 chirality = Substrate.objects.get(pk=monomers[selected - 1]).chirality
             else:
                 chirality = None
         else:
-            chirality = Substrate.objects.get(pk=monomers[selected]).chirality
+            chirality = Substrate.objects.get(pk=monomers[-1]).chirality
         substrates = Substrate.objects.exclude(user__username='sbspks')
         if not toBool(request.POST['current']) or selected == len(monomers) - 1:
             aas = filter(lambda x: x.can_be_added(chirality, toBool(request.POST['curatedonly'])), substrates)
@@ -171,7 +194,7 @@ def get_available_monomers(request):
     jsonlist.sort(lambda x,y: cmp(x['text'], y['text']))
     return JsonResponse({"monomers": json, "monomerslist": jsonlist})
 
-
+@login_required
 def submit_nrp(request):
     nrpxml = x.Element('nrp')
     for monomer in request.POST.getlist("as[]"):

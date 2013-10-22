@@ -14,9 +14,7 @@ class NRPSDESIGNER_EXPORT Monomer
 {
 public:
     Monomer();
-    Monomer(Monomer&&);
     Monomer(uint32_t);
-    ~Monomer();
 
     uint32_t id() const;
     void setId(uint32_t);

@@ -9,19 +9,14 @@ include_directories(
 configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SRCS
-    monomer.cpp
-
     domains/domaintypea.cpp
     domains/domaintypec.cpp
     domains/domaintypet.cpp
     domains/domaintypee.cpp
     domains/domaintypete.cpp
     domains/domaintypeaoxa.cpp
-
-    global_enums.cpp
-
     domain.cpp
-
+    monomer.cpp
     origin.cpp
     product.cpp
     abstractdatabaseconnector.cpp
@@ -31,6 +26,11 @@ set(SRCS
     taxonbuilder.cpp
     nrps.cpp
     nrpsbuilder.cpp
+    nrpslibrary.cpp
+
+    global_enums.cpp
+
+    globals_internal.cpp
 )
 set(HEADERS
     monomer.h
@@ -50,6 +50,7 @@ set(HEADERS
     taxonbuilder.h
     nrps.h
     nrpsbuilder.h
+    nrpslibrary.h
     exceptions.h
     ${CMAKE_CURRENT_BINARY_DIR}/nrpsdesigner_export.h
     ${CMAKE_CURRENT_BINARY_DIR}/config.h

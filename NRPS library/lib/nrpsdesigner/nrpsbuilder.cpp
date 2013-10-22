@@ -2,6 +2,7 @@
 #include "abstractdatabaseconnector.h"
 #include "origin.h"
 #include "product.h"
+#include "globals_internal.h"
 
 #include <queue>
 #include <algorithm>
@@ -28,11 +29,6 @@ typedef std::tuple<float, Node*, Node*> dijkstra_weight;
 
 namespace std
 {
-    size_t NRPSDESIGNER_EXPORT hash<pair<uint32_t, uint32_t>>::operator()(const pair<uint32_t, uint32_t> &s) const
-{
-    return hash<uint32_t>()(s.first) ^ (std::hash<uint32_t>()(s.second) << 1);
-}
-
 template<>
 struct greater<dijkstra_weight>
 {
@@ -44,10 +40,24 @@ public:
 };
 }
 
+NrpsBuilder::NrpsBuilder()
+: m_scaffoldNrp(nullptr), m_scaffoldNrps(nullptr)
+{}
+
+NrpsBuilder::NrpsBuilder(const std::vector<Monomer> *scaffoldNrp, const Nrps *scaffoldNrps)
+: m_scaffoldNrp(scaffoldNrp), m_scaffoldNrps(scaffoldNrps)
+{}
+
+void NrpsBuilder::setScaffold(const std::vector<Monomer> *scaffoldNrp, const Nrps *scaffoldNrps)
+{
+    m_scaffoldNrp = scaffoldNrp;
+    m_scaffoldNrps = scaffoldNrps;
+}
+
 Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError)
 {
     m_db = AbstractDatabaseConnector::getInstance();
-    Nrps nrps(nrp);
+    Nrps ret;
     m_startn = new Node();
     m_endn = new Node();
     m_graph.push_back(m_startn);
@@ -64,7 +74,32 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
     std::vector<Node*> lastmodulenodes;
     Configuration lastmonomerconfiguration;
 
-    for (auto iter = nrp.begin(); iter != nrp.end(); ++iter) {
+    auto iter = nrp.begin();
+    auto end = nrp.end();
+    Nrps::const_iterator nrpsiter;
+    if (m_scaffoldNrp != nullptr && m_scaffoldNrps != nullptr) {
+        auto nrpiter = m_scaffoldNrp->begin();
+        nrpsiter = m_scaffoldNrps->begin();
+        lastmodulenodes.push_back(m_startn);
+        for (; iter != nrp.end() && nrpiter != m_scaffoldNrp->end() && iter->id() == nrpiter->id(); ++iter, ++nrpiter) {
+            for (; (*nrpsiter)->type() != DomainType::C; ++nrpsiter) {
+                std::shared_ptr<std::vector<Node*>> neighs(new std::vector<Node*>());
+                Node *n = makeNode(*nrpsiter);
+                neighs->push_back(n);
+                lastmodulenodes[0]->neighbors = neighs;
+                lastmodulenodes[0] = n;
+                m_graph.push_back(n);
+            }
+        }
+        end = iter + 1;
+        ++nrpiter;
+        if (end->configuration() != nrpiter->configuration())
+            ++end;
+        for (int i = 0; i < end - iter; ++i)
+            while (nrpsiter != m_scaffoldNrps->end() && (*nrpsiter)->type() != DomainType::C)
+                ++nrpsiter;
+    }
+    for (; iter != end; ++iter) {
         auto adomains = m_db->getADomains(*iter, false);
         bool needtdomainsc = false, needtdomainse = false;
         std::shared_ptr<std::vector<Node*>> amatchingdomainnodes(new std::vector<Node*>());
@@ -124,7 +159,20 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
         }
         lastmonomerconfiguration = iter->configuration();
     }
-    if (indTag) {
+
+    if (m_scaffoldNrp != nullptr && m_scaffoldNrps != nullptr) {
+        for (; nrpsiter != m_scaffoldNrps->end(); ++nrpsiter) {
+            std::shared_ptr<std::vector<Node*>> neighs(new std::vector<Node*>());
+            Node *n = makeNode(*nrpsiter);
+            neighs->push_back(n);
+            for (Node *ln : lastmodulenodes) {
+                ln->neighbors = neighs;
+            }
+            lastmodulenodes.clear();
+            lastmodulenodes.push_back(n);
+            m_graph.push_back(n);
+        }
+    } else if (indTag) {
         Monomer glu = m_db->getMonomer("gln");
         auto aoxa = m_db->getADomains(glu, true);
         std::shared_ptr<std::vector<Node*>> tdomainnodes(new std::vector<Node*>());
@@ -150,20 +198,23 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
             tdomainnodes->push_back(t);
             m_graph.push_back(t);
         }
-        nrps.setIndigoidineTagged(true);
+        ret.setIndigoidineTagged(true);
     }
-
     std::shared_ptr<std::vector<Node*>> goal(new std::vector<Node*>(1, m_endn));
-    std::shared_ptr<std::vector<Node*>> tedomainnodes(new std::vector<Node*>());
-    for (const auto &domain : tedomains) {
-        Node *n = makeNode(domain);
-        tedomainnodes->push_back(n);
-        m_graph.push_back(n);
-        n->neighbors = goal;
+    if (m_scaffoldNrp == nullptr || m_scaffoldNrps == nullptr || end == nrp.end()) {
+        std::shared_ptr<std::vector<Node*>> tedomainnodes(new std::vector<Node*>());
+        for (const auto &domain : tedomains) {
+            Node *n = makeNode(domain);
+            tedomainnodes->push_back(n);
+            m_graph.push_back(n);
+            n->neighbors = goal;
+        }
+        for (Node *n : lastmodulenodes)
+            n->neighbors = tedomainnodes;
+    } else {
+        for (Node *n : lastmodulenodes)
+            n->neighbors = goal;
     }
-    for (Node *n : lastmodulenodes)
-        n->neighbors = tedomainnodes;
-
     m_graph.push_back(m_endn);
     TaxonBuilder::getInstance()->process();
 
@@ -187,18 +238,19 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
     Node *cur = m_parents[m_endn];
     while (cur != m_startn) {
         m_db->fillDomain(cur->data);
-        nrps.push_back(cur->data);
+        ret.push_back(cur->data);
         cur->data->setDeterminedLinkerBefore(cur->data->nativeDefinedLinkerBefore().empty() ? cur->data->nativePfamLinkerBefore() : cur->data->nativeDefinedLinkerBefore());
         cur->data->setDeterminedLinkerAfter(std::string());
         cur = m_parents[cur];
     }
-    std::reverse(nrps.begin(), nrps.end());
+    std::reverse(ret.begin(), ret.end());
     for (Node *n : m_graph)
         delete n;
     m_startn = nullptr;
     m_endn = nullptr;
     m_parents.clear();
-    return nrps;
+    m_graph.clear();
+    return ret;
 }
 
 std::shared_ptr<std::vector<Node*>> NrpsBuilder::makeCDomains(const Monomer &m, std::shared_ptr<std::vector<Node*>> amatchingdomainnodes, std::shared_ptr<std::vector<Node*>> anotmatchingdomainnodes, Configuration lastmonomerconfiguration)
@@ -232,7 +284,7 @@ std::shared_ptr<std::vector<Node*>> NrpsBuilder::makeCDomains(const Monomer &m, 
     return cdomainnodes;
 }
 
-Node* NrpsBuilder::makeNode(std::shared_ptr<Domain> d)
+Node* NrpsBuilder::makeNode(const std::shared_ptr<Domain> &d)
 {
     Node *n = new Node(d);
     if (d->origin() != nullptr && !m_taxonCache.count(d->origin()->taxId())) {
@@ -253,27 +305,5 @@ float NrpsBuilder::makeWeight(Node *lhs, Node *rhs)
             return 0;
         lhs = n;
     }
-    uint32_t taxid1 = lhs->data->origin()->taxId(), taxid2 = rhs->data->origin()->taxId();
-    std::pair<uint32_t, uint32_t> key(std::min(taxid1, taxid2), std::max(taxid1, taxid2));
-    float weight;
-    if (!m_weightCache.count(key)) {
-        auto dist = *m_taxonCache.at(taxid1) - *m_taxonCache.at(taxid2);
-        weight = dist[0] + dist[1];
-        m_weightCache.emplace(key, weight);
-    } else
-        weight = m_weightCache[key];
-    if (!weight) // TODO: there could be multiple pathways producing the same product in the same organism
-        weight += (lhs->data->product()->id() != rhs->data->product()->id()) * 0.7;
-    if (!weight) {
-        int diff = lhs->data->module() - rhs->data->module();
-        if (diff > 0)
-            weight += 0.6;
-        else if (std::abs(diff) > 1)
-            weight += 0.5;
-        else if (std::abs(diff) == 1)
-            weight += (rhs->data->type() != DomainType::C) ? 0.4 : 0.1;
-        else if (std::abs(diff) == 0 && rhs->data->type() == DomainType::C)
-            weight += 0.2;
-    }
-    return weight;
+    return nrps::makeWeight(lhs->data, rhs->data, &m_taxonCache, &m_weightCache);
 }

@@ -4,6 +4,7 @@
 #include <exceptions.h>
 #include <nrpsbuilder.h>
 #include <taxonbuilder.h>
+#include <nrpslibrary.h>
 #include <networkoptions.h>
 
 #include <curl/curl.h>
@@ -30,16 +31,18 @@ int main(int argc, char *argv[])
     std::string outfile;
     std::string outsbol;
     bool indTag = false;
+    std::string inputnrps;
     po::options_description options("General options");
     options.add_options()("help,h", "print this help")
-                         ("monomers,m", po::value<std::string>(&monomersopt)->required(), "Comma-separated list of monomer ids for the NRP.")
+                         ("monomers,m", po::value<std::string>(&monomersopt), "Comma-separated list of monomer ids for the NRP.")
 #ifdef WITH_INTERNAL_XML
                          ("outfile,o", po::value<std::string>(&outfile), "Path to output file in internal XML format. Use - for stdout.")
 #endif
 #ifdef WITH_SBOL
                          ("outsbol,s", po::value<std::string>(&outsbol), "Path to output file in SBOL format. Use - for stdout.")
 #endif
-                         ("indigoidine-tag,t", po::bool_switch(&indTag), "Append an indigoidine tag to the NRP.");
+                         ("indigoidine-tag,t", po::bool_switch(&indTag), "Append an indigoidine tag to the NRP.")
+                         ("input-nrps,n", po::value<std::string>(&inputnrps), "Path to input NRPS file for library generation. Use - for stdin.");
     auto dbConn = AbstractDatabaseConnector::getInstance();
 
     TaxonBuilder *tb = TaxonBuilder::getInstance();
@@ -50,7 +53,7 @@ int main(int argc, char *argv[])
     po::store(po::command_line_parser(argc, argv).options(alloptions).run(), vm);
     po::store(po::parse_environment(tb->options(), [&tb](std::string s){return tb->mapEnvironment(s);}), vm);
 
-    if (argc == 1 || vm.count("help")) {
+    if (argc == 1 || vm.count("help") || !vm.count("monomers") && !vm.count("input-nrps")) {
         std::cout << alloptions;
         delete dbConn;
         return 0;
@@ -60,35 +63,51 @@ int main(int argc, char *argv[])
     try {
         dbConn->initialize();
 
-        std::vector<Monomer> monomers;
-        char *monomersch = (char*)std::malloc((monomersopt.length() + 1) * sizeof(char));
-        std::strncpy(monomersch, monomersopt.c_str(), monomersopt.length());
-        monomersch[monomersopt.length()] = '\0';
-        char *ptr = std::strtok(monomersch, ",");
-        while (ptr != nullptr) {
-            monomers.push_back(dbConn->getMonomer(std::atoi(ptr)));
-            ptr = std::strtok(nullptr, ",");
-        }
-        std::free(monomersch);
+        if (monomersopt.size()) {
+            std::vector<Monomer> monomers;
+            char *monomersch = (char*)std::malloc((monomersopt.length() + 1) * sizeof(char));
+            std::strncpy(monomersch, monomersopt.c_str(), monomersopt.length());
+            monomersch[monomersopt.length()] = '\0';
+            char *ptr = std::strtok(monomersch, ",");
+            while (ptr != nullptr) {
+                monomers.push_back(dbConn->getMonomer(std::atoi(ptr)));
+                ptr = std::strtok(nullptr, ",");
+            }
+            std::free(monomersch);
 
-        Nrps nrps = NrpsBuilder().build(monomers, indTag);
+            Nrps nrps = NrpsBuilder().build(monomers, indTag);
 #ifdef WITH_INTERNAL_XML
-        if (!outfile.empty()) {
-            if (outfile == "-")
-                nrps.toXml(std::cout);
-            else
-                nrps.toXml(outfile);
-        }
+            if (!outfile.empty()) {
+                if (outfile == "-")
+                    nrps.toXml(std::cout);
+                else
+                    nrps.toXml(outfile);
+            }
 #endif
 #ifdef WITH_SBOL
-        if (!outsbol.empty()) {
-            if (outsbol == "-")
-                nrps.toSbol(std::cout);
-            else
-                nrps.toSbol(outsbol);
-        }
+            if (!outsbol.empty()) {
+                if (outsbol == "-")
+                    nrps.toSbol(std::cout);
+                else
+                    nrps.toSbol(outsbol);
+            }
 #endif
-
+        } else {
+            NrpsLibrary lib;
+            if (inputnrps == "-")
+                lib.fromFile(std::cin);
+            else
+                lib.fromFile(inputnrps);
+            lib.makeLibrary();
+#ifdef WITH_INTERNAL_XML
+            if (!outfile.empty()) {
+                if (outfile == "-")
+                    lib.toXml(std::cout);
+                else
+                    lib.toXml(outfile);
+            }
+#endif
+        }
         delete dbConn;
         return 0;
     } catch (const NCBITaxonomyError &e) {

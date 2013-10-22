@@ -46,6 +46,9 @@ MySQLDatabaseConnector::~MySQLDatabaseConnector()
     if (m_stmtDomain != nullptr) {
         delete m_stmtDomain;
     }
+    if (m_stmtDomainSubstrate != nullptr) {
+        delete m_stmtDomainSubstrate;
+    }
     if (m_stmtProduct != nullptr) {
         delete m_stmtProduct;
     }
@@ -106,7 +109,8 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
     m_stmtCoreDomainsSubstrate = m_connection->prepareStatement(stmtCoreDomainsSubstrate);
     m_stmtCoreDomainsNoSubstrate = m_connection->prepareStatement(stmtCoreDomainsNoSubstrate);
 
-    m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc FROM databaseInput_domain AS d INNER JOIN databaseInput_cds AS c ON d.cds_id = c.id WHERE d.id = ?;");
+    m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.chirality AS chirality, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc, o.id AS oid, p.id AS pid, dtype.name AS type FROM databaseInput_domain AS d INNER JOIN (databaseInput_cds AS c, databaseInput_origin AS o, databaseInput_product AS p, databaseInput_type AS dtype) ON (d.cds_id = c.id AND c.origin_id = o.id AND c.product_id = p.id AND d.domainType_id = dtype.id) WHERE d.id = ?;");
+    m_stmtDomainSubstrate = m_connection->prepareStatement("SELECT substrate_id AS sid FROM databaseInput_domain_substrateSpecificity WHERE domain_id = ?");
     m_stmtProduct = m_connection->prepareStatement("SELECT id, name, description FROM databaseInput_product WHERE id = ?;");
     m_stmtOrigin = m_connection->createStatement();
 }
@@ -219,7 +223,7 @@ std::vector<std::shared_ptr<DomainTypeTe>> MySQLDatabaseConnector::getTeDomains(
 
 bool MySQLDatabaseConnector::testInitialized(bool except) throw (DatabaseError)
 {
-    if (m_connection == nullptr || m_stmtMonomerId == nullptr || m_stmtMonomerSmash == nullptr || m_stmtMonomerSearch == nullptr|| m_stmtCoreDomainsSubstrate == nullptr || m_stmtCoreDomainsNoSubstrate == nullptr || m_stmtDomain == nullptr || m_stmtProduct == nullptr || m_stmtOrigin == nullptr)
+    if (m_connection == nullptr || m_stmtMonomerId == nullptr || m_stmtMonomerSmash == nullptr || m_stmtMonomerSearch == nullptr|| m_stmtCoreDomainsSubstrate == nullptr || m_stmtCoreDomainsNoSubstrate == nullptr || m_stmtDomain == nullptr || m_stmtDomainSubstrate == nullptr || m_stmtProduct == nullptr || m_stmtOrigin == nullptr)
         if (except)
             throw DatabaseError("Not initialized");
         else
@@ -293,6 +297,78 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw 
         m_stmtDomain->setUInt(1, d->id());
         res = m_stmtDomain->executeQuery();
         res->next();
+        fillDomain(d, res);
+        delete res;
+    } catch (const sql::SQLException &e) {
+        if (res != nullptr)
+            delete res;
+        throw makeException(e);
+    }
+}
+
+
+std::shared_ptr<Domain> MySQLDatabaseConnector::createDomain(uint32_t id) throw (DatabaseError)
+{
+    sql::ResultSet *res = nullptr;
+    sql::ResultSet *sres = nullptr;
+    try {
+        m_stmtDomain->setUInt(1, id);
+        res = m_stmtDomain->executeQuery();
+        res->next();
+        std::string type = res->getString("type");
+        std::shared_ptr<Domain> d;
+        if (type[0] == 'C') {
+            m_stmtDomainSubstrate->setUInt(1, id);
+            sres = m_stmtDomainSubstrate->executeQuery();
+            sres->next();
+            d = std::shared_ptr<Domain>(new DomainTypeC(id, sres->getUInt("sid"), type == "C_L" ? Configuration::L : Configuration::D));
+        } else if (type[0] == 'T') {
+            d = std::shared_ptr<Domain>(new DomainTypeT(id, type == "T_Ep" ? DomainTPosition::BeforeE : DomainTPosition::BeforeC));
+        } else {
+            switch (fromString<DomainType>(type)) {
+                case DomainType::A:
+                    m_stmtDomainSubstrate->setUInt(1, id);
+                    sres = m_stmtDomainSubstrate->executeQuery();
+                    sres->next();
+                    d = std::shared_ptr<Domain>(new DomainTypeA(id, sres->getUInt("sid")));
+                    break;
+                case DomainType::E:
+                    d = std::shared_ptr<Domain>(new DomainTypeE(id));
+                    break;
+                case DomainType::Te:
+                    d = std::shared_ptr<Domain>(new DomainTypeTe(id));
+                    break;
+                case DomainType::AOxA:
+                    m_stmtDomainSubstrate->setUInt(1, id);
+                    sres = m_stmtDomainSubstrate->executeQuery();
+                    sres->next();
+                    d = std::shared_ptr<Domain>(new DomainTypeAOxA(id, sres->getUInt("sid")));
+                    break;
+            }
+        }
+        fillDomain(d, res);
+        if (sres != nullptr)
+            delete sres;
+        delete res;
+        return d;
+    } catch (const sql::SQLException &e) {
+        if (sres != nullptr)
+            delete sres;
+        if (res != nullptr)
+            delete res;
+        throw makeException(e);
+    } catch (const DatabaseError &e) {
+        if (sres != nullptr)
+            delete sres;
+        if (res != nullptr)
+            delete res;
+        throw;
+    }
+}
+
+void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d, sql::ResultSet *res) throw (DatabaseError)
+{
+    try {
         d->setModule(res->getUInt("dmodule"));
         d->setDescription(res->getString("ddesc"));
         d->setGeneName(res->getString("cgenename"));
@@ -317,10 +393,16 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d) throw 
             if (lstop <= seq.size() && !res->isNull("ddefinedstop") && !res->isNull("ddefinedlinkerstart"))
                 d->setNativeDefinedLinkerAfter(seq.substr(stop + 1, lstop - stop));
         }
-        delete res;
+        uint32_t id = res->getUInt("oid");
+        if (d->origin() == nullptr || d->origin()->id() != id) {
+            Origin *ori = d->setOrigin(id);
+            fillOrigin(ori);
+        }
+        id = res->getUInt("pid");
+        if (d->product() == nullptr || d->product()->id() != id) {
+            d->setProduct(id);
+        }
     } catch (const sql::SQLException &e) {
-        if (res != nullptr)
-            delete res;
         throw makeException(e);
     }
     res = nullptr;

@@ -1,6 +1,7 @@
 #include "taxonbuilder.h"
 #include "global_enums.h"
 #include "networkoptions.h"
+#include "globals_internal.h"
 
 #include <iostream>
 #include <locale>
@@ -49,9 +50,6 @@
 #define RANK_SPECIES "species"
 
 #define TIME_FORMAT "%Y/%m/%d %H:%M:%S"
-
-#define XMLCMP(n, y) xmlStrcmp(n->name, BAD_CAST y)
-#define XMLTXT(n) (const char*)n->children->content
 
 using namespace nrps;
 namespace po = boost::program_options;

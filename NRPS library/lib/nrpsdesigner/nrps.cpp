@@ -3,6 +3,7 @@
 #include "origin.h"
 #include "product.h"
 #include "abstractdatabaseconnector.h"
+#include "globals_internal.h"
 
 #include <unordered_set>
 #include <fstream>
@@ -87,8 +88,8 @@ private:
 };
 #endif
 
-Nrps::Nrps(const std::vector<Monomer> &nrp)
-: std::vector<std::shared_ptr<Domain>>(), m_nrp(nrp), m_indigoidineTagged(false)
+Nrps::Nrps()
+: std::vector<std::shared_ptr<Domain>>(), m_indigoidineTagged(false)
 {}
 
 bool Nrps::isIndigoidineTagged() const
@@ -104,23 +105,12 @@ void Nrps::setIndigoidineTagged(bool tagged)
 #ifdef WITH_INTERNAL_XML
 std::string Nrps::toXml() const
 {
-    xmlBufferPtr buf = xmlBufferCreate();
-    xmlTextWriterPtr writer = xmlNewTextWriterMemory(buf, 0);
-    toXml(writer);
-    std::string xml((const char*)buf->content);
-    xmlFreeTextWriter(writer);
-    xmlBufferFree(buf);
-    return xml;
+    return nrps::toXml(static_cast<void (Nrps::*)(xmlTextWriterPtr)const>(&Nrps::toXml), this);
 }
 
 void Nrps::toXml(std::ostream &of) const
 {
-    xmlBufferPtr buf = xmlBufferCreate();
-    xmlTextWriterPtr writer = xmlNewTextWriterMemory(buf, 0);
-    toXml(writer);
-    of << (const char*)buf->content;
-    xmlFreeTextWriter(writer);
-    xmlBufferFree(buf);
+    nrps::toXml(of, static_cast<void (Nrps::*)(xmlTextWriterPtr)const>(&Nrps::toXml), this);
 }
 
 void Nrps::toXml(const std::string &file) const
@@ -130,19 +120,12 @@ void Nrps::toXml(const std::string &file) const
 
 void Nrps::toXml(const char *file) const
 {
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename(file, 0);
-    toXml(writer);
-    xmlFreeTextWriter(writer);
+    nrps::toXml(file, static_cast<void (Nrps::*)(xmlTextWriterPtr)const>(&Nrps::toXml), this);
 }
 
 void Nrps::toXml(int fd) const
 {
-    xmlBufferPtr buf = xmlBufferCreate();
-    xmlTextWriterPtr writer = xmlNewTextWriterMemory(buf, 0);
-    toXml(writer);
-    write(fd, buf->content, buf->use);
-    xmlFreeTextWriter(writer);
-    xmlBufferFree(buf);
+    nrps::toXml(fd, static_cast<void (Nrps::*)(xmlTextWriterPtr)const>(&Nrps::toXml), this);
 }
 
 void Nrps::toXml(xmlTextWriterPtr writer) const
@@ -150,9 +133,6 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
     std::unordered_set<Origin*> seenOrigins;
     std::unordered_set<Product*> seenProducts;
     std::vector<Origin*> originsToWrite;
-    xmlTextWriterSetIndent(writer, 1);
-    xmlTextWriterSetIndentString(writer, BAD_CAST "    ");
-    xmlTextWriterStartDocument(writer, nullptr, "UTF-8", nullptr);
     xmlTextWriterStartElement(writer, BAD_CAST NRPS_NODE);
     if (m_indigoidineTagged)
         xmlTextWriterWriteAttribute(writer, BAD_CAST INDIGOIDINETAGGED_ATTR, BAD_CAST INDIGOIDINETAGGED_ATTR);
@@ -183,7 +163,6 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
     }
     xmlTextWriterEndElement(writer);
     xmlTextWriterEndElement(writer);
-    xmlTextWriterEndDocument(writer);
 }
 #endif
 
