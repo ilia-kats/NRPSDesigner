@@ -139,7 +139,8 @@ def createLibrary(request, pid):
 def processLibrary(request, pid):
     if request.method == 'POST':
         data = json.loads(request.raw_post_data)
-        return JsonResponse(data)
+        nrp = NRP.objects.get(pk=pid)
+        return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
 
 @login_required
 def get_available_monomers(request):

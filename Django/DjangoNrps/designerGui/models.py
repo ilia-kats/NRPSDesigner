@@ -4,7 +4,7 @@ import subprocess
 import fcntl
 import os
 import select
-from xml.dom.minidom import parseString
+from xml.dom.minidom import parseString, getDOMImplementation
 import json
 import logging
 
@@ -44,7 +44,7 @@ Some comments regarding deletion considerations/strategies:
 *if construct gets created again -> manually delete previous fragment.Gene objects (in case DomainOrder did not point yet
 at appropriate fragment.Gene)-> gibson.ConstructFragment objects get deleted automatically
     '''
-import pdb
+
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
     name = models.CharField(max_length=80)
@@ -56,6 +56,7 @@ class NRP(models.Model):
     indigoidineTagged = models.BooleanField(default=False)
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.ForeignKey('gibson.Construct', null=True, blank=True)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
 
     def __unicode__(self):
         return self.name
@@ -170,8 +171,8 @@ class NRP(models.Model):
 
     #returns IDs
     def getDomainSequence(self):
-        domains = self.designerDomains.order_by('domainOrder').all()
-        orderedDomainIds = [int(domain.pk) for domain in domains]
+        domains = DomainOrder.objects.filter(nrp=self).order_by('order')
+        orderedDomainIds = [int(domain.domain.pk) for domain in domains]
         return orderedDomainIds
 
     def generatePfamGraphicJson(self):
@@ -196,6 +197,106 @@ class NRP(models.Model):
     def designDomains(self, curatedonly=True):
         #see deletion strategy in multiline comment above
         self.delete_dependencies(False)
+        args = ["-m", self.getPeptideSequenceAsString(), "-s", "-"]
+        if curatedonly:
+            args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
+        if self.indigoidineTagged:
+            args.append("-t")
+        xmlout = self._runNrpsDesigner(args)
+
+        # parse xml to extract domain list
+        # can not use libsbol here, as it only supports reading from file
+        designerDom = parseString(xmlout)
+
+        domainIdList = self._parseNrps(designerDom)
+        self._design(domainIdList)
+
+    @task()
+    def makeLibrary(self, monomers, curatedonly=True):
+        self.child.all().delete()
+        impl = getDOMImplementation()
+        xml = impl.createDocument(None, 'nrp', None)
+        root = xml.documentElement
+        monomersnode = xml.createElement('monomers')
+        varpos = -1
+        i = 0
+        for monomer in monomers:
+            monomernode = xml.createElement('monomer')
+            if len(monomer) > 1:
+                varpos = i
+            i += 1
+            for aa in monomer:
+                idnode = xml.createElement("id")
+                aanode = xml.createTextNode(str(aa))
+                idnode.appendChild(aanode)
+                monomernode.appendChild(idnode)
+            monomersnode.appendChild(monomernode)
+        root.appendChild(monomersnode)
+        nrpsnode = xml.createElement('nrps')
+        domains = self.getDomainSequence()
+        for domain in domains:
+            domainnode = xml.createElement('domain')
+            idnode = xml.createElement('id')
+            idtext = xml.createTextNode(str(domain))
+            idnode.appendChild(idtext)
+            domainnode.appendChild(idnode)
+            nrpsnode.appendChild(domainnode)
+        root.appendChild(nrpsnode)
+        xmlstr = xml.toxml("utf-8")
+        args = ['-n', '-', '-s', '-']
+        if curatedonly:
+            args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
+        xmlout = self._runNrpsDesigner(args, xmlstr)
+        designerDom = parseString(xmlout)
+        nrpsList = designerDom.getElementsByTagName('s:component')
+        i = 1
+        for nrps in nrpsList:
+            description = self.description
+            if description is not None and len(description) > 0:
+                description += "\n"
+            nrp = NRP.objects.create(owner = self.owner, name="%s_lib%d" % (self.name, i), description=description + "library variant %d" % i, indigoidineTagged=self.indigoidineTagged, parent=self)
+            for j, monomerId in enumerate(monomers):
+                index = 0
+                if j == varpos:
+                    index = i
+                monomer = Substrate.objects.get(pk=monomerId[index])
+                SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
+            nrp._design(self._parseNrps(nrps))
+            nrp.construct.process()
+            i += 1
+
+    def _design(self, domainIdList):
+        prevDomains = DomainOrder.objects.filter(nrp = self)
+        prevDomains.delete()
+        for count, domainId in enumerate(domainIdList):
+            domain = Domain.objects.get(pk = domainId[0])
+            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count, linkerBeforeLength=domainId[1], linkerAfterLength=domainId[2])
+        self.designed = True
+        self.save()
+        self.makeConstruct()
+
+    def _parseNrps(self, nrps):
+        domainDomList = nrps.getElementsByTagName('s:DnaComponent')
+        domainIdList = []
+        for comp in domainDomList:
+            cid = comp.attributes.getNamedItem("rdf:about").value[1:]
+            if cid[:cid.find("_")].isdigit():
+                did = comp.getElementsByTagName('s:displayId')[0].firstChild.data
+                if did[0] != '_':
+                    raise Exception("Could not find domain ID, got %s instead." % did)
+                annots = comp.getElementsByTagName('s:SequenceAnnotation')
+                linkerbefore = 0
+                linkerafter = 0
+                for annot in annots:
+                    aid = annot.attributes.getNamedItem("rdf:about").value[1:]
+                    if aid.startswith("salb"):
+                        linkerbefore = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
+                    elif aid.startswith("sala"):
+                        linkerafter = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
+                domainIdList.append((int(did[1:]), linkerbefore, linkerafter))
+        return domainIdList
+
+    def _runNrpsDesigner(self, params, stdin=None):
         lasterror = [None] # nonlocal only in python3
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3
@@ -240,15 +341,12 @@ class NRP(models.Model):
             '--mysql-user'     : settings.DATABASES[connection.alias]['USER'],
             '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
-        args = ["nrpsdesigner", "-m", self.getPeptideSequenceAsString(), "-s", "-"]
-        if curatedonly:
-            args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
-        if self.indigoidineTagged:
-            args.append("-t")
+        args = ["nrpsdesigner"]
+        args.extend(params)
         for k,v in dbSettings.items():
             if v:
                 args.extend([k, v])
-        child = subprocess.Popen(args, 0, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen(args, 0, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
 
         fds = (child.stdout.fileno(), child.stderr.fileno())
         mask = fcntl.fcntl(fds[0], fcntl.F_GETFL)
@@ -259,6 +357,9 @@ class NRP(models.Model):
         mask = select.POLLIN | select. POLLPRI | select.POLLERR | select.POLLHUP
         poll.register(fds[0], mask)
         poll.register(fds[1], mask)
+        if stdin is not None:
+            child.stdin.write(stdin)
+            child.stdin.close()
         while child.poll() is None:
             fdsready = poll.poll()
             for fd in fdsready:
@@ -271,37 +372,7 @@ class NRP(models.Model):
         if child.returncode != 0:
             logger.error("NRPSDesigner returned errorcode %d" % child.returncode)
             raise Exception("NRPSDesigner returned errorcode %d: %s" % (child.returncode, lasterror[0]))
-
-        # parse xml to extract domain list
-        # can not use libsbol here, as it only supports reading from file
-        designerDom = parseString(xmlout[0])
-        domainDomList = designerDom.getElementsByTagName('s:DnaComponent')
-        domainIdList = []
-        for comp in domainDomList:
-            cid = comp.attributes.getNamedItem("rdf:about").value[1:]
-            if cid[:cid.find("_")].isdigit():
-                did = comp.getElementsByTagName('s:displayId')[0].firstChild.data
-                if did[0] != '_':
-                    raise Exception("Could not find domain ID, got %s instead." % did)
-                annots = comp.getElementsByTagName('s:SequenceAnnotation')
-                linkerbefore = 0
-                linkerafter = 0
-                for annot in annots:
-                    aid = annot.attributes.getNamedItem("rdf:about").value[1:]
-                    if aid.startswith("salb"):
-                        linkerbefore = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
-                    elif aid.startswith("sala"):
-                        linkerafter = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
-                domainIdList.append((int(did[1:]), linkerbefore, linkerafter))
-
-        prevDomains = DomainOrder.objects.filter(nrp = self)
-        prevDomains.delete()
-        for count, domainId in enumerate(domainIdList):
-            domain = Domain.objects.get(pk = domainId[0])
-            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count, linkerBeforeLength=domainId[1], linkerAfterLength=domainId[2])
-        self.designed = True
-        self.save()
-        self.makeConstruct()
+        return xmlout[0]
 
 def readFrom(file, callback):
     try:

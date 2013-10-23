@@ -260,7 +260,7 @@
     function save(e)
     {
         var monomers = collectMonomers();
-        jQuery.post("{% url 'processLibrary' pid %}", JSON.stringify({as: monomers, curatedonly: jQuery('#chk_curatedonly').prop("checked")}), makeConstruct, "text").fail(function(){alert("failed");});
+        submitCeleryJob("{% url 'processLibrary' pid %}", JSON.stringify({as: monomers, curatedonly: jQuery('#chk_curatedonly').prop("checked")}), undefined, undefined, undefined);
     }
 
     jQuery(function() {

@@ -441,7 +441,6 @@ class Construct(models.Model):
             name=self.name[0:8],
             description=self.description
         )
-        import pdb;pdb.set_trace()
         g.features = []
         for f in self.features():
             t = f.type
