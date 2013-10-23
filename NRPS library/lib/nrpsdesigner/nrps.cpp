@@ -7,13 +7,8 @@
 
 #include <unordered_set>
 #include <fstream>
+#include <chrono>
 #include <unistd.h>
-
-#ifdef WITH_SBOL
-extern "C" {
-#include <sbol.h>
-}
-#endif
 
 #define NRPS_NODE "nrps"
 #define DOMAINS_NODE "domains"
@@ -28,11 +23,15 @@ class SbolBuilder
 {
 public:
     SbolBuilder(const Nrps &n)
-    : m_nrps(n), m_start(1) {}
-    char* build()
+    : m_nrps(n), m_start(1), m_uniqueId("_") {}
+
+    DNAComponent* build(Document *doc)
     {
-        m_doc = createDocument();
-        DNAComponent *nrps = createDNAComponent(m_doc, "#nrps");
+        if (doc == nullptr)
+            return nullptr;
+        m_doc = doc;
+        m_uniqueId.append(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
+        DNAComponent *nrps = createDNAComponent(m_doc, std::string("#nrps").append(m_uniqueId).c_str());
         setDNAComponentDisplayID(nrps, "NRPS");
         size_t start = 1;
         for (size_t i = 0; i < m_nrps.size(); ++i) {
@@ -40,10 +39,10 @@ public:
             const auto &domain = m_nrps[i];
             m_did = std::to_string(domain->id());
             m_id = std::to_string(i);
-            m_dc = createDNAComponent(m_doc, std::string("#").append(m_id).c_str());
+            m_dc = createDNAComponent(m_doc, std::string("#").append(m_id).append(m_uniqueId).c_str());
             setDNAComponentDisplayID(m_dc, std::string("_").append(m_did).c_str());
             setDNAComponentDescription(m_dc, domain->toString().c_str());
-            SequenceAnnotation *rootsa = createSequenceAnnotation(m_doc, std::string("#sal1_").append(m_id).c_str());
+            SequenceAnnotation *rootsa = createSequenceAnnotation(m_doc, std::string("#sal1_").append(m_id).append(m_uniqueId).c_str());
             setSequenceAnnotationStart(rootsa, start);
             setSequenceAnnotationSubComponent(rootsa, m_dc);
             setSequenceAnnotationStrand(rootsa, STRAND_FORWARD);
@@ -56,21 +55,29 @@ public:
             start += m_start;
             setSequenceAnnotationEnd(rootsa, start++);
         }
-        DNASequence *ds = createDNASequence(m_doc, "#seq");
+        DNASequence *ds = createDNASequence(m_doc, std::string("#seq").append(m_uniqueId).c_str());
         setDNASequenceNucleotides(ds, m_seq.c_str());
         setDNAComponentSequence(nrps, ds);
-        char *ret = writeDocumentToString(m_doc);
-        deleteDocument(m_doc);
+        m_doc = nullptr;
+        return nrps;
+    }
+
+    char* build()
+    {
+        Document *doc = createDocument();
+        build(doc);
+        char *ret = writeDocumentToString(doc);
+        deleteDocument(doc);
         return ret;
     }
 
 private:
     void makeSubAnnotation(const std::string &seq, const std::string &id, const std::string &desc)
     {
-        DNAComponent *dc = createDNAComponent(m_doc, std::string("#").append(id).append(m_id).c_str());
+        DNAComponent *dc = createDNAComponent(m_doc, std::string("#").append(id).append(m_id).append(m_uniqueId).c_str());
         setDNAComponentDisplayID(dc, (id + m_did).c_str());
         setDNAComponentDescription(dc, (desc + m_did).c_str());
-        SequenceAnnotation *sa = createSequenceAnnotation(m_doc, std::string("#sa").append(id).append(m_id).c_str());
+        SequenceAnnotation *sa = createSequenceAnnotation(m_doc, std::string("#sa").append(id).append(m_id).append(m_uniqueId).c_str());
         setSequenceAnnotationStart(sa, m_start);
         m_start += seq.size();
         setSequenceAnnotationEnd(sa, m_start - 1);
@@ -80,6 +87,7 @@ private:
     }
     const Nrps &m_nrps;
     size_t m_start;
+    std::string m_uniqueId;
     Document *m_doc;
     DNAComponent *m_dc;
     std::string m_did;
@@ -204,4 +212,9 @@ void Nrps::toSbol(int fd) const
     std::free(sbol);
 }
 
+DNAComponent* Nrps::toSbol(Document *doc) const
+{
+    SbolBuilder builder(*this);
+    return builder.build(doc);
+}
 #endif

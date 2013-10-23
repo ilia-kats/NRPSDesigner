@@ -148,6 +148,53 @@ void NrpsLibrary::toXml(xmlTextWriterPtr writer) const
 }
 #endif
 
+#ifdef WITH_SBOL
+std::string NrpsLibrary::toSbol() const
+{
+    Document *doc = createDocument();
+    toSbol(doc);
+    char *sbol = writeDocumentToString(doc);
+    deleteDocument(doc);
+    std::string seq(sbol);
+    std::free(sbol);
+    return seq;
+}
+
+void NrpsLibrary::toSbol(std::ostream &of) const
+{
+    of << toSbol();
+}
+
+void NrpsLibrary::toSbol(const std::string &file) const
+{
+    toSbol(file.c_str());
+}
+
+void NrpsLibrary::toSbol(const char *file) const
+{
+    std::ofstream of(file);
+    toSbol(of);
+    of.close();
+}
+
+void NrpsLibrary::toSbol(int fd) const
+{
+    std::string sbol = toSbol();
+    write(fd, sbol.c_str(), sbol.size());
+}
+
+Collection* NrpsLibrary::toSbol(Document *doc) const
+{
+    std::string uniqueId("_");
+    uniqueId.append(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
+    Collection *col = createCollection(doc, std::string("#library").append(uniqueId).c_str());
+    for (const auto &nrps : m_library) {
+        addDNAComponentToCollection(col, nrps.toSbol(doc));
+    }
+    return col;
+}
+#endif
+
 void NrpsLibrary::readXml(xmlDocPtr doc)
 {
     AbstractDatabaseConnector *dbConn = AbstractDatabaseConnector::getInstance();

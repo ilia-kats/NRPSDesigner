@@ -13,6 +13,11 @@
 #ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
 #endif
+#ifdef WITH_SBOL
+extern "C" {
+#include <sbol.h>
+}
+#endif
 
 namespace nrps
 {
@@ -38,6 +43,7 @@ public:
     void toSbol(const std::string&) const;
     void toSbol(const char*) const;
     void toSbol(int) const;
+    DNAComponent* toSbol(Document*) const;
 #endif
 
 private:

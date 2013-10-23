@@ -107,6 +107,14 @@ int main(int argc, char *argv[])
                     lib.toXml(outfile);
             }
 #endif
+#ifdef WITH_SBOL
+            if (!outsbol.empty()) {
+                if (outsbol == "-")
+                    lib.toSbol(std::cout);
+                else
+                    lib.toSbol(outsbol);
+            }
+#endif
         }
         delete dbConn;
         return 0;

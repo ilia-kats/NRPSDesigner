@@ -279,7 +279,7 @@ class NRP(models.Model):
         domainIdList = []
         for comp in domainDomList:
             cid = comp.attributes.getNamedItem("rdf:about").value[1:]
-            if cid.isdigit():
+            if cid[:cid.find("_")].isdigit():
                 did = comp.getElementsByTagName('s:displayId')[0].firstChild.data
                 if did[0] != '_':
                     raise Exception("Could not find domain ID, got %s instead." % did)

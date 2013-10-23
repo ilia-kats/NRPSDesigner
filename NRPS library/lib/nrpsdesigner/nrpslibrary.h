@@ -39,6 +39,14 @@ public:
     void toXml(int) const;
     void toXml(xmlTextWriterPtr) const;
 #endif
+#ifdef WITH_SBOL
+    std::string toSbol() const;
+    void toSbol(std::ostream&) const;
+    void toSbol(const std::string&) const;
+    void toSbol(const char*) const;
+    void toSbol(int) const;
+    Collection* toSbol(Document*) const;
+#endif
 
     void makeLibrary();
 
