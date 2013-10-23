@@ -4,6 +4,7 @@
 #include "globals_internal.h"
 
 #include <ios>
+#include <iterator>
 #include <stdexcept>
 
 #include <fcntl.h>
@@ -82,8 +83,7 @@ void NrpsLibrary::fromFile(int fd)
 
 void NrpsLibrary::fromFile(std::istream &stream)
 {
-    std::string xml;
-    stream >> xml;
+    std::string xml((std::istreambuf_iterator<std::string::value_type>(stream)), std::istreambuf_iterator<std::string::value_type>());
     xmlDocPtr doc = xmlReadMemory(xml.c_str(), xml.size(), nullptr, nullptr, XML_PARSE_RECOVER | XML_PARSE_NONET | XML_PARSE_COMPACT);
     readXml(doc);
     xmlFreeDoc(doc);

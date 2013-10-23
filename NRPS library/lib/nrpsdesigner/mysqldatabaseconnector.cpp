@@ -322,7 +322,7 @@ std::shared_ptr<Domain> MySQLDatabaseConnector::createDomain(uint32_t id) throw 
             sres = m_stmtDomainSubstrate->executeQuery();
             sres->next();
             d = std::shared_ptr<Domain>(new DomainTypeC(id, sres->getUInt("sid"), type == "C_L" ? Configuration::L : Configuration::D));
-        } else if (type[0] == 'T') {
+        } else if (type[0] == 'T' && (type == "T_Ep" || type == "Tstd")) {
             d = std::shared_ptr<Domain>(new DomainTypeT(id, type == "T_Ep" ? DomainTPosition::BeforeE : DomainTPosition::BeforeC));
         } else {
             switch (fromString<DomainType>(type)) {

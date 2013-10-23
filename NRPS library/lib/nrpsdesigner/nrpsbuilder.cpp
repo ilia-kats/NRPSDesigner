@@ -82,7 +82,7 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
         nrpsiter = m_scaffoldNrps->begin();
         lastmodulenodes.push_back(m_startn);
         for (; iter != nrp.end() && nrpiter != m_scaffoldNrp->end() && iter->id() == nrpiter->id(); ++iter, ++nrpiter) {
-            for (; (*nrpsiter)->type() != DomainType::C; ++nrpsiter) {
+            for (int i = 0; i == 0 || (*nrpsiter)->type() != DomainType::C; ++nrpsiter, ++i) {
                 std::shared_ptr<std::vector<Node*>> neighs(new std::vector<Node*>());
                 Node *n = makeNode(*nrpsiter);
                 neighs->push_back(n);
@@ -93,9 +93,10 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
         }
         end = iter + 1;
         ++nrpiter;
-        if (end->configuration() != nrpiter->configuration())
+        if (end < nrp.end() && end->configuration() != nrpiter->configuration())
             ++end;
         for (int i = 0; i < end - iter; ++i)
+            ++nrpsiter; // skip C domain of module
             while (nrpsiter != m_scaffoldNrps->end() && (*nrpsiter)->type() != DomainType::C)
                 ++nrpsiter;
     }
