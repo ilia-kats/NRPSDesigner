@@ -81,6 +81,13 @@ from unafold import UnaFolder
 import os, subprocess, shlex, sys, csv
 from subprocess import CalledProcessError
 from datetime import datetime
+import json, csv
+from cStringIO import StringIO
+try:
+    from collections import OrderedDict
+except ImportError:
+    # python 2.6 or earlier, use backport
+    from ordereddict import OrderedDict
 
 def hybrid_options(t,settings):
     return ' -n DNA -t %.2f -T %.2f -N %.2f -M %.2f --mfold=5,-1,100 ' %(t + settings.ss_safety, t + settings.ss_safety, settings.na_salt, settings.mg_salt)
@@ -102,6 +109,10 @@ def run_subprocess(cline, primer):
         return False
     dir(p)
     return True
+
+
+def pcr_step(name, temp, time):
+    return {"type":"step", "name":name, "temp":str(temp), "time":str(time)}
 
 class Settings(models.Model):
     # automatically create a Settings object whne you make a new construct object
@@ -614,15 +625,15 @@ class Construct(models.Model):
                 p.stick.length = self.settings.min_overlap
                 p.flap.length = self.settings.min_overlap
                 p.save()
-        for i,p in enumerate(self.primer.all()):
-            if self.settings.min_anneal_tm > 0:
-                p.tm_len_anneal(self.settings.min_anneal_tm)
-            if self.settings.min_primer_tm > 0:
-                p.tm_len_primer(self.settings.min_primer_tm)
-            p.self_prime_check()
-            yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
-            p.misprime_check()
-            yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
+        #for i,p in enumerate(self.primer.all()):
+            #if self.settings.min_anneal_tm > 0:
+                #p.tm_len_anneal(self.settings.min_anneal_tm)
+            #if self.settings.min_primer_tm > 0:
+                #p.tm_len_primer(self.settings.min_primer_tm)
+            #p.self_prime_check()
+            #yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
+            #p.misprime_check()
+            #yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
         self.processed = True
         self.save()
         yield ':100'
@@ -644,6 +655,9 @@ class Construct(models.Model):
     def last_modified(self):
         """Return the date/time that the construct was last modified as a formatted string"""
         return self.modified.strftime('%c')
+
+    def pcr_instructions(self):
+        return [(self.name + '-' + cf.fragment.name+'.pcr',cf.pcr_cycle()) for cf in self.cf.all()]
 
 class ConstructFragment(models.Model):
     construct = models.ForeignKey('Construct', related_name='cf')
@@ -759,6 +773,19 @@ class ConstructFragment(models.Model):
 
     def water_v(self):
         return self.construct.pcrsettings.water_v(self.primer_top().concentration, self.primer_bottom().concentration, self.concentration)
+
+    def pcr_cycle(self):
+        tm = int((self.primer_top().tm() + self.primer_bottom().tm())/2 - 4)
+        t = int(self.fragment.length() * 45.0/1000.0)
+        cycle = OrderedDict()
+        cycle['type'] = 'cycle'
+        cycle['count'] = 30
+        cycle['steps'] = [pcr_step('Melting',98,10), pcr_step('Annealing', tm, 10), pcr_step('Elongation', 72, t)]
+        pcr = OrderedDict()
+        pcr['name'] = self.construct.name + '-' + self.fragment.name
+        pcr['steps'] = [pcr_step('Initial Melting',98,30), cycle, pcr_step('Final Elongation', 72, 450),pcr_step('Final Hold', 4, 0)]
+        pcr['lidtemp']  = 110
+        return json.dumps(pcr, indent=4)
 
     def __unicode__(self):
         return self.construct.name + ' : ' + self.fragment.name + ' (' + str(self.order) + ')'

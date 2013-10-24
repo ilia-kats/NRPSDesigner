@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, getConstruct, makeConstruct, DomainSequenceView, get_available_monomers, createLibrary, processLibrary
+from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, getConstruct, makeConstruct, DomainSequenceView, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -12,6 +12,8 @@ urlpatterns = patterns('',
 					url(r'^(?P<pid>\d+)/$', nrpDesigner, name = "nrpDesigner"),
 					url(r'^(?P<pid>\d+)/library/$', createLibrary, name="createLibrary"),
 					url(r'^(?P<pid>\d+)/library/process/$', processLibrary, name="processLibrary"),
+					url(r'^(?P<pid>\d+)/library/view/$', viewLibrary, name="viewLibrary"),
+					url(r'^(?P<pid>\d+)/library/download/$', downloadLibrary, name="downloadLibrary"),
 					url(r'^nrpselection/(?P<pid>\d+)$', SpeciesListView.as_view(), name="guiTool"),
 					url(r'^selectableMonomers/$', get_available_monomers, name="selectableMonomers"),
 					url(r'^makeConstruct/(?P<pid>\d+)$', makeConstruct, name="makeConstruct"),

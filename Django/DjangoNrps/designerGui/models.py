@@ -117,7 +117,7 @@ class NRP(models.Model):
         if self.construct is None:
             self.construct = Construct.objects.create(owner = self.owner,
                 name = name,
-                description = 'NRPS designer',
+                description = 'NRPS designer:\n' + self.description,
                 shape = 'c')
 
         # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment
@@ -214,6 +214,9 @@ class NRP(models.Model):
     @task()
     def makeLibrary(self, monomers, curatedonly=True):
         self.child.all().delete()
+        if not self.construct.processed:
+            for j in self.construct.process():
+                pass
         impl = getDOMImplementation()
         xml = impl.createDocument(None, 'nrp', None)
         root = xml.documentElement
@@ -262,7 +265,8 @@ class NRP(models.Model):
                 monomer = Substrate.objects.get(pk=monomerId[index])
                 SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
             nrp._design(self._parseNrps(nrps))
-            nrp.construct.process()
+            for j in nrp.construct.process():
+                pass
             i += 1
 
     def _design(self, domainIdList):

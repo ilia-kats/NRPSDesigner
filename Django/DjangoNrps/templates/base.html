@@ -34,12 +34,14 @@
 AJAX_ERROR = -1
 </script>
 <script src="{% static "js/jquery-ui-1.10.3.custom.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.cookie-modified.js" %}" type="text/javascript"></script>
 <script>
      jQuery.noConflict();
 </script>
 <script src="{% static "js/base.js" %}" type="text/javascript"></script>
 <script src="{% static "js/select2.js" %}" type="text/javascript"></script>
 
+<script src="{% static "js/jquery.prompt.js" %}" type="text/javascript"></script>
 
 <!--JS for Intro.js-->
 <script src="{% static "js/intro.js" %}"></script>
@@ -222,7 +224,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 	{% endif %}
 	{% endblock %}
 	<div id="sub-container" class="ui-widget-content ui-corner-bottom">
-	<div class="modal hide" id="progress" style="max-height:50%;">
+	<div class="modal hide" data-backdrop="static" id="progress" style="max-height:50%;">
         <div class="modal-body">
             <div class="well" style="min-height:50px;">
                 <div style="display:inline-block;height:50px; width:50px;position:absolute;" id="progress-spinner"></div>
@@ -242,7 +244,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 
 {% block dialog %}
 {% endblock %}
-
+<div id="prompt"></div>
 <div class="footer">
 	<h4>Follow us:</h4>
 	<a href="https://www.facebook.com/pages/IGEM-Team-Heidelberg-2013/265102553624765" target="_blank"><img src="{% static "img/FB-f-Logo__blue_144.png" %}" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd"/></a>

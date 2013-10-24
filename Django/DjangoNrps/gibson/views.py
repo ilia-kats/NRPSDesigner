@@ -12,17 +12,15 @@ from django.views.decorators.http import condition
 from django.core.exceptions import *
 from django.conf import settings
 
+import csv, time, json, zipfile
+from copy import copy
+from xhtml2pdf import pisa
+from cStringIO import StringIO
 try:
     from collections import OrderedDict
 except ImportError:
     # python 2.6 or earlier, use backport
     from ordereddict import OrderedDict
-
-import csv, time, json, zipfile
-from copy import copy
-from cStringIO import StringIO
-from xhtml2pdf import pisa
-
 
 def fix_request(reqp):
 	rp = copy(reqp)
@@ -49,6 +47,17 @@ def get_primer(user, pid):
 		return False
 	else:
 		return p
+
+def make_csv(primers):
+    csvbuffer = StringIO()
+    writer = csv.writer(csvbuffer)
+    writer.writerow(['Name', 'Length', 'Melting Temperature', 'Sequence'])
+    for p in primers:
+        writer.writerow(p.csv())
+    csvbuffer.flush()
+    retval = csvbuffer.getvalue()
+    csvbuffer.close()
+    return retval
 
 @login_required
 def download_genbank(request, cid):
@@ -438,22 +447,6 @@ def primer_save(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-def pcr_step(name, temp, time):
-	return {"type":"step", "name":name, "temp":str(temp), "time":str(time)}
-
-def pcr_cycle(cf):
-	tm = int((cf.primer_top().tm() + cf.primer_bottom().tm())/2 - 4)
-	t = int(cf.fragment.length() * 45.0/1000.0)
-	cycle = OrderedDict()
-	cycle['type'] = 'cycle'
-	cycle['count'] = 30
-	cycle['steps'] = [pcr_step('Melting',98,10), pcr_step('Annealing', tm, 10), pcr_step('Elongation', 72, t)]
-	pcr = OrderedDict()
-	pcr['name'] = cf.construct.name + '-' + cf.fragment.name
-	pcr['steps'] = [pcr_step('Initial Melting',98,30), cycle, pcr_step('Final Elongation', 72, 450),pcr_step('Final Hold', 4, 0)]
-	pcr['lidtemp']  = 110
-	return json.dumps(pcr, indent=4)
-
 def pcr_instructions(request, cid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -486,60 +479,68 @@ def download_sbol(request, cid):
         return HttpResponseNotFound()
 
 @login_required
-def primer_download(request, cid):
-	con = get_construct(request.user, cid)
-	if con and con.fragments.all().count():
-		print request.GET['tk']
-		#set up response headers
-		response = HttpResponse(mimetype='application/zip')
-		response['Content-Disposition'] = 'attachment; filename='+con.name+'.zip'
-		response.set_cookie('fileDownloadToken',request.GET['tk'])
+def primer_download(request, cid, *args):
+    t = loader.get_template('gibson/pdf_primer.html')
+    zipbuffer = StringIO()
+    zip = zipfile.ZipFile(zipbuffer, 'w', zipfile.ZIP_DEFLATED)
+    notFound = False
+    if len(args) > 0:
+        allprimers = OrderedDict()
+    for ccid in [cid] + list(args):
+        con = get_construct(request.user, ccid)
+        if con and con.fragments.all().count():
+            print request.GET['tk']
+            #set up response headers
+            response = HttpResponse(mimetype='application/zip')
+            response['Content-Disposition'] = 'attachment; filename="'+con.name+'.zip"'
+            response.set_cookie('fileDownloadToken',request.GET['tk'])
 
-		# get all the pcr instruction files
-		pcr = [(con.name + '-' + cf.fragment.name+'.pcr',pcr_cycle(cf)) for cf in con.cf.all()]
+            # get all the pcr instruction files
+            pcr = con.pcr_instructions()
 
-		# write the csv file
-		csvbuffer = StringIO()
-		writer = csv.writer(csvbuffer)
-		writer.writerow(['Name', 'Length', 'Melting Temperature', 'Sequence'])
-		for p in con.primer.all():
-			writer.writerow(p.csv())
-		csvbuffer.flush()
+            # write the csv file
+            csvstr = make_csv(con.primer.all())
+            if len(args) > 0:
+                for p in con.primer.all():
+                    if str(p.seq()) not in allprimers:
+                        allprimers[str(p.seq())] = p
+            # write the pdf
+            c = RequestContext(request,{
+                'construct':con,
+                'each':5.0/con.fragments.all().count()
+            })
+            pdfbuffer = StringIO()
+            pdf = pisa.CreatePDF(StringIO(t.render(c).encode("ISO-8859-1")), pdfbuffer, link_callback=fetch_resources)
 
-		# write the pdf
-		t = loader.get_template('gibson/pdf_primer.html')
-		c = RequestContext(request,{
-			'construct':con,
-			'each':5.0/con.fragments.all().count()
-		})
-		pdfbuffer = StringIO()
-		pdf = pisa.CreatePDF(StringIO(t.render(c).encode("ISO-8859-1")), pdfbuffer, link_callback=fetch_resources)
+            # write the zip file
 
-		# write the zip file
-		zipbuffer = StringIO()
-		zip = zipfile.ZipFile(zipbuffer, 'w', zipfile.ZIP_DEFLATED)
-		# add the pcr files
-		for name, f in pcr:
-			zip.writestr(con.name+'/pcr/'+name, f)
-		# add the csv file
-		zip.writestr(con.name+'/primers.csv', csvbuffer.getvalue())
-		# add the pdf
-		zip.writestr(con.name+'/'+con.name+'.pdf', pdfbuffer.getvalue())
-		# add the gb
-		zip.writestr(con.name+'/'+con.name+'.gb', con.gb())
-		# add the sbol
-		zip.writestr(con.name + '/' + con.name + '.sbol', con.sbol())
-		# closing of buffers and return
-		csvbuffer.close()
-		pdfbuffer.close()
-		zip.close()
-		zipbuffer.flush()
-		ret_zip = zipbuffer.getvalue()
-		zipbuffer.close()
-		response.write(ret_zip)
-		return response
-	else:
-		return HttpResponseNotFound()
+            # add the pcr files
+            for name, f in pcr:
+                zip.writestr(con.name+'/pcr/'+name, f)
+            # add the csv file
+            zip.writestr(con.name+'/primers.csv', csvstr)
+            # add the pdf
+            zip.writestr(con.name+'/'+con.name+'.pdf', pdfbuffer.getvalue())
+            # add the gb
+            zip.writestr(con.name+'/'+con.name+'.gb', con.gb())
+            # add the sbol
+            zip.writestr(con.name + '/' + con.name + '.sbol', con.sbol())
+            # closing of buffers and return
+            pdfbuffer.close()
+        else:
+            notFound = True
+            break
+    if len(args) > 0 and not notFound:
+        zip.writestr('primers.csv', make_csv(allprimers.values()))
+    zip.close()
+    zipbuffer.flush()
+    ret_zip = zipbuffer.getvalue()
+    zipbuffer.close()
+    if not notFound:
+        response.write(ret_zip)
+        return response
+    else:
+        return HttpResponseNotFound()
 
 @login_required
 def pdf(request, cid):

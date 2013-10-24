@@ -2,7 +2,7 @@
  * jQuery UI Prompt
  *
  * Displays an alert using the jQuery UI theme
- * 
+ *
  * Written by Bill Collins for Gibthon
  */
 
@@ -52,7 +52,7 @@ $.widget( "ui.prompt" , {
 			icon: "ui-icon-close"
 		},
 		promptText: '',
-		target: { 
+		target: {
 			location :'',
 			target: '',
 			type: 'GET',
@@ -107,7 +107,6 @@ $.widget( "ui.prompt" , {
 				show: "fade",
 				hide: "fade"
 			});
-		
 		switch($('~ div button', this.element).size()) {
 			case 0:
 				break;
@@ -146,13 +145,13 @@ $.widget( "ui.prompt" , {
 		if (this.options.type == "wait") {
 			$(this.options.target.target).load(this.options.target.location, function () { self.options.target.callback(); self.close(); });
 		}
-		
+
 	},
-	
+
 	_text: function () {
 		return $('input', this.element).val();
 	},
-	
+
 	_confirm: function () {
 		if (!(this.options.type == 'prompt' && this._text() == '')) {
 			this.options.confirm.click(this._text());
@@ -161,22 +160,22 @@ $.widget( "ui.prompt" , {
 			this._cancel();
 		}
 	},
-	
+
 	_cancel: function () {
 		this.options.cancel.click();
 		this.close();
 	},
 
-	
+
 	close: function () {
 		this.element.dialog("close");
-		this._destroy();
+		this.destroy();
 	},
-	
+
 	_destroy: function() {
 		this.element.html('');
 		this.element.dialog('destroy');
-		$.Widget.prototype.destroy.apply(this, arguments);
+		//$.Widget.prototype.destroy.apply(this, arguments);
 	}
 });
 })(jQuery);

@@ -3,6 +3,7 @@ from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
+from gibson.views import primer_download
 
 from django.views.generic import ListView, CreateView, TemplateView
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
@@ -23,13 +24,13 @@ def toBool(x):
 
 @login_required
 def makeConstruct(request,pid):
-    nrp = NRP.objects.get(pk=pid)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
     nrp.designed = False
     return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
 
 @login_required
 def getConstruct(request, pid):
-    nrp = NRP.objects.get(pk=pid)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
     if not nrp.designed:
         return makeConstruct(request, pid)
     elif nrp.construct is None or nrp.construct.fragments.count() == 0:
@@ -46,7 +47,7 @@ def getConstruct(request, pid):
 
 @login_required
 def nrpDesigner(request, pid):
-    nrp = NRP.objects.get(pk=pid)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
     if nrp:
         t = loader.get_template('gibson/designer.html')
         c = RequestContext(request,{
@@ -126,8 +127,8 @@ class SpeciesListView(ListView):
 def createLibrary(request, pid):
     t = loader.get_template('designerGui/createlibrary.html')
     c = RequestContext(request)
-    nrp = NRP.objects.get(pk= pid)
-    substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
+    substrateOrder = SubstrateOrder.objects.filter(nrp=nrp)
     c['substrateOrder'] = substrateOrder
     c['indigoidineTagged'] = nrp.indigoidineTagged
     c['pid'] = pid
@@ -136,11 +137,28 @@ def createLibrary(request, pid):
     c['scaffold'] = nrp.monomers.order_by('substrateOrder')
     return HttpResponse(t.render(c))
 
+@login_required
 def processLibrary(request, pid):
     if request.method == 'POST':
-        data = json.loads(request.raw_post_data)
-        nrp = NRP.objects.get(pk=pid)
+        data = json.loads(request.body)
+        nrp = NRP.objects.get(owner=request.user, pk=pid)
         return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
+
+@login_required
+def viewLibrary(request, pid):
+    parentnrp = NRP.objects.get(owner=request.user, pk=pid)
+    childnrps = parentnrp.child.all()
+    c = RequestContext(request)
+    c['parentnrp'] = parentnrp
+    c['childnrps'] = childnrps
+    t = loader.get_template('designerGui/viewlibrary.html')
+    return HttpResponse(t.render(c))
+
+@login_required
+def downloadLibrary(request, pid):
+    parentnrp = NRP.objects.get(owner=request.user, pk=pid)
+    cids = [child.construct.pk for child in parentnrp.child.all()]
+    return primer_download(request, parentnrp.construct.pk, *cids)
 
 @login_required
 def get_available_monomers(request):
