@@ -486,15 +486,19 @@ def primer_download(request, cid, *args):
     notFound = False
     if len(args) > 0:
         allprimers = OrderedDict()
+    con = get_construct(request.user, cid)
+    if con and con.fragments.all().count():
+        #set up response headers
+        response = HttpResponse(mimetype='application/zip')
+        response['Content-Disposition'] = 'attachment; filename="'+con.name+'.zip"'
+        response.set_cookie('fileDownloadToken',request.GET['tk'])
+    else:
+        zip.close()
+        zipbuffer.close()
+        return HttpReponseNotFound()
     for ccid in [cid] + list(args):
         con = get_construct(request.user, ccid)
         if con and con.fragments.all().count():
-            print request.GET['tk']
-            #set up response headers
-            response = HttpResponse(mimetype='application/zip')
-            response['Content-Disposition'] = 'attachment; filename="'+con.name+'.zip"'
-            response.set_cookie('fileDownloadToken',request.GET['tk'])
-
             # get all the pcr instruction files
             pcr = con.pcr_instructions()
 

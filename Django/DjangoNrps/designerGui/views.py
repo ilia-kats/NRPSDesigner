@@ -157,7 +157,7 @@ def viewLibrary(request, pid):
 @login_required
 def downloadLibrary(request, pid):
     parentnrp = NRP.objects.get(owner=request.user, pk=pid)
-    cids = [child.construct.pk for child in parentnrp.child.all()]
+    cids = [child.construct.pk for child in parentnrp.child.filter(pk__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
 
 @login_required
