@@ -74,6 +74,7 @@ class NRP(models.Model):
             if self.construct.primer is not None:
                 [x.del_all() for x in self.construct.primer.all() if x is not None]
             self.construct.reset()
+        self.parent = None
         self.save()
 
     def fullDelete(self):
@@ -257,7 +258,8 @@ class NRP(models.Model):
             description = self.description
             if description is not None and len(description) > 0:
                 description += "\n"
-            nrp = NRP.objects.create(owner = self.owner, name="%s_lib%d" % (self.name, i), description=description + "library variant %d" % i, indigoidineTagged=self.indigoidineTagged, parent=self)
+            varname = Substrate.objects.get(pk=monomers[varpos][i]).name
+            nrp = NRP.objects.create(owner = self.owner, name="%s %s" % (self.name, varname), description=description + "library variant %d: %s" % (i, varname), indigoidineTagged=self.indigoidineTagged, parent=self)
             for j, monomerId in enumerate(monomers):
                 index = 0
                 if j == varpos:

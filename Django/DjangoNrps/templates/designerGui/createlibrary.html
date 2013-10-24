@@ -30,7 +30,7 @@
     {
         var ids = new Array();
         var checked = undefined;
-        var selected = jQuery('#selected_monomers :button[disabled="disabled"]:not(.addmonomer)');
+        var selected = jQuery('#selected_monomers :button[disabled="disabled"]:not(.addmonomer,.addall)');
         for (var i = 0; i < selected.length; ++i) {
             ids[i] = jQuery(selected[i]).attr("value");
             if (jQuery(selected[i]).parent().parent().find(".active").length)
@@ -71,7 +71,7 @@
                 jQuery("#monomer_chirality_D").click();
             }
         }
-        jQuery("#monomer_chirality").buttonset("option", "disabled", 'lid' in data ^ 'did' in data);
+        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
 
         refreshModificationList();
         jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
@@ -135,7 +135,7 @@
         }
         btn.data("selectid", data.id);
 
-        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data);
+        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
         refreshModificationList();
     }
 
@@ -177,7 +177,7 @@
         var toappend = jQuery(e.delegateTarget).parent().parent();
         toappend.parent().find(".active").removeClass("active");
         toappend.parent().find(".addmonomer").prop("disabled", true);
-        jQuery(e.delegateTarget).prop("disabled", false).next().addClass("active");
+        jQuery(e.delegateTarget).prop("disabled", false).next().next().addClass("active");
         if (toappend.attr("id") != lastretrieved) {
             getSelectableMonomers(true);
             lastretrieved = toappend.attr("id");
@@ -200,6 +200,42 @@
         applyMonomer();
         return aa;
     }
+    function addAllMonomers(e)
+    {
+        var source = jQuery(e.delegateTarget);
+        var selected = source.parent().parent().parent();
+        var selectedmonomers = selected.children();
+        if (!source.hasClass("active")) {
+            selected.find(".active").removeClass("active");
+            selected.find(".addmonomer").prop("disabled", true);
+            selected.find(".addall").prop("disabled", true);
+            source.prop("disabled", false).addClass("active");
+            for (var i = 0; i < selectedmonomers.length; ++i) {
+                var children = jQuery(selectedmonomers[i]).children();
+                if (children.length > 1) {
+                    children.slice(1).find("button").prop("disabled", true);
+                }
+            }
+        } else {
+            source.removeClass("active");
+            selected.find(".addall").prop("disabled", false);
+            var addbtns = selected.find(".addmonomer");
+            var pos = -1;
+            for (var i = 0; i < selectedmonomers.length; ++i) {
+                var children = jQuery(selectedmonomers[i]).children();
+                if (children.length > 1) {
+                    children.slice(1).find("button").prop("disabled", false);
+                    pos = i;
+                    break;
+                }
+            }
+            if (pos != -1) {
+                addbtns.prop("disabled", true);
+                jQuery(addbtns[i]).prop("disabled", false);
+            } else
+                addbtns.prop("disabled", false);
+        }
+    }
     function formatAA(aminoAcid) {
         // if (!aminoAcid.id) return aminoAcid.text; // optgroup
         kek = "<img class='aminoAcid' height='50' width='50' src='{% url "Structure" %}"+  "?as=" + primaryId(aminoAcid) + "'/>" + aminoAcid.text;
@@ -212,47 +248,21 @@
         return kek;
     }
 
-    function makeConstruct(){
-       jQuery("#tabs").tabs("disable",1);
-       jQuery("#tabs").tabs("disable",2);
-       jQuery("#tabs").tabs("disable",3);
-       jQuery("#primerTab").attr("href", "");
-       jQuery("#constructTab").attr("href", "");
-       submitCeleryJob("{% url 'makeConstruct' pid %}", {curatedonly: jQuery('#chk_curatedonly').prop("checked")}, undefined, undefined, function(data){
-            if (data[1].constructId != undefined)
-                activateTabs(data);
-            else
-                jQuery.post("{% url 'getConstruct' pid %}").done(activateTabs);
-        });
-    }
-
-    function activateTabs(data){
-        data = data[1]
-        console.log(data);
-        constructId =  data["constructId"];
-        if (constructId != 0) {
-       jQuery("#primerTab").attr("href", data["primerTabLink"]);
-       jQuery("#constructTab").attr("href", data["designTabLink"]);
-       jQuery("#tabs").tabs("enable",1);
-       jQuery("#tabs").tabs("enable",2);
-       jQuery("#tabs").tabs("enable",3);
-       jQuery("#tabs").tabs("option", "active", 1);
-        } else {
-            alert("ERROR");
-        }
-        if (typeof g_designer != 'undefined')
-            g_designer.update();
-    }
-
     function collectMonomers()
     {
         var monomers = new Array();
         var selected = jQuery('#selected_monomers').children();
+        var useall = selected.find(".addall.active");
         for (var i = 0; i < selected.length; ++i) {
             var current = jQuery(selected[i]).children();
             monomers[i] = new Array();
-            for (var j = 0; j < current.length; ++j)
-                monomers[i][j] = parseInt(jQuery(jQuery(current[j]).children()[1]).attr("value"));
+            monomers[i][0] = parseInt(jQuery(jQuery(current[0]).children()[2]).attr("value"));
+            if (useall.length > 0 && jQuery(current[0]).children()[1] == useall[0]) {
+                monomers[i][1] = true;
+            } else if (useall.length == 0) {
+                for (var j = 1; j < current.length; ++j)
+                    monomers[i][j] = parseInt(jQuery(jQuery(current[j]).children()[1]).attr("value"));
+            }
         }
         return monomers;
     }
@@ -260,7 +270,7 @@
     function save(e)
     {
         var monomers = collectMonomers();
-        submitCeleryJob("{% url 'processLibrary' pid %}", JSON.stringify({as: monomers, curatedonly: jQuery('#chk_curatedonly').prop("checked")}), undefined, undefined, undefined);
+        submitCeleryJob("{% url 'processLibrary' pid %}", JSON.stringify({as: monomers, curatedonly: jQuery('#chk_curatedonly').prop("checked")}), undefined, undefined, function() {window.location.href = "{% url 'viewLibrary' pid %}";});
     }
 
     jQuery(function() {
@@ -292,8 +302,8 @@
         });
 
         nrpEnabledEffects = true;
-        jQuery(".addmonomer").click(addMonomer)
-
+        jQuery(".addmonomer").click(addMonomer);
+        jQuery(".addall").click(addAllMonomers);
     });
     jQuery(window).load(function(){
         jQuery("#struct").height(jQuery("#params").height());
@@ -383,6 +393,7 @@
                 <div style="display:inline-block;vertical-align:top" id="selected_position_{{ forloop.counter }}">
                     <div class="btn-group" style="display:block">
                         <button class="btn addmonomer"><i class="icon-plus"></i></button>
+                        <button class="btn addall" title="Use all possible monomers"><i class="icon-ok"></i></button>
                         <button class="btn" disabled="disabled" value="{{ monomer.id }}">{{ monomer.name }}</button>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ from gibson.jsonresponses import JsonResponse, ERROR
 from gibson.views import primer_download
 
 from django.views.generic import ListView, CreateView, TemplateView
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
@@ -141,6 +141,22 @@ def createLibrary(request, pid):
 def processLibrary(request, pid):
     if request.method == 'POST':
         data = json.loads(request.body)
+        monomers = []
+        haveUseAll = -1
+        i = 0
+        for m in data['as']:
+            monomers.append(m[0])
+            if len(m) > 1 and m[1] == True:
+                haveUseAll = i
+            i += 1
+        if haveUseAll != -1:
+            for m in data['as']:
+                del m[1:]
+            substrates = get_available_substrates(monomers, True, data['curatedonly'], haveUseAll)
+            scaffold = data['as'][haveUseAll][0]
+            for s in substrates:
+                if s.pk != scaffold:
+                    data['as'][haveUseAll].append(s.pk)
         nrp = NRP.objects.get(owner=request.user, pk=pid)
         return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
 
@@ -167,20 +183,8 @@ def get_available_monomers(request):
         if 'selected' in request.POST:
             selected = int(request.POST['selected'])
         else:
-            selected = len(monomers) - 1
-        if toBool(request.POST['current']):
-            if selected > 0:
-                chirality = Substrate.objects.get(pk=monomers[selected - 1]).chirality
-            else:
-                chirality = None
-        else:
-            chirality = Substrate.objects.get(pk=monomers[-1]).chirality
-        substrates = Substrate.objects.exclude(user__username='sbspks')
-        if not toBool(request.POST['current']) or selected == len(monomers) - 1:
-            aas = filter(lambda x: x.can_be_added(chirality, toBool(request.POST['curatedonly'])), substrates)
-        else:
-            following = Substrate.objects.get(pk=monomers[selected + 1])
-            aas = filter(lambda x: x.can_be_added(chirality, toBool(request.POST['curatedonly'])) and following.can_be_added(x.chirality, toBool(request.POST['curatedonly'])), substrates)
+            selected = None
+        aas = get_available_substrates(monomers, toBool(request.POST['current']), toBool(request.POST['curatedonly']), selected)
     else:
         aas = filter(lambda x: x.can_be_added(), Substrate.objects.exclude(user__username='sbspks'))
     json = {}
@@ -212,6 +216,24 @@ def get_available_monomers(request):
     jsonlist = json.values()
     jsonlist.sort(lambda x,y: cmp(x['text'], y['text']))
     return JsonResponse({"monomers": json, "monomerslist": jsonlist})
+
+def get_available_substrates(monomers, current, curatedonly=True, selected=None):
+    if selected is None:
+        selected = len(monomers) - 1
+    if current:
+        if selected > 0:
+            chirality = Substrate.objects.get(pk=monomers[selected - 1]).chirality
+        else:
+            chirality = None
+    else:
+        chirality = Substrate.objects.get(pk=monomers[-1]).chirality
+    substrates = Substrate.objects.exclude(user__username='sbspks')
+    if not current or selected == len(monomers) - 1:
+        aas = filter(lambda x: x.can_be_added(chirality, curatedonly), substrates)
+    else:
+        following = Substrate.objects.get(pk=monomers[selected + 1])
+        aas = filter(lambda x: x.can_be_added(chirality, curatedonly) and following.can_be_added(x.chirality, curatedonly), substrates)
+    return aas
 
 @login_required
 def submit_nrp(request):

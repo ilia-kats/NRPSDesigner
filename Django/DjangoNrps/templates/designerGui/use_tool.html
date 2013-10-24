@@ -78,7 +78,7 @@
                 jQuery("#monomer_chirality_D").click();
             }
         }
-        jQuery("#monomer_chirality").buttonset("option", "disabled", 'lid' in data ^ 'did' in data);
+        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
 
         refreshModificationList();
         jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
@@ -142,7 +142,7 @@
         }
         btn.data("selectid", data.id);
 
-        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data);
+        jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
         makeStruct();
         refreshModificationList();
     }
