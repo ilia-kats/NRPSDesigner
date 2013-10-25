@@ -267,6 +267,9 @@ class NRP(models.Model):
                 monomer = Substrate.objects.get(pk=monomerId[index])
                 SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
             nrp._design(self._parseNrps(nrps))
+            for j,cf in enumerate(self.construct.cf.order_by('order')):
+                if cf.fragment.origin != 'ND':
+                    nrp.construct.add_fragment(cf.fragment, j, cf.direction)
             for j in nrp.construct.process():
                 pass
             i += 1
