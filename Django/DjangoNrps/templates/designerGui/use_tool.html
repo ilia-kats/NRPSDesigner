@@ -403,10 +403,10 @@
         <p>Options:</p>
         <div>
             <input type="checkbox" id="chk_curatedonly" checked="checked"/><label for="chk_curatedonly" style="margin-bottom:0">Use curated domains only</label>
-            <input type="checkbox" id="chk_indigoidinetag"{% if indigoidineTagged %} checked="checked"{% endif %}/><label for="chk_indigoidinetag" style="margin-bottom:0">Tag NRP with Indigoidine</label>
+            <input type="checkbox" id="chk_indigoidinetag"{% if indigoidineTagged %} checked="checked"{% endif %}/><label for="chk_indigoidinetag" style="margin-bottom:0" data-step="3" data-intro="Check this if the peptide needs to be tagged with the blue pigment Indigoidine.">Tag NRP with Indigoidine</label>
         </div>
     </div>
-    <div class="box" data-intro="In this box you can choose the amino acid of your choice in L or D-form, if available. Press 'Add Monomer' in order to extend the peptide chain by 1 amino acid. Once you are done and you want to get your predicted domains, just press on 'Design Construct' " data-step="3">
+    <div class="box" data-intro="In this box you can choose the amino acid of your choice in L or D-form, if available. Press 'Add Monomer' in order to extend the peptide chain by 1 amino acid. Once you are done and you want to get your predicted domains, just press on 'Design Construct' " data-step="4">
         <p> Please choose amino acids you want to integrate into your peptide! </p>
         <input type="hidden" id="e23" style="width:100%"/>
         <div id="monomer_chirality">
@@ -430,7 +430,7 @@
 </div>
 
 <div class="span4" id="struct">
-    <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;" data-intro="This box contains a visual representation of the peptide you are about to design a synthetic NRPS for." data-step="4">
+    <div class="box" style="height:100%;-moz-box-sizing:border-box;box-sizing:border-box;" data-intro="This box contains a visual representation of the peptide you are about to design a synthetic NRPS for." data-step="5">
             <div id="structzoom" style="float:left;height:100%;"></div>
             <div style="height:100%;text-align:center;">
                 <img id="structimg" alt="" src = "{% url 'Structure' %}{{initialPic}}" style="height:100%;">
