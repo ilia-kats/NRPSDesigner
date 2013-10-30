@@ -4,8 +4,8 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="hero-unit">
+    <div class="row-fluid hero-unit" style="box-sizing:border-box;-moz-box-sizing:border-box;">
+    <div class="span6">
     <h1>NRPSDesigner</h1>
     <p>    Welcome to the NRPSDesigner of <a href="http://2013.igem.org/Team:Heidelberg"> iGEM Team Heidelberg 2013! </a> </p>
 
@@ -13,30 +13,29 @@
 
 <p>In order to get started, please choose one of the options below:
     </p>
-    <div class="span8">
     <div class="btn-group">
 
    <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-heart"> </i> Register
     </a>
     <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
     </a>
-    <a href="http://www.youtube.com/watch?v=EntKLw788cs" target="_blank" class="btn btn-large"><i class="icon-film"></i>Watch the tutorial</a>
-
     </div>
     </div>
     {% else %}
    <p>Thanks for logging in, {{ user.username }}! </p>
-    <div class="span8">
     <div class="btn-group">
 
    <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-ok"> </i> Start designing
     </a>
     <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
     </a>
-    <a href="http://www.youtube.com/watch?v=EntKLw788cs" target="_blank" class="btn btn-large"><i class="icon-film"></i>Watch the tutorial</a>
 
     </div>
     </div>
 
     {% endif %}
+    <div class="span6">
+    <iframe width="640" height="360" src="//www.youtube.com/embed/EntKLw788cs?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+    </div>
+    </div>
 {% endblock %}
