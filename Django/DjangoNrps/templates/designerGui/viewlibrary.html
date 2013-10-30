@@ -128,7 +128,7 @@ var show_delete_dialog = function(){
 		{
 			var id = ids[i];
 			commands.push( {'desc': "Deleting id '" + id + "'",
-							'url': '' + id + "/delete/",
+							'url':  "{% url 'peptides' %}" + id + "/delete/",
 							'data': {'selected': id},
 							'type': 'POST',});
 		}
@@ -166,10 +166,7 @@ jQuery(function() {
 			{
 				sWidth:"5%"
 			},
-		],
-		oLanguage:{
-			sEmptyTable: '<button class="addc btn btn-active"><i class="icon-plus"></i>Add new Peptide</button>'
-		}
+		]
 	});
 	jQuery('#delete_btn').click(function() {
 		show_delete_dialog();

@@ -147,7 +147,7 @@ var show_delete_dialog = function(){
 		{
 			var id = ids[i];
 			commands.push( {'desc': "Deleting id '" + id + "'",
-							'url': '' + id + "/delete/",
+                            'url': "{% url 'peptides' %}" + id + "/delete/",
 							'data': {'selected': id},
 							'type': 'POST',});
 		}
