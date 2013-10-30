@@ -161,10 +161,13 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
         lastmonomerconfiguration = iter->configuration();
     }
 
+    bool haveTeDomain = false; // in case of Ind tag
     if (m_scaffoldNrp != nullptr && m_scaffoldNrps != nullptr) {
         for (; nrpsiter != m_scaffoldNrps->end(); ++nrpsiter) {
             std::shared_ptr<std::vector<Node*>> neighs(new std::vector<Node*>());
             Node *n = makeNode(*nrpsiter);
+            if ((*nrpsiter)->type() == DomainType::Te)
+                haveTeDomain = true;
             neighs->push_back(n);
             for (Node *ln : lastmodulenodes) {
                 ln->neighbors = neighs;
@@ -202,7 +205,7 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
         ret.setIndigoidineTagged(true);
     }
     std::shared_ptr<std::vector<Node*>> goal(new std::vector<Node*>(1, m_endn));
-    if (m_scaffoldNrp == nullptr || m_scaffoldNrps == nullptr || end == nrp.end()) {
+    if (m_scaffoldNrp == nullptr || m_scaffoldNrps == nullptr || !haveTeDomain) {
         std::shared_ptr<std::vector<Node*>> tedomainnodes(new std::vector<Node*>());
         for (const auto &domain : tedomains) {
             Node *n = makeNode(domain);
