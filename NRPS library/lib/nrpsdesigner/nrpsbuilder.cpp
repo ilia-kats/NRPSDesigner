@@ -90,6 +90,7 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
                 lastmodulenodes[0] = n;
                 m_graph.push_back(n);
             }
+            lastmonomerconfiguration = iter->configuration();
         }
         end = iter + 1;
         ++nrpiter;
