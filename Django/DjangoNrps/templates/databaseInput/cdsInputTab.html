@@ -1,4 +1,27 @@
-{{task_id}}
+
+{% if djangoSuccess %}
+
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {% autoescape off %}
+    {{djangoSuccess}}
+{% endautoescape %}
+
+</div>
+
+{% endif %}
+
+{% if djangoError %}
+
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {% autoescape off %}
+    {{djangoError}}
+{% endautoescape %}
+
+</div>
+
+{% endif %}
 
         {{ form.non_field_errors }}
         <form id="cdsFormForDomainPrediction">
@@ -25,7 +48,7 @@
               <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
               {{ form.dnaSequence }} <br/>
               <div class="btn-group">
-                <input type="button" class="btn" onclick="predictDomains()" value="Generate Domains!"/>
+                <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()"> Generate Domains!</button>
 
               </div>
 
@@ -59,7 +82,7 @@
 
 
 <script type="text/javascript">
-// code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/ 
+// code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/
 // adapted from coffeescript to javascript
 // enables use of Bootstrap modal to load other html pages
 
@@ -71,47 +94,30 @@
   return jQuery(target).load(url);
 });
 
-	predictDomains = function(){
-	jQuery("ul.errorlist").remove();
-	jQuery("#tabs").tabs("disable",1);
-		jQuery.post("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
-      if (data[0] === AJAX_ERROR){
+function predictDomains(){
+    jQuery("#domainGenerator").prop('disabled', true);
+    jQuery("ul.errorlist").remove();
+    jQuery("#tabs").tabs("disable",1);
+    submitCeleryJob("{% url "startDomainPrediction" %}", jQuery("#cdsFormForDomainPrediction").serialize(), undefined, function(data){
         jQuery("#cdsInputTab").html(data[1].html);
-      } else {
-			   taskId = data[1].taskId;
-         setTimeout(checkCeleryStatus(taskId), 50);
-      }
-
-		});
-		
-	};
-
-checkCeleryStatus = function(taskId){
-  jQuery.get("{% url "celery_log_base" %}" + taskId, function(data){
-      if (data.status === "ready"){
-        jQuery("#statusLog").append("Domain prediction task finished!")
+        jQuery("#domainGenerator").prop('disabled', false);
+    }, function(data) {
+        taskId = data[1].taskId;
         getPredictedDomains(taskId);
-      }else{
-        jQuery("#statusLog").html(data.output);
-        setTimeout(checkCeleryStatus(taskId), 50);
-      }
-  });
-}
+    });
+};
 
-getPredictedDomains = function(taskId){
+function getPredictedDomains(taskId){
   jQuery("ul.errorlist").remove();
-    jQuery.post("{% url "getPredictedDomainFormsetBase" %}" +taskId, jQuery("#cdsFormForDomainPrediction").serialize(), function(data){
+    jQuery.post("{% url "getPredictedDomainFormsetBase" %}" +taskId).done(function(data){
       if (data[0] === AJAX_ERROR){
         jQuery("#cdsInputTab").html(data[1].html);
       } else {
        jQuery("#domainInput").html( data[1].html);
 
-              jQuery( "#accordion" ).accordion({
-                heightStyle: "content",
-                collapsible: true
-              });
        jQuery("#tabs").tabs("enable",1);
        jQuery("#tabs").tabs( "option", "active", 1);
+       jQuery("#domainGenerator").prop('disabled', false);
       }
 
     });
@@ -127,7 +133,7 @@ jQuery(document).ready(function() {
           jQuery("#cdsFormForDomainPrediction").change(function() {
            jQuery("#tabs").tabs("disable",1);});
 
-   
+
 
 {% if not isAjax %}
 });
@@ -139,7 +145,7 @@ jQuery(document).ready(function() {
     //     constructId =  data["constructId"];
     //     if (constructId != 0) {
     //    jQuery("#tabs").tabs("enable",1);
-  
+
     //     } else {
     //         alert("ERROR");
     //     }

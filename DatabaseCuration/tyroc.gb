@@ -1,0 +1,13 @@
+LOCUS       Annotations                                             22-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    912..4178
+                     /ugene_name="tycA"
+                     /ugene_group="tyroc_coding_sequences"
+     misc_feature    4273..15036
+                     /ugene_name="tycB"
+                     /ugene_group="tyroc_coding_sequences"
+     misc_feature    15142..34602
+                     /ugene_name="tycC"
+                     /ugene_group="tyroc_coding_sequences"
+//

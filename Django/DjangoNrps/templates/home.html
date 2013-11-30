@@ -4,18 +4,36 @@
 {% endblock %}
 
 {% block content %}
+    <div class="row-fluid hero-unit" style="box-sizing:border-box;-moz-box-sizing:border-box;">
+    <div class="span6">
+    <h1>NRPSDesigner</h1>
+    <p>    Welcome to the NRPSDesigner of <a href="http://2013.igem.org/Team:Heidelberg"> iGEM Team Heidelberg 2013! </a> </p>
 
-    <div class="hero-unit">
-    <h1>NRPS Designer</h1>
-    <p>    Welcome to the NRPS Designer! The button below does absolutely nothing!</p>
-    <p> You can still try to push though! </p>
-    <p>
-    <a href="http://www.youtube.com/watch?v=oHg5SJYRHA0" class="btn btn-inverse btn-large">     <i class="icon-heart icon-white"></i>      push
-    </a>
+
     </p>
+    <div class="btn-group">
+
+   <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-heart"> </i> Register
+    </a>
+    <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+    </a>
+    </div>
+    </div>
+    {% else %}
+   <p>Thanks for logging in, {{ user.username }}! </p>
+    <div class="btn-group">
+
+   <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-ok"> </i> Start designing
+    </a>
+    <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+    </a>
+
+    </div>
     </div>
 
-    <div class="span8">
-	<a class="btn" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how this works!</a>
-	</div>
+    {% endif %}
+    <div class="span6">
+    <iframe width="640" height="360" src="//www.youtube.com/embed/EntKLw788cs?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+    </div>
+    </div>
 {% endblock %}

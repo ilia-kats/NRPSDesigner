@@ -12,7 +12,7 @@
 # For details see the accompanying kde/COPYING-CMAKE-SCRIPTS file.
 
 if(WIN32)
-    find_path(MYSQLCPP_INCLUDE_DIR mysql_connection.h
+    find_path(MYSQLCPP_INCLUDE_DIR cppconn/driver.h
         PATHS
         $ENV{MYSQL_INCLUDE_DIR}
         $ENV{MYSQL_DIR}/include
@@ -20,7 +20,7 @@ if(WIN32)
         $ENV{SystemDrive}/MySQL/*/include
    )
 else(WIN32)
-    find_path(MYSQLCPP_INCLUDE_DIR mysql_connection.h
+    find_path(MYSQLCPP_INCLUDE_DIR cppconn/driver.h
         PATHS
         $ENV{MYSQL_INCLUDE_DIR}
         $ENV{MYSQL_DIR}/include
@@ -40,7 +40,7 @@ if(WIN32)
    )
    find_library(MYSQLCPP_LIBRARIES NAMES mysqlcppconn
         PATHS
-        ${MYSQL_LIB_PATHS}
+        ${MYSQLCPP_LIB_PATHS}
    )
 else(WIN32)
     set(MYSQLCPP_LIB_PATHS
@@ -54,7 +54,7 @@ else(WIN32)
    )
    find_library(MYSQLCPP_LIBRARIES NAMES mysqlcppconn
         PATHS
-        ${MYSQL_LIB_PATHS}
+        ${MYSQLCPP_LIB_PATHS}
    )
 endif(WIN32)
 
@@ -62,12 +62,7 @@ if(MYSQLCPP_LIBRARIES)
     get_filename_component(MYSQLCPP_LIB_DIR ${MYSQLCPP_LIBRARIES} PATH)
 endif(MYSQLCPP_LIBRARIES)
 
-if(MYSQLCPP_INCLUDE_DIR AND MYSQLCPP_LIBRARIES)
-    set(MYSQLCPP_FOUND TRUE)
-    message(STATUS "Found MySQL C++ connector: ${MYSQLCPP_INCLUDE_DIR}, ${MYSQLCPP_LIBRARIES}")
-else(MYSQLCPP_INCLUDE_DIR AND MYSQLCPP_LIBRARIES)
-    set(MYSQLCPP_FOUND FALSE)
-    message(STATUS "MySQL C++ connector not found.")
-endif(MYSQLCPP_INCLUDE_DIR AND MYSQLCPP_LIBRARIES)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(MySQLCpp  DEFAULT_MSG  MYSQLCPP_LIBRARIES MYSQLCPP_INCLUDE_DIR)
 
 mark_as_advanced(MYSQLCPP_INCLUDE_DIR MYSQLCPP_LIBRARIES )

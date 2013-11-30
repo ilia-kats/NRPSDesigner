@@ -297,6 +297,7 @@ jQuery.widget("ui.jFragmentSelector", {
         droptarget: null,
         containment: 'parent',
         dragEnabled: true,
+        categories: new Array(),
     },
     _create: function() {
         var self = this;
@@ -335,32 +336,52 @@ jQuery.widget("ui.jFragmentSelector", {
 
         this.frags = new Array();
         //fetch the fragments
-        libFrag.getAll("Expression_Plasmid", "Plasmid_Backbone", "Promoter", "RBS", "Terminator", function(frags){
+        libFrag.getAll(function(frags){
             var categories = new Array();
+            var fragments = new Object();
             for (f in frags)
             {
                 frags[f].getMeta(function(meta){
+                    var category = "";
                     if ('annots' in meta && 'part_type' in meta['annots'])
                     {
-                        if (!(meta['annots']['part_type'] in categories))
-                            categories[meta['annots']['part_type']] = new Array();
-                        categories[meta['annots']['part_type']].push(frags[f]);
+                        category = meta['annots']['part_type'];
                     }
+                    if (self.options.categories.indexOf(category) == -1)
+                        category = "Other";
+                    if (!(category in fragments)) {
+                        fragments[category] = new Array();
+                        categories.push(category);
+                    }
+                    fragments[category].push(frags[f]);
                 })
             }
+            categories.sort(function(a,b) {
+                if (a == "Other")
+                    return 1;
+                else if (b == "Other")
+                    return -1;
+                else {
+                    if (a < b)
+                        return -1;
+                    else if (a > b)
+                        return 1;
+                    else
+                        return 0;
+                }});
             //remove the loading screen
             self.jQueryfragView.empty();
             //add in the fragments one by one
             for (c in categories)
             {
-                var header = jQuery('<h5>' + c + '</h5>');
+                var cat = categories[c];
                 var div = jQuery('<div/>');
-                for (f in categories[c])
+                for (f in fragments[cat])
                 {
-                    self.frags.push(categories[c][f]);
+                    self.frags.push(fragments[cat][f]);
                     jQuery('<div/>').addClass('JFS_fragHolder')
                     .append( jQuery('<div/>').jFragment({
-                        fragment: categories[c][f],
+                        fragment: fragments[cat][f],
                         color: libFrag.getNextColor(),
                         helper: function(){
                             return jQuery('<div/>').jFragment({
@@ -371,13 +392,17 @@ jQuery.widget("ui.jFragmentSelector", {
                         containment: self.options.containment,
                         zIndex:200,
                     }))
-                    .data('f', categories[c][f])
+                    .data('f', fragments[cat][f])
                     .appendTo(div);
                 }
-                header.appendTo(self.jQueryfragView);
+                if (categories.length > 1) {
+                    var header = jQuery('<h5>' + cat + '</h5>');
+                    header.appendTo(self.jQueryfragView);
+                }
                 div.appendTo(self.jQueryfragView);
             }
-            self.jQueryfragView.accordion({collapsible: true, heightStyle: "content"});
+            if (categories.length > 1)
+                self.jQueryfragView.accordion({collapsible: true, heightStyle: "content"});
             self.jQuerynumItems.text(frags.length);
         });
 

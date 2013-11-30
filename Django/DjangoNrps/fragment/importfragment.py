@@ -6,6 +6,7 @@ from django.conf.urls.defaults import patterns, include
 from django.template import Context, loader, RequestContext
 from django.core.context_processors import csrf
 from django.core.files.uploadedfile import UploadedFile
+from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from django.shortcuts import render_to_response
@@ -90,15 +91,15 @@ def handle_upload(request):
 			ids = []
 			truncated = 0
 			for record in records:
-				(g, t) = Gene.add(record, 'UL', request.user, True)
+				(g, t) = Gene.add(record, 'UL', request.user, errors=True)
 				truncated += t['truncated']
 				ids.append(g.id)
 			
 			file_dict = {	"name":wrapped_file.name, 
 							"size":file.size,
 							"error": None,
-							"url":'/fragment/%s/' % ids[0],
-							"delete_url":'/fragment/delete/', 
+							"url":reverse('fragment.views.fragment', args=(ids[0],)),
+							"delete_url":reverse('fragment.views.delete'),
 							"delete_type":"POST",
 							"delete_data": json.dumps({'selected':ids,}),
 						}
@@ -113,7 +114,7 @@ def handle_upload(request):
 			
 			data.append(file_dict)
 		
-		return RawJsonResponse(data)
+		return RawJsonResponse({'files': data})
 	raise Http404
 	
 	

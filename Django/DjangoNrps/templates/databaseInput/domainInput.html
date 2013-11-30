@@ -1,10 +1,10 @@
+           <form>         {{domainFormSet.management_form}}  </form>
 <div id="accordion">
 
-          {% for domainForm in originSet %}
+          {% for domainForm in domainFormSet %}
 
           <h3> Domain {{ forloop.counter }} </h3>
           <div>
-                    {{originSet.management_form}}
 
             {{ domainForm.non_field_errors }}
             <form>
@@ -41,7 +41,7 @@
               </div>
 
               <div class="span3">
-                
+
               </div>
 
               <div class="span3">
@@ -58,7 +58,7 @@
                 </div>
               </div>
               <div class="span3">
-                
+
                 </div>
               </div>
               <div class="span3">
@@ -82,26 +82,26 @@
                   {{ domainForm.description }}
                 </div>
 
-      
+
 
 
 
 
             </div>
 
-                        <button class="btn msaGenButton" type="button">MSA LOL</button>
+                        <button class="btn msaGenButton" type="button">MSA!</button>
 
             </div>
 
           </form>
-        
+
                                 {% endfor %}
 
 
 
- 
+
   </div>
-          <p><input type="submit" value="Send message" /></p>
+          <button class="btn" id="saveCdsDomains" type="button">Save cds and domains!</button>
 
 
 <div id="msaModal" class="modal hide fade fullScreenModal">
@@ -116,11 +116,32 @@
 </div>
 
 <script type="text/javascript">
+
+              jQuery( "#accordion" ).accordion({
+                heightStyle: "content",
+                collapsible: true
+              });
+
+jQuery("#saveCdsDomains").click(function() {
+  allForms = jQuery(Document).find("form").serialize()
+  jQuery.post("{% url "saveCdsDomains" %}", allForms, function(data){
+    if (data[0] === AJAX_ERROR){
+         jQuery("#domainInput").html(data[1].html);
+      } else {
+      jQuery("#cdsInputTab").html( data[1].html);
+      jQuery("#tabs").tabs("disable",1);
+      jQuery("#tabs").tabs( "option", "active", 0);
+      jQuery("#domainGenerator").prop('disabled', false);
+      jQuery("#domainInput").html("");
+  }
+});
+});
+
 jQuery(".msaGenButton").click(function(e) {
   btn = e.delegateTarget;
   domainFormArray = jQuery(btn).closest("form").serializeArray();
   cdsFormArray = jQuery("#cdsInputTab").find("form").serializeArray();
-  
+
   // convert "domain_set-0-module" to "domain_set-module"
   // so that Django view can handle this as normal form with prefix "domain_set"...
   domainFormArray = domainFormArray.map(function(x) {
@@ -130,11 +151,13 @@ jQuery(".msaGenButton").click(function(e) {
     });
   cdsAndDomainFormArray = cdsFormArray.concat(domainFormArray);
 
-  jQuery.post("{% url "msaDomainView" %}", cdsAndDomainFormArray, function(data){
-       jQuery("#msaModal .modal-body").html( data );
-       jQuery("#msaModal").modal("show");
+  submitCeleryJob('{% url "doMsa" %}', cdsAndDomainFormArray, undefined, undefined, function(data){
+        taskId = data[1].taskId;
+        jQuery.post("{% url 'doMsa' %}" + taskId).done(function(data) {
+            jQuery("#msaModal").modal("show");
+            jQuery("#msaModal .modal-body").html( data );
+        });
       });
-
     });
 
 jQuery(".domainSelect2Wrapper").children().select2();

@@ -25,13 +25,17 @@ public:
     virtual boost::program_options::options_description options() = 0;
     virtual void initialize() throw (DatabaseError) = 0;
     virtual Monomer getMonomer(uint32_t) throw (DatabaseError) = 0;
-    virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&) throw (DatabaseError) = 0;
+    virtual Monomer getMonomer(const std::string&) throw (DatabaseError) = 0;
+    virtual std::vector<Monomer> searchMonomers(const std::string&) throw (DatabaseError) = 0;
+    virtual std::vector<std::shared_ptr<DomainTypeA>> getADomains(const Monomer&, bool axoa = false) throw (DatabaseError) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeC>> getCDomains(const Monomer&, Configuration) throw (DatabaseError) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeT>> getTDomains(DomainTPosition) throw (DatabaseError) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeE>> getEDomains() throw (DatabaseError) = 0;
     virtual std::vector<std::shared_ptr<DomainTypeTe>> getTeDomains() throw (DatabaseError) = 0;
+    virtual std::shared_ptr<Domain> createDomain(uint32_t) throw (DatabaseError) = 0;
     virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError) = 0;
     virtual void fillOrigin(Origin*) throw (DatabaseError) = 0;
+    virtual bool isDummy(const std::shared_ptr<Domain>&) = 0;
 
     static AbstractDatabaseConnector* getInstance();
 

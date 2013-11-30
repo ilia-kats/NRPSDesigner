@@ -1,6 +1,6 @@
 from databaseInput.models import Origin, Cds, Domain, Substrate, Modification, Product
 from django.forms.models import inlineformset_factory, formset_factory
-from django.forms import ModelForm, HiddenInput, ModelChoiceField, Form
+from django.forms import ModelForm, HiddenInput, ModelChoiceField, Form, CharField, Textarea
 
 from django.forms.widgets import TextInput
 
@@ -17,6 +17,9 @@ SubstrateFormSet = formset_factory(SubstrateListForm, extra=1)
 ModificationsFormSet = formset_factory(ModificationsListForm, extra=1)
 
 class CdsForm(ModelForm):
+	geneName = CharField(label="Gene name:")
+	dnaSequence = CharField(widget = Textarea, label = "DNA sequence:")
+	description = CharField(widget = Textarea , label = "Description:")
 	class Meta:
 		model = Cds
 

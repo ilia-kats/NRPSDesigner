@@ -17,8 +17,6 @@ from substrates_nrps import *
 import os
 import utils
 
-from celeryHelper.helpers import update_celery_task_state_log
-
 def run_nrps_substr_spec_predictions(pksnrpsvars, seq_record, options):
     #Predict NRPS A domain specificities with NRPSPredictor and Minowa et al. method
 
@@ -85,7 +83,6 @@ def parse_nrps_preds(options, pksnrpsvars):
 # dha
 # scy
 # pip
-#bmt
 #adds
 #HIV VS 2HIVA????
 #bht

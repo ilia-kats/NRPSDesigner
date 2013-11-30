@@ -1,6 +1,7 @@
 #include "taxonbuilder.h"
 #include "global_enums.h"
 #include "networkoptions.h"
+#include "globals_internal.h"
 
 #include <iostream>
 #include <locale>
@@ -45,12 +46,10 @@
 #define RANK_ORDER "order"
 #define RANK_FAMILY "family"
 #define RANK_GENUS "genus"
+#define RANK_SPECIESGROUP "species group"
 #define RANK_SPECIES "species"
 
 #define TIME_FORMAT "%Y/%m/%d %H:%M:%S"
-
-#define XMLCMP(n, y) xmlStrcmp(n->name, BAD_CAST y)
-#define XMLTXT(n) (const char*)n->children->content
 
 using namespace nrps;
 namespace po = boost::program_options;
@@ -280,7 +279,7 @@ void TaxonBuilder::parseDump(const std::shared_ptr<Taxon> &t) throw (TaxonomyDum
 
 void TaxonBuilder::fetch(const std::shared_ptr<Taxon> &t) throw (NCBITaxonomyError, std::logic_error, std::system_error)
 {
-    std::string url = s_url + std::to_string(t->m_id);
+    std::string url = s_url + std::to_string(t->id());
     xmlParserCtxtPtr ctxt = xmlCreatePushParserCtxt(nullptr, nullptr, nullptr, 0, url.c_str());
     CURLcode ret = curl_easy_setopt(m_handle, CURLOPT_URL, url.c_str());
     ret = curl_easy_setopt(m_handle, CURLOPT_WRITEDATA, ctxt);
@@ -288,7 +287,7 @@ void TaxonBuilder::fetch(const std::shared_ptr<Taxon> &t) throw (NCBITaxonomyErr
     long httpcode;
     curl_easy_getinfo(m_handle, CURLINFO_RESPONSE_CODE, &httpcode);
     if (ret > 0)
-        throw NCBITaxonomyError(std::string("Something went wrong when fetching the NCBI taxonomy information. Error code: ") + std::to_string(ret) + std::string(";    ") + curl_easy_strerror(ret));
+        throw NCBITaxonomyError(std::string("Something went wrong when fetching the NCBI taxonomy information. Error code: ") + std::to_string(ret) + std::string("; ") + curl_easy_strerror(ret));
     if (httpcode != 200 && ret != CURLE_ABORTED_BY_CALLBACK)
         throw NCBITaxonomyError("The NCBI taxonomy database seems to be experiencing problems.");
     xmlParseChunk(ctxt, nullptr, 0, 1);
@@ -416,6 +415,8 @@ Taxon::Rank TaxonBuilder::parseRank(const char *r)
         return Taxon::Rank::Family;
     else if (!strcmp(r, RANK_GENUS))
         return Taxon::Rank::Genus;
+    else if (!strcmp(r, RANK_SPECIESGROUP))
+        return Taxon::Rank::SpeciesGroup;
     else if (!strcmp(r, RANK_SPECIES))
         return Taxon::Rank::Species;
 }

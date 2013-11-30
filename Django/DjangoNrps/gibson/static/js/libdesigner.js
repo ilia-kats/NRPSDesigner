@@ -27,31 +27,31 @@ var libDesigner = new function()
             modified: 'blah',
             fs: [
                 {
-                "origin": "BioBrick", 
-                "name": "pSB1C3", 
-                "refs": [], 
-                "annots": {}, 
-                "length": 2070, 
-                "id": 1, 
+                "origin": "BioBrick",
+                "name": "pSB1C3",
+                "refs": [],
+                "annots": {},
+                "length": 2070,
+                "id": 1,
                 "desc": "High copy BioBrick assembly plasmid"
             },
             {
-                "origin": "BioBrick", 
-                "name": "BBa_K325219", 
-                "refs": [], 
-                "annots": {}, 
-                "length": 3841, 
-                "id": 2, 
+                "origin": "BioBrick",
+                "name": "BBa_K325219",
+                "refs": [],
+                "annots": {},
+                "length": 3841,
+                "id": 2,
                 "desc": "Red Firefly Luciferase and LRE"+
                     "(under pBAD)L. Cruciata(E. coli optimised)"
             },
             {
-                "origin": "Nucleotide Database", 
-                "name": "HD065425", 
-                "refs": [], 
-                "annots": {}, 
-                "length": 4168, 
-                "id": 5, 
+                "origin": "Nucleotide Database",
+                "name": "HD065425",
+                "refs": [],
+                "annots": {},
+                "length": 4168,
+                "id": 5,
                 "desc": "Sequence 52 from Patent WO2010070295."
             },
             ],
@@ -112,7 +112,7 @@ function Construct(data)
     {
         AJAX.post({
             url: gibthon_api_url + this.id + '/addFragment/',
-            data: {'fid': f.getID(), 'pos': position, 'dir':direction,}, 
+            data: {'fid': f.getID(), 'pos': position, 'dir':direction,},
             success: function(cf) {
                 if(jQuery.isFunction(_suc)) _suc(new ConstructFragment(cf, f));
             },
@@ -127,7 +127,7 @@ function Construct(data)
     {
         AJAX.post({
             url: gibthon_api_url + this.id + '/rmFragment/',
-            data: {'cfid': cfid,}, 
+            data: {'cfid': cfid,},
             success: function() {if(_suc!=undefined) _suc();},
         });
     }
@@ -149,7 +149,7 @@ function Construct(data)
             this.desc = desc;
         AJAX.post({
             url: gibthon_api_url + this.id + '/saveMeta/',
-            data: {'name': this.name, 'desc': this.desc,}, 
+            data: {'name': this.name, 'desc': this.desc,},
         });
     }
 
@@ -158,7 +158,7 @@ function Construct(data)
 }
 
 function ConstructFragment(d, f)
-{		
+{
     this.id = d.id;
     this.strand = d.direction;
     this.s_offset = d.s_offset;
@@ -302,7 +302,7 @@ jQuery.widget('ui.constructPreview', {
         }).click( function() {
             self.boxplot.html('')
                 .dialog('open')
-                .load('primers/' + jQuery(this).attr('pid') + '/boxplot/');
+                .load(gibthon_primer_url + jQuery(this).attr('pid') + '/boxplot/');
         });
 
         jQuery(document).on('click', '.join .seq > .base', function() {
@@ -330,7 +330,7 @@ jQuery.widget('ui.constructPreview', {
         var p = this.options.primers[jQueryp.attr('id')];
         this.pedit.find('#pname').text(p.name);
         this.pedit.find('#pseq').text(p.seq);
-        
+
         if(this.type == 'fwd')
         {
             this._set_fwd();
@@ -362,7 +362,7 @@ jQuery.widget('ui.constructPreview', {
                 .addClass('sl');
         }
 
-        this._set_rulers(p); 
+        this._set_rulers(p);
 
         this._show_warnings(p.warnings);
 
@@ -412,7 +412,7 @@ jQuery.widget('ui.constructPreview', {
             s = parseInt(l.attr('offset')) + 1;
         }
         var self = this;
-        jQuery.ajax('primers/' + p.id + '/setLength/', {
+        jQuery.ajax(gibthon_primer_url + p.id + '/setLength/', {
             'type': 'POST',
             'data': {
                 'flap_length': f,
@@ -442,7 +442,7 @@ jQuery.widget('ui.constructPreview', {
         p.length = f+s;
         p.stick.length = s;
         p.flap.length = f;
-        var flap_seq = 
+        var flap_seq =
             p.flap.context.substring(p.flap.context.length - p.flap.length);
         var stick_seq = p.stick.context.substring(0, p.stick.length);
 

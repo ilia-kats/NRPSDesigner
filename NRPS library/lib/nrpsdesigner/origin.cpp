@@ -139,11 +139,12 @@ void Origin::setTaxId(uint32_t taxid)
     }
 }
 
+#ifdef WITH_INTERNAL_XML
 void Origin::toXml(xmlTextWriterPtr writer) const
 {
     xmlTextWriterStartElement(writer, BAD_CAST ORIGIN_NODE);
     xmlTextWriterWriteElement(writer, BAD_CAST ID_NODE, BAD_CAST std::to_string(id()).c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST SOURCETYPE_NODE, BAD_CAST toString(sourceType()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST SOURCETYPE_NODE, BAD_CAST nrps::toString(sourceType()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST SOURCE_NODE, BAD_CAST source().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST SPECIES_NODE, BAD_CAST species().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
@@ -151,4 +152,14 @@ void Origin::toXml(xmlTextWriterPtr writer) const
     if (parent() != nullptr)
         xmlTextWriterWriteElement(writer, BAD_CAST PARENT_NODE, BAD_CAST std::to_string(parent()->id()).c_str());
     xmlTextWriterEndElement(writer);
+}
+#endif
+
+std::string Origin::toString() const
+{
+    std::string retVal = nrps::toString(sourceType());
+    retVal.append("; taxID ").append(std::to_string(taxId())).append(": ").append(species());
+    if (sourceType() == OriginSourceType::DNA)
+        retVal.append("; source: ").append(source());
+    return retVal;
 }

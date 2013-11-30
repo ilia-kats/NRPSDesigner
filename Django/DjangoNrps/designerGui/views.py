@@ -3,12 +3,14 @@ from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
 from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
+from gibson.views import primer_download
 
 from django.views.generic import ListView, CreateView, TemplateView
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
+from django.views.decorators.cache import cache_page
 
 
 import math
@@ -17,28 +19,35 @@ import xml.etree.ElementTree as x
 import openbabel as ob
 import json
 
+def toBool(x):
+    return str(x.lower()) in ("yes", "true", "t", "1")
 
 @login_required
 def makeConstruct(request,pid):
-    nrp = NRP.objects.get(pk=pid)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
     nrp.designed = False
-    #import pdb; pdb.set_trace()
-    nrp.makeConstruct()
+    return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
+
+@login_required
+def getConstruct(request, pid):
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
+    if not nrp.designed:
+        return makeConstruct(request, pid)
+    elif nrp.construct is None or nrp.construct.fragments.count() == 0:
+        con = nrp.makeConstruct()
     con = nrp.construct
     constructId = con.pk
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
     domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
-    jsonOutput = json.dumps({"constructId": constructId,
-        'designTabLink': designTabLink,
-        'primerTabLink': primerTabLink,
-        'domainSequenceTablLink': domainSequenceTabLink})
-    #construct
-    return HttpResponse(jsonOutput)
+    return JsonResponse({"constructId": constructId,
+                         'designTabLink': designTabLink,
+                         'primerTabLink': primerTabLink,
+                         'domainSequenceTablLink': domainSequenceTabLink})
 
 @login_required
 def nrpDesigner(request, pid):
-    nrp = NRP.objects.get(pk=pid)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
     if nrp:
         t = loader.get_template('gibson/designer.html')
         c = RequestContext(request,{
@@ -50,7 +59,7 @@ def nrpDesigner(request, pid):
     else:
         raise Http404()
 
-@login_required 
+@login_required
 def peptide_add(request):
     if request.method == 'POST':
         form = NRPForm(request.POST, prefix='nrp')
@@ -74,14 +83,15 @@ def peptide_delete(request, cid):
     if peptide:
         peptide.fullDelete()
         if request.is_ajax():
-            return JsonResponse('/peptides') 
+            return JsonResponse('/peptides')
         return HttpResponseRedirect('/peptides')
     else:
         return HttpResponseNotFound()
 
+
 class NRPListView(TemplateView):
     template_name = 'designerGui/peptides.html'
-   
+
     def get_context_data(self, **kwargs):
         context = super(NRPListView, self).get_context_data(**kwargs)
         context['NRPform'] = NRPForm(prefix='nrp')
@@ -89,51 +99,143 @@ class NRPListView(TemplateView):
         context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
         return context
 
- 
+
 class SpeciesListView(ListView):
   template_name = 'designerGui/use_tool.html'
   model = Species
-  
+
   def get_context_data(self, **kwargs):
 
         context = super(SpeciesListView, self).get_context_data(**kwargs)
         pid  = self.kwargs["pid"]
         context['pid'] = pid
         context['myFormSet'] = SubstrateFormSet()
-        
+
         modfs = Modification.objects.all()
         context['modifications'] = modfs.values()
         #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
-        
-
-        aas = Substrate.objects.exclude(structure='')
-        realAas = []
-        for aa in aas:
-            if not hasattr(aa.parent, 'name'):
-                realAas.append(aa)
-        names = {}
-        for aa in realAas:
-            name = aa.name
-            if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
-                name = aa.name[2:]
-            if name in names:
-                names[name][aa.chirality] = aa.pk
-                names[name][aa.chirality+'Children'] = aa.child.all()
-                #names[name]['name'] = name
-            else:
-                tmp = aa.child.all()    
-                names[name] = {aa.chirality: aa.pk, 'name': name, aa.chirality+'Children': aa.child.all()}
-        context['substrates'] = names.values()
-        context['substrates'].sort(lambda x,y: cmp(x['name'], y['name']))
 
         nrp = NRP.objects.get(pk= pid)
         substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
         context['substrateOrder'] = substrateOrder
+        context['indigoidineTagged'] = nrp.indigoidineTagged
 
-        initialPic = nrp.getPeptideSequenceForStructView()
-        context['initialPic'] = initialPic
+        context['initialPic'] = nrp.getPeptideSequenceForStructView()
         return context
 
+@login_required
+def createLibrary(request, pid):
+    t = loader.get_template('designerGui/createlibrary.html')
+    c = RequestContext(request)
+    nrp = NRP.objects.get(owner=request.user, pk=pid)
+    substrateOrder = SubstrateOrder.objects.filter(nrp=nrp)
+    c['substrateOrder'] = substrateOrder
+    c['indigoidineTagged'] = nrp.indigoidineTagged
+    c['pid'] = pid
+    initialPic = nrp.getPeptideSequenceForStructView()
+    c['initialPic'] = initialPic
+    c['scaffold'] = nrp.monomers.order_by('substrateOrder')
+    return HttpResponse(t.render(c))
+
+@login_required
+def processLibrary(request, pid):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        monomers = []
+        haveUseAll = -1
+        i = 0
+        for m in data['as']:
+            monomers.append(m[0])
+            if len(m) > 1 and m[1] == True:
+                haveUseAll = i
+            i += 1
+        if haveUseAll != -1:
+            for m in data['as']:
+                del m[1:]
+            substrates = get_available_substrates(monomers, True, data['curatedonly'], haveUseAll)
+            scaffold = data['as'][haveUseAll][0]
+            for s in substrates:
+                if s.pk != scaffold:
+                    data['as'][haveUseAll].append(s.pk)
+        nrp = NRP.objects.get(owner=request.user, pk=pid)
+        return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
+
+@login_required
+def viewLibrary(request, pid):
+    parentnrp = NRP.objects.get(owner=request.user, pk=pid)
+    childnrps = parentnrp.child.all()
+    c = RequestContext(request)
+    c['parentnrp'] = parentnrp
+    c['childnrps'] = childnrps
+    t = loader.get_template('designerGui/viewlibrary.html')
+    return HttpResponse(t.render(c))
+
+@login_required
+def downloadLibrary(request, pid):
+    parentnrp = NRP.objects.get(owner=request.user, pk=pid)
+    cids = [child.construct.pk for child in parentnrp.child.filter(pk__in=request.POST.getlist('id'))]
+    return primer_download(request, parentnrp.construct.pk, *cids)
+
+@login_required
+def get_available_monomers(request):
+    if request.method == 'POST' and "monomer[]" in request.POST:
+        monomers = request.POST.getlist("monomer[]")
+        if 'selected' in request.POST:
+            selected = int(request.POST['selected'])
+        else:
+            selected = None
+        aas = get_available_substrates(monomers, toBool(request.POST['current']), toBool(request.POST['curatedonly']), selected)
+    else:
+        aas = filter(lambda x: x.can_be_added(), Substrate.objects.exclude(user__username='sbspks'))
+    json = {}
+    minid = float("Inf")
+    for aa in aas:
+        if aa.parent is None:
+            name = aa.name
+            if aa.name[0:2].upper() == 'L-' or aa.name[0:2].upper() == 'D-':
+                name = aa.name[2:]
+            if aa.pk in json:
+                key = aa.pk
+            elif aa.enantiomer is not None and aa.enantiomer.pk in json:
+                key = aa.enantiomer.pk
+            else:
+                key = None
+            if aa.enantiomer is None:
+                chirality = 'N'
+            else:
+                chirality = aa.chirality
+            if key is not None:
+                if key < minid:
+                    minid = key
+                json[key][chirality.lower() + "id"] = aa.pk
+                json[key][chirality+'Children'] = [{"text": c.name, "id": c.pk} for c in aa.child.all()]
+                #names[name]['name'] = name
+            else:
+                json[aa.pk] = {"id": aa.pk, chirality.lower() + "id": aa.pk, 'text': name, aa.chirality+'Children': [{"text": c.name, "id": c.pk} for c in aa.child.all()]}
+
+    jsonlist = json.values()
+    jsonlist.sort(lambda x,y: cmp(x['text'], y['text']))
+    return JsonResponse({"monomers": json, "monomerslist": jsonlist})
+
+def get_available_substrates(monomers, current, curatedonly=True, selected=None):
+    if selected is None:
+        selected = len(monomers) - 1
+    if current:
+        if selected > 0:
+            chirality = Substrate.objects.get(pk=monomers[selected - 1]).chirality
+        else:
+            chirality = None
+    else:
+        chirality = Substrate.objects.get(pk=monomers[-1]).chirality
+    substrates = Substrate.objects.exclude(user__username='sbspks')
+    if not current or selected == len(monomers) - 1:
+        aas = filter(lambda x: x.can_be_added(chirality, curatedonly), substrates)
+    else:
+        following = Substrate.objects.get(pk=monomers[selected + 1])
+        aas = filter(lambda x: x.can_be_added(chirality, curatedonly) and following.can_be_added(x.chirality, curatedonly), substrates)
+    return aas
+
+@login_required
 def submit_nrp(request):
     nrpxml = x.Element('nrp')
     for monomer in request.POST.getlist("as[]"):
@@ -141,7 +243,8 @@ def submit_nrp(request):
         monomerid = x.SubElement(monomerel, 'id')
         monomerid.text = monomer
     return HttpResponse(x.tostring(nrpxml, "utf8"), mimetype="text/xml")
-  
+
+@cache_page(365*24*60*60*15)
 def make_structure(request):
     def makeResidue(mol, idx, aaatoms):
         res = mol.NewResidue()
@@ -236,11 +339,11 @@ def make_structure(request):
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
 
-    
+
 
 class DomainSequenceView(TemplateView):
     template_name = 'designerGui/domainSequence.html'
-   
+
     def get_context_data(self, **kwargs):
         context = super(DomainSequenceView, self).get_context_data(**kwargs)
         pid  = self.kwargs["pid"]

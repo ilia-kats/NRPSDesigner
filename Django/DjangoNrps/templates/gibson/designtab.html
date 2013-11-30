@@ -5,9 +5,9 @@
 	<div class="pad-content" style="padding:.2em;">
 		<div id='canvas_holder'>
 			<canvas id="cdesigner" style="display:block; height:100%; width:100%;"></canvas>
-					
+
 			<div id="fragment_clipping" style='display:none;'></div>
-			
+
 			<div class="fragment-info ui-corner-all" style='display:none;'>
 				<div class="fragment-data">
 					<h3 id="fragment_name">Name</h3>
@@ -18,9 +18,14 @@
 					<button id="fragment_remove">Remove</button>
 				</div>
 			</div>
-			
+
 		</div>
         <div id='frag_select_holder'>
+            <div class="btn-group">
+                <button class="btn" type="button" id="download_sbol">Download SBOL</button>
+                <button class="btn" type="button" id="download_genbank">Download GenBank</button>
+                <button class="btn" type="button" onclick="jQuery('#tabs').tabs('option', 'active', 3);">Next</button>
+            </div>
             <div id='frag_select'>
                 {%include 'fragment/jFragmentSelector.html' %}
             </div>
@@ -43,6 +48,7 @@
         //Make the selector and equalise the height
         jQuery('#frag_select').jFragmentSelector({
             containment: jQuery('.pad-content'),
+            categories: new Array("Expression Plasmid", "Plasmid Backbone", "Promoter", "RBS", "Terminator"),
         }).jFragmentSelector('height', jQuery('#cdesigner').height());
 	});
 
@@ -52,6 +58,14 @@
 		jQuery('#status').text(modified);
 		}
 		}
+		jQuery(function(){
+            jQuery("#download_sbol").click(function(){
+                window.location.href='{% url 'gibson.views.download_sbol' construct.pk %}';
+            });
+            jQuery("#download_genbank").click(function(){
+                window.location.href='{% url 'gibson.views.download_genbank' construct.pk %}';
+            });
+        });
 
 </script>
 

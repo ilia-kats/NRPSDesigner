@@ -59,7 +59,7 @@ class Part:
         self.url = getTag(soup, "part_url")
         self.author = getTag(soup, "part_author")
         #type and categories
-        self.part_type = getTag(soup, "part_type")
+        self.part_type = getTag(soup, "part_type").replace("_", " ")
         self.categories = [x.string.strip() for x in soup.findAll('category')]
         #date added
         adate = re.findall("[0-9]+", soup.find('part_entered').string)

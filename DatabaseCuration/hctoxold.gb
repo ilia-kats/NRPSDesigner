@@ -1,0 +1,7 @@
+LOCUS       Annotations                                             20-SEP-2013
+UNIMARK     Annotations
+FEATURES             Location/Qualifiers
+     misc_feature    936..16589
+                     /ugene_name="hctox"
+                     /ugene_group="hctox_coding_sequences"
+//

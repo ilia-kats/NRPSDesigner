@@ -78,7 +78,7 @@ class SbspksPipeline(object):
                                 s.save()
                                 sd.save()
                                 cls.names[d['substrate']] = d['substrate']
-                                domain.substrateSpecificity.add(s)
+                            domain.substrateSpecificity.add(s)
                         except KeyError as e:
                             print "KeyError:"
                             print d

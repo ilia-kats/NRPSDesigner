@@ -1,6 +1,5 @@
 {% load staticfiles %}
 <script src="{% static "js/primers.js" %}" type="text/javascript"></script>
-<script src="{% static "js/jquery.cookie-modified.js" %}" type="text/javascript"></script>
 
 <div id='buttons' class='ui-widget-content content fixed-width'>
 	<button id="download">Download Primers and Protocols</button>
@@ -9,7 +8,9 @@
 -->
 </div>
 
-
+<script type="text/javascript">
+var gibthon_primer_url = '{%url 'primers' construct.pk %}';
+</script>
 
 <div class="ui-widget-content ui-corner-all content fixed-width">
     <h3>Overview</h3>
@@ -52,11 +53,11 @@
 	<div class="ui-widget-content ui-corner-all content fixed-width">
 		<h3>PCR Particulars</h3>
 		<p>
-            Fill in the details for all of your primers to download protocol 
+            Fill in the details for all of your primers to download protocol
             information
         </p>
 		<p>Don't forget to save your changes!</p>
-		<div id="warning" class="ui-state-highlight ui-corner-all" 
+		<div id="warning" class="ui-state-highlight ui-corner-all"
             style="padding:5px; margin-left:auto; margin-right:auto; width:500px; margin-bottom:5px;">
             Warning! Some of your components have a volume of less than 1&mu;l. Consider diluting them before adding to the mix.
         </div>
@@ -106,7 +107,7 @@
 
 <script type="text/javascript">
 
-var primer_dlg_contents = 
+var primer_dlg_contents =
     "<div class='center' style='margin-top:2em'>" +
         "<img src='{% static "images/spinner.gif" %}'></img>" +
     "</div>";
@@ -125,7 +126,7 @@ jQuery(window).ready(function() {
 			jQuery.each(jQuery('#pcrform')[0].elements, function (i,e) {
 				settings.push('"' + e.name + '":"' + e.value + '"');
 			});
-			jQuery.post('primers/save', {"data":'[{"pcrsettings":{' + settings.join(',') + '},"fragments":[' + forms.join(',') + ']}]'});
+			jQuery.post('{% url 'gibson.views.primer_save' construct.pk %}', {"data":'[{"pcrsettings":{' + settings.join(',') + '},"fragments":[' + forms.join(',') + ']}]'});
 		});
 
 	var downloadTimer;
@@ -149,7 +150,7 @@ jQuery(window).ready(function() {
 				jQuery.cookie('fileDownloadToken', null);
 			}
 		},500);
-		window.location.href='{% url 'gibson.views.constructs' %}/{{ construct.id }}/primers/download?tk='+token;
+		window.location.href='{% url 'gibson.views.primer_download' construct.pk %}?tk='+token;
 	});
 });
 </script>

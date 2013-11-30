@@ -1,6 +1,7 @@
 #ifndef NRPSDESIGNER_DOMAIN_H
 #define NRPSDESIGNER_DOMAIN_H
 
+#include "config.h"
 #include "nrpsdesigner_export.h"
 #include "global_enums.h"
 
@@ -9,7 +10,9 @@
 #include <memory>
 #include <unordered_map>
 
+#ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
+#endif
 
 namespace nrps
 {
@@ -34,8 +37,13 @@ public:
     const std::string& nativePfamLinkerAfter() const;
     const std::string& nativeDefinedLinkerBefore() const;
     const std::string& nativeDefinedLinkerAfter() const;
+    const std::string& determinedLinkerBefore() const;
+    const std::string& determinedLinkerAfter() const;
 
+#ifdef WITH_INTERNAL_XML
     void toXml(xmlTextWriterPtr) const;
+#endif
+    std::string toString() const;
 
     void setId(uint32_t);
     void setModule(uint32_t);
@@ -59,15 +67,22 @@ public:
     void setNativeDefinedLinkerBefore(std::string&&);
     void setNativeDefinedLinkerAfter(const std::string&);
     void setNativeDefinedLinkerAfter(std::string&&);
+    void setDeterminedLinkerBefore(const std::string&);
+    void setDeterminedLinkerBefore(std::string&&);
+    void setDeterminedLinkerAfter(const std::string&);
+    void setDeterminedLinkerAfter(std::string&&);
 
 protected:
     Domain(DomainType, uint32_t);
+#ifdef WITH_INTERNAL_XML
     virtual void writeXml(xmlTextWriterPtr) const;
-
+#endif
 
 private:
+#ifdef WITH_INTERNAL_XML
     void startXml(xmlTextWriterPtr) const;
     void endXml(xmlTextWriterPtr) const;
+#endif
 
     DomainType m_type;
     uint32_t m_id;
@@ -83,6 +98,8 @@ private:
     std::string m_nativePfamLinkerAfter;
     std::string m_nativeDefinedLinkerBefore;
     std::string m_nativeDefinedLinkerAfter;
+    std::string m_determinedLinkerBefore;
+    std::string m_determinedLinkerAfter;
 };
 }
 

@@ -6,7 +6,7 @@
 
 namespace nrps
 {
-    enum class NRPSDESIGNER_EXPORT DomainType {A, C, T, E, Te, Tailoring};
+    enum class NRPSDESIGNER_EXPORT DomainType {A, C, T, E, Te, AOxA, Tailoring};
     enum class NRPSDESIGNER_EXPORT Configuration {L, D};
     enum class NRPSDESIGNER_EXPORT DomainTPosition {BeforeC, BeforeE};
     enum class NRPSDESIGNER_EXPORT OriginSourceType {Species, DNA};
