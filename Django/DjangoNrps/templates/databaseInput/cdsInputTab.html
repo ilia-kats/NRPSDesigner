@@ -10,7 +10,11 @@
 </div>
 
 {% endif %}
-
+<style type="text/css">
+  textarea, .uneditable-input {
+    width: 520px;
+}
+</style>
 {% if djangoError %}
 
 <div class="alert alert-error">
@@ -22,58 +26,90 @@
 </div>
 
 {% endif %}
-
+        
         {{ form.non_field_errors }}
         <form id="cdsFormForDomainPrediction">
         <div class="row">
-          <div class="span3">
-                   <div class="fieldWrapper">
-            {{ form.origin.errors }}
-            <label for="id_origin"></label>
-            <div id="originChosenWrapper" class = "chosenWrapper">
-              {{ form.origin }} <br/>
-            </div>
-            </div>
-
-            <div class="fieldWrapper">
-            {{ form.product.errors }}
-            <label for="id_product"></label>
-            <div id="productChosenWrapper" class = "chosenWrapper">
-              {{ form.product }} <br/>
-            </div>
-            </div>
-
-            <div class="fieldWrapper">
-              {{ form.dnaSequence.errors }}
-              <label for="id_dnaSequence">Please enter DNA sequence: <br/> </label>
-              {{ form.dnaSequence }} <br/>
-              <div class="btn-group">
-                <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()"> Generate Domains!</button>
-
+          <div class="span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; margin-top:1%">
+          <p style="margin-left:5%; margin-top:5%">Please specify your NRPS origin!</p>
+              <div class="span3">
+                <div class="fieldWrapper">
+                  {{ form.origin.errors }}
+                  <label for="id_origin"></label>
+                  <div id="originChosenWrapper" class = "chosenWrapper">
+                    {{ form.origin }} 
+                  </div>
+                </div>
+              </div>
+              
+              <div class="span1">
+                <center>or</center>
+              </div>
+              <div class="span2">
+                <a href="{% url 'addOrigin' %}" role="button" class="btn" data-toggle="modal"  data-target="#myModal">Add a new origin</a>
               </div>
 
+          </div>
+
+          
+          <div class="span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; margin-top:1%">
+            <p style="margin-left:5%; margin-top:5%">Please specify your NRPS pathway product!</p>
+            <div class="span3">
+              <div class="fieldWrapper">
+                {{ form.product.errors }}
+                <label for="id_product"></label>
+                <div id="productChosenWrapper" class = "chosenWrapper">
+                  {{ form.product }} <br/>
+                </div>
+              </div>
+            </div>
+            <div class="span1">
+              <center>or</center>
+            </div>
+            <div class="span2">
+               <a href="{% url 'addProduct' %}" role="button" class="btn btn-lg" data-toggle="modal"  data-target="#myModal">Add new product</a>
+            </div>
+            
+          </div>
+          <div class="modal hide fade"  id="myModal"></div>
+            
+
+          <div class="fieldWrapper span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; margin-top:1%">
+            <div class="fieldWrapper" style="margin-left:7%; margin-top:5%">
+              {{ form.geneName.errors }}
+              <label for="id_message">Gene Name:</label>
+              {{ form.geneName }}
+            </div>
+            
+            {{ form.dnaSequence.errors }}
+            <label for="id_dnaSequence" style="margin-top:5%; margin-left:7%">Please enter DNA sequence:</label>
+            <div style="margin-left:7%">
+              {{ form.dnaSequence }}
+            </div>
+            </div>
+            <div class="span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; margin-top:1%">
+            <div class="fieldWrapper" style="margin-top:5%; margin-left:7%">
+              {{ form.description.errors }}
+              <label for="id_sender">Description:</label>
+              {{ form.description }}
+            </div>
+            <div class="btn-group">
+              <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()" style="margin-left:60%; margin-top:5%;margin-bottom:12%">Generate domains!</button>
+
+            </div>
+            </div>
             </div>
           </div>
 
-          <div class="span3">
-<a href="{% url 'addOrigin' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Origin</a>
-
-
-<a href="{% url 'addProduct' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Product</a>
-
-<div class="modal hide fade"  id="myModal"></div>
-
-
-            <div class="fieldWrapper">
-              {{ form.geneName.errors }}
-              <label for="id_message">Gene Name:<br/> </label>
-              {{ form.geneName }}
+          <!-- <div class="span3">
+            <div style="display:inline;" class="box">
+              <p> or </p>
+              <a href="{% url 'addOrigin' %}" role="button" class="btn btn-lg" data-toggle="modal"  data-target="#myModal">   Add new Origin</a>
             </div>
-            <div class="fieldWrapper">
-              {{ form.description.errors }}
-              <label for="id_sender">Description:<br/> </label>
-              {{ form.description }}
-            </div>
+            
+            <a href="{% url 'addProduct' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Product</a>
+            -->
+
           </div>
           <div class="span4" id="statusLog">
            </div>
