@@ -10,6 +10,9 @@
     <p>    Welcome to the NRPSDesigner of <a href="http://2013.igem.org/Team:Heidelberg"> iGEM Team Heidelberg 2013! </a> </p>
 
 
+{% if not user.is_authenticated %}
+
+<p>In order to get started, please choose one of the options below:
     </p>
     <div class="btn-group">
 
