@@ -274,7 +274,7 @@ class Primer(models.Model):
                 w = Warning.objects.create(
                     primer = self,
                     type = 'mp',
-                    text= 'Potentital mis-priming ' + (str(warning[1]) + ' bp from ' if warning[1] > 0 else ' of ') + '3\' end of primer at bp ' + str(warning[2]) + ', length ' + str(warning[0]) + ', energy ' + str(warning[3]),
+                    text= 'Potential mis-priming ' + (str(warning[1]) + ' bp from ' if warning[1] > 0 else ' of ') + '3\' end of primer at bp ' + str(warning[2]) + ', length ' + str(warning[0]) + ', energy ' + str(warning[3]),
                 )
 
 

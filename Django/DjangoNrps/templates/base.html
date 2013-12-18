@@ -184,17 +184,11 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 				<span class="user_tab"><a href="{% url 'auth_login' %}" id="user_tab_login" class="user_tab">Log in</a></span>
 				<span class="user_tab"><a href="{% url 'registration_register' %}" id="user_tab_register" class="user_tab">Register</a></span>
 				{% endif %}
-				<!--<span class="user_tab drop" data-intro="Lorem ipsum..." data-step="4">
-					<a href="/help/" id="user_tab_help" class="user_tab">Help</a>
-					<ul class="ui-widget-content ui-corner-bottom">
-						<li><a href="/help/gibson/">NRPS Designer</a></li>
-						<li><a href="/help/primer/">Add NRPS into library</a></li>
-					</ul>
-				</span>-->
+                <span class="user_tab"><a href="{% url 'documentation' %}" id="user_tab_help" class="user_tab">Help</a></span>
 				<span class="user_tab drop">
 					<a href="#" id="user_tab_tools" class="user_tab">Apps</a>
 					<ul class="ui-widget-content ui-corner-bottom">
-						<li><a href="{% url 'peptides' %}">NRPS Designer</a></li>
+						<li><a href="{% url 'peptides' %}">NRPSDesigner</a></li>
 						<li><a href="{% url 'pfam' %}">Add NRPS into library</a></li>
 						<li><a href="{% url 'fragment.views.fragments' %}">Manage Gibson fragments</a></li>
 					</ul>
@@ -207,7 +201,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 				</span>
 			</div>
 			<a href="{%url 'home' %}"><img src="{% static "img/logo_NRPSDesigner.png" %}" style="height:90px; padding:5px 10px; float:left;" alt="iGEMhd" /></a>
-			<h2 id="main_title">NRPS Designer<!--:<span style="font-size:0.7em">{{ title|default:"Home" }}</span>--></h2>
+			<h2 id="main_title">NRPSDesigner<!--:<span style="font-size:0.7em">{{ title|default:"Home" }}</span>--></h2>
 		</div>
 	</div>
 	{% block no-app-menu %}
