@@ -2,7 +2,7 @@
 from fragment.models import *
 from django import forms
 from django.contrib.auth.decorators import login_required
-from django.conf.urls.defaults import patterns, include
+from django.conf.urls import patterns, include
 from django.template import Context, loader, RequestContext
 from django.core.context_processors import csrf
 from django.core.files.uploadedfile import UploadedFile
@@ -22,7 +22,7 @@ def fragment_import(request):
 	"""return the import page"""
 	t = loader.get_template('fragment/import.html')
 	c = RequestContext(request,{})
-	
+
 	return HttpResponse(t.render(c))
 
 ##################################### MANUAL ############################
@@ -37,10 +37,10 @@ def manual_form(request):
 	c = RequestContext(request, {	'meta': meta, 'seq': seq,
 									'title':'Manually add a Fragment',
 									'action': 'import/manual/add/',})
-	
+
 	return HttpResponse(t.render(c))
 
-@login_required	
+@login_required
 def manual_add(request):
 	"""Add a fragment manually"""
 	if request.method == 'GET':
@@ -48,7 +48,7 @@ def manual_add(request):
 		seq = SequenceForm(request.GET)
 		if meta.is_valid() and seq.is_valid():
 			record = SeqRecord(	seq.cleaned_data['seq'],
-								name=meta.cleaned_data['name'], 
+								name=meta.cleaned_data['name'],
 								id=meta.cleaned_data['name'],
 								description=meta.cleaned_data['desc'])
 			Gene.add(record, 'MN', request.user)
@@ -67,7 +67,7 @@ def upload_form(request):
 	"""return the import page"""
 	t = loader.get_template('fragment/ULform.html')
 	c = RequestContext(request,{})
-	
+
 	return HttpResponse(t.render(c))
 
 
@@ -82,7 +82,7 @@ def handle_upload(request):
 		data = []
 		for file in files:
 			wrapped_file = UploadedFile(file)
-			
+
 			format = 'genbank' #assume genbank
 			if wrapped_file.name.split('.')[-1] in fasta_types:
 				format = 'fasta' #we were wrong!
@@ -94,8 +94,8 @@ def handle_upload(request):
 				(g, t) = Gene.add(record, 'UL', request.user, errors=True)
 				truncated += t['truncated']
 				ids.append(g.id)
-			
-			file_dict = {	"name":wrapped_file.name, 
+
+			file_dict = {	"name":wrapped_file.name,
 							"size":file.size,
 							"error": None,
 							"url":reverse('fragment.views.fragment', args=(ids[0],)),
@@ -103,21 +103,21 @@ def handle_upload(request):
 							"delete_type":"POST",
 							"delete_data": json.dumps({'selected':ids,}),
 						}
-			
+
 			if truncated > 0:
 				e = ''
 				if truncated == 1:
 					e = "Warning: 1 annotation was truncated"
 				else:
-					e = "Warning: %i annotations were truncated" % truncated 
+					e = "Warning: %i annotations were truncated" % truncated
 				file_dict['error'] = e
-			
+
 			data.append(file_dict)
-		
+
 		return RawJsonResponse({'files': data})
 	raise Http404
-	
-	
+
+
 ############################################################### PARTS #############################
 
 from partsregistry import Part
@@ -140,8 +140,8 @@ def part_import(request):
 		except Exception, e:
 			return JsonResponse(e.message, ERROR)
 		return JsonResponse('ok')
-	raise Http404	
-		
+	raise Http404
+
 
 ###################################################################################################
 ########## ENTREZ JSON API ########################################################################
@@ -159,7 +159,7 @@ entrez_databases = (	('nucleotide', 'All Nucleotide Databases'),
 
 class EntrezSearchForm(forms.Form):
 	database = forms.ChoiceField(choices=entrez_databases, label='Entrez Database')
-	query = forms.CharField({'width': 60,}, label='Search Term')
+	query = forms.CharField(widget=forms.TextInput(attrs={'width': 60,}), label='Search Term')
 
 @login_required
 def entrez(request):
@@ -190,7 +190,7 @@ def entrez_search(request):
 				return JsonResponse(ids)
 		else:
 			return JsonResponse("Error: Blank search query", ERROR);
-		
+
 	raise Http404
 
 @login_required
@@ -199,14 +199,14 @@ def entrez_summary(request):
 	if request.method == 'GET' and 'id' in request.GET:
 		id = request.GET['id']
 		db = request.GET.get('database', 'nucleotide') #assume nucleotide by default
-		
+
 		#fetch summary information for the id
-		
+
 		handle = Entrez.esummary(db=db, id=id)
 		record = Entrez.read(handle)
 		if record is None or len(record) < 1:
 			return JsonResponse("Error: Could not get summary information for id '%s'" % id, ERROR)
-		return JsonResponse(record[0]);	
+		return JsonResponse(record[0]);
 	raise Http404
 
 @login_required
@@ -221,6 +221,6 @@ def entrez_import(request):
 			if len(Gene.objects.filter(name=r.name, owner=request.user)) == 0:
 				Gene.add(r, 'NT', request.user)
 		return JsonResponse("Imported id '%s' from Entrez." % id)
-		
+
 	raise Http404
 

@@ -17,3 +17,20 @@ def saveNrpMonomers(request,pid):
         nrp.indigoidineTagged = toBool(request.POST['indtag'])
         nrp.save()
         return HttpResponse()
+
+def saveNrpMonomers_nologin(request, uuid):
+    if request.method == 'POST':
+        try:
+            nrp = NRP.objects.get(uuid=uuid)
+            # delete other stuff pointing
+            nrp.delete_dependencies()
+        except NRP.DoesNotExist:
+            nrp = NRP.objects.create(uuid=uuid, owner=None)
+
+        # now add the new list
+        for count, monomerId in enumerate(request.POST.getlist('as[]')):
+            monomer = Substrate.objects.get(pk=int(monomerId))
+            so = SubstrateOrder.objects.create(nrp= nrp, substrate = monomer, order = count)
+        nrp.indigoidineTagged = toBool(request.POST['indtag'])
+        nrp.save()
+        return HttpResponse()

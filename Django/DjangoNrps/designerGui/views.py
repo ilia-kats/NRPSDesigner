@@ -28,9 +28,40 @@ def makeConstruct(request,pid):
     nrp.designed = False
     return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
 
+def makeConstruct_nologin(request,uuid):
+    try:
+        nrp = NRP.objects.get(uuid=uuid)
+    except NRP.DoesNotExist:
+        raise Http404()
+    if nrp and nrp.owner is not None:
+        raise Http404()
+    nrp.designed = False
+    return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
+
 @login_required
 def getConstruct(request, pid):
     nrp = NRP.objects.get(owner=request.user, pk=pid)
+    if not nrp.designed:
+        return makeConstruct(request, pid)
+    elif nrp.construct is None or nrp.construct.fragments.count() == 0:
+        con = nrp.makeConstruct()
+    con = nrp.construct
+    constructId = con.pk
+    designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
+    primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
+    domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
+    return JsonResponse({"constructId": constructId,
+                         'designTabLink': designTabLink,
+                         'primerTabLink': primerTabLink,
+                         'domainSequenceTablLink': domainSequenceTabLink})
+
+def getConstruct_nologin(request, uuid):
+    try:
+        nrp = NRP.objects.get(uuid=uuid)
+    except NRP.DoesNotExist:
+        raise Http404()
+    if nrp and nrp.owner is not None:
+        raise Http404()
     if not nrp.designed:
         return makeConstruct(request, pid)
     elif nrp.construct is None or nrp.construct.fragments.count() == 0:
@@ -58,6 +89,19 @@ def nrpDesigner(request, pid):
         return HttpResponse(t.render(c))
     else:
         raise Http404()
+
+def nrpDesigner_nologin(request, uuid):
+    try:
+        nrp = NRP.objects.get(uuid=uuid)
+    except NRP.DoesNotExist:
+        nrp = None
+    t = loader.get_template('gibson/designer.html')
+    if nrp and nrp.owner is not None:
+        raise Http404()
+    elif not nrp:
+        nrp = NRP(owner=None, uuid=uuid)
+    c = RequestContext(request, {'nrp': nrp})
+    return HttpResponse(t.render(c))
 
 @login_required
 def peptide_add(request):
@@ -123,6 +167,21 @@ class SpeciesListView(ListView):
         context['initialPic'] = nrp.getPeptideSequenceForStructView()
         return context
 
+def SpeciesListView_nologin(request, uuid):
+    try:
+        nrp = NRP.objects.get(uuid=uuid)
+    except NRP.DoesNotExist:
+        nrp = None
+    t = loader.get_template('designerGui/use_tool.html')
+    if nrp and nrp.owner is not None:
+        raise Http404()
+    elif not nrp:
+        nrp = NRP(owner=None, uuid=uuid)
+    substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+    modfs = Modification.objects.all()
+    c = RequestContext(request, {'nrp': nrp, 'uuid': uuid, 'myFormSet': SubstrateFormSet(), 'modifications': modfs.values(), 'substrateOrder': substrateOrder, 'indigoidineTagged': nrp.indigoidineTagged, 'initialPic': nrp.getPeptideSequenceForStructView()})
+    return HttpResponse(t.render(c))
+
 @login_required
 def createLibrary(request, pid):
     t = loader.get_template('designerGui/createlibrary.html')
@@ -176,7 +235,6 @@ def downloadLibrary(request, pid):
     cids = [child.construct.pk for child in parentnrp.child.filter(pk__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
 
-@login_required
 def get_available_monomers(request):
     if request.method == 'POST' and "monomer[]" in request.POST:
         monomers = request.POST.getlist("monomer[]")

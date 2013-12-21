@@ -1,9 +1,11 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, getConstruct, makeConstruct, DomainSequenceView, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
+from designerGui.views import SpeciesListView, SpeciesListView_nologin, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, nrpDesigner_nologin, getConstruct, getConstruct_nologin, makeConstruct, makeConstruct_nologin, DomainSequenceView, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
-from designerGui.api import saveNrpMonomers
+from designerGui.api import saveNrpMonomers, saveNrpMonomers_nologin
+
+uuidregex = r'[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'
 
 urlpatterns = patterns('',
 					url(r'^$', login_required(NRPListView.as_view()),name="peptides"),
@@ -23,3 +25,11 @@ urlpatterns = patterns('',
 					url(r'^api/(?P<pid>\d+)', saveNrpMonomers, name = "saveNrpMonomers" ),
 					url(r'^(?P<pid>\d+)/domainSequence/', DomainSequenceView.as_view(), name="domainSequence")
 					)
+
+urlpatterns += patterns('',
+                        url(r'^(?P<uuid>' + uuidregex + ')/$', nrpDesigner_nologin, name='nrpDesigner'),
+                        url(r'^nrpselection/(?P<uuid>' + uuidregex + ')/$', SpeciesListView_nologin, name='guiTool'),
+                        url(r'^api/(?P<uuid>' + uuidregex + ')', saveNrpMonomers, name = "saveNrpMonomers" ),
+                        url(r'^makeConstruct/(?P<uuid>' + uuidregex + ')$', makeConstruct_nologin, name="makeConstruct"),
+                        url(r'^getConstruct/(?P<uuid>' + uuidregex + ')$', getConstruct_nologin, name="getConstruct"),
+                        )

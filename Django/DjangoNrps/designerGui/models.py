@@ -47,6 +47,7 @@ at appropriate fragment.Gene)-> gibson.ConstructFragment objects get deleted aut
 
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
+    uuid = models.CharField(max_length=36, db_index=True, null=True, blank=True)
     name = models.CharField(max_length=80)
     description = models.CharField(max_length=2000, null= True, blank=True)
     monomers = models.ManyToManyField('databaseInput.Substrate', through='SubstrateOrder', blank=True, related_name='includedIn')
@@ -163,7 +164,10 @@ class NRP(models.Model):
         return peptideSequenceAsString
 
     def getPeptideSequenceForStructView(self):
-        return '?' + '&'.join(["as=%s" % monomerId for monomerId in self.getPeptideSequence()])
+        if self.pk:
+            return '?' + '&'.join(["as=%s" % monomerId for monomerId in self.getPeptideSequence()])
+        else:
+            return '?'
 
     #returns actual domain objects
     def getDomainModelSequence(self):
