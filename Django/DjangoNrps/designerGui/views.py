@@ -5,6 +5,7 @@ from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
 from gibson.views import primer_download
 
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, TemplateView
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict, Http404
 from django.contrib.auth.decorators import login_required
@@ -18,6 +19,7 @@ import json
 import xml.etree.ElementTree as x
 import openbabel as ob
 import json
+from uuid import uuid4
 
 def toBool(x):
     return str(x.lower()) in ("yes", "true", "t", "1")
@@ -132,16 +134,14 @@ def peptide_delete(request, cid):
     else:
         return HttpResponseNotFound()
 
-
-class NRPListView(TemplateView):
-    template_name = 'designerGui/peptides.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(NRPListView, self).get_context_data(**kwargs)
-        context['NRPform'] = NRPForm(prefix='nrp')
-        context['title'] = 'NRPS Designer'
-        context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
-        return context
+def nrpListView(request):
+    if request.user.is_authenticated():
+        t = loader.get_template('designerGui/peptides.html')
+        c = RequestContext(request, {'NRPform': NRPForm(prefix='nrp'), 'title': 'NRPSDesigner', 'nrpList': NRP.objects.filter(owner=request.user)})
+        return HttpResponse(t.render(c))
+    else:
+        uuid = str(uuid4())
+        return redirect('nrpDesigner', uuid)
 
 
 class SpeciesListView(ListView):

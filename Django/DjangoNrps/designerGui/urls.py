@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, SpeciesListView_nologin, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, nrpDesigner_nologin, getConstruct, getConstruct_nologin, makeConstruct, makeConstruct_nologin, DomainSequenceView, domainSequenceView_nologin, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
+from designerGui.views import SpeciesListView, SpeciesListView_nologin, make_structure, submit_nrp, nrpListView, peptide_add, peptide_delete, nrpDesigner, nrpDesigner_nologin, getConstruct, getConstruct_nologin, makeConstruct, makeConstruct_nologin, DomainSequenceView, domainSequenceView_nologin, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -8,7 +8,7 @@ from designerGui.api import saveNrpMonomers, saveNrpMonomers_nologin
 uuidregex = r'[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'
 
 urlpatterns = patterns('',
-					url(r'^$', login_required(NRPListView.as_view()),name="peptides"),
+					url(r'^$', nrpListView,name="peptides"),
 					url(r'^add$', peptide_add, name="peptide_add"),
 					url(r'^(?P<cid>\d+)/delete/$', peptide_delete, name = "peptide_delete"),
 					url(r'^(?P<pid>\d+)/$', nrpDesigner, name = "nrpDesigner"),

@@ -448,8 +448,8 @@ class Construct(models.Model):
         l = self.length()
         g = SeqRecord(
             Seq(self.sequence(),IUPAC.IUPACUnambiguousDNA()),
-            id=self.name[0:8],
-            name=self.name[0:8],
+            id=self.name[0:8].strip(),
+            name=self.name[0:8].strip(),
             description=self.description
         )
         g.features = []
@@ -625,15 +625,15 @@ class Construct(models.Model):
                 p.stick.length = self.settings.min_overlap
                 p.flap.length = self.settings.min_overlap
                 p.save()
-        #for i,p in enumerate(self.primer.all()):
-            #if self.settings.min_anneal_tm > 0:
-                #p.tm_len_anneal(self.settings.min_anneal_tm)
-            #if self.settings.min_primer_tm > 0:
-                #p.tm_len_primer(self.settings.min_primer_tm)
-            #p.self_prime_check()
-            #yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
-            #p.misprime_check()
-            #yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
+        for i,p in enumerate(self.primer.all()):
+            if self.settings.min_anneal_tm > 0:
+                p.tm_len_anneal(self.settings.min_anneal_tm)
+            if self.settings.min_primer_tm > 0:
+                p.tm_len_primer(self.settings.min_primer_tm)
+            p.self_prime_check()
+            yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
+            p.misprime_check()
+            yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
         self.processed = True
         self.save()
         yield ':100'
