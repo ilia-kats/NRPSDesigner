@@ -11,7 +11,6 @@
     var monomersList;
     var animationDuration = 300;
     var structAR = 16 / 9;
-    var pid = {{pid}};
     var lastretrieved;
 
     function primaryId(aa)
@@ -270,7 +269,7 @@
     function save(e)
     {
         var monomers = collectMonomers();
-        submitCeleryJob("{% url 'processLibrary' pid %}", JSON.stringify({as: monomers, curatedonly: jQuery('#chk_curatedonly').prop("checked")}), undefined, undefined, function() {window.location.href = "{% url 'viewLibrary' pid %}";});
+        submitCeleryJob("{% url 'processLibrary' uuid %}", JSON.stringify({as: monomers, curatedonly: jQuery('#chk_curatedonly').prop("checked")}), undefined, undefined, function() {window.location.href = "{% url 'viewLibrary' uuid %}";});
     }
 
     jQuery(function() {

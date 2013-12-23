@@ -231,11 +231,11 @@
        jQuery("#tabs").tabs("disable",3);
        jQuery("#primerTab").attr("href", "");
        jQuery("#constructTab").attr("href", "");
-       submitCeleryJob("{% if user.is_authenticated %}{% url 'makeConstruct' pid %}{% else %}{% url 'makeConstruct' uuid %}{%endif%}", {curatedonly: jQuery('#chk_curatedonly').prop("checked")}, undefined, undefined, function(data){
+       submitCeleryJob("{% url 'makeConstruct' uuid %}", {curatedonly: jQuery('#chk_curatedonly').prop("checked")}, undefined, undefined, function(data){
             if (data[1].constructId != undefined)
                 activateTabs(data);
             else
-                jQuery.post("{% if user.is_authenticated %}{% url 'getConstruct' pid %}{% else %}{% url 'getConstruct' uuid %}{%endif%}").done(activateTabs);
+                jQuery.post("{% url 'getConstruct' uuid %}").done(activateTabs);
         });
     }
 
@@ -260,7 +260,7 @@
 
     function save(e)
     {
-        jQuery.post("{% if user.is_authenticated %}{% url 'saveNrpMonomers' pid %}{% else %}{% url 'saveNrpMonomers' uuid %}{% endif %}", {as: getMonomers()[0], indtag: jQuery('#chk_indigoidinetag').prop("checked")}, makeConstruct, "text").fail(function(){alert("failed");});
+        jQuery.post("{% url 'saveNrpMonomers' uuid %}", {as: getMonomers()[0], indtag: jQuery('#chk_indigoidinetag').prop("checked")}, makeConstruct, "text").fail(function(){alert("failed");});
     }
 
 

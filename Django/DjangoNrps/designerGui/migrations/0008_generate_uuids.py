@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
+from uuid import uuid4
 
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Adding field 'NRP.uuid'
-        db.add_column(u'designerGui_nrp', 'uuid',
-                      self.gf('django.db.models.fields.CharField')(default='5ea1a416-2ca3-4f78-82c2-6fdcc19f1207', max_length=36, db_index=True),
-                      keep_default=False)
-
+        for nrp in orm.NRP.objects.all():
+            nrp.uuid = str(uuid4())
+            nrp.save()
 
     def backwards(self, orm):
-        # Deleting field 'NRP.uuid'
-        db.delete_column(u'designerGui_nrp', 'uuid')
-
+        "Write your backwards methods here."
 
     models = {
         u'auth.group': {
@@ -154,7 +151,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'child'", 'null': 'True', 'to': u"orm['designerGui.NRP']"}),
-            'uuid': ('django.db.models.fields.CharField', [], {'default': "'98841900-52cd-4180-8959-e2e4c8c655dd'", 'max_length': '36', 'db_index': 'True'})
+            'uuid': ('django.db.models.fields.CharField', [], {'default': "'0b1396e3-dddd-4bbc-85c3-a310f25caccc'", 'max_length': '36', 'db_index': 'True'})
         },
         u'designerGui.species': {
             'Meta': {'object_name': 'Species'},
@@ -217,3 +214,4 @@ class Migration(SchemaMigration):
     }
 
     complete_apps = ['designerGui']
+    symmetrical = True
