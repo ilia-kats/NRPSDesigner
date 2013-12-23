@@ -117,9 +117,13 @@ class NRP(models.Model):
         # start creating construct
         name = self.name + ' Gibson Construct'
         if self.construct is None:
+            if self.description:
+                description = ':\n' + self.description
+            else:
+                description = ''
             self.construct = Construct.objects.create(owner = self.owner,
                 name = name,
-                description = 'NRPS designer:\n' + self.description,
+                description = 'NRPS designer' + description,
                 shape = 'c')
 
         # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment

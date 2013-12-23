@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, SpeciesListView_nologin, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, nrpDesigner_nologin, getConstruct, getConstruct_nologin, makeConstruct, makeConstruct_nologin, DomainSequenceView, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
+from designerGui.views import SpeciesListView, SpeciesListView_nologin, make_structure, submit_nrp, NRPListView, peptide_add, peptide_delete, nrpDesigner, nrpDesigner_nologin, getConstruct, getConstruct_nologin, makeConstruct, makeConstruct_nologin, DomainSequenceView, domainSequenceView_nologin, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -22,14 +22,15 @@ urlpatterns = patterns('',
 					url(r'^getConstruct/(?P<pid>\d+)$', getConstruct, name="getConstruct"),
 					url(r'^structure/', make_structure, name="Structure"),
 					url(r'^submit/', submit_nrp, name="submitNRP"),
-					url(r'^api/(?P<pid>\d+)', saveNrpMonomers, name = "saveNrpMonomers" ),
+					url(r'^api/(?P<pid>\d+)$', saveNrpMonomers, name = "saveNrpMonomers" ),
 					url(r'^(?P<pid>\d+)/domainSequence/', DomainSequenceView.as_view(), name="domainSequence")
 					)
 
 urlpatterns += patterns('',
                         url(r'^(?P<uuid>' + uuidregex + ')/$', nrpDesigner_nologin, name='nrpDesigner'),
                         url(r'^nrpselection/(?P<uuid>' + uuidregex + ')/$', SpeciesListView_nologin, name='guiTool'),
-                        url(r'^api/(?P<uuid>' + uuidregex + ')', saveNrpMonomers, name = "saveNrpMonomers" ),
+                        url(r'^api/(?P<uuid>' + uuidregex + ')$', saveNrpMonomers_nologin, name = "saveNrpMonomers" ),
                         url(r'^makeConstruct/(?P<uuid>' + uuidregex + ')$', makeConstruct_nologin, name="makeConstruct"),
                         url(r'^getConstruct/(?P<uuid>' + uuidregex + ')$', getConstruct_nologin, name="getConstruct"),
+                        url(r'^(?P<uuid>' + uuidregex + ')/domainSequence/', domainSequenceView_nologin, name="domainSequence")
                         )

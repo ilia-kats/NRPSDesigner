@@ -6,7 +6,7 @@ from gibson.jsonresponses import JsonResponse, ERROR
 from gibson.views import primer_download
 
 from django.views.generic import ListView, CreateView, TemplateView
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict, Http404
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
@@ -70,7 +70,7 @@ def getConstruct_nologin(request, uuid):
     constructId = con.pk
     designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
     primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
-    domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
+    domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : nrp.pk})
     return JsonResponse({"constructId": constructId,
                          'designTabLink': designTabLink,
                          'primerTabLink': primerTabLink,
@@ -409,3 +409,13 @@ class DomainSequenceView(TemplateView):
         context['pfamGraphicJson'] = nrp.generatePfamGraphicJson()
         return context
 
+def domainSequenceView_nologin(request, uuid):
+    try:
+        nrp = NRP.objects.get(uuid=uuid)
+    except NRP.DoesNotExist:
+        raise Http404()
+    if nrp and nrp.owner is not None:
+        raise Http404()
+    t = loader.get_template('designerGui/domainSequence.html')
+    context = RequestContext(request, {'pfamGraphicJson': nrp.generatePfamGraphicJson()})
+    return HttpResponse(t.render(context))
