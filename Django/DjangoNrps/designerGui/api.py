@@ -7,7 +7,7 @@ from designerGui.views import toBool, get_nrp
 def saveNrpMonomers(request, uuid):
     if request.method == 'POST':
         nrp = get_nrp(request.user, uuid)
-        if not nrp and user.is_authenticated():
+        if not nrp and request.user.is_authenticated():
             return HttpResponseNotFound()
         if not nrp:
             nrp = NRP.objects.create(uuid=uuid, owner=None)
