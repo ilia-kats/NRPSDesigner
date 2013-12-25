@@ -51,6 +51,11 @@
                  <p> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences the primer is complementary too. After each such modification, important primer properties, e.g. regarding self-priming are recalculated using UNAfold. In the next sections, the modified version of Gibthon for integration with the NRPSDesigner and its use will be explained. </p>
 
                 <h3> Fragment library </h3>
+
+                <img src={% static "images/documentation/fragmentLibrary.png" %} />
+
+                <p>The first step when using Gibthon is to add the appropriate DNA fragments that have to be assembled to the library. In the case of the NRPSDesigner, the coding sequence for the Synthetase is automatically returned. Yet, you still need to add your own DNA parts, for example a backbone with a promoter and a ribosome binding site. This functionality can be easily accessed by clicking on the "apps" dropdown and then choosing "Manage Gibson fragments". There, you can manage all your already added parts (e.g. delete them or download their DNA sequence), as well as add new parts, as seen in the screenshot above. The current version includes API access to both the iGEM parts registry and NCBI. Of course it also possible to add your own sequences by submitting FASTA/Genbank files or by copying the raw string. </p>
+
                 <h3> Plasmid view #2</h3>
                 <h3> Output </h3>
                     <h4> Primers </h4>
