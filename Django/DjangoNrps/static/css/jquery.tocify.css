@@ -8,9 +8,9 @@
     width: 20%;
     max-height: 90%;
     overflow: auto;
-    margin-left: 2%;
+    margin-left: 0%;
     position: fixed;
-    border: 1px solid #ccc;
+    border: 1px solid #000;
     webkit-border-radius: 6px;
     moz-border-radius: 6px;
     border-radius: 6px;
@@ -59,4 +59,16 @@
 /* Twitter Bootstrap Override Style */
 .nav-list > li > a {
     padding: 5px;
+}
+
+p {
+    font-size: x-large;
+}
+
+.well {
+    font-size: x-large;
+}
+
+dl {
+    font-size: x-large;
 }
