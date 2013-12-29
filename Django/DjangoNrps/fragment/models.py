@@ -41,7 +41,7 @@ class LineFeature:
             self.type += '(' + _label + ')'
 
 class Gene(models.Model):
-    owner = models.ForeignKey('auth.User')
+    owner = models.ForeignKey('auth.User', null=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
     sequence = models.TextField(max_length=500000)

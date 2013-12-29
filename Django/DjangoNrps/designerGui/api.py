@@ -1,15 +1,19 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from designerGui.models import NRP, SubstrateOrder
 from databaseInput.models import Substrate
-from designerGui.views import toBool
+from designerGui.views import toBool, get_nrp
 
-@login_required
-def saveNrpMonomers(request,pid):
+def saveNrpMonomers(request, uuid):
     if request.method == 'POST':
-        nrp = NRP.objects.get(owner = request.user, pk = pid)
-        # delete other stuff pointing
-        nrp.delete_dependencies()
+        nrp = get_nrp(request.user, uuid)
+        if not nrp and request.user.is_authenticated():
+            return HttpResponseNotFound()
+        if not nrp:
+            nrp = NRP.objects.create(uuid=uuid, owner=None)
+        else:
+            # delete other stuff pointing
+            nrp.delete_dependencies()
         # now add the new list
         for count, monomerId in enumerate(request.POST.getlist('as[]')):
             monomer = Substrate.objects.get(pk=int(monomerId))

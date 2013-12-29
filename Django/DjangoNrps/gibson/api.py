@@ -17,7 +17,7 @@ def cf2dict(cf):
 	"""
 		Convert a ConstructFragment to a dictionary suitable for JSON encoding
 	"""
-	ret = {	
+	ret = {
 			'id': cf.id,
 			'fid': cf.fragment.id,
 			'order': cf.order,
@@ -34,11 +34,10 @@ def cf2dict(cf):
 		ret['s_feat'] = cf.start_feature.id
 	if cf.end_feature:
 		ret['e_feat'] = cf.end_feature.id
-	
-	return ret
-			
 
-@login_required
+	return ret
+
+
 def save_meta(request, cid):
 	"""	Save a construct's metadata
 		Post Data, all optional
@@ -47,7 +46,7 @@ def save_meta(request, cid):
 	if request.method == 'POST':
 		con = get_construct(request.user, cid)
 		if not con:
-			return JsonResponse({'errors': 
+			return JsonResponse({'errors':
 				{'all': "Construct with id '%s' not found" % cid,}}, ERROR)
 		name = request.POST.get('name', con.name)
 		desc = request.POST.get('desc', con.description)
@@ -58,13 +57,12 @@ def save_meta(request, cid):
 				con.save()
 			except Exception as e:
 				return JsonResponse('One or more fields are too long.', ERROR)
-				
-		return JsonResponse({'modified': con.last_modified(), 
+
+		return JsonResponse({'modified': con.last_modified(),
 			'fields': {'name': con.name, 'desc': con.description}});
-		
+
 	raise Http404
-	
-@login_required
+
 def save_settings(request, cid):
 	print 'update_settings request.method = %s' % request.method
 	if request.method == 'POST':
@@ -85,18 +83,17 @@ def save_settings(request, cid):
 		return JsonResponse({'errors': form.errors,}, ERROR)
 	raise Http404
 
-@login_required
 def get_info(request, cid):
 	"""Get information about a construct"""
-	try:
-		c = get_construct(request.user, cid)
+	c = get_construct(request.user, cid)
+	if c:
 		cfs = []
 		fs = []
 		for cf in c.cf.all():
 			cfs.append(cf2dict(cf));
 			g = get_gene(request.user, cf.fragment.id)
 			fs.append(read_meta(g))
-			
+
 		ret = {
             'id': cid,
 			'name': c.name,
@@ -107,20 +104,19 @@ def get_info(request, cid):
 			'created': c.last_modified(),
 		}
 		return JsonResponse(ret)
-	except ObjectDoesNotExist:
+	else:
 		return JsonResponse('Construct %s not found.' % s, ERROR)
 	raise Http404
 
-@login_required
 def fragment_add(request, cid):
 	con = get_construct(request.user, cid)
 	if con:
 		fid = request.POST.get('fid')
-		
+
 		if not fid:
 			return JsonResponse("No fragment id provided", ERROR)
 		f = get_fragment(request.user, fid)
-		
+
 		pos = request.POST.get('pos', 0);
 		strand = request.POST.get('dir', 1);
 
@@ -135,11 +131,11 @@ def fragment_add(request, cid):
 					ERROR)
 		if strand not in [-1, 1]:
 			return JsonResponse('Strand must be 1 or -1, not "%s"' %strand, ERROR)
-		
+
 		direction = 'f'
 		if strand == -1:
 			direction = 'r'
-		
+
 		if f:
 			cf = con.add_fragment(f, pos, direction)
 			if cf:
@@ -154,7 +150,6 @@ def fragment_add(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def fragment_remove(request, cid):
 	con = get_construct(request.user, cid)
 	#post = json.loads(request.raw_post_data)
@@ -166,14 +161,13 @@ def fragment_remove(request, cid):
 			con.delete_cfragment(cfid)
 		except ObjectDoesNotExist as e:
 			return JsonResponse('No such fragment "%s" associated with construct "%s".' % (cfid, cid))
-		
+
 		return JsonResponse('OK');
 	else:
 		return JsonResponse('No such Construct ' + cid, ERROR)
 
 directions = {1:'f', -1:'r',}
 
-@login_required
 def save_order(request, cid):
 	con = get_construct(request.user, cid)
 	cfid = request.POST.getlist('cfid[]')
@@ -183,12 +177,12 @@ def save_order(request, cid):
 	if not direction:
 		return JsonResponse('No directions provided', ERROR)
 	if len(cfid) != len(con.cf.all()):
-		return JsonResponse('Only %s ConstructFragments provided, %s required.' 
+		return JsonResponse('Only %s ConstructFragments provided, %s required.'
 				% (len(cfid), len(con.cf.all())), ERROR)
 	if len(direction) != len(con.cf.all()):
-		return JsonResponse('Only %s directions provided, %s required.' 
+		return JsonResponse('Only %s directions provided, %s required.'
 				% (len(direction), len(con.cf.all())), ERROR)
-	
+
 	if con:
 		dirs = []
 		for d in direction:

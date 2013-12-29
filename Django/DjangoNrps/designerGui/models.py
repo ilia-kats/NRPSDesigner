@@ -7,6 +7,7 @@ import select
 from xml.dom.minidom import parseString, getDOMImplementation
 import json
 import logging
+from uuid import uuid4
 
 from django.conf import settings
 from django.db import connection
@@ -45,8 +46,12 @@ Some comments regarding deletion considerations/strategies:
 at appropriate fragment.Gene)-> gibson.ConstructFragment objects get deleted automatically
     '''
 
+def make_uuid():
+    return str(uuid4())
+
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
+    uuid = models.CharField(max_length=36, db_index=True, default=make_uuid)
     name = models.CharField(max_length=80)
     description = models.CharField(max_length=2000, null= True, blank=True)
     monomers = models.ManyToManyField('databaseInput.Substrate', through='SubstrateOrder', blank=True, related_name='includedIn')
@@ -116,9 +121,13 @@ class NRP(models.Model):
         # start creating construct
         name = self.name + ' Gibson Construct'
         if self.construct is None:
+            if self.description:
+                description = ':\n' + self.description
+            else:
+                description = ''
             self.construct = Construct.objects.create(owner = self.owner,
                 name = name,
-                description = 'NRPS designer:\n' + self.description,
+                description = 'NRPS designer' + description,
                 shape = 'c')
 
         # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment
@@ -163,7 +172,10 @@ class NRP(models.Model):
         return peptideSequenceAsString
 
     def getPeptideSequenceForStructView(self):
-        return '?' + '&'.join(["as=%s" % monomerId for monomerId in self.getPeptideSequence()])
+        if self.pk:
+            return '?' + '&'.join(["as=%s" % monomerId for monomerId in self.getPeptideSequence()])
+        else:
+            return '?'
 
     #returns actual domain objects
     def getDomainModelSequence(self):

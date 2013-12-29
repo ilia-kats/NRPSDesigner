@@ -41,7 +41,7 @@ NRP library generated from {{ parentnrp.name }}.
                     <tr>
                         <td>
                             <div class="btn-group">
-                                <a href="{% url 'nrpDesigner' nrp.pk %}" class="btn btn-small">{{ nrp.name }}</a>
+                                <a href="{% url 'nrpDesigner' nrp.uuid %}" class="btn btn-small">{{ nrp.name }}</a>
                             </div>
                         </td>
                         <td>
@@ -51,7 +51,7 @@ NRP library generated from {{ parentnrp.name }}.
                             {{ nrp.modified}}
                         </td>
                         <td>
-                            <input class="selected-check" id="{{nrp.pk}}-checkbox" type="checkbox" name="selected" value="{{nrp.pk}}"/>
+                            <input class="selected-check" id="{{nrp.uuid}}-checkbox" type="checkbox" name="selected" value="{{nrp.uuid}}"/>
                         </td>
                     </tr>
 			{% endfor %}
@@ -199,7 +199,7 @@ jQuery(function() {
         },500);
         var ids = jQuery('#peptide_table').fragmentList('getList');
         var form = jQuery('<form/>');
-        form.attr("action", "{% url 'downloadLibrary' parentnrp.pk %}?tk=" + token);
+        form.attr("action", "{% url 'downloadLibrary' parentnrp.uuid %}?tk=" + token);
         form.attr("method", "POST");
         for (var i = 0; i < ids.length; ++i) {
             var input = jQuery('<input type="hidden"/>');

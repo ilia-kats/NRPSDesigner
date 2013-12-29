@@ -10,7 +10,6 @@
     var monomersList;
     var animationDuration = 300;
     var structAR = 16 / 9;
-    var pid = {{pid}};
     var processing;
 
     function primaryId(aa)
@@ -232,11 +231,11 @@
        jQuery("#tabs").tabs("disable",3);
        jQuery("#primerTab").attr("href", "");
        jQuery("#constructTab").attr("href", "");
-       submitCeleryJob("{% url 'makeConstruct' pid %}", {curatedonly: jQuery('#chk_curatedonly').prop("checked")}, undefined, undefined, function(data){
+       submitCeleryJob("{% url 'makeConstruct' uuid %}", {curatedonly: jQuery('#chk_curatedonly').prop("checked")}, undefined, undefined, function(data){
             if (data[1].constructId != undefined)
                 activateTabs(data);
             else
-                jQuery.post("{% url 'getConstruct' pid %}").done(activateTabs);
+                jQuery.post("{% url 'getConstruct' uuid %}").done(activateTabs);
         });
     }
 
@@ -261,7 +260,7 @@
 
     function save(e)
     {
-        jQuery.post("{% url 'saveNrpMonomers' pid %}", {as: getMonomers()[0], indtag: jQuery('#chk_indigoidinetag').prop("checked")}, makeConstruct, "text").fail(function(){alert("failed");});
+        jQuery.post("{% url 'saveNrpMonomers' uuid %}", {as: getMonomers()[0], indtag: jQuery('#chk_indigoidinetag').prop("checked")}, makeConstruct, "text").fail(function(){alert("failed");});
     }
 
 

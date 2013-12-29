@@ -448,8 +448,8 @@ class Construct(models.Model):
         l = self.length()
         g = SeqRecord(
             Seq(self.sequence(),IUPAC.IUPACUnambiguousDNA()),
-            id=self.name[0:8],
-            name=self.name[0:8],
+            id=self.name[0:8].strip(),
+            name=self.name[0:8].strip(),
             description=self.description
         )
         g.features = []

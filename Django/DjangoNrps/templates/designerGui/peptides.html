@@ -40,13 +40,13 @@ Welcome to your collection of non-ribosomal peptides. Choose one of your existin
                     <tr>
                         <td>
                             <div class="btn-group">
-                                <a href="{% url 'nrpDesigner' nrp.pk %}" class="btn btn-small">{{ nrp.name }}</a>
+                                <a href="{% url 'nrpDesigner' nrp.uuid %}" class="btn btn-small">{{ nrp.name }}</a>
                                 <button class="btn btn-small dropdown-toggle" data-toggle="dropdown" {% if not nrp.designed %} disabled="disabled" {% endif %}><span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     {% if nrp.child.count > 0 %}
-                                    <li><a href="{% url 'viewLibrary' nrp.pk %}">View library</a></li>
+                                    <li><a href="{% url 'viewLibrary' nrp.uuid %}">View library</a></li>
                                     {% endif %}
-                                    <li><a href="{%url 'createLibrary' nrp.pk %}">Create library</a></li>
+                                    <li><a href="{%url 'createLibrary' nrp.uuid %}">Create library</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -57,7 +57,7 @@ Welcome to your collection of non-ribosomal peptides. Choose one of your existin
                             {{ nrp.modified}}
                         </td>
                         <td>
-                            <input class="selected-check" id="{{nrp.pk}}-checkbox" type="checkbox" name="selected" value="{{nrp.pk}}"/>
+                            <input class="selected-check" id="{{nrp.uuid}}-checkbox" type="checkbox" name="selected" value="{{nrp.uuidk}}"/>
                         </td>
                     </tr>
 				{% endif %}

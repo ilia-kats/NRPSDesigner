@@ -33,8 +33,12 @@ def fix_request(reqp):
 			continue
 
 def get_construct(user, cid):
+    if user.is_authenticated():
+        owner = user
+    else:
+        owner = None
 	try:
-		c = Construct.objects.get(pk=cid, owner=user)
+		c = Construct.objects.get(pk=cid, owner=owner)
 	except ObjectDoesNotExist:
 		return False
 	else:
@@ -59,7 +63,6 @@ def make_csv(primers):
     csvbuffer.close()
     return retval
 
-@login_required
 def download_genbank(request, cid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -71,7 +74,6 @@ def download_genbank(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def primer(request, cid, pid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -90,7 +92,6 @@ def primer(request, cid, pid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def csv_primers(request, cid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -104,7 +105,6 @@ def csv_primers(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def load_primer(request, cid, pid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -120,7 +120,6 @@ def load_primer(request, cid, pid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def primers(request, cid):
 	con = get_construct(request.user, cid)
 	if con and con.processed:
@@ -137,7 +136,6 @@ def primers(request, cid):
 		})
 	return HttpResponse(t.render(c))
 
-@login_required
 def process(request, cid, new=True):
 	con = get_construct(request.user, cid)
 	if con:
@@ -183,7 +181,6 @@ def construct_add(request):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def construct(request,cid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -208,7 +205,6 @@ def construct(request,cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def construct_fragment(request, cid):
 	con = get_construct(request.user, cid)
 	if con and not request.is_ajax():
@@ -238,7 +234,6 @@ def construct_delete(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def apply_clipping(request, cid, cfid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -304,7 +299,6 @@ def apply_clipping(request, cid, cfid):
 		return JsonResponse('OK')
 	raise Http404
 
-@login_required
 def fragment_clipping(request, cid, cfid):
 	con = get_construct(request.user, cid)
 	if con:
@@ -361,7 +355,6 @@ def fragment_browse(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def summary(request, cid):
 	con = get_construct(request.user, cid)
 	t = loader.get_template('gibson/summary.html')
@@ -370,7 +363,6 @@ def summary(request, cid):
 	})
 	return HttpResponse(t.render(c))
 
-@login_required
 @condition(etag_func=None)
 def primer_offset(request, cid, pid):
 	con = get_construct(request.user, cid)
@@ -394,7 +386,6 @@ def primer_offset(request, cid, pid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def primer_length(request, cid, pid):
 	con = get_construct(request.user, cid)
 	p = get_primer(request.user, pid)
@@ -417,7 +408,6 @@ def primer_length(request, cid, pid):
 	return HttpResponseNotFound()
 
 
-@login_required
 @condition(etag_func=None)
 def primer_reset(request, cid):
 	con = get_construct(request.user, cid)
@@ -426,7 +416,6 @@ def primer_reset(request, cid):
 	else:
 		return HttpResponseNotFound()
 
-@login_required
 def primer_save(request, cid):
 	con = get_construct(request.user, cid)
 	if request.method == 'POST' and con:
@@ -467,7 +456,6 @@ def pcr_instructions(request, cid):
 		return HttpReponseNotFound()
 
 
-@login_required
 def download_sbol(request, cid):
     con = get_construct(request.user, cid)
     if con:
@@ -478,7 +466,6 @@ def download_sbol(request, cid):
     else:
         return HttpResponseNotFound()
 
-@login_required
 def primer_download(request, cid, *args):
     t = loader.get_template('gibson/pdf_primer.html')
     zipbuffer = StringIO()
@@ -546,7 +533,6 @@ def primer_download(request, cid, *args):
     else:
         return HttpResponseNotFound()
 
-@login_required
 def pdf(request, cid):
 	con = get_construct(request.user, cid)
 	if con:

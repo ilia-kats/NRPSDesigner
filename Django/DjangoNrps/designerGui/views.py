@@ -5,12 +5,14 @@ from designerGui.forms import NRPForm
 from gibson.jsonresponses import JsonResponse, ERROR
 from gibson.views import primer_download
 
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, TemplateView
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, QueryDict, Http404
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
+from django.core.exceptions import ObjectDoesNotExist
 
 
 import math
@@ -18,46 +20,59 @@ import json
 import xml.etree.ElementTree as x
 import openbabel as ob
 import json
+from uuid import uuid4
 
 def toBool(x):
     return str(x.lower()) in ("yes", "true", "t", "1")
 
-@login_required
-def makeConstruct(request,pid):
-    nrp = NRP.objects.get(owner=request.user, pk=pid)
-    nrp.designed = False
-    return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
-
-@login_required
-def getConstruct(request, pid):
-    nrp = NRP.objects.get(owner=request.user, pk=pid)
-    if not nrp.designed:
-        return makeConstruct(request, pid)
-    elif nrp.construct is None or nrp.construct.fragments.count() == 0:
-        con = nrp.makeConstruct()
-    con = nrp.construct
-    constructId = con.pk
-    designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
-    primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
-    domainSequenceTabLink = reverse('domainSequence', kwargs = {'pid' : pid})
-    return JsonResponse({"constructId": constructId,
-                         'designTabLink': designTabLink,
-                         'primerTabLink': primerTabLink,
-                         'domainSequenceTablLink': domainSequenceTabLink})
-
-@login_required
-def nrpDesigner(request, pid):
-    nrp = NRP.objects.get(owner=request.user, pk=pid)
-    if nrp:
-        t = loader.get_template('gibson/designer.html')
-        c = RequestContext(request,{
-            'nrp':nrp,
-            #'id': cid,
-            #'construct':con,
-        })
-        return HttpResponse(t.render(c))
+def get_nrp(user, uuid):
+    if user.is_authenticated():
+        owner = user
     else:
-        raise Http404()
+        owner = None
+    try:
+        nrp = NRP.objects.get(owner=owner, uuid=uuid)
+    except ObjectDoesNotExist:
+        return False
+    else:
+        return nrp
+
+def makeConstruct(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp:
+        return HttpResponseNotFound()
+    else:
+        nrp.designed = False
+        return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
+
+def getConstruct(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp:
+        return HttpResponseNotFound()
+    else:
+        if not nrp.designed:
+            return makeConstruct(request, uuid)
+        elif nrp.construct is None or nrp.construct.fragments.count() == 0:
+            con = nrp.makeConstruct()
+        con = nrp.construct
+        constructId = con.pk
+        designTabLink = reverse('design_tab', kwargs= {'cid' : constructId})
+        primerTabLink = reverse('primers', kwargs= {'cid' : constructId})
+        domainSequenceTabLink = reverse('domainSequence', kwargs = {'uuid' : nrp.uuid})
+        return JsonResponse({"constructId": constructId,
+                            'designTabLink': designTabLink,
+                            'primerTabLink': primerTabLink,
+                            'domainSequenceTablLink': domainSequenceTabLink})
+
+def nrpDesigner(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp and request.user.is_authenticated():
+        return HttpResponseNotFound()
+    if not nrp:
+        nrp = NRP(owner=None, uuid=uuid)
+    t = loader.get_template('gibson/designer.html')
+    c = RequestContext(request, {'nrp': nrp})
+    return HttpResponse(t.render(c))
 
 @login_required
 def peptide_add(request):
@@ -78,8 +93,8 @@ def peptide_add(request):
         return HttpResponseNotFound()
 
 @login_required
-def peptide_delete(request, cid):
-    peptide = NRP.objects.get(owner = request.user, pk = cid)
+def peptide_delete(request, uuid):
+    peptide = get_nrp(request.user, uuid)
     if peptide:
         peptide.fullDelete()
         if request.is_ajax():
@@ -88,58 +103,49 @@ def peptide_delete(request, cid):
     else:
         return HttpResponseNotFound()
 
+def nrpListView(request):
+    if request.user.is_authenticated():
+        t = loader.get_template('designerGui/peptides.html')
+        c = RequestContext(request, {'NRPform': NRPForm(prefix='nrp'), 'title': 'NRPSDesigner', 'nrpList': NRP.objects.filter(owner=request.user)})
+        return HttpResponse(t.render(c))
+    else:
+        uuid = str(uuid4())
+        return redirect('nrpDesigner', uuid)
 
-class NRPListView(TemplateView):
-    template_name = 'designerGui/peptides.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(NRPListView, self).get_context_data(**kwargs)
-        context['NRPform'] = NRPForm(prefix='nrp')
-        context['title'] = 'NRPS Designer'
-        context['nrpList'] = NRP.objects.all().filter(owner=self.request.user)
-        return context
-
-
-class SpeciesListView(ListView):
-  template_name = 'designerGui/use_tool.html'
-  model = Species
-
-  def get_context_data(self, **kwargs):
-
-        context = super(SpeciesListView, self).get_context_data(**kwargs)
-        pid  = self.kwargs["pid"]
-        context['pid'] = pid
-        context['myFormSet'] = SubstrateFormSet()
-
-        modfs = Modification.objects.all()
-        context['modifications'] = modfs.values()
-        #context['modifications'].sort(lambda x,y: cmp(x['name'], y['name']))
-
-        nrp = NRP.objects.get(pk= pid)
-        substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
-        context['substrateOrder'] = substrateOrder
-        context['indigoidineTagged'] = nrp.indigoidineTagged
-
-        context['initialPic'] = nrp.getPeptideSequenceForStructView()
-        return context
+def SpeciesListView(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp and request.user.is_authenticated():
+        return HttpResponseNotFound()
+    if not nrp:
+        nrp = NRP(owner=None, uuid=uuid)
+    t = loader.get_template('designerGui/use_tool.html')
+    substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
+    modfs = Modification.objects.all()
+    c = RequestContext(request, {'nrp': nrp, 'uuid': uuid, 'myFormSet': SubstrateFormSet(), 'modifications': modfs.values(), 'substrateOrder': substrateOrder, 'indigoidineTagged': nrp.indigoidineTagged, 'initialPic': nrp.getPeptideSequenceForStructView()})
+    return HttpResponse(t.render(c))
 
 @login_required
-def createLibrary(request, pid):
+def createLibrary(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp:
+        return HttpResponseNotFound()
     t = loader.get_template('designerGui/createlibrary.html')
     c = RequestContext(request)
-    nrp = NRP.objects.get(owner=request.user, pk=pid)
     substrateOrder = SubstrateOrder.objects.filter(nrp=nrp)
     c['substrateOrder'] = substrateOrder
     c['indigoidineTagged'] = nrp.indigoidineTagged
-    c['pid'] = pid
+    c['uuid'] = uuid
     initialPic = nrp.getPeptideSequenceForStructView()
     c['initialPic'] = initialPic
     c['scaffold'] = nrp.monomers.order_by('substrateOrder')
     return HttpResponse(t.render(c))
 
 @login_required
-def processLibrary(request, pid):
+def processLibrary(request, uuid):
     if request.method == 'POST':
+        nrp = get_nrp(request.user, uuid)
+        if not nrp:
+            return HttpResponseNotFound()
         data = json.loads(request.body)
         monomers = []
         haveUseAll = -1
@@ -157,12 +163,13 @@ def processLibrary(request, pid):
             for s in substrates:
                 if s.pk != scaffold:
                     data['as'][haveUseAll].append(s.pk)
-        nrp = NRP.objects.get(owner=request.user, pk=pid)
         return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
 
 @login_required
-def viewLibrary(request, pid):
-    parentnrp = NRP.objects.get(owner=request.user, pk=pid)
+def viewLibrary(request, uuid):
+    parentnrp = get_nrp(request.user, uuid)
+    if not parentnrp:
+        return HttpResponseNotFound()
     childnrps = parentnrp.child.all()
     c = RequestContext(request)
     c['parentnrp'] = parentnrp
@@ -171,12 +178,13 @@ def viewLibrary(request, pid):
     return HttpResponse(t.render(c))
 
 @login_required
-def downloadLibrary(request, pid):
-    parentnrp = NRP.objects.get(owner=request.user, pk=pid)
+def downloadLibrary(request, uuid):
+    parentnrp = get_nrp(request.user, uuid)
+    if not parentnrp:
+        return HttpResponseNotFound()
     cids = [child.construct.pk for child in parentnrp.child.filter(pk__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
 
-@login_required
 def get_available_monomers(request):
     if request.method == 'POST' and "monomer[]" in request.POST:
         monomers = request.POST.getlist("monomer[]")
@@ -339,15 +347,10 @@ def make_structure(request):
     svg = svg[0:delstart] + svg[delend:svgend]
     return HttpResponse(svg, mimetype="image/svg+xml")
 
-
-
-class DomainSequenceView(TemplateView):
-    template_name = 'designerGui/domainSequence.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(DomainSequenceView, self).get_context_data(**kwargs)
-        pid  = self.kwargs["pid"]
-        nrp = NRP.objects.get(pk=pid)
-        context['pfamGraphicJson'] = nrp.generatePfamGraphicJson()
-        return context
-
+def domainSequenceView(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp:
+        return HttpResponseNotFound()
+    t = loader.get_template('designerGui/domainSequence.html')
+    context = RequestContext(request, {'pfamGraphicJson': nrp.generatePfamGraphicJson()})
+    return HttpResponse(t.render(context))
