@@ -8,4 +8,4 @@ class NRPForm(ModelForm):
 	description = CharField(widget=Textarea, required=False)
 	class Meta:
 		model = NRP
-		exclude = ['monomers','owner','designed','construct','designerDomains']
+		exclude = ['uuid', 'monomers','owner','designed','construct','designerDomains']

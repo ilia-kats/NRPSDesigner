@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Species
+from designerGui.models import NRP
 
-admin.site.register(Species)
+class NRPInline(admin.TabularInline):
+    model = NRP.monomers.through
+    extra = 3
+
+class NRPAdmin(admin.ModelAdmin):
+	list_display = ('name' , 'owner', 'modified')
+	inlines = [NRPInline]
+
+admin.site.register(NRP, NRPAdmin)
 

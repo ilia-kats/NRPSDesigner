@@ -62,9 +62,15 @@ class NRP(models.Model):
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.ForeignKey('gibson.Construct', null=True, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
+    
+    class Meta:
+        verbose_name = "Nonribosomal peptide"
+        verbose_name_plural = "Nonribosomal peptides"
 
     def __unicode__(self):
         return self.name
+
+
 
     def delete_dependencies(self, all=True):
         self.designed = False
