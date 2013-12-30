@@ -73,7 +73,7 @@ $.widget("ui.fragmentList", {
 	getList: function() {
 		var ret = new Array();
 		this.fragments.filter(':checked').each(function(index, element) {
-			ret.push($(element).prop('value'));
+			ret.push($(element).prop('id').split("-",5).join("-"));
 		});
 		return ret;
 	}

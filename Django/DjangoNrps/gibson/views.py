@@ -33,16 +33,15 @@ def fix_request(reqp):
 			continue
 
 def get_construct(user, cid):
+    owner = None
     if user.is_authenticated():
         owner = user
-    else:
-        owner = None
-	try:
+    try:
 		c = Construct.objects.get(pk=cid, owner=owner)
-	except ObjectDoesNotExist:
-		return False
-	else:
-		return c
+    except ObjectDoesNotExist:
+	    return False
+    else:
+	    return c
 
 def get_primer(user, pid):
 	try:
