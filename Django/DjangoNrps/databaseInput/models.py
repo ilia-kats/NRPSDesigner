@@ -42,7 +42,12 @@ class Cds(models.Model):
         initialDicts = []
         allDomainTypes = [x.smashName for x in Type.objects.all()]
         nrpsSmashResult = nrpsSmash(self.dnaSequence)
-        consensusPreds = nrpsSmashResult.consensuspreds
+        try:
+            consensusPreds = nrpsSmashResult.consensuspreds
+        except AttributeError:
+            raise AttributeError("""According to the in-built domain prediction pipeline, 
+                the DNA sequence you entered does not contain any NRPS domains.""")
+
         #code below still not nice, should probably adapt nrpsSMASH to give nicer output
         consensusKeys = sorted(consensusPreds, key = lambda x: int(x.split('_A')[-1]))
         consensusValues = [consensusPreds[key] for key in consensusKeys]
