@@ -207,8 +207,10 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 					<a href="#" id="user_tab_tools" class="user_tab">Apps</a>
 					<ul class="ui-widget-content ui-corner-bottom">
 						<li><a href="{% url 'peptides' %}">NRPSDesigner</a></li>
+                            {% if user.is_authenticated %}
 						<li><a href="{% url 'pfam' %}">Add NRPS into library</a></li>
 						<li><a href="{% url 'fragment.views.fragments' %}">Manage Gibson fragments</a></li>
+                          {% endif %}
 					</ul>
 				</span>
 				<span class="user_tab drop">
