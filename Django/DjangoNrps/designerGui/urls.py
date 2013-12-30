@@ -9,9 +9,11 @@ uuidregex = r'[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'
 
 urlpatterns = patterns('',
 					url(r'^$', nrpListView,name="peptides"),
+					url(r'^sample$', nrpListView, {'sample':True}, name="sample_peptide" ),
 					url(r'^add$', peptide_add, name="peptide_add"),
 					url(r'^(?P<uuid>' + uuidregex + ')/delete/$', peptide_delete, name = "peptide_delete"),
 					url(r'^(?P<uuid>' + uuidregex + ')/$', nrpDesigner, name = "nrpDesigner"),
+					url(r'^(?P<uuid>' + uuidregex + ')/sample$', nrpDesigner, {'sample':True}, name = "sampleNrpDesigner"),
 					url(r'^(?P<uuid>' + uuidregex + ')/library/$', createLibrary, name="createLibrary"),
 					url(r'^(?P<uuid>' + uuidregex + ')/library/process/$', processLibrary, name="processLibrary"),
 					url(r'^(?P<uuid>' + uuidregex + ')/library/view/$', viewLibrary, name="viewLibrary"),

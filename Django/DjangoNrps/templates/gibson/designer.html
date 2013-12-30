@@ -31,6 +31,14 @@ var gibthon_api_url = gibthon_base_url + 'api/';
 
 
 {% block content %}
+{% if not user.is_authenticated %}
+
+<div class="alert alert-info">
+  Hint: You can bookmark this page ({{ request.build_absolute_uri }}) in order to revisit your peptide at a later point or to check for job status if you have submitted a request to the server.
+
+</div>
+
+{% endif %}
 <div>
 
 	<div class="content center full-width">

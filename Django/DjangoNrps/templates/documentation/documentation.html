@@ -124,7 +124,7 @@
 
                      <img src={% static "images/documentation/designPrimer.png" %} />
 
-                    <p> Clicking on "Process primers", will calculate appropriate primers, as seen on the next screenshot: </p>
+                    <p> Clicking on "Design primers", will calculate appropriate primers, as seen on the next screenshot: </p>
 
                       <img src={% static "images/documentation/primerOverview.png" %} />
 
@@ -198,6 +198,12 @@
              <img src={% static "images/documentation/HMMoutput.png" %} />
 
              <p> Once this output has been returned, manual curation has to take place: This includes adding appropriate descriptions to the files, checking or adding specificities to the adenylation domains and checking domain boundaries, for example with the in-built multiple sequence alignment. Pressing on the "Save cds and domains!" button results in the storage of all the previously entered and predicted information to the NRPSDesigner database. </p>
+
+             <h2> Privacy </h2>
+              <p>
+             Every user’s submitted data is private and not viewable by anyone other than the user. In particular, for non-registered users, safety is ensured by assigning a random UUID (according to <a href="http://www.ietf.org/rfc/rfc4122.txt"> RFC4122 </a>) to designed NRP constructs. In the case of registered users, both the identity of the user and the UUID of the constructs are used as safety checks. Also, the in-built authentication system encrypts the password of all registered users using PBKDF2 (Password-Based Key Derivation Function 2).
+             </p>
+
             <h2> Contact </h2>
 
             <p> Do you have further questions, feedback or suggestions? Then please do not hesitate to contact Ilia Kats (kats@stud.uni-heidelberg.de), Nikos Ignatiadis (nikos.ignatiadis01@gmail.com) or Nils Kurzawa (nilskurzawa@yahoo.de). </p>

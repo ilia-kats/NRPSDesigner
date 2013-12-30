@@ -401,6 +401,11 @@ class NRP(models.Model):
             raise Exception("NRPSDesigner returned errorcode %d: %s" % (child.returncode, lasterror[0]))
         return xmlout[0]
 
+    def makeSample(self):
+        for count, monomerId in enumerate([6,19,14]):
+            monomer = Substrate.objects.get(pk=int(monomerId))
+            so = SubstrateOrder.objects.create(nrp= self, substrate = monomer, order = count)
+
 def readFrom(file, callback):
     try:
         lines = file.read()

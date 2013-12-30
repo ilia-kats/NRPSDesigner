@@ -22,7 +22,7 @@ jQuery(document).ready(function() {
 	});
 	jQuery('#user_tab_help').button({
 		icons:{primary:'ui-icon-help',
-			  }
+			  secondary:'ui-icon-triangle-1-s'}
 	});
 	jQuery('#user_tab_tools').button({
 		icons:{primary:'ui-icon-wrench',

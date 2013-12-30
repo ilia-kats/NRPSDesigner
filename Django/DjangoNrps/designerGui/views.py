@@ -64,12 +64,15 @@ def getConstruct(request, uuid):
                             'primerTabLink': primerTabLink,
                             'domainSequenceTablLink': domainSequenceTabLink})
 
-def nrpDesigner(request, uuid):
+def nrpDesigner(request, uuid, sample=False):
     nrp = get_nrp(request.user, uuid)
     if not nrp and request.user.is_authenticated():
         return HttpResponseNotFound()
     if not nrp:
         nrp = NRP(owner=None, uuid=uuid)
+        if sample:
+            nrp.save()
+            nrp.makeSample()
     t = loader.get_template('gibson/designer.html')
     c = RequestContext(request, {'nrp': nrp})
     return HttpResponse(t.render(c))
@@ -103,14 +106,18 @@ def peptide_delete(request, uuid):
     else:
         return HttpResponseNotFound()
 
-def nrpListView(request):
+def nrpListView(request, sample=False):
     if request.user.is_authenticated():
         t = loader.get_template('designerGui/peptides.html')
         c = RequestContext(request, {'NRPform': NRPForm(prefix='nrp'), 'title': 'NRPSDesigner', 'nrpList': NRP.objects.filter(owner=request.user)})
         return HttpResponse(t.render(c))
     else:
         uuid = str(uuid4())
-        return redirect('nrpDesigner', uuid)
+        if not sample:
+            return redirect('nrpDesigner', uuid)
+        else:
+            return redirect('sampleNrpDesigner', uuid)
+
 
 def SpeciesListView(request, uuid):
     nrp = get_nrp(request.user, uuid)

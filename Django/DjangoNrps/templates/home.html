@@ -5,7 +5,7 @@
 
 {% block content %}
     <div class="row-fluid hero-unit" style="box-sizing:border-box;-moz-box-sizing:border-box;">
-    <div class="span6">
+    <div class="span12">
     <h1>NRPSDesigner</h1>
     <p>    Welcome to the NRPSDesigner of <a href="http://2013.igem.org/Team:Heidelberg"> iGEM Team Heidelberg 2013! </a> </p>
 
@@ -15,28 +15,32 @@
 <p>In order to get started, please choose one of the options below:
     </p>
     <div class="btn-group">
-
-   <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-heart"> </i> Register
+     <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-pencil"> </i> Design new NRP
     </a>
-    <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+    <a href="{% url 'sample_peptide' %}" class="btn btn-large">  <i class="icon-star"> </i> Sample NRP
     </a>
+   <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-user"> </i> Register
+    </a>
+    <!-- <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+    </a> --> 
     </div>
     </div>
     {% else %}
    <p>Thanks for logging in, {{ user.username }}! </p>
     <div class="btn-group">
 
-   <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-ok"> </i> Start designing
+   <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-pencil"> </i> Continue designing
     </a>
-    <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
+     
+    <a href="{% url 'documentation' %}" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
     </a>
 
     </div>
     </div>
 
     {% endif %}
-    <div class="span6">
+    <!-- <div class="span6">
     <iframe width="640" height="360" src="//www.youtube.com/embed/EntKLw788cs?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
-    </div>
+    </div> -->
     </div>
 {% endblock %}
