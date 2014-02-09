@@ -4,6 +4,32 @@
 
     {% block css-include %}
      <link rel="stylesheet" href="{% static "css/jquery.tocify.css" %}">
+     <style type="text/css">
+     .tocify-header {
+        font-size: 13pt;
+        font-family: Helvetica, Arial;
+    }
+    .tocify {
+        border: 1px solid #E5E5E5;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    }
+    .tocify-header > li > a {
+            border: 1px solid #E5E5E5;
+            display: block;
+            margin: 0 0 -1px;
+            padding: 8px 14px;
+            border-radius: 6px 6px 0 0;
+    }
+    .tocify-subheader > li{
+        font-size: 12pt;
+        font-family: Helvetica, Arial;
+    }
+    .well > li {
+        font-size: 14pt;
+        font-family: Helvetica, Arial;
+        margin: 0 0 3px 0;
+    }
+    </style>
     {% endblock %}
 
     {% block js-include %}
@@ -24,7 +50,9 @@
                 Welcome to the documentation of the NRPSDesigner. All the features as well as detailed description of how to access them is described below.
              </div>
 
-             <h2> Features </h2>
+             <div class="page-header">
+                            <h2>Features</h2>
+                        </div>
              <div class="well">
                                      <li> Computer aided design of fully synthetic NRPS determined to produce a user-defined short peptide</li>
                                     <li> Optimal domain assembly based on evolutionary distance</li>
@@ -35,7 +63,9 @@
                                     <li> <a href="http://hdl.handle.net/1721.1/81333"><b>RFC100</b></a> for non-ribosomal peptide synthesis design</li>
 
              </div>
+             <div class="page-header">
              <h2> Workflow </h2>
+             </div>
              <p> In general, the steps for creation of novel non-ribosomal synthetases using the NRPSDesigner are the following. The next sections describe those in more detail. </p>
               <div class="well">
 
@@ -50,39 +80,42 @@
 
               </div>
 
+            <div class="page-header">
              <h2> Novel NRPS </h2>
+             </div>
              <p> The core functionality of the NRPSDesigner can be accessed by clicking on the "Apps" dropdown and then on the "NRPS Designer" button. Users that have not been logged in will be able to immediately proceed with the design of their synthetase of choice. Registered users will be redirected to their collection of already designed synthetases and thus will be able to reinspect or continue working on one of these or to design a new one. </p>
                 <h3> Input </h3>
                 <p> The input basically only consists of a sequence of monomers (amino acids) which should make up the final non-ribosomal peptide (NRP). This is achieved with the user-friendly interface shown below: </p>
-                <img src={% static "images/documentation/nrpSelection.png" %} />
+                <img src={% static "images/documentation/nrpSelection.png" %} /></br>
 
                 <p> The functionality of the interface can be accessed mainly by the following 3 buttons </p>
-                <dl>
+                
 
-                  <dt>Add monomer</dt>
-                  <dd>When you want to elongate the sequence of monomers by one, you should press this button. Note that
+                  <button class="btn" style="margin-left:10px">Add monomer</button></br>
+                  <p>When you want to elongate the sequence of monomers by one, you should press this button. Note that
                   you can click on the chosen monomers and then possibly replace the selection by choosing another one
                   from the dropdown. In addition, L or D-configurations can be selected, which is one of the
                   characteristics making NRPS so special. Also note that the monomer choices available will depend on the specificities of the adenylation domains available in the NRPSDesigner database and
-                  the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</dd>
-                   <dt>Use curated domains only</dt>
-                  <dd>The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user
+                  the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
+                   <button class="btn" style="margin-left:10px">Use curated domains only</button></br>
+                  <p>The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user
                   can do so (see below). Those genes and domains will also be used in the NRPSDesigner algorithm, if the
                   above button has not been pressed. On the other hand, if it has been selected, then only
-                  domains curated by the authors, or other scientists with NRPS expertise (curators) will be utilized.</dd>
-                  <dt>Design construct</dt>
-                  <dd>Once all preferences have been set, the "Design construct" button can be pressed and a request will be
-                  sent to the NRPSDesigner database.</dd>
-                </dl>
+                  domains curated by the authors, or other scientists with NRPS expertise (curators) will be utilized.</p>
+                  <button class="btn" style="margin-left:10px">Design construct</button></br>
+                  <p>Once all preferences have been set, the "Design construct" button can be pressed and a request will be
+                  sent to the NRPSDesigner database.</p>
+
+
                 <h3> Domain Output </h3>
                  <p> Once the request to the NRPSDesigner has been processed, the optimal NRPS domain sequence
                   according to evolutionary distance, cloning practicability and experimentally characterized interactions is calculated by a rule-based algorithm (Dijkstra's algorithm). The visualization returned shows the domains which are necessary for the production of a synthetase capable of producing a peptide of choice. </p>
 
-                <img src={% static "images/documentation/domains.png" %} />
+                <img src={% static "images/documentation/domains.png" %} /></br>
                 <h3> Plasmid view </h3>
                 <p> The NRPS domains shown in the previous visualization are encoded on the coding DNA sequences. Thus, as also exemplified in the screenshot below, the next step through the NRPSDesigner wizard leads to the actual DNA sequences and the fragments that have to be assembled. </p>
 
-                <img src={% static "images/documentation/gibthon1.png" %} />
+                <img src={% static "images/documentation/gibthon1.png" %} /></br>
 
                 <p> Note that each fragment shown in the plasmid map corresponds to a particular sequence that has to be amplified by PCR from a source organism. For example, the clicked fragment above corresponds to a DNA sequence that has to be amplified from <i> Brevibacillus parabrevis </i> strain atcc 8185/dsm362. Also observe that this fragment codes for more than one domain, namely a condensation, an adenylation and a thiolation domain. In particular, the rules for weight assignment in the application of Dijkstra's algorithm also enforce the minimization of number of fragments that have to be amplified. Thus, less cloning steps will be necessary and less native NRPS domain interfaces will be disrupted. </p>
 
@@ -91,21 +124,23 @@
                <p> <span class="label label-important">Important</span> Finally, note that synthetic NRPS have also been proven to be functional when an adenylation domain natively found in an elongation module is used as the initation domain. The consequence for the NRPSDesigner is that returned NRPS coding sequences may start without a start codon. Thus, in the subsequent steps of design of an appropriate cloning strategy, it is essential to introduce a start codon e.g. by including it in the backbone.</p>
 
 
+            <div class="page-header">
             <h2> Cloning strategy </h2>
+            </div>
             <p>The previously mentioned steps comprise the core functionality of the NRPSDesigner: The selection of appropriate DNA sequences and their source, which after assembly and transformation will lead to the production of a non-ribosomal peptide of choice. Thus, the subsequent steps can range from direct synthesis to diverse cloning techniques, such as Golden Gate, CPEC or Gibson assembly. </p>
 
             <p>In fact, it is highly encouraged to use your own tool for CAD DNA design and assembly for the next steps, for example commercial offerings such as <a href="http://www.teselagen.com/"> teselagen's platform </a> or <a href="http://j5.jbei.org/index.php/Main_Page"> J5 </a>. Nevertheless, here we already provide an in-built solution for the CAD DNA assembly, namely Gibthon.
 
                 <h3> About Gibthon </h3>
-                 <img src={% static "images/documentation/gibthon2.0beta.png" %} />
+                 <img src={% static "images/documentation/gibthon2.0beta.png" %} /> </br>
 
                  <p> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences the primer is complementary too. After each such modification, important primer properties, e.g. regarding self-priming are recalculated using UNAfold. In the next sections, the modified version of Gibthon for integration with the NRPSDesigner and its use will be explained. </p>
 
-                <h3> Fragment library        <span class="label label-warning">[Login required]</span>
- </h3>
+                <h3> Fragment library</h3>
+                <span class="label label-warning" style="margin-left:10px">[Login required]</span></br>
 
 
-                <img src={% static "images/documentation/fragmentLibrary.png" %} />
+                <img src={% static "images/documentation/fragmentLibrary.png" %} /></br>
 
                 <p>The first step when using Gibthon is to add the appropriate DNA fragments that have to be assembled to the library. In the case of the NRPSDesigner, the coding sequence for the synthetase is automatically returned. Yet, you still need to add your own DNA parts, for example a backbone with a promoter and a ribosome binding site. Note that some biological devices of general use are available to all users from the <a href="http://parts.igem.org/Main_Page"> Parts Registry </a>. </p>
 
@@ -113,7 +148,7 @@
 
                 <h3> Plasmid view #2</h3>
                 <p>For use of Gibthon for a Gibson assembly strategy, the previously presented dynamic plasmid view can be utilized. In particular, parts that have been added to the user specific Gibson fragment library (for registered users) or globally available parts (available to all users) can be added to the plasmid by simple drag and drop. Dragging towards the inner side of the plasmid results in the fragments being entered in the reverse direction (as seen in the screenshot below), else the sequence is added in the forward direction. </p>
-                <img src={% static "images/documentation/gibthon2.png" %} />
+                <img src={% static "images/documentation/gibthon2.png" %} /></br>
 
                 <p> The behaviour in the previously mentioned step is similar to the one present in the original Gibthon web-server, but with one important difference: Other fragments can't be entered into the plasmid in such a way so as to break the returned sequence of NRPS domains. Thus, other DNA sequences can be embedded in the plasmid only after the thioesterase (TE) domain or before the initialization adenylation domain. </p>
 
@@ -122,11 +157,11 @@
                     <h3> Primers </h3>
                     <p> If you click on the "Primers" tab, you will initially come across the following: </p>
 
-                     <img src={% static "images/documentation/designPrimer.png" %} />
+                     <img src={% static "images/documentation/designPrimer.png" %} /></br>
 
                     <p> Clicking on "Design primers", will calculate appropriate primers, as seen on the next screenshot: </p>
 
-                      <img src={% static "images/documentation/primerOverview.png" %} />
+                      <img src={% static "images/documentation/primerOverview.png" %} /></br>
 
                     <p> In particular, the generated overview of the primers, includes a graphical display of the fragments to be assembled and the corresponding primers. For each of these, the visual representation shows to which fragment the annealing sequence of the primer binds to and to which fragment the Gibson overhang is complementary to. In addition, a small table which summarizes all the primers, their length and their melting temperature (annealing end, whole primer). In the example above, 8 primers have been generated, corresponding to the 4 fragments (3 NRPS sequences, 1 backbone). </p>
 
@@ -142,7 +177,7 @@
 
         <p> For more information about a specific primer, one can click on it (in the graphical representation), as exemplified in the following screenshot: </p>
 
-        <img src={% static "images/documentation/specificPrimer.png" %} />
+        <img src={% static "images/documentation/specificPrimer.png" %} /></br>
 
         <p> Note that the primer specific view includes the sequence of the primer as well as a graphical representation of the primer and the two corresponding DNA sequences: The DNA sequence which gets amplified with PCR due to the 3' sticky end of the primer as well as the sequence which will be combined with the aforementioned one during Gibson assembly. The view also includes a detailed description of all the warnings and a boxplot generated by UNAfold (see next section). Clicking on a particular base pair of the DNA sequences on the graphical view will save the primer with the new length and the warnings and melting temperature will be recalculated. </p>
 <br/>
@@ -166,47 +201,55 @@
                     <h3> Downloadable output </h3>
                    <p> All of the content readily available on the online interface, can also be downloaded in a convenient format. In particular, a .zip file with the contents seen below is returned: </p>
 
-           <img src={% static "images/documentation/downloadableOutput.png" %} />
+           <img src={% static "images/documentation/downloadableOutput.png" %} /></br>
 
            <p>In particular, the downloaded archive contains an annotated description of the DNA sequences to be assembled in both the <a href="http://www.sbolstandard.org/"> SBOL </a> (Synthetic Biology Open Language) format, as well as in the GenBank format. Thus, those files can be edited and inspected using most available CAD-tools for biological assembly. A pdf describing the contents of the .zip archive, summarizing the source of the different DNA fragments to be assembled and also describing the Gibson assembly protocol to be used, is also returned. The PCR folder includes suggestions for the reactions necessary for the amplification of the appropriate fragments. Finally, the primers and their sequences are returned in a tabular format ("primers.csv"):</p>
 
-           <img src={% static "images/documentation/primerTable.png" %} />
+           <img src={% static "images/documentation/primerTable.png" %} /></br>
 
            <p> This table contains the sequence of the primers, their length, as well as their melting temperature (including floppy ends). Thus, the primers can be quickly ordered from commercial providers. </p>
 
-            <h2> Combinatorial libraries <span class="label label-warning">[Login required]</span></h2>
+           <div class="page-header">
+            <h2> Combinatorial libraries </h2>
+            </div>
+            <span class="label label-warning" style="margin-left:10px">[Login required]</span></br>
             <p> For logged-in users, the NRPSDesigner also provides an experimental feature for high-throughput generation of peptide libraries by starting from a given scaffold (with applications for example in the case of production of novel antibiotics by starting from a known non-ribosomal peptide antibiotic). Thus, the login requirement is enforced, because the procedure can only begin from a succesfully cloned NRPS construct, as designed in one of the previous steps and saved in a user-specific session. In particular, the user can visit his collection of designed NRPs and then click on the downwards-pointing arrow of the button of his peptide of choice and then choose "Create library", as seen in the screenshot below.</p>
 
 
 
-            <img src={% static "images/documentation/createLibrary.png" %} />
+            <img src={% static "images/documentation/createLibrary.png" %} /></br>
 
             <p> In the library view, the sequence of monomers of the NRP produced by the scaffold is highlighted. The heuristic utilized here for high throughput is the following: For the creation of a library, one particular monomer position can be shuffled with many different other monomers. Thus, most of the primers for the rest of the scaffold can be reused and only the set of primers necessary for the domain to be shuffled has to be ordered. The corresponding interface can be seen in the screenshot below: </p>
 
-            <img src={% static "images/documentation/library.png" %} />
+            <img src={% static "images/documentation/library.png" %} /></br>
 
             <p> The monomer position to be exchanged can be chosen by clicking on the corresponding <i class="icon-ok"></i> or <i class="icon-plus"></i> button. Choosing the <i class="icon-ok"></i> option leads to the shuffling of that particular position with all monomers of the database. On the other hand, by repeated clicking of the <i class="icon-plus"></i> button, a manual selection of monomers to be used for the exchange can be accomplished. Once preferences have been set, the appropriate constructs are designed by clicking on the "Design library" button. Note that depending on the number of monomers, this procedure could take a long time. Once the calculation is ready, a downloadable output with SBOL/GenBank files, as well as primers, similar to the one described for the scaffold construct, is returned. </p>
 
-            <h2> Extending the database <span class="label label-warning">[Login required]</span></h2>
+            <div class="page-header">
+            <h2> Extending the database </h2>
+            </div>
+            <span class="label label-warning"style="margin-left:10px">[Login required]</span></br>
             <p> As mentioned previously, every user can extend the NRPSDesigner database by adding new NRPS pathways (with the safety mechanism of distinguishing between sequences entered by curators or normal users). This functionality can be accessed from the "Apps" dropdown by choosing the "Add NRPS into library" option. Exemplary, a sample input of the tycB gene is shown below: </p>
 
-            <img src={% static "images/documentation/dbInput.png" %} />
+            <img src={% static "images/documentation/dbInput.png" %} /></br>
             <p> Beyond the source organism and the product synthesized in the native organism, the DNA sequence has to be entered. This can be a raw string or a FASTA formatted sequence. Here a number of conditions are checked: The DNA sequence entered has to be a coding sequence. Thus, its length has to be a multiple of 3 and it has to begin with a start codon, end with a stop codon and no stop codons should be interspersed within the gene (start/stop codon definition according to the <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG11"> NCBI Bacterial, Archaeal and Plant Plastid Code </a>). If one of these conditions is violated, then appropriate warnings are returned. </p>
 
             <p> Once everything has been entered, the request can be submitted to the NRPSDesigner server by pressing the "Generate Domains" button. The pipeline based on hidden markov models (HMM) then detects all NRPS domains. If none is found, then an appropriate error message is returned. In the example of the tycB gene, 11 domains are detected and returned. </p>
 
-             <img src={% static "images/documentation/HMMoutput.png" %} />
+             <img src={% static "images/documentation/HMMoutput.png" %} /></br>
 
              <p> Once this output has been returned, manual curation has to take place: This includes adding appropriate descriptions to the files, checking or adding specificities to the adenylation domains and checking domain boundaries, for example with the in-built multiple sequence alignment. Pressing on the "Save cds and domains!" button results in the storage of all the previously entered and predicted information to the NRPSDesigner database. </p>
 
+             <div class="page-header">
              <h2> Privacy </h2>
-              <p>
-             Every user’s submitted data is private and not viewable by anyone other than the user. In particular, for non-registered users, safety is ensured by assigning a random UUID (according to <a href="http://www.ietf.org/rfc/rfc4122.txt"> RFC4122 </a>) to designed NRP constructs. In the case of registered users, both the identity of the user and the UUID of the constructs are used as safety checks. Also, the in-built authentication system encrypts the password of all registered users using PBKDF2 (Password-Based Key Derivation Function 2).
+             </div>
+              <p>Every user’s submitted data is private and not viewable by anyone other than the user. In particular, for non-registered users, safety is ensured by assigning a random UUID (according to <a href="http://www.ietf.org/rfc/rfc4122.txt"> RFC4122 </a>) to designed NRP constructs. In the case of registered users, both the identity of the user and the UUID of the constructs are used as safety checks. Also, the in-built authentication system encrypts the password of all registered users using PBKDF2 (Password-Based Key Derivation Function 2).
              </p>
 
+            <div class="page-header">
             <h2> Contact </h2>
-
-            <p> Do you have further questions, feedback or suggestions? Then please do not hesitate to contact Ilia Kats (kats@stud.uni-heidelberg.de), Nikos Ignatiadis (nikos.ignatiadis01@gmail.com) or Nils Kurzawa (nilskurzawa@yahoo.de). </p>
+            </div>
+            <p style="margin-bottom: 400px"> Do you have further questions, feedback or suggestions? Then please do not hesitate to contact Ilia Kats (kats@stud.uni-heidelberg.de), Nikos Ignatiadis (nikos.ignatiadis01@gmail.com) or Nils Kurzawa (nilskurzawa@yahoo.de). </p>
 
 
             </div><!--/span-->
