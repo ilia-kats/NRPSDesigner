@@ -266,7 +266,7 @@ class Feature(models.Model):
         if (feature.location.end.position == 0):
             return
         f = Feature(type=feature.type, start=feature.location.start.position, end=feature.location.end.position,
-            direction='f' if feature.location.start < feature.location.end else 'r', gene = g)
+            direction='f' if feature.strand == 1 else 'r', gene = g)
         f.save()
         for _name,_data in feature.qualifiers.iteritems():
             data = ''
@@ -331,5 +331,3 @@ class Qualifier(models.Model):
 
     def __unicode__(self):
         return self.name
-
-

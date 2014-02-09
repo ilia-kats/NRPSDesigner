@@ -39,7 +39,7 @@ from django.db import models
 from django import forms
 from django.conf import settings
 
-from fragment.models import Feature
+from fragment.models import Feature, Gene, DomainGene
 
 from Bio.SeqUtils.MeltingTemp import Tm_staluc
 from Bio.Seq import reverse_complement, Seq
@@ -72,9 +72,6 @@ rules = [
         ]
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"])
-
-
-from fragment.models import Gene
 
 from unafold import UnaFolder
 
@@ -397,14 +394,17 @@ class Construct(models.Model):
                 if fr.direction == 'r':
                     f.reverse()
                     t  = f.start
-                    f.start = fr.fragment.length() - f.end - 1
-                    f.end = fr.fragment.length() - t - 1
+                    f.start = fr.fragment.length() - f.end
+                    f.end = fr.fragment.length() - t
                 if transform:
-                    f.start -= fr.start() - acc - 1
-                    f.end -= fr.start() - acc - 1
+                    f.start -= fr.start() - acc
+                    f.end -= fr.start() - acc
                 yield f
             acc += fr.end() - fr.start()
-            yield Feature(type="fragment", start=start, end=acc, direction=fr.direction, gene=fr.fragment)
+            try:
+                fr.fragment.domaingene is None
+            except DomainGene.DoesNotExist:
+                yield Feature(type="fragment", start=start, end=acc, direction=fr.direction, gene=fr.fragment)
             if self.processed:
                 phs = fr.ph.all()
                 for ph in phs:
