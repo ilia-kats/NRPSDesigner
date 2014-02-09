@@ -234,6 +234,7 @@
 	 **/
 	 var FONT = {
 		 LG: '700 24px Lucida Grande,Lucida Sans,Arial,sans-serif',
+         L: '600 18px Lucida Grande,Lucida Sans,Arial,sans-serif',
 		 M:  '500 12px Lucida Grande,Lucida Sans,Arial,sans-serif',
 		 SM: '300 10px Lucida Grande,Lucida Sans,Arial,sans-serif',
 	 };
@@ -435,7 +436,7 @@ var fl = FragmentLabel.prototype = new Container();
 	 * @private
 	 * @type string
 	 **/
-	fl._font = FONT.SM;
+	fl._font = FONT.L;
 
 	/**
 	 * The colour
@@ -717,7 +718,7 @@ var fl = FragmentLabel.prototype = new Container();
 			l.rotation = r2d(r) + 90;
 			if(this._outward)
 			{
-				l.textBaseline = 'top';
+				l.textBaseline = 'bottom';
 				l.rotation = -r2d(r) - 90;
 			}
 			else
@@ -2339,7 +2340,7 @@ var d = Designer.prototype = new Container();
 		F.dradii[Area.CW] = F.radii[Area.CW] + 1.6*F.width;
 		F.dradii[Area.CCW]= F.radii[Area.CCW] - 1.6*F.width;
 
-		F.ldelta[Area.CW] = + 15;
+		F.ldelta[Area.CW] = + 25;
 		F.ldelta[Area.CCW]= - 25;
 
 		F.maxRadii[Area.CCW] = radius;
