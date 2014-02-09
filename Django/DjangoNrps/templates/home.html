@@ -19,10 +19,10 @@
     </a>
     <a href="{% url 'sample_peptide' %}" class="btn btn-large">  <i class="icon-star"> </i> Sample NRP
     </a>
-   <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-user"> </i> Register
+   <a href="{% url 'registration_register' %}" class="btn btn-large">  <i class="icon-user"> </i> Register <small>(optional)</small>
     </a>
     <!-- <a href="http://2013.igem.org/Team:Heidelberg/Project_Software" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
-    </a> --> 
+    </a> -->
     </div>
     </div>
     {% else %}
@@ -31,7 +31,7 @@
 
    <a href="{% url 'peptides' %}" class="btn btn-large">  <i class="icon-pencil"> </i> Continue designing
     </a>
-     
+
     <a href="{% url 'documentation' %}" class="btn btn-large"> <i class="icon-book"> </i>   Read about it
     </a>
 
