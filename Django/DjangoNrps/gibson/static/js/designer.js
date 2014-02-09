@@ -2263,7 +2263,7 @@ var d = Designer.prototype = new Container();
                 if (i == 0)
                     activeclass = "active";
                 navstr += '<li class="' + activeclass + '"><a href="#' + idstr + i + '" data-toggle="tab">' + domains[i].type + '</a></li>';
-                contentstr += '<table class="table table-striped tab-pane ' + activeclass + '" id="' + idstr + i + '"><tr><td>Species</td><td>' + df.f().getSpecies() + '</td></tr><tr><td>Gene</td><td>' + df.f().getGene() + '</td></tr><tr><td>' + source + '</td><td>' + df.f().getSource() + '</td></tr>';
+                contentstr += '<table class="table table-striped tab-pane ' + activeclass + '" id="' + idstr + i + '"><tr><td>Species</td><td>' + df.f().getSpecies() + '</td></tr><tr><td>Gene</td><td>' + df.f().getGene() + '</td></tr><tr><td>Module</td><td>' + domains[i].module + '</td></tr><tr><td>' + source + '</td><td>' + df.f().getSource() + '</td></tr>';
                 if (domains[i].substrates.length > 0) {
                     var substratestr = new Array();
                     for (var j = 0; j < domains[i].substrates.length; ++j) {

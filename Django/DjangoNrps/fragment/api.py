@@ -86,7 +86,7 @@ def get_gene_info(g):
             substrates = []
             for substrate in domain.substrateSpecificity.all():
                 substrates.append({'name': substrate.name, 'chirality': substrate.chirality})
-            domaintypes.append({'type': domain.domainType.name, 'substrates': substrates, 'chirality': domain.chirality, 'description': domain.description, 'curated': len(domain.user.groups.filter(name=settings.CURATION_GROUP)) > 0})
+            domaintypes.append({'type': domain.domainType.name, 'substrates': substrates, 'chirality': domain.chirality, 'description': domain.description, 'curated': len(domain.user.groups.filter(name=settings.CURATION_GROUP)) > 0, 'module': domain.module})
         info['domaingene'] = True
         info['domaintypes'] = domaintypes
         info['gene'] = domains[0].cds.geneName
