@@ -13,7 +13,7 @@ from django.conf import settings
 from django.db import connection
 from databaseInput.models import Substrate, Domain
 from gibson.models import Construct, ConstructFragment
-from fragment.models import Gene
+from fragment.models import Gene, DomainGene
 
 from celery.contrib.methods import task
 
@@ -62,7 +62,7 @@ class NRP(models.Model):
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.ForeignKey('gibson.Construct', null=True, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
-    
+
     class Meta:
         verbose_name = "Nonribosomal peptide"
         verbose_name_plural = "Nonribosomal peptides"
@@ -143,7 +143,7 @@ class NRP(models.Model):
             domain2 = connectedDomains[-1]
             domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, domain1.linkerBeforeLength, domain2.linkerAfterLength)
 
-            domainGene = Gene.objects.create(owner = self.owner,
+            domainGene = DomainGene.objects.create(owner = self.owner,
                 name = ','.join([x.domain.domainType.name for x in connectedDomains]),
                 description = ' '.join(['DNA sequence of',
                         ','.join(map(lambda x: ' '.join([str(x.domain.domainType),
@@ -157,6 +157,8 @@ class NRP(models.Model):
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
+            for domain in connectedDomains:
+                domainGene.domains.add(domain.domain)
 
             domainConstructFragment = ConstructFragment.objects.create(
                 construct = self.construct,
@@ -330,7 +332,7 @@ class NRP(models.Model):
         def processErr(lines):
             cat = 0
             def log():
-                if lasterror[0]is not None:
+                if lasterror[0]is None:
                     return
                 if cat == 0:
                     logger.error(lasterror[0])

@@ -2245,13 +2245,55 @@ var d = Designer.prototype = new Container();
 	{
 		//set the title and description
 		this._jQueryinfo.find('#fragment_name').text(df.f().getName());
-		this._jQueryinfo.find('#fragment_desc').text(df.f().getDesc());
+        if (df.f() instanceof DomainFragment) {
+            var source;
+            if (df.f().getSourceType() == 'Species')
+                source = 'Taxonomy ID';
+            else if (df.f().getSourceType() == 'Biobrick')
+                source = 'BioBrick';
+            else
+                source = 'Source';
+            var navstr = '<ul class="nav nav-tabs">';
+            var contentstr = '<div class="tab-content">';
+            var domains = df.f().getDomains();
+            var idstr = "fragmentinfo_" + df.f().getID() + '_';
+            for (var i = 0; i < domains.length; ++i) {
+                var activeclass = "";
+                if (i == 0)
+                    activeclass = "active";
+                navstr += '<li class="' + activeclass + '"><a href="#' + idstr + i + '" data-toggle="tab">' + domains[i].type + '</a></li>';
+                contentstr += '<table class="table table-striped tab-pane ' + activeclass + '" id="' + idstr + i + '"><tr><td>Species</td><td>' + df.f().getSpecies() + '</td></tr><tr><td>Gene</td><td>' + df.f().getGene() + '</td></tr><tr><td>' + source + '</td><td>' + df.f().getSource() + '</td></tr>';
+                if (domains[i].substrates.length > 0) {
+                    var substratestr = new Array();
+                    for (var j = 0; j < domains[i].substrates.length; ++j) {
+                        substratestr.push(domains[i].substrates[j].name);
+                    }
+                    contentstr += '<tr><td>Substrate</td><td>' + substratestr.join(", ") + '</td></tr>';
+                }
+                contentstr += '<tr><td>Description</td><td>' + domains[i].description + '</td></tr><tr><td>Curated</td><td>' + (domains[i].curated ? 'Yes' : 'No') + '</td></tr></table>';
+            }
+            navstr += '</ul>';
+            contentstr += '</div>';
+
+            this._jQueryinfo.find('#fragment_desc').html(navstr + contentstr);
+        } else {
+            this._jQueryinfo.find('#fragment_desc').text(df.f().getDesc());
+        }
 
 		var loc = ra2xy(df.getRadius(), df.getMid());
 		loc = this._fc.localToGlobal(loc.x, loc.y);
 
 		//set position
-		this._jQueryinfo.css({position: 'absolute', zindex:100, left:loc.x - 33, top:loc.y - (this._jQueryinfo.outerHeight() + 14),});
+        this._jQueryinfo.removeClass("fragment-info-arrow-bottom fragment-info-arrow-top")
+        var toppos = loc.y - (this._jQueryinfo.outerHeight() + 14);
+        if (toppos < 0) {
+            toppos = loc.y + 14;
+            this._jQueryinfo.addClass("fragment-info-arrow-top");
+        } else {
+            this._jQueryinfo.addClass("fragment-info-arrow-bottom");
+        }
+
+		this._jQueryinfo.css({position: 'absolute', zindex:100, left:loc.x - 33, top:toppos,});
 		this._jQueryinfo.css({display:'block',});
 
 		//set remove callback

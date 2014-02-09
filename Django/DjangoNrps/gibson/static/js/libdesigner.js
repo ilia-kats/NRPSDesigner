@@ -103,7 +103,7 @@ function Construct(data)
 
     for(var i = 0; i < data.cfs.length; i=i+1)
     {
-        var f = new Fragment(data.fs[i]);
+        var f = makeFragment(data.fs[i]);
         this.fs.push(f);
         this.cfs.push(new ConstructFragment(data.cfs[i], f));
     }

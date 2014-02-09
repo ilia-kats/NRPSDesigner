@@ -10,6 +10,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 import urllib
 
+from databaseInput.models import Domain
+
 Entrez.email = 'entrez@gibthon.org'
 Entrez.tool = 'gibthon/biopython'
 
@@ -155,6 +157,9 @@ class Gene(models.Model):
 
     def length(self):
         return len(self.sequence)
+
+class DomainGene(Gene):
+    domains = models.ManyToManyField(Domain, related_name="+")
 
 class Reference(models.Model):
     """Store a reference"""

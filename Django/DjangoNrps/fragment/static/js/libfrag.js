@@ -18,7 +18,7 @@ var libFrag = new function()
 			url: fragment_api_url + id+'/',
 			success: function(data)
 			{
-				_suc(new Fragment(data));
+				_suc(makeFragment(data));
 			},
 		});
 	};
@@ -34,7 +34,7 @@ var libFrag = new function()
                 var frags = new Array();
                 for(f in data)
                 {
-                    frags.push(new Fragment(data[f]));
+                    frags.push(makeFragment(data[f]));
                 }
                 _suc(frags);
             },
@@ -49,7 +49,7 @@ var libFrag = new function()
      */
     var _h = Math.random() * 360;
 	var _grc = 0.618033988749895 * 360;
-	
+
 	this.getNextColor = function()
 	{
 		_h = (_h + _grc) % 360;
@@ -93,6 +93,11 @@ var libFrag = new function()
 	}
 }
 
+function makeFragment(data)
+{
+    return ('domaingene' in data && data.domaingene == true) ? new DomainFragment(data) : new Fragment(data);
+}
+
 /*
  *
  * An actual fragment object
@@ -100,6 +105,8 @@ var libFrag = new function()
  */
 function Fragment(data)
 {
+    if (arguments.length == 0)
+        return;
 	/*
 	 * Public Accessors
 	 *
@@ -181,7 +188,7 @@ function Fragment(data)
 			error: fail_cb,
 			data: metadata,
 		});
-	};	
+	};
 
 	this.getFeats = function(success_fn)
 	{
@@ -243,6 +250,26 @@ function Fragment(data)
 	var metadata = ('annots' in data && 'refs' in data) ? data : null;
 }
 
+function DomainFragment(data)
+{
+    Fragment.apply(this, arguments);
+    this.getDomains = function() {return domains;};
+    this.getGene = function() {return gene;};
+    this.getSpecies = function() {return species;};
+    this.getSource = function() {return source;};
+    this.getSourceType = function() {return sourcetype;};
+
+    var domains = data.domaintypes;
+    var gene = data.gene;
+    var species = data.species;
+    var source = data.source;
+    var sourcetype = data.sourceType;
+}
+
+DomainFragment.prototype = new Fragment();
+DomainFragment.prototype.constructor = DomainFragment;
+
+
 // ============================================ Widgets
 
 /*
@@ -284,11 +311,11 @@ jQuery.widget("ui.jFragment", jQuery.ui.draggable, {
         console.log('setting '+name);
         this.options[name] = value;
     },
-});  
+});
 
 /*
  *
- * jFragmentSelector: Easily select fragment from the available ones 
+ * jFragmentSelector: Easily select fragment from the available ones
  * using drag and drop
  *
  * */
@@ -329,9 +356,9 @@ jQuery.widget("ui.jFragmentSelector", {
             }, 350);
         });
         this.jQueryfilterInput.hover(function() {
-            self.jQueryfilterHolder.addClass('ui-state-hover');   
+            self.jQueryfilterHolder.addClass('ui-state-hover');
         }, function() {
-            self.jQueryfilterHolder.removeClass('ui-state-hover');   
+            self.jQueryfilterHolder.removeClass('ui-state-hover');
         });
 
         this.frags = new Array();
@@ -410,7 +437,7 @@ jQuery.widget("ui.jFragmentSelector", {
     },
     //set height to fill the parent container
     height: function(h){
-        this.jQueryfragView.height( h - 
+        this.jQueryfragView.height( h -
                               (this.jQueryel.height() - this.jQueryfragView.height()));
     },
     _onInputFocus: function(){
