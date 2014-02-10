@@ -12,7 +12,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.db import connection
 from databaseInput.models import Substrate, Domain
-from gibson.models import Construct, ConstructFragment
+from gibson.models import Construct, ConstructFragment, fragment_feature
 from fragment.models import Gene, DomainGene, Feature, Qualifier
 
 from celery.contrib.methods import task
@@ -170,7 +170,7 @@ class NRP(models.Model):
                 if len(domain.domain.user.groups.filter(name=settings.CURATION_GROUP)) > 0:
                     curated = "Yes"
                 Qualifier(name="curated", data=curated, feature=f).save()
-            f = Feature(type="fragment", start=0, end=len(domainSequence), direction='f', gene=domainGene)
+            f = Feature(type=fragment_feature, start=0, end=len(domainSequence), direction='f', gene=domainGene)
             f.save()
             Qualifier(name="gene", data=domain1.domain.cds.geneName, feature=f).save()
             Qualifier(name="species", data=domain1.domain.cds.origin.species, feature=f).save()
