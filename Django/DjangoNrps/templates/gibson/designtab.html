@@ -38,13 +38,51 @@
 
 <script type='text/javascript'>
     var g_designer = null;
+    var expressionPlasmids = 0;
+    var plasmidBackbones = 0;
 
+    function warnConstruct() {
+        if (!plasmidBackbones && !expressionPlasmids)
+            showError("<strong>WARNING:</strong>There is no plasmid backbone in the construct. The construct will not be able to replicate and propagate to daughter cells.", "error");
+        else if (!expressionPlasmids)
+            showError("<strong>WARNING:</strong>There is no expression backbone in the construct. The NRPS will not be produced.", "warning");
+        else
+            hideError();
+    }
+
+    function addCb(fragment)
+    {
+        fragment.getMeta(function(meta) {
+            if ('annots' in meta && 'part_type' in meta['annots']) {
+                var ptype = meta['annots']['part_type'].toLowerCase();
+                if(ptype == 'expression plasmid')
+                    ++expressionPlasmids;
+                else if (ptype == 'plasmid backbone')
+                    ++plasmidBackbones;
+            }
+            warnConstruct();
+        });
+    }
+
+    function rmCb(fragment)
+    {
+        fragment.getMeta(function(meta) {
+            if ('annots' in meta && 'part_type' in meta['annots']) {
+                var ptype = meta['annots']['part_type'].toLowerCase();
+                if(ptype == 'expression plasmid')
+                    --expressionPlasmids;
+                else if (ptype == 'plasmid backbone')
+                    --plasmidBackbones;
+            }
+            warnConstruct();
+        });
+    }
 
 	jQuery(window).ready( function() {
 		//tabs
 
         //load designer
-        g_designer = new Designer(jQuery('#cdesigner'),{{construct.id}});
+        g_designer = new Designer(jQuery('#cdesigner'),{{construct.id}}, addCb, rmCb);
         //Make the selector and equalise the height
         jQuery('#frag_select').jFragmentSelector({
             containment: jQuery('.pad-content'),

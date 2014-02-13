@@ -1402,9 +1402,9 @@ var df = DisplayFragment.prototype = new Container();
 * @constructor
 * @param {Server} server A server object for saving changes
 **/
-var FragmentContainer = function(designer)
+var FragmentContainer = function(designer, addCb, rmCb)
 {
-	this.initialize(designer);
+	this.initialize(designer, addCb, rmCb);
 }
 var fc = FragmentContainer.prototype = new Container();
 
@@ -1445,6 +1445,10 @@ var fc = FragmentContainer.prototype = new Container();
 
 	fc._designer = null;
 
+    fc._addCb = function(){};
+
+    fc._rmCb = function(){};
+
 //Constructor
 	/**
 	 * @property Container_initialize
@@ -1458,10 +1462,14 @@ var fc = FragmentContainer.prototype = new Container();
 	 * @method initialize
 	 * @protected
 	 **/
-	fc.initialize = function(d)
+	fc.initialize = function(d, addCb, rmCb)
 	{
 		this.Container_initialize();
 		this._designer = d;
+        if (addCb)
+            this._addCb = addCb;
+        if (rmCb)
+            this._rmCb = rmCb;
 	};
 
 //public methods
@@ -1581,6 +1589,7 @@ var fc = FragmentContainer.prototype = new Container();
     {
         if (df.f().getViewable() == 'H')
             this._hiddenFragments++;
+        this._addCb(df.f())
         Container.prototype.addChild.call(this, df);
     }
 
@@ -1591,6 +1600,7 @@ var fc = FragmentContainer.prototype = new Container();
     {
         if (df.f().getViewable() == 'H')
             this._hiddenFragments++;
+        this._addCb(df.f())
         Container.prototype.addChildAt.call(this, df, pos);
     }
 
@@ -1600,6 +1610,8 @@ var fc = FragmentContainer.prototype = new Container();
     fc.removeAllChildren = function()
     {
         this._hiddenFragments = 0;
+        for (var i = 0; i < this.children.length; ++i)
+            this._rmCb(this.children[i].f());
         Container.prototype.removeAllChildren.call(this);
     }
 
@@ -1614,7 +1626,7 @@ var fc = FragmentContainer.prototype = new Container();
 		if(i < 0) return this;
         if (df.f().getViewable() == 'H')
             this._hiddenFragments--;
-
+        this._rmCb(df.f());
 		var a = df.getMid();
 
 		this.removeChildAt(i);
@@ -2045,9 +2057,9 @@ var s = Server.prototype = new Container();
 * @class Designer
 * @extends Container
 **/
-var Designer = function(jQuerycanvas, cid)
+var Designer = function(jQuerycanvas, cid, addCb, rmCb)
 {
-	this.initialize(jQuerycanvas, cid);
+	this.initialize(jQuerycanvas, cid, addCb, rmCb);
 }
 var d = Designer.prototype = new Container();
 
@@ -2068,7 +2080,7 @@ var d = Designer.prototype = new Container();
 
 	//Constuctor
 	d._container_initialize = d.initialize;
-	d.initialize = function(jQuerycanvas, cid)
+	d.initialize = function(jQuerycanvas, cid, addCb, rmCb)
 	{
 		var self = this;
 		this._jQuerycanvas = jQuerycanvas;
@@ -2084,7 +2096,7 @@ var d = Designer.prototype = new Container();
 		this._tlen.textAlign = 'center';
 		this._tlen.maxWidth = 1000;
 
-		this._fc = new FragmentContainer(this);
+		this._fc = new FragmentContainer(this, addCb, rmCb);
 //jQuery(window).keypress(function() {self._fc.debug();});
 
 		this._server = new Server();
