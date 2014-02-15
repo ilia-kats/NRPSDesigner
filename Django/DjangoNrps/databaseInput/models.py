@@ -45,7 +45,7 @@ class Cds(models.Model):
         try:
             consensusPreds = nrpsSmashResult.consensuspreds
         except AttributeError:
-            raise AttributeError("""According to the in-built domain prediction pipeline, 
+            raise AttributeError("""According to the in-built domain prediction pipeline,
                 the DNA sequence you entered does not contain any NRPS domains.""")
 
         #code below still not nice, should probably adapt nrpsSMASH to give nicer output
@@ -115,8 +115,8 @@ class Cds(models.Model):
 
             # write custom functions for the below!!!
             # With linker consideration maybe???
-            start_position = start_domain.pfamStart - linker_before - 1
-            stop_position  = stop_domain.pfamStop + linker_after
+            start_position = start_domain.get_start() - linker_before - 1
+            stop_position = stop_domain.get_stop() + linker_after
             ##
             return self.dnaSequence[start_position:stop_position]
         else:
@@ -170,10 +170,22 @@ class Domain(models.Model):
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
+    def get_start(self):
+        if self.definedStart is not None:
+            return self.definedStart
+        else:
+            return self.pfamStart
+
+    def get_stop(self):
+        if self.definedStop is not None:
+            return self.definedStop
+        else:
+            return self.pfamStop
+
     def get_sequence(self):
         cdsSequence = self.cds.dnaSequence
-        domainStart = self.pfamStart - 1
-        domainStop  = self.pfamStop
+        domainStart = self.get_start() - 1
+        domainStop  = self.get_stop()
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
 

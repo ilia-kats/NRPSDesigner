@@ -80,6 +80,30 @@ jQuery.ajaxSetup({
     }
 });
 
+function showError(htmlText, errorClass)
+{
+    var err = jQuery('#message');
+    if (!errorClass)
+        errorClass = "error";
+    if (!err.length) {
+        err = jQuery('<div id="message"/>');
+        err.addClass("alert alert-block alert-" + errorClass);
+        jQuery('#sub-container').prepend(err);
+    } else if (!err.hasClass("alert-" + errorClass)) {
+        err.removeClass("alert-info alert-success alert-warning alert-error");
+        err.addClass("alert-" + errorClass);
+    }
+    err.empty().append(jQuery('<button type="button" class="close" data-dismiss="alert">&times;</button>')).append(htmlText);
+}
+
+function hideError()
+{
+    var err = jQuery('#message');
+    if (err.length) {
+        err.remove();
+    }
+}
+
 function submitCeleryJob(url, data, callbackProgress, callbackError, callbackSuccess)
 {
     jQuery('#message').remove();
@@ -134,8 +158,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
                 callbackSuccess(data);
         } else if (data[1].status == "FAILED") {
             stop();
-            var err = jQuery('<div id="message"/>');
-            err.append(jQuery('<button type="button" class="close" data-dismiss="alert">&times;</button>')).addClass("alert alert-block alert-error").append("<strong>ERROR:</strong> " + data[1].output);
+            showError("<strong>ERROR:</strong> " + data[1].output);
             jQuery('#sub-container').prepend(err);
             if (callbackError != undefined)
                 callbackError(data);

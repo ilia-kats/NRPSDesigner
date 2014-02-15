@@ -10,6 +10,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 import urllib
 
+from databaseInput.models import Domain
+
 Entrez.email = 'entrez@gibthon.org'
 Entrez.tool = 'gibthon/biopython'
 
@@ -156,6 +158,9 @@ class Gene(models.Model):
     def length(self):
         return len(self.sequence)
 
+class DomainGene(Gene):
+    domains = models.ManyToManyField(Domain, related_name="+")
+
 class Reference(models.Model):
     """Store a reference"""
     gene = models.ForeignKey('Gene', related_name='references')
@@ -261,7 +266,7 @@ class Feature(models.Model):
         if (feature.location.end.position == 0):
             return
         f = Feature(type=feature.type, start=feature.location.start.position, end=feature.location.end.position,
-            direction='f' if feature.location.start < feature.location.end else 'r', gene = g)
+            direction='f' if feature.strand == 1 else 'r', gene = g)
         f.save()
         for _name,_data in feature.qualifiers.iteritems():
             data = ''
@@ -326,5 +331,3 @@ class Qualifier(models.Model):
 
     def __unicode__(self):
         return self.name
-
-

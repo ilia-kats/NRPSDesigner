@@ -234,6 +234,7 @@
 	 **/
 	 var FONT = {
 		 LG: '700 24px Lucida Grande,Lucida Sans,Arial,sans-serif',
+         L: '600 18px Lucida Grande,Lucida Sans,Arial,sans-serif',
 		 M:  '500 12px Lucida Grande,Lucida Sans,Arial,sans-serif',
 		 SM: '300 10px Lucida Grande,Lucida Sans,Arial,sans-serif',
 	 };
@@ -435,7 +436,7 @@ var fl = FragmentLabel.prototype = new Container();
 	 * @private
 	 * @type string
 	 **/
-	fl._font = FONT.SM;
+	fl._font = FONT.L;
 
 	/**
 	 * The colour
@@ -717,7 +718,7 @@ var fl = FragmentLabel.prototype = new Container();
 			l.rotation = r2d(r) + 90;
 			if(this._outward)
 			{
-				l.textBaseline = 'top';
+				l.textBaseline = 'bottom';
 				l.rotation = -r2d(r) - 90;
 			}
 			else
@@ -1401,9 +1402,9 @@ var df = DisplayFragment.prototype = new Container();
 * @constructor
 * @param {Server} server A server object for saving changes
 **/
-var FragmentContainer = function(designer)
+var FragmentContainer = function(designer, addCb, rmCb)
 {
-	this.initialize(designer);
+	this.initialize(designer, addCb, rmCb);
 }
 var fc = FragmentContainer.prototype = new Container();
 
@@ -1444,6 +1445,10 @@ var fc = FragmentContainer.prototype = new Container();
 
 	fc._designer = null;
 
+    fc._addCb = function(){};
+
+    fc._rmCb = function(){};
+
 //Constructor
 	/**
 	 * @property Container_initialize
@@ -1457,10 +1462,14 @@ var fc = FragmentContainer.prototype = new Container();
 	 * @method initialize
 	 * @protected
 	 **/
-	fc.initialize = function(d)
+	fc.initialize = function(d, addCb, rmCb)
 	{
 		this.Container_initialize();
 		this._designer = d;
+        if (addCb)
+            this._addCb = addCb;
+        if (rmCb)
+            this._rmCb = rmCb;
 	};
 
 //public methods
@@ -1580,6 +1589,7 @@ var fc = FragmentContainer.prototype = new Container();
     {
         if (df.f().getViewable() == 'H')
             this._hiddenFragments++;
+        this._addCb(df.f())
         Container.prototype.addChild.call(this, df);
     }
 
@@ -1590,6 +1600,7 @@ var fc = FragmentContainer.prototype = new Container();
     {
         if (df.f().getViewable() == 'H')
             this._hiddenFragments++;
+        this._addCb(df.f())
         Container.prototype.addChildAt.call(this, df, pos);
     }
 
@@ -1599,6 +1610,8 @@ var fc = FragmentContainer.prototype = new Container();
     fc.removeAllChildren = function()
     {
         this._hiddenFragments = 0;
+        for (var i = 0; i < this.children.length; ++i)
+            this._rmCb(this.children[i].f());
         Container.prototype.removeAllChildren.call(this);
     }
 
@@ -1613,7 +1626,7 @@ var fc = FragmentContainer.prototype = new Container();
 		if(i < 0) return this;
         if (df.f().getViewable() == 'H')
             this._hiddenFragments--;
-
+        this._rmCb(df.f());
 		var a = df.getMid();
 
 		this.removeChildAt(i);
@@ -2044,9 +2057,9 @@ var s = Server.prototype = new Container();
 * @class Designer
 * @extends Container
 **/
-var Designer = function(jQuerycanvas, cid)
+var Designer = function(jQuerycanvas, cid, addCb, rmCb)
 {
-	this.initialize(jQuerycanvas, cid);
+	this.initialize(jQuerycanvas, cid, addCb, rmCb);
 }
 var d = Designer.prototype = new Container();
 
@@ -2067,7 +2080,7 @@ var d = Designer.prototype = new Container();
 
 	//Constuctor
 	d._container_initialize = d.initialize;
-	d.initialize = function(jQuerycanvas, cid)
+	d.initialize = function(jQuerycanvas, cid, addCb, rmCb)
 	{
 		var self = this;
 		this._jQuerycanvas = jQuerycanvas;
@@ -2083,7 +2096,7 @@ var d = Designer.prototype = new Container();
 		this._tlen.textAlign = 'center';
 		this._tlen.maxWidth = 1000;
 
-		this._fc = new FragmentContainer(this);
+		this._fc = new FragmentContainer(this, addCb, rmCb);
 //jQuery(window).keypress(function() {self._fc.debug();});
 
 		this._server = new Server();
@@ -2245,13 +2258,55 @@ var d = Designer.prototype = new Container();
 	{
 		//set the title and description
 		this._jQueryinfo.find('#fragment_name').text(df.f().getName());
-		this._jQueryinfo.find('#fragment_desc').text(df.f().getDesc());
+        if (df.f() instanceof DomainFragment) {
+            var source;
+            if (df.f().getSourceType() == 'Species')
+                source = 'Taxonomy ID';
+            else if (df.f().getSourceType() == 'Biobrick')
+                source = 'BioBrick';
+            else
+                source = 'Source';
+            var navstr = '<ul class="nav nav-tabs">';
+            var contentstr = '<div class="tab-content">';
+            var domains = df.f().getDomains();
+            var idstr = "fragmentinfo_" + df.f().getID() + '_';
+            for (var i = 0; i < domains.length; ++i) {
+                var activeclass = "";
+                if (i == 0)
+                    activeclass = "active";
+                navstr += '<li class="' + activeclass + '"><a href="#' + idstr + i + '" data-toggle="tab">' + domains[i].type + '</a></li>';
+                contentstr += '<table class="table table-striped tab-pane ' + activeclass + '" id="' + idstr + i + '"><tr><td>Species</td><td>' + df.f().getSpecies() + '</td></tr><tr><td>Gene</td><td>' + df.f().getGene() + '</td></tr><tr><td>Module</td><td>' + domains[i].module + '</td></tr><tr><td>' + source + '</td><td>' + df.f().getSource() + '</td></tr>';
+                if (domains[i].substrates.length > 0) {
+                    var substratestr = new Array();
+                    for (var j = 0; j < domains[i].substrates.length; ++j) {
+                        substratestr.push(domains[i].substrates[j].name);
+                    }
+                    contentstr += '<tr><td>Substrate</td><td>' + substratestr.join(", ") + '</td></tr>';
+                }
+                contentstr += '<tr><td>Description</td><td>' + domains[i].description + '</td></tr><tr><td>Curated</td><td>' + (domains[i].curated ? 'Yes' : 'No') + '</td></tr></table>';
+            }
+            navstr += '</ul>';
+            contentstr += '</div>';
+
+            this._jQueryinfo.find('#fragment_desc').html(navstr + contentstr);
+        } else {
+            this._jQueryinfo.find('#fragment_desc').text(df.f().getDesc());
+        }
 
 		var loc = ra2xy(df.getRadius(), df.getMid());
 		loc = this._fc.localToGlobal(loc.x, loc.y);
 
 		//set position
-		this._jQueryinfo.css({position: 'absolute', zindex:100, left:loc.x - 33, top:loc.y - (this._jQueryinfo.outerHeight() + 14),});
+        this._jQueryinfo.removeClass("fragment-info-arrow-bottom fragment-info-arrow-top")
+        var toppos = loc.y - (this._jQueryinfo.outerHeight() + 14);
+        if (toppos < 0) {
+            toppos = loc.y + 14;
+            this._jQueryinfo.addClass("fragment-info-arrow-top");
+        } else {
+            this._jQueryinfo.addClass("fragment-info-arrow-bottom");
+        }
+
+		this._jQueryinfo.css({position: 'absolute', zindex:100, left:loc.x - 33, top:toppos,});
 		this._jQueryinfo.css({display:'block',});
 
 		//set remove callback
@@ -2297,7 +2352,7 @@ var d = Designer.prototype = new Container();
 		F.dradii[Area.CW] = F.radii[Area.CW] + 1.6*F.width;
 		F.dradii[Area.CCW]= F.radii[Area.CCW] - 1.6*F.width;
 
-		F.ldelta[Area.CW] = + 15;
+		F.ldelta[Area.CW] = + 25;
 		F.ldelta[Area.CCW]= - 25;
 
 		F.maxRadii[Area.CCW] = radius;

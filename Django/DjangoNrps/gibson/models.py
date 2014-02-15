@@ -39,7 +39,7 @@ from django.db import models
 from django import forms
 from django.conf import settings
 
-from fragment.models import Feature
+from fragment.models import Feature, Gene, DomainGene
 
 from Bio.SeqUtils.MeltingTemp import Tm_staluc
 from Bio.Seq import reverse_complement, Seq
@@ -50,6 +50,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 
 import sbol
+
+fragment_feature = "fragment"
 
 from annoying.fields import AutoOneToOneField
 rules = [
@@ -72,9 +74,6 @@ rules = [
         ]
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"])
-
-
-from fragment.models import Gene
 
 from unafold import UnaFolder
 
@@ -397,14 +396,17 @@ class Construct(models.Model):
                 if fr.direction == 'r':
                     f.reverse()
                     t  = f.start
-                    f.start = fr.fragment.length() - f.end - 1
-                    f.end = fr.fragment.length() - t - 1
-                if transform:
-                    f.start -= fr.start() - acc - 1
-                    f.end -= fr.start() - acc - 1
+                    f.start = fr.fragment.length() - f.end
+                    f.end = fr.fragment.length() - t
+                if transform or f.type == fragment_feature:
+                    f.start -= fr.start() - acc
+                    f.end -= fr.start() - acc
                 yield f
             acc += fr.end() - fr.start()
-            yield Feature(type="fragment", start=start, end=acc, direction=fr.direction, gene=fr.fragment)
+            try:
+                fr.fragment.domaingene is None
+            except DomainGene.DoesNotExist:
+                yield Feature(type=fragment_feature, start=start, end=acc, direction=fr.direction, gene=fr.fragment)
             if self.processed:
                 phs = fr.ph.all()
                 for ph in phs:
@@ -500,7 +502,7 @@ class Construct(models.Model):
             else:
                 sa.strand = '-'
             sa.start = f.start + 1 # SBOL 1-based
-            sa.end = f.end + 1
+            sa.end = f.end
             parent.annotations.append(sa)
             fid[0] += 1
             return dcf
@@ -509,7 +511,7 @@ class Construct(models.Model):
         for f in self.features(False): # sub-annotations relative to parent
             try:
                 if f.gene is not None:
-                    if f.type == "fragment":
+                    if f.type == fragment_feature:
                         fragments[f.gene] = f
                     else:
                         if f.gene in fragmentfeats:
