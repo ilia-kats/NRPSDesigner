@@ -51,6 +51,7 @@ private:
     Monomer makeMonomer(sql::ResultSet*);
     void fillDomain(const std::shared_ptr<Domain>&, sql::ResultSet*) throw (DatabaseError);
     DatabaseError makeException(const sql::SQLException &e) const;
+    void fillWorkingNextDomains(Domain *, const std::string&);
 
     sql::Connection *m_connection;
     sql::PreparedStatement *m_stmtMonomerId;

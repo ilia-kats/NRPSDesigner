@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
-#include <unordered_map>
+#include <unordered_set>
 
 #ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
@@ -39,6 +39,8 @@ public:
     const std::string& nativeDefinedLinkerAfter() const;
     const std::string& determinedLinkerBefore() const;
     const std::string& determinedLinkerAfter() const;
+    const std::unordered_set<uint32_t>& workingNextDomains() const;
+    bool worksWithNextDomain(uint32_t) const;
 
 #ifdef WITH_INTERNAL_XML
     void toXml(xmlTextWriterPtr) const;
@@ -71,6 +73,8 @@ public:
     void setDeterminedLinkerBefore(std::string&&);
     void setDeterminedLinkerAfter(const std::string&);
     void setDeterminedLinkerAfter(std::string&&);
+    void addWorkingNextDomain(uint32_t);
+    void removeWorkingNextDomain(uint32_t);
 
 protected:
     Domain(DomainType, uint32_t);
@@ -100,6 +104,7 @@ private:
     std::string m_nativeDefinedLinkerAfter;
     std::string m_determinedLinkerBefore;
     std::string m_determinedLinkerAfter;
+    std::unordered_set<uint32_t> m_workingNextDomains;
 };
 }
 

@@ -18,6 +18,7 @@
 #define NATIVEDEFINEDLINKERAFTER_NODE "nativedefinedlinkerafter"
 #define DETERMINEDLINKERBEFORE_NODE "determinedlinkerbefore"
 #define DETERMINEDLINKERAFTER_NODE "determinedlinkerafter"
+#define WORKEDWITHNEXTDOMAIN_NODE "workedwithnextdomains"
 #define ORIGINID_NODE "originid"
 #define PRODUCTID_NODE "productid"
 
@@ -244,6 +245,26 @@ void Domain::setDeterminedLinkerAfter(std::string &&linker)
     m_determinedLinkerAfter = std::move(linker);
 }
 
+void Domain::addWorkingNextDomain(uint32_t did)
+{
+    m_workingNextDomains.insert(did);
+}
+
+void Domain::removeWorkingNextDomain(uint32_t did)
+{
+    m_workingNextDomains.erase(did);
+}
+
+const std::unordered_set<uint32_t>& Domain::workingNextDomains() const
+{
+    return m_workingNextDomains;
+}
+
+bool Domain::worksWithNextDomain(uint32_t id) const
+{
+    return m_workingNextDomains.count(id) > 0;
+}
+
 #ifdef WITH_INTERNAL_XML
 void Domain::toXml(xmlTextWriterPtr writer) const
 {
@@ -273,6 +294,17 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERAFTER_NODE, BAD_CAST nativeDefinedLinkerAfter().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DETERMINEDLINKERBEFORE_NODE, BAD_CAST determinedLinkerBefore().c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DETERMINEDLINKERAFTER_NODE, BAD_CAST determinedLinkerAfter().c_str());
+
+    if (!m_workingNextDomains.empty()) {
+        std::string working;
+        int i = 0;
+        for (auto it = m_workingNextDomains.cbegin(); it != m_workingNextDomains.end(); ++it, ++i) {
+            if (i > 0)
+                working.append(",");
+            working.append(std::to_string(*it));
+        }
+        xmlTextWriterWriteElement(writer, BAD_CAST WORKEDWITHNEXTDOMAIN_NODE, BAD_CAST working.c_str());
+    }
 
     if (origin() != nullptr)
         xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());

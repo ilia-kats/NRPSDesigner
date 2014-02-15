@@ -83,8 +83,8 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
     m_stmtMonomerId = m_connection->prepareStatement("SELECT id, name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE id = ?;");
     m_stmtMonomerSmash = m_connection->prepareStatement("SELECT id, name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE smashName = ?;");
     m_stmtMonomerSearch = m_connection->prepareStatement("SELECT id, name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE name LIKE ?;");
-    std::string stmtCoreDomainsSubstrate = "SELECT domain.id AS did, domain.module AS module, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
-    std::string stmtCoreDomainsNoSubstrate = "SELECT domain.id AS did, domain.module AS module, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
+    std::string stmtCoreDomainsSubstrate = "SELECT domain.id AS did, domain.module AS module, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid, GROUP_CONCAT(dtuple.next_domain_id SEPARATOR ',') AS workswithnext FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
+    std::string stmtCoreDomainsNoSubstrate = "SELECT domain.id AS did, domain.module AS module, origin.id AS orid, product.id AS pid, GROUP_CONCAT(dtuple.next_domain_id SEPARATOR ',') AS workswithnext FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
     if (m_curatedOnly) {
         std::string s = ", auth_user AS user, auth_group AS `group`, auth_user_groups AS user_xref";
         stmtCoreDomainsSubstrate.append(s);
@@ -97,19 +97,19 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
         stmtCoreDomainsSubstrate.append(s);
         stmtCoreDomainsNoSubstrate.append(s);
     }
-    stmtCoreDomainsSubstrate.append(") WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ?");
-    stmtCoreDomainsNoSubstrate.append(") WHERE dtype.name = ?");
+    stmtCoreDomainsSubstrate.append(") LEFT JOIN databaseInput_domaintuple AS dtuple ON domain.id = dtuple.prev_domain_id WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ?");
+    stmtCoreDomainsNoSubstrate.append(") LEFT JOIN databaseInput_domaintuple AS dtuple ON domain.id = dtuple.prev_domain_id WHERE dtype.name = ?");
     if (m_curatedOnly) {
         std::string s = " AND group.name = ?";
         stmtCoreDomainsSubstrate.append(s);
         stmtCoreDomainsNoSubstrate.append(s);
     }
-    stmtCoreDomainsSubstrate.append(";");
-    stmtCoreDomainsNoSubstrate.append(";");
+    stmtCoreDomainsSubstrate.append(" GROUP BY IFNULL(dtuple.prev_domain_id, domain.id);");
+    stmtCoreDomainsNoSubstrate.append(" GROUP BY IFNULL(dtuple.prev_domain_id, domain.id);");
     m_stmtCoreDomainsSubstrate = m_connection->prepareStatement(stmtCoreDomainsSubstrate);
     m_stmtCoreDomainsNoSubstrate = m_connection->prepareStatement(stmtCoreDomainsNoSubstrate);
 
-    m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.chirality AS chirality, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc, o.id AS oid, p.id AS pid, dtype.name AS type FROM databaseInput_domain AS d INNER JOIN (databaseInput_cds AS c, databaseInput_origin AS o, databaseInput_product AS p, databaseInput_type AS dtype) ON (d.cds_id = c.id AND c.origin_id = o.id AND c.product_id = p.id AND d.domainType_id = dtype.id) WHERE d.id = ?;");
+    m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.chirality AS chirality, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc, o.id AS oid, p.id AS pid, dtype.name AS type, GROUP_CONCAT(dtuple.next_domain_id SEPARATOR ',') AS workswithnext FROM databaseInput_domain AS d INNER JOIN (databaseInput_cds AS c, databaseInput_origin AS o, databaseInput_product AS p, databaseInput_type AS dtype) ON (d.cds_id = c.id AND c.origin_id = o.id AND c.product_id = p.id AND d.domainType_id = dtype.id) LEFT JOIN databaseInput_domaintuple AS dtuple ON d.id = dtuple.prev_domain_id WHERE d.id = ? GROUP BY IFNULL(dtuple.prev_domain_id, d.id);");
     m_stmtDomainSubstrate = m_connection->prepareStatement("SELECT substrate_id AS sid FROM databaseInput_domain_substrateSpecificity WHERE domain_id = ?");
     m_stmtProduct = m_connection->prepareStatement("SELECT id, name, description FROM databaseInput_product WHERE id = ?;");
     m_stmtOrigin = m_connection->createStatement();
@@ -274,6 +274,7 @@ std::vector<std::shared_ptr<RD>> MySQLDatabaseConnector::getCoreDomains(sql::Pre
                 d->setModule(res->getUInt("module"));
                 Origin *ori = d->setOrigin(res->getUInt("orid"));
                 d->setProduct(res->getUInt("pid"));
+                fillWorkingNextDomains(d, res->getString("workswithnext"));
                 f(d, res);
                 vec.emplace_back(d);
                 fillOrigin(ori);
@@ -402,6 +403,7 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d, sql::R
         if (d->product() == nullptr || d->product()->id() != id) {
             d->setProduct(id);
         }
+        fillWorkingNextDomains(d.get(), res->getString("workswithnext"));
     } catch (const sql::SQLException &e) {
         throw makeException(e);
     }
@@ -453,6 +455,15 @@ void MySQLDatabaseConnector::fillOrigin(Origin *ori) throw (DatabaseError)
             delete m_stmtOrigin->getResultSet();
         }
         throw makeException(e);
+    }
+}
+
+void MySQLDatabaseConnector::fillWorkingNextDomains(Domain *d, const std::string &ids)
+{
+    std::istringstream str(ids);
+    std::string tmp;
+    while (std::getline(str, tmp, ',')) {
+        d->addWorkingNextDomain(std::stoul(tmp));
     }
 }
 
