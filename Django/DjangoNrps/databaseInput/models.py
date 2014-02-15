@@ -163,6 +163,7 @@ class Domain(models.Model):
     pfamStop = models.IntegerField()
     definedStart = models.IntegerField(blank=True, null=True)
     definedStop = models.IntegerField(blank=True, null=True)
+    next_domain = models.ManyToManyField('self', symmetrical=False, through='DomainTuple', blank=True, related_name='prev_domain')
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
 
@@ -290,10 +291,29 @@ class Type(models.Model):
         domainSeqRecordList = [dom.get_seqrecord_object(protein=True) for dom in domains]
         return msa_run(domainSeqRecordList)
 
+# models experimentally validated domain combinations
+class DomainTuple(models.Model):
+    prev_domain    = models.ForeignKey('Domain', related_name = "next_tuple")
+    next_domain    = models.ForeignKey('Domain', related_name = "prev_tuple")
+    prev_position  = models.IntegerField()
+    next_position  = models.IntegerField()
+    experiment     = models.ForeignKey('Experiment' , related_name="domain_tuples")
+
+    def __unicode__(self):
+        return str(self.prev_domain)+ "with" + str(self.next_domain)
+
+class Experiment(models.Model):
+    description = models.TextField()
+    linkout =  generic.GenericRelation('Linkout')
+    user= models.ForeignKey('auth.User', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.description[0:20]
+
 class Linkout(models.Model):
     linkoutType = models.ForeignKey('LinkoutType')
     identifier = models.CharField(max_length=50)
-    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product')
+    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product') | models.Q(app_label = 'databaseInput', model = 'Experiment')
     content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
