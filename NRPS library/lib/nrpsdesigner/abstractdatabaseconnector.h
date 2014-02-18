@@ -35,6 +35,8 @@ public:
     virtual std::shared_ptr<Domain> createDomain(uint32_t) throw (DatabaseError) = 0;
     virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError) = 0;
     virtual void fillOrigin(Origin*) throw (DatabaseError) = 0;
+    virtual void fillProduct(Product*) throw (DatabaseError) = 0;
+    virtual void fillCds(Cds*) throw (DatabaseError) = 0;
     virtual bool isDummy(const std::shared_ptr<Domain>&) = 0;
 
     static AbstractDatabaseConnector* getInstance();

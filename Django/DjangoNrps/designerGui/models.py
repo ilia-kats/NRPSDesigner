@@ -136,12 +136,18 @@ class NRP(models.Model):
                 description = 'NRPS designer' + description,
                 shape = 'c')
 
+        lastDomain = None
+        nextDomain = None
         # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment
         for count, connectedDomains in enumerate(connectedDomainList):
-
             domain1 = connectedDomains[0]
             domain2 = connectedDomains[-1]
-            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, domain1.linkerBeforeLength, domain2.linkerAfterLength)
+            if count < len(connectedDomainList) - 1:
+                nextDomain = connectedDomainList[count + 1][0].domain.pk
+            else:
+                nextDomain = None
+            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, lastDomain, nextDomain)
+            lastDomain = domain2.domain.pk
 
             domainGene = DomainGene.objects.create(owner = self.owner,
                 name = ','.join([x.domain.domainType.name for x in connectedDomains]),
@@ -157,10 +163,10 @@ class NRP(models.Model):
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
-            start_pos = domain1.domain.get_start() - domain1.linkerBeforeLength - 1
+            start_pos = domain1.domain.get_start(lastDomain) - 1
             for domain in connectedDomains:
                 domainGene.domains.add(domain.domain)
-                f = Feature(type="domain", start=domain.domain.get_start() - 1 - start_pos, end=domain.domain.get_stop() - start_pos, direction='f', gene=domainGene)
+                f = Feature(type="domain", start=domain.domain.get_start(with_linker=False) - 1 - start_pos, end=domain.domain.get_stop(with_linker=False) - start_pos, direction='f', gene=domainGene)
                 f.save()
                 Qualifier(name="type", data=domain.domain.domainType.name, feature=f).save()
                 Qualifier(name="module", data=domain.domain.module, feature=f).save()
@@ -321,8 +327,8 @@ class NRP(models.Model):
         prevDomains = DomainOrder.objects.filter(nrp = self)
         prevDomains.delete()
         for count, domainId in enumerate(domainIdList):
-            domain = Domain.objects.get(pk = domainId[0])
-            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count, linkerBeforeLength=domainId[1], linkerAfterLength=domainId[2])
+            domain = Domain.objects.get(pk = domainId)
+            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count)
         self.designed = True
         self.save()
         self.makeConstruct()
@@ -336,16 +342,7 @@ class NRP(models.Model):
                 did = comp.getElementsByTagName('s:displayId')[0].firstChild.data
                 if did[0] != '_':
                     raise Exception("Could not find domain ID, got %s instead." % did)
-                annots = comp.getElementsByTagName('s:SequenceAnnotation')
-                linkerbefore = 0
-                linkerafter = 0
-                for annot in annots:
-                    aid = annot.attributes.getNamedItem("rdf:about").value[1:]
-                    if aid.startswith("salb"):
-                        linkerbefore = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
-                    elif aid.startswith("sala"):
-                        linkerafter = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
-                domainIdList.append((int(did[1:]), linkerbefore, linkerafter))
+                domainIdList.append(int(did[1:]))
         return domainIdList
 
     def _runNrpsDesigner(self, params, stdin=None):
@@ -449,5 +446,3 @@ class DomainOrder(models.Model):
     nrp = models.ForeignKey('NRP', related_name = 'domainOrder')
     domain = models.ForeignKey('databaseInput.Domain', related_name = 'domainOrder')
     order = models.PositiveIntegerField()
-    linkerBeforeLength = models.IntegerField(default=0)
-    linkerAfterLength = models.IntegerField(default=0)

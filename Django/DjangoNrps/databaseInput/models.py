@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -107,7 +108,7 @@ class Cds(models.Model):
 
     # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
-    def get_sequence(self, start_domain, stop_domain, linker_before=0, linker_after=0):
+    def get_sequence(self, start_domain, stop_domain, prev_domain=None, next_domain=None):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
             start_index = domain_list.index(start_domain)
@@ -115,8 +116,8 @@ class Cds(models.Model):
 
             # write custom functions for the below!!!
             # With linker consideration maybe???
-            start_position = start_domain.get_start() - linker_before - 1
-            stop_position = stop_domain.get_stop() + linker_after
+            start_position = start_domain.get_start(prev_domain) - 1
+            stop_position = stop_domain.get_stop(next_domain)
             ##
             return self.dnaSequence[start_position:stop_position]
         else:
@@ -171,22 +172,44 @@ class Domain(models.Model):
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
-    def get_start(self):
-        if self.definedStart is not None:
-            return self.definedStart
+    def get_start(self, prevd=None, with_linker=True):
+        if prevd is not None:
+            try:
+                return self.prev_domain.get(pk=prevd).next_position
+            except ObjectDoesNotExist:
+                pass
+        if with_linker:
+            if self.definedLinkerStart is not None:
+                return self.definedLinkerStart
+            else:
+                return self.pfamLinkerStart
         else:
-            return self.pfamStart
+            if self.definedStart is not None:
+                return self.definedStart
+            else:
+                return self.pfamStart
 
-    def get_stop(self):
-        if self.definedStop is not None:
-            return self.definedStop
+    def get_stop(self, nextd=None, with_linker=False):
+        if nextd is not None:
+            try:
+                return self.next_domain.get(pk=nextd).prev_position
+            except ObjectDoesNotExist:
+                pass
+        if with_linker:
+            if self.definedLinkerStop is not None:
+                return self.definedLinkerStop
+            else:
+                return self.pfamLinkerStop
         else:
-            return self.pfamStop
+            if self.definedStop is not None:
+                return self.definedStop
+            else:
+                return self.pfamStop
 
-    def get_sequence(self):
+    def get_sequence(self, includeForwardLinker=False, includeAftLinker=False):
         cdsSequence = self.cds.dnaSequence
-        domainStart = self.get_start() - 1
-        domainStop  = self.get_stop()
+        domainStart = self.get_start(with_linker=includeForwardLinker) - 1
+        domainStop  = self.get_stop(with_linker=includeAftLinker)
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
 

@@ -1,6 +1,7 @@
 #include "domain.h"
 #include "origin.h"
 #include "product.h"
+#include "cds.h"
 
 #define NRPS_NODE "nrps"
 #define DOMAIN_NODE "domain"
@@ -8,24 +9,23 @@
 #define ID_NODE "id"
 #define MODULE_NODE "module"
 #define DESCRIPTION_NODE "description"
-#define GENENAME_NODE "genename"
-#define GENEDESCRIPTION_NODE "genedescription"
-#define SEQUENCEPFAM_NODE "sequencepfam"
-#define SEQUENCEDEFINED_NODE "sequencedefined"
-#define NATIVEPFAMLINKERBEFORE_NODE "nativepfamlinkerbefore"
-#define NATIVEPFAMLINKERAFTER_NODE "nativepfamlinkerafter"
-#define NATIVEDEFINEDLINKERBEFORE_NODE "nativedefinedlinkerbefore"
-#define NATIVEDEFINEDLINKERAFTER_NODE "nativedefinedlinkerafter"
-#define DETERMINEDLINKERBEFORE_NODE "determinedlinkerbefore"
-#define DETERMINEDLINKERAFTER_NODE "determinedlinkerafter"
-#define WORKEDWITHNEXTDOMAIN_NODE "workedwithnextdomains"
-#define ORIGINID_NODE "originid"
-#define PRODUCTID_NODE "productid"
+#define PFAMSTART_NODE "pfamstart"
+#define PFAMSTOP_NODE "pfamstop"
+#define DEFINEDSTART_NODE "definedstart"
+#define DEFINEDSTOP_NODE "definedstop"
+#define PFAMLINKERSTART_NODE "pfamlinkerstart"
+#define PFAMLINKERSTOP_NODE "pfamlinkerstop"
+#define DEFINEDLINKERSTART_NODE "definedlinkerstart"
+#define DEFINEDLINKERSTOP_NODE "definedlinkerstop"
+#define EXPERIMENTALWORKED_NODE "workedwithnextdomains"
+#define STOP_NODE "stop"
+#define NEXTSTART_NODE "nextdomainstart"
+#define CDSID_NODE "cdsid"
 
 using namespace nrps;
 
 Domain::Domain(DomainType t, uint32_t id)
-: m_type(t), m_id(id), m_module(0), m_origin(nullptr), m_product(nullptr)
+: m_type(t), m_id(id), m_module(0), m_cds(nullptr)
 {}
 
 std::size_t Domain::hash() const
@@ -60,24 +60,45 @@ void Domain::setModule(uint32_t id)
 
 Origin* Domain::origin() const
 {
-    return m_origin;
+    if (m_cds != nullptr)
+        return m_cds->origin();
+    else
+        return nullptr;
 }
 
 Origin* Domain::setOrigin(uint32_t id)
 {
-    m_origin = Origin::makeOrigin(id);
-    return m_origin;
+    if (m_cds != nullptr)
+        return m_cds->setOrigin(id);
+    else
+        return nullptr;
 }
 
 Product* Domain::product() const
 {
-    return m_product;
+    if (m_cds != nullptr)
+        return m_cds->product();
+    else
+        return nullptr;
 }
 
 Product* Domain::setProduct(uint32_t id)
 {
-    m_product = Product::makeProduct(id);
-    return m_product;
+    if (m_cds != nullptr)
+        return m_cds->setProduct(id);
+    else
+        return nullptr;
+}
+
+Cds* Domain::cds() const
+{
+    return m_cds;
+}
+
+Cds* Domain::setCds(uint32_t id)
+{
+    m_cds = Cds::makeCds(id);
+    return m_cds;
 }
 
 const std::string& Domain::description() const
@@ -95,159 +116,155 @@ void Domain::setDescription(std::string &&description)
     m_description = std::move(description);
 }
 
-const std::string& Domain::dnaSequencePfam() const
+std::string Domain::dnaSequencePfam() const
 {
-    return m_dnaSeqPfam;
+    if (m_cds != nullptr && m_pfamStop <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(m_pfamStart, m_pfamStop - m_pfamStart + 1);
+    else
+        return std::string();
 }
 
-void Domain::setDnaSequencePfam(const std::string &seq)
+std::string Domain::dnaSequenceDefined() const
 {
-    m_dnaSeqPfam = seq;
+    if (m_cds != nullptr && m_definedStop <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(m_definedStart, m_definedStart - m_definedStop + 1);
+    else
+        return std::string();
 }
 
-void Domain::setDnaSequencePfam(std::string &&seq)
+std::string Domain::pfamLinkerBefore() const
 {
-    m_dnaSeqPfam = std::move(seq);
+    if (m_cds != nullptr && m_pfamLinkerStart <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(m_pfamLinkerStart, m_pfamStart - m_pfamLinkerStart);
+    else
+        return std::string();
 }
 
-const std::string& Domain::dnaSequenceDefined() const
+std::string Domain::pfamLinkerAfter() const
 {
-    return m_dnaSeqDefined;
+    if (m_cds != nullptr && m_pfamLinkerStop <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(m_pfamStop + 1, m_pfamLinkerStop - m_pfamStop);
+    else
+        return std::string();
 }
 
-void Domain::setDnaSequenceDefined(const std::string &seq)
+std::string Domain::definedLinkerBefore() const
 {
-    m_dnaSeqDefined = seq;
+    if (m_cds != nullptr && m_definedLinkerStart <= m_cds->dnaSequence().size() && m_definedStart <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(m_definedLinkerStart, m_definedStart - m_definedLinkerStart);
+    else
+        return std::string();
 }
 
-void Domain::setDnaSequenceDefined(std::string &&seq)
+std::string Domain::definedLinkerAfter() const
 {
-    m_dnaSeqDefined = std::move(seq);
+    if (m_cds != nullptr && m_definedLinkerStop <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(m_definedStop + 1, m_definedLinkerStop - m_definedStop);
+    else
+        return std::string();
 }
 
-const std::string& Domain::geneDescription() const
+
+std::string Domain::dnaSequence(Domain *prev, Domain *next) const
 {
-    return m_geneDescription;
+    uint32_t start, stop;
+    if (prev != nullptr && prev->worksWithNextDomain(id()))
+        start = prev->workingDomainBorders(id()).next_start;
+    else
+        start = definedLinkerStart();
+    if (next != nullptr && worksWithNextDomain(next->id()))
+        stop = workingDomainBorders(next->id()).stop;
+    else
+        stop = definedStop();
+    if (m_cds != nullptr && start <= m_cds->dnaSequence().size() && stop <= m_cds->dnaSequence().size())
+        return m_cds->dnaSequence().substr(start, stop - start + 1);
+    else
+        return std::string();
 }
 
-void Domain::setGeneDescription(const std::string &description)
+uint32_t Domain::pfamStart() const
 {
-    m_geneDescription = description;
+    return m_pfamStart;
 }
 
-void Domain::setGeneDescription(std::string &&description)
+void Domain::setPfamStart(uint32_t start)
 {
-    m_geneDescription = std::move(description);
+    m_pfamStart = start;
 }
 
-const std::string& Domain::geneName() const
+uint32_t Domain::pfamStop() const
 {
-    return m_geneName;
+    return m_pfamStop;
 }
 
-void Domain::setGeneName(const std::string &name)
+void Domain::setPfamStop(uint32_t stop)
 {
-    m_geneName = name;
+    m_pfamStop = stop;
 }
 
-void Domain::setGeneName(std::string &&name)
+uint32_t Domain::definedStart() const
 {
-    m_geneName = std::move(name);
+    return m_definedStart;
 }
 
-const std::string& Domain::nativePfamLinkerBefore() const
+void Domain::setDefinedStart(uint32_t start)
 {
-    return m_nativePfamLinkerBefore;
+    m_definedStart = start;
 }
 
-void Domain::setNativePfamLinkerBefore(const std::string &linker)
+uint32_t Domain::definedStop() const
 {
-    m_nativePfamLinkerBefore = linker;
+    return m_definedStop;
 }
 
-void Domain::setNativePfamLinkerBefore(std::string &&linker)
+void Domain::setDefinedStop(uint32_t stop)
 {
-    m_nativePfamLinkerBefore = std::move(linker);
+    m_definedStop = stop;
 }
 
-const std::string& Domain::nativePfamLinkerAfter() const
+uint32_t Domain::pfamLinkerStart() const
 {
-    return m_nativePfamLinkerAfter;
+    return m_pfamLinkerStart;
 }
 
-void Domain::setNativePfamLinkerAfter(const std::string &linker)
+void Domain::setPfamLinkerStart(uint32_t start)
 {
-    m_nativePfamLinkerAfter = linker;
+    m_pfamLinkerStart = start;
 }
 
-void Domain::setNativePfamLinkerAfter(std::string &&linker)
+uint32_t Domain::pfamLinkerStop() const
 {
-    m_nativePfamLinkerAfter = std::move(linker);
+    return m_pfamLinkerStop;
 }
 
-const std::string& Domain::nativeDefinedLinkerBefore() const
+void Domain::setPfamLinkerStop(uint32_t stop)
 {
-    return m_nativeDefinedLinkerBefore;
+    m_pfamLinkerStop = stop;
 }
 
-void Domain::setNativeDefinedLinkerBefore(const std::string &linker)
+uint32_t Domain::definedLinkerStart() const
 {
-    m_nativeDefinedLinkerBefore = linker;
+    return m_definedLinkerStart;
 }
 
-void Domain::setNativeDefinedLinkerBefore(std::string &&linker)
+void Domain::setDefinedLinkerStart(uint32_t start)
 {
-    m_nativeDefinedLinkerBefore = std::move(linker);
+    m_definedLinkerStart = start;
 }
 
-const std::string& Domain::nativeDefinedLinkerAfter() const
+uint32_t Domain::definedLinkerStop() const
 {
-    return m_nativeDefinedLinkerAfter;
+    return m_definedLinkerStop;
 }
 
-void Domain::setNativeDefinedLinkerAfter(const std::string &linker)
+void Domain::setDefinedLinkerStop(uint32_t stop)
 {
-    m_nativeDefinedLinkerAfter = linker;
+    m_definedLinkerStop = stop;
 }
 
-void Domain::setNativeDefinedLinkerAfter(std::string &&linker)
+void Domain::addWorkingNextDomain(uint32_t did, Domain::workingBorders borders)
 {
-    m_nativeDefinedLinkerAfter = std::move(linker);
-}
-
-const std::string& Domain::determinedLinkerBefore() const
-{
-    return m_determinedLinkerBefore;
-}
-
-void Domain::setDeterminedLinkerBefore(const std::string &linker)
-{
-    m_determinedLinkerBefore = linker;
-}
-
-void Domain::setDeterminedLinkerBefore(std::string &&linker)
-{
-    m_determinedLinkerBefore = std::move(linker);
-}
-
-const std::string& Domain::determinedLinkerAfter() const
-{
-    return m_determinedLinkerAfter;
-}
-
-void Domain::setDeterminedLinkerAfter(const std::string &linker)
-{
-    m_determinedLinkerAfter = linker;
-}
-
-void Domain::setDeterminedLinkerAfter(std::string &&linker)
-{
-    m_determinedLinkerAfter = std::move(linker);
-}
-
-void Domain::addWorkingNextDomain(uint32_t did)
-{
-    m_workingNextDomains.insert(did);
+    m_workingNextDomains.emplace(did, borders);
 }
 
 void Domain::removeWorkingNextDomain(uint32_t did)
@@ -255,7 +272,7 @@ void Domain::removeWorkingNextDomain(uint32_t did)
     m_workingNextDomains.erase(did);
 }
 
-const std::unordered_set<uint32_t>& Domain::workingNextDomains() const
+const std::unordered_map<uint32_t, Domain::workingBorders>& Domain::workingNextDomains() const
 {
     return m_workingNextDomains;
 }
@@ -263,6 +280,11 @@ const std::unordered_set<uint32_t>& Domain::workingNextDomains() const
 bool Domain::worksWithNextDomain(uint32_t id) const
 {
     return m_workingNextDomains.count(id) > 0;
+}
+
+const Domain::workingBorders& Domain::workingDomainBorders(uint32_t id) const
+{
+    return m_workingNextDomains.at(id);
 }
 
 #ifdef WITH_INTERNAL_XML
@@ -284,32 +306,29 @@ void Domain::writeXml(xmlTextWriterPtr writer) const
     xmlTextWriterWriteElement(writer, BAD_CAST TYPE_NODE, BAD_CAST nrps::toString(type()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST MODULE_NODE, BAD_CAST std::to_string(module()).c_str());
     xmlTextWriterWriteElement(writer, BAD_CAST DESCRIPTION_NODE, BAD_CAST description().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST GENEDESCRIPTION_NODE, BAD_CAST geneDescription().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST GENENAME_NODE, BAD_CAST geneName().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST SEQUENCEPFAM_NODE, BAD_CAST dnaSequencePfam().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST SEQUENCEDEFINED_NODE, BAD_CAST dnaSequenceDefined().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEPFAMLINKERBEFORE_NODE, BAD_CAST nativePfamLinkerBefore().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEPFAMLINKERAFTER_NODE, BAD_CAST nativePfamLinkerAfter().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERBEFORE_NODE, BAD_CAST nativeDefinedLinkerBefore().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST NATIVEDEFINEDLINKERAFTER_NODE, BAD_CAST nativeDefinedLinkerAfter().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST DETERMINEDLINKERBEFORE_NODE, BAD_CAST determinedLinkerBefore().c_str());
-    xmlTextWriterWriteElement(writer, BAD_CAST DETERMINEDLINKERAFTER_NODE, BAD_CAST determinedLinkerAfter().c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST PFAMSTART_NODE, BAD_CAST std::to_string(pfamStart()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST PFAMSTOP_NODE, BAD_CAST std::to_string(pfamStop()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DEFINEDSTART_NODE, BAD_CAST std::to_string(definedStart()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DEFINEDSTOP_NODE, BAD_CAST std::to_string(definedStop()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST PFAMLINKERSTART_NODE, BAD_CAST std::to_string(pfamLinkerStart()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST PFAMLINKERSTOP_NODE, BAD_CAST std::to_string(pfamLinkerStop()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DEFINEDLINKERSTART_NODE, BAD_CAST std::to_string(definedLinkerStart()).c_str());
+    xmlTextWriterWriteElement(writer, BAD_CAST DEFINEDLINKERSTOP_NODE, BAD_CAST std::to_string(definedLinkerStop()).c_str());
 
     if (!m_workingNextDomains.empty()) {
-        std::string working;
-        int i = 0;
-        for (auto it = m_workingNextDomains.cbegin(); it != m_workingNextDomains.end(); ++it, ++i) {
-            if (i > 0)
-                working.append(",");
-            working.append(std::to_string(*it));
+        xmlTextWriterStartElement(writer, BAD_CAST EXPERIMENTALWORKED_NODE);
+        for (const auto &it : m_workingNextDomains) {
+            xmlTextWriterStartElement(writer, BAD_CAST DOMAIN_NODE);
+            xmlTextWriterWriteElement(writer, BAD_CAST ID_NODE, BAD_CAST std::to_string(it.first).c_str());
+            xmlTextWriterWriteElement(writer, BAD_CAST STOP_NODE, BAD_CAST std::to_string(it.second.stop).c_str());
+            xmlTextWriterWriteElement(writer, BAD_CAST NEXTSTART_NODE, BAD_CAST std::to_string(it.second.next_start).c_str());
+            xmlTextWriterEndElement(writer);
         }
-        xmlTextWriterWriteElement(writer, BAD_CAST WORKEDWITHNEXTDOMAIN_NODE, BAD_CAST working.c_str());
+        xmlTextWriterEndElement(writer);
     }
 
-    if (origin() != nullptr)
-        xmlTextWriterWriteElement(writer, BAD_CAST ORIGINID_NODE, BAD_CAST std::to_string(origin()->id()).c_str());
-    if (product() != nullptr)
-        xmlTextWriterWriteElement(writer, BAD_CAST PRODUCTID_NODE, BAD_CAST std::to_string(product()->id()).c_str());
+    if (cds() != nullptr)
+        xmlTextWriterWriteElement(writer, BAD_CAST CDSID_NODE, BAD_CAST std::to_string(cds()->id()).c_str());
 }
 
 void Domain::endXml(xmlTextWriterPtr writer) const

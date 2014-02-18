@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
-#include <unordered_set>
+#include <unordered_map>
 
 #ifdef WITH_INTERNAL_XML
 #include <libxml/xmlwriter.h>
@@ -18,9 +18,14 @@ namespace nrps
 {
 class Origin;
 class Product;
+class Cds;
 class NRPSDESIGNER_EXPORT Domain
 {
 public:
+    typedef struct {
+        uint32_t stop;
+        uint32_t next_start;
+    } workingBorders;
     virtual std::size_t hash() const;
 
     DomainType type() const;
@@ -28,19 +33,26 @@ public:
     uint32_t module() const;
     Origin* origin() const;
     Product* product() const;
+    Cds* cds() const;
     const std::string& description() const;
-    const std::string& dnaSequencePfam() const;
-    const std::string& dnaSequenceDefined() const;
-    const std::string& geneName() const;
-    const std::string& geneDescription() const;
-    const std::string& nativePfamLinkerBefore() const;
-    const std::string& nativePfamLinkerAfter() const;
-    const std::string& nativeDefinedLinkerBefore() const;
-    const std::string& nativeDefinedLinkerAfter() const;
-    const std::string& determinedLinkerBefore() const;
-    const std::string& determinedLinkerAfter() const;
-    const std::unordered_set<uint32_t>& workingNextDomains() const;
+    std::string dnaSequencePfam() const;
+    std::string dnaSequenceDefined() const;
+    std::string dnaSequence(Domain *prev = nullptr, Domain *next = nullptr) const;
+    std::string pfamLinkerBefore() const;
+    std::string pfamLinkerAfter() const;
+    std::string definedLinkerBefore() const;
+    std::string definedLinkerAfter() const;
+    uint32_t pfamStart() const;
+    uint32_t pfamStop() const;
+    uint32_t definedStart() const;
+    uint32_t definedStop() const;
+    uint32_t pfamLinkerStart() const;
+    uint32_t pfamLinkerStop() const;
+    uint32_t definedLinkerStart() const;
+    uint32_t definedLinkerStop() const;
+    const std::unordered_map<uint32_t, workingBorders>& workingNextDomains() const;
     bool worksWithNextDomain(uint32_t) const;
+    const workingBorders& workingDomainBorders(uint32_t) const;
 
 #ifdef WITH_INTERNAL_XML
     void toXml(xmlTextWriterPtr) const;
@@ -51,29 +63,18 @@ public:
     void setModule(uint32_t);
     Origin* setOrigin(uint32_t);
     Product* setProduct(uint32_t);
+    Cds* setCds(uint32_t);
     void setDescription(const std::string&);
     void setDescription(std::string&&);
-    void setDnaSequencePfam(const std::string&);
-    void setDnaSequencePfam(std::string&&);
-    void setDnaSequenceDefined(const std::string&);
-    void setDnaSequenceDefined(std::string&&);
-    void setGeneDescription(const std::string&);
-    void setGeneDescription(std::string&&);
-    void setGeneName(const std::string&);
-    void setGeneName(std::string&&);
-    void setNativePfamLinkerBefore(const std::string&);
-    void setNativePfamLinkerBefore(std::string&&);
-    void setNativePfamLinkerAfter(const std::string&);
-    void setNativePfamLinkerAfter(std::string&&);
-    void setNativeDefinedLinkerBefore(const std::string&);
-    void setNativeDefinedLinkerBefore(std::string&&);
-    void setNativeDefinedLinkerAfter(const std::string&);
-    void setNativeDefinedLinkerAfter(std::string&&);
-    void setDeterminedLinkerBefore(const std::string&);
-    void setDeterminedLinkerBefore(std::string&&);
-    void setDeterminedLinkerAfter(const std::string&);
-    void setDeterminedLinkerAfter(std::string&&);
-    void addWorkingNextDomain(uint32_t);
+    void setPfamStart(uint32_t);
+    void setPfamStop(uint32_t);
+    void setDefinedStart(uint32_t);
+    void setDefinedStop(uint32_t);
+    void setPfamLinkerStart(uint32_t);
+    void setPfamLinkerStop(uint32_t);
+    void setDefinedLinkerStart(uint32_t);
+    void setDefinedLinkerStop(uint32_t);
+    void addWorkingNextDomain(uint32_t, workingBorders);
     void removeWorkingNextDomain(uint32_t);
 
 protected:
@@ -91,20 +92,17 @@ private:
     DomainType m_type;
     uint32_t m_id;
     uint32_t m_module;
-    Origin *m_origin;
-    Product *m_product;
+    Cds *m_cds;
     std::string m_description;
-    std::string m_dnaSeqPfam;
-    std::string m_dnaSeqDefined;
-    std::string m_geneDescription;
-    std::string m_geneName;
-    std::string m_nativePfamLinkerBefore;
-    std::string m_nativePfamLinkerAfter;
-    std::string m_nativeDefinedLinkerBefore;
-    std::string m_nativeDefinedLinkerAfter;
-    std::string m_determinedLinkerBefore;
-    std::string m_determinedLinkerAfter;
-    std::unordered_set<uint32_t> m_workingNextDomains;
+    uint32_t m_pfamStart;
+    uint32_t m_pfamStop;
+    uint32_t m_definedStart;
+    uint32_t m_definedStop;
+    uint32_t m_pfamLinkerStart;
+    uint32_t m_pfamLinkerStop;
+    uint32_t m_definedLinkerStart;
+    uint32_t m_definedLinkerStop;
+    std::unordered_map<uint32_t, workingBorders> m_workingNextDomains;
 };
 }
 

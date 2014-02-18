@@ -38,6 +38,8 @@ public:
     virtual std::shared_ptr<Domain> createDomain(uint32_t) throw (DatabaseError);
     virtual void fillDomain(const std::shared_ptr<Domain>&) throw (DatabaseError);
     virtual void fillOrigin(Origin*) throw (DatabaseError);
+    virtual void fillProduct(Product*) throw (DatabaseError);
+    virtual void fillCds(Cds*) throw (DatabaseError);
     virtual bool  isDummy(const std::shared_ptr<Domain>&);
 
 private:
@@ -51,7 +53,7 @@ private:
     Monomer makeMonomer(sql::ResultSet*);
     void fillDomain(const std::shared_ptr<Domain>&, sql::ResultSet*) throw (DatabaseError);
     DatabaseError makeException(const sql::SQLException &e) const;
-    void fillWorkingNextDomains(Domain *, const std::string&);
+    void fillWorkingNextDomains(Domain *, const std::string&, const std::string&, const std::string&);
 
     sql::Connection *m_connection;
     sql::PreparedStatement *m_stmtMonomerId;
@@ -62,6 +64,7 @@ private:
     sql::PreparedStatement *m_stmtDomain;
     sql::PreparedStatement *m_stmtDomainSubstrate;
     sql::PreparedStatement *m_stmtProduct;
+    sql::PreparedStatement *m_stmtCds;
     sql::Statement *m_stmtOrigin;
 
     bool m_curatedOnly;
