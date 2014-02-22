@@ -181,13 +181,12 @@ class Domain(models.Model):
         if with_linker:
             if self.definedLinkerStart is not None:
                 return self.definedLinkerStart
-            else:
+            elif self.pfamLinkerStart is not None:
                 return self.pfamLinkerStart
+        if self.definedStart is not None:
+            return self.definedStart
         else:
-            if self.definedStart is not None:
-                return self.definedStart
-            else:
-                return self.pfamStart
+            return self.pfamStart
 
     def get_stop(self, nextd=None, with_linker=False):
         if nextd is not None:
@@ -198,13 +197,12 @@ class Domain(models.Model):
         if with_linker:
             if self.definedLinkerStop is not None:
                 return self.definedLinkerStop
-            else:
+            elif self.pfamLinkerStop is not None:
                 return self.pfamLinkerStop
+        if self.definedStop is not None:
+            return self.definedStop
         else:
-            if self.definedStop is not None:
-                return self.definedStop
-            else:
-                return self.pfamStop
+            return self.pfamStop
 
     def get_sequence(self, includeForwardLinker=False, includeAftLinker=False):
         cdsSequence = self.cds.dnaSequence

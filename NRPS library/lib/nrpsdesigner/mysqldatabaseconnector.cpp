@@ -382,8 +382,8 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d, sql::R
         d->setPfamStop(res->getUInt("dpfamstop") - 1);
         d->setDefinedStart(res->isNull("ddefinedstart") ? d->pfamStart() : res->getUInt("ddefinedstart") - 1);
         d->setDefinedStop(res->isNull("ddefinedstop") ? d->pfamStop() : res->getUInt("ddefinedstop") - 1);
-        d->setPfamLinkerStart(res->getUInt("dpfamlinkerstart") - 1);
-        d->setPfamLinkerStop(res->getUInt("dpfamlinkerstop") - 1);
+        d->setPfamLinkerStart(res->isNull("dpfamlinkerstart") ? d->pfamStart() : res->getUInt("dpfamlinkerstart") - 1);
+        d->setPfamLinkerStop(res->isNull("dpfamlinkerstop") ? d->pfamStop() : res->getUInt("dpfamlinkerstop") - 1);
         d->setDefinedLinkerStart(res->isNull("ddefinedlinkerstart") ? d->pfamLinkerStart() : res->getUInt("ddefinedlinkerstart") - 1);
         d->setDefinedLinkerStop(res->isNull("ddefinedlinkerstop") ? d->pfamLinkerStop() : res->getUInt("ddefinedlinkerstop") - 1);
         uint32_t id = res->getUInt("cid");
