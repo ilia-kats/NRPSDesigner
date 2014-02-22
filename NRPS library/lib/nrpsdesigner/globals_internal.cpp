@@ -40,6 +40,8 @@ float nrps::makeWeight(const std::shared_ptr<Domain> &lhs, const std::shared_ptr
         else if (std::abs(diff) == 0 && rhs->type() == DomainType::C)
             weight += 0.2;
     }
+    if (weight > 0.1 && lhs->worksWithNextDomain(rhs->id()))
+        weight = 0.15;
     return weight;
 }
 

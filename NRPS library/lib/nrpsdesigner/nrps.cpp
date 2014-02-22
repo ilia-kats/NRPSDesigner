@@ -2,6 +2,7 @@
 #include "taxon.h"
 #include "origin.h"
 #include "product.h"
+#include "cds.h"
 #include "abstractdatabaseconnector.h"
 #include "globals_internal.h"
 
@@ -11,9 +12,14 @@
 #include <unistd.h>
 
 #define NRPS_NODE "nrps"
+#define CONSTRUCTDOMAIN_NODE "constructdomain"
+#define START_NODE "start"
+#define STOP_NODE "stop"
 #define DOMAINS_NODE "domains"
 #define ORIGINS_NODE "origins"
 #define PRODUCTS_NODE "products"
+#define CDS_NODE "cdss"
+#define CONSTRUCTSEQUENCE_NODE "constructsequence"
 #define INDIGOIDINETAGGED_ATTR "indigoidinetagged"
 
 using namespace nrps;
@@ -34,9 +40,14 @@ public:
         DNAComponent *nrps = createDNAComponent(m_doc, std::string("#nrps").append(m_uniqueId).c_str());
         setDNAComponentDisplayID(nrps, "NRPS");
         size_t start = 1;
+        Domain *lastDomain = nullptr, *nextDomain = nullptr;
         for (size_t i = 0; i < m_nrps.size(); ++i) {
             m_start = 1;
             const auto &domain = m_nrps[i];
+            if (i < m_nrps.size() - 1)
+                nextDomain = m_nrps[i + 1].get();
+            else
+                nextDomain = nullptr;
             m_did = std::to_string(domain->id());
             m_id = std::to_string(i);
             m_dc = createDNAComponent(m_doc, std::string("#").append(m_id).append(m_uniqueId).c_str());
@@ -47,13 +58,10 @@ public:
             setSequenceAnnotationSubComponent(rootsa, m_dc);
             setSequenceAnnotationStrand(rootsa, STRAND_FORWARD);
             addSequenceAnnotation(nrps, rootsa);
-            if (!domain->determinedLinkerBefore().empty())
-                makeSubAnnotation(domain->determinedLinkerBefore(), "lb", "linker before domain ");
-            makeSubAnnotation(domain->dnaSequenceDefined().empty() ? domain->dnaSequencePfam() : domain->dnaSequenceDefined(), "d", "domain ");
-            if (!domain->determinedLinkerAfter().empty())
-                makeSubAnnotation(domain->determinedLinkerAfter(), "la", "linker after domain ");
+            makeSubAnnotation(domain->dnaSequence(lastDomain, nextDomain), "d", "domain ");
             start += m_start;
-            setSequenceAnnotationEnd(rootsa, start++);
+            setSequenceAnnotationEnd(rootsa, start - 1);
+            lastDomain = domain.get();
         }
         DNASequence *ds = createDNASequence(m_doc, std::string("#seq").append(m_uniqueId).c_str());
         setDNASequenceNucleotides(ds, m_seq.c_str());
@@ -79,8 +87,8 @@ private:
         setDNAComponentDescription(dc, (desc + m_did).c_str());
         SequenceAnnotation *sa = createSequenceAnnotation(m_doc, std::string("#sa").append(id).append(m_id).append(m_uniqueId).c_str());
         setSequenceAnnotationStart(sa, m_start);
-        m_start += seq.size();
-        setSequenceAnnotationEnd(sa, m_start - 1);
+        m_start += seq.size() - 1;
+        setSequenceAnnotationEnd(sa, m_start);
         setSequenceAnnotationSubComponent(sa, dc);
         addSequenceAnnotation(m_dc, sa);
         m_seq.append(seq);
@@ -138,6 +146,8 @@ void Nrps::toXml(int fd) const
 
 void Nrps::toXml(xmlTextWriterPtr writer) const
 {
+    std::string sequence;
+    std::unordered_set<Cds*> seenCds;
     std::unordered_set<Origin*> seenOrigins;
     std::unordered_set<Product*> seenProducts;
     std::vector<Origin*> originsToWrite;
@@ -146,12 +156,32 @@ void Nrps::toXml(xmlTextWriterPtr writer) const
         xmlTextWriterWriteAttribute(writer, BAD_CAST INDIGOIDINETAGGED_ATTR, BAD_CAST INDIGOIDINETAGGED_ATTR);
     xmlTextWriterStartElement(writer, BAD_CAST DOMAINS_NODE);
     AbstractDatabaseConnector *dbconn = AbstractDatabaseConnector::getInstance();
-    for (const auto &domain : *this) {
-        if (domain->origin() != nullptr)
-            originsToWrite.push_back(domain->origin());
-        if (domain->product() != nullptr)
-            seenProducts.insert(domain->product());
-        domain->toXml(writer);
+    Domain *lastDomain = nullptr, *nextDomain = nullptr;
+    for (auto it = cbegin(); it != end(); ++it) {
+        if (it < end() - 1)
+            nextDomain = (*(it + 1)).get();
+        else
+            nextDomain = nullptr;
+        std::string currseq = (*it)->dnaSequence(lastDomain, nextDomain);
+        lastDomain = it->get();
+        if ((*it)->cds() != nullptr)
+            seenCds.insert((*it)->cds());
+        xmlTextWriterStartElement(writer, BAD_CAST CONSTRUCTDOMAIN_NODE);
+        xmlTextWriterWriteElement(writer, BAD_CAST START_NODE, BAD_CAST std::to_string(sequence.size()).c_str());
+        xmlTextWriterWriteElement(writer, BAD_CAST STOP_NODE, BAD_CAST std::to_string(sequence.size() + currseq.size() - 1).c_str());
+        (*it)->toXml(writer);
+        xmlTextWriterEndElement(writer);
+        sequence.append(currseq);
+    }
+    xmlTextWriterEndElement(writer);
+    xmlTextWriterWriteElement(writer, BAD_CAST CONSTRUCTSEQUENCE_NODE, BAD_CAST sequence.c_str());
+    xmlTextWriterStartElement(writer, BAD_CAST CDS_NODE);
+    for (Cds *cds : seenCds) {
+        if (cds->origin() != nullptr)
+            originsToWrite.push_back(cds->origin());
+        if (cds->product() != nullptr)
+            seenProducts.insert(cds->product());
+        cds->toXml(writer);
     }
     xmlTextWriterEndElement(writer);
     xmlTextWriterStartElement(writer, BAD_CAST ORIGINS_NODE);

@@ -244,8 +244,6 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
     while (cur != m_startn) {
         m_db->fillDomain(cur->data);
         ret.push_back(cur->data);
-        cur->data->setDeterminedLinkerBefore(cur->data->nativeDefinedLinkerBefore().empty() ? cur->data->nativePfamLinkerBefore() : cur->data->nativeDefinedLinkerBefore());
-        cur->data->setDeterminedLinkerAfter(std::string());
         cur = m_parents[cur];
     }
     std::reverse(ret.begin(), ret.end());
