@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-
+from django.core.validators import MinLengthValidator
 from celery.contrib.methods import task
 
 from itertools import count
@@ -21,7 +21,7 @@ import pdb
 from time import sleep
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
-    product = models.ForeignKey('Product', blank=True, null=True)
+    product = models.ForeignKey('Product', blank=True, null=True, related_name = "cdsSequence")
     geneName = models.CharField(max_length=100)
     dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
@@ -171,6 +171,9 @@ class Domain(models.Model):
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
+    def short_name(self):
+        return str(self.cds.geneName) + str(self.module) + str(self.domainType)
+        
     def get_start(self):
         if self.definedStart is not None:
             return self.definedStart
@@ -225,6 +228,12 @@ class Substrate(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def reverse_chirality(self):
+        if self.chirality == "L":
+            return "D"
+        else:
+            return "L"
 
     def can_be_added_by_adenylation_domain(self, curatedonly=False):
         domains = self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(domainType__name='A')
@@ -293,8 +302,8 @@ class Type(models.Model):
 
 # models experimentally validated domain combinations
 class DomainTuple(models.Model):
-    prev_domain    = models.ForeignKey('Domain', related_name = "next_tuple")
-    next_domain    = models.ForeignKey('Domain', related_name = "prev_tuple")
+    prev_domain    = models.ForeignKey('Domain', related_name = "next_tuple",verbose_name="left domain")
+    next_domain    = models.ForeignKey('Domain', related_name = "prev_tuple",verbose_name="right domain")
     prev_position  = models.IntegerField()
     next_position  = models.IntegerField()
     experiment     = models.ForeignKey('Experiment' , related_name="domain_tuples")
@@ -310,17 +319,7 @@ class Experiment(models.Model):
     def __unicode__(self):
         return self.description[0:20]
 
-class Linkout(models.Model):
-    linkoutType = models.ForeignKey('LinkoutType')
-    identifier = models.CharField(max_length=50)
-    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product') | models.Q(app_label = 'databaseInput', model = 'Experiment')
-    content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
-    object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
-    user = models.ForeignKey('auth.User', blank=True, null=True)
 
-    def __unicode__(self):
-        return self.identifier
 
 class LinkoutType(models.Model):
     shortcut = models.CharField(max_length=10)
@@ -329,3 +328,19 @@ class LinkoutType(models.Model):
 
     def __unicode__(self):
         return self.shortcut
+
+def get_pubmed_type():
+    return LinkoutType.objects.get(shortcut="PubMed");    
+
+
+class Linkout(models.Model):
+    linkoutType = models.ForeignKey('LinkoutType')
+    identifier = models.CharField(max_length=50, validators=[MinLengthValidator(3)])
+    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product') | models.Q(app_label = 'databaseInput', model = 'Experiment')
+    content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.identifier

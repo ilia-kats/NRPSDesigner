@@ -26,10 +26,12 @@
 </div>
 
 {% endif %}
-        
+
+
         {{ form.non_field_errors }}
         <form id="cdsFormForDomainPrediction">
         <div class="row">
+
           <div class="span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; margin-top:1%">
           <p style="margin-left:5%; margin-top:5%">Please specify your NRPS origin!</p>
               <div class="span3">
@@ -71,7 +73,6 @@
             </div>
             
           </div>
-          <div class="modal hide fade"  id="myModal"></div>
             
 
           <div class="fieldWrapper span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; margin-top:1%">
@@ -80,12 +81,16 @@
               <label for="id_message">Gene Name:</label>
               {{ form.geneName }}
             </div>
-            
-            {{ form.dnaSequence.errors }}
-            <label for="id_dnaSequence" style="margin-top:5%; margin-left:7%">Please enter DNA sequence:</label>
+           
             <div style="margin-left:7%">
+
+            {{ form.dnaSequence.errors }}
+            <label for="id_dnaSequence" style="margin-top:5%;">Please enter DNA sequence:</label>
               {{ form.dnaSequence }}
             </div>
+           
+            <button style="margin-left:63%; margin-top:5%;" type="button" id="domainGenerator" class="btn btn-large" onclick="predictDomains()" >Generate domains!</button>
+            
             </div>
             <div class="span7" style="padding:10px; border:1px solid gray; border-top-left-radius: 10px; border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; margin-top:1%">
             <div class="fieldWrapper" style="margin-top:5%; margin-left:7%">
@@ -93,14 +98,20 @@
               <label for="id_sender">Description:</label>
               {{ form.description }}
             </div>
-            <div class="btn-group">
-              <button type="button" id="domainGenerator" class="btn" onclick="predictDomains()" style="margin-left:60%; margin-top:5%;margin-bottom:12%">Generate domains!</button>
+            {{ linkoutFormSet.management_form }}
+            <label  style="margin-top:5%; margin-left:7%">References:</label>
 
+           
+            {% for linkoutForm in linkoutFormSet %}
+            <div class="linkoutFormSet" style="margin-left:7%">
+            {{ linkoutForm.errors}}
+            {{ linkoutForm.linkoutType }}
+            {{ linkoutForm.identifier }}
             </div>
-            </div>
-            </div>
-          </div>
-
+            {% endfor %}
+        
+       
+   
           <!-- <div class="span3">
             <div style="display:inline;" class="box">
               <p> or </p>
@@ -109,12 +120,16 @@
             
             <a href="{% url 'addProduct' %}" role="button" class="btn btn-link" data-toggle="modal"  data-target="#myModal">   Or add new Product</a>
             -->
-
+   
           </div>
+             
+
           <div class="span4" id="statusLog">
            </div>
         </div>
-        </form>
+        </form>  
+                         
+                        
 
 
 <script type="text/javascript">
@@ -131,6 +146,7 @@
 });
 
 function predictDomains(){
+    jQuery("#myModal").html("");
     jQuery("#domainGenerator").prop('disabled', true);
     jQuery("ul.errorlist").remove();
     jQuery("#tabs").tabs("disable",1);
@@ -162,12 +178,16 @@ function getPredictedDomains(taskId){
 {% if not isAjax %}
 jQuery(document).ready(function() {
 {% endif %}
-
           jQuery('#id_cds-product > option').filter(':first').html('');
           jQuery('#id_cds-origin > option').filter(':first').html('');
           jQuery("#id_cds-product, #id_cds-origin").select2({placeholder: "Choose existing"});
           jQuery("#cdsFormForDomainPrediction").change(function() {
-           jQuery("#tabs").tabs("disable",1);});
+          jQuery("#tabs").tabs("disable",1);});
+          jQuery('.linkoutFormSet').formset({addText:'<i style="margin-left:7%" class="icon-plus"></i>',
+            deleteText:'<i class="icon-remove"></i>',
+            prefix: '{{ linkoutFormSet.prefix }}'});
+
+
 
 
 

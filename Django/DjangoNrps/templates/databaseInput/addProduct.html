@@ -7,6 +7,20 @@
   <form id="addProductForm" action="" method="post">
   {{ form.as_p }}
 
+  {{ productLinkoutSet.management_form }}
+  <div style="margin-left:1.5%;">
+<label >References:</label>
+
+  {% for productLinkout in productLinkoutSet %}
+
+<div class="productLinkoutSet">
+  {{ productLinkout.errors}}
+  {{ productLinkout.linkoutType }}
+  {{ productLinkout.identifier }}
+</div>
+</div>
+
+  {% endfor %}
   </div>
   <div class="modal-footer">
     <button id="closeProductModal" class="btn" data-dismiss="modal" type="button" aria-hidden="true">Close</button>
@@ -18,7 +32,10 @@
 
 <script>
 
-
+jQuery(".productLinkoutSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+        prefix: '{{ productLinkoutSet.prefix }}',
+      });
 jQuery("#submitProduct").click(function(e) {
     e.preventDefault();
     jQuery.post("{% url "saveProduct" %}", jQuery("#addProductForm, #cdsFormForDomainPrediction").serialize(), function(data){
