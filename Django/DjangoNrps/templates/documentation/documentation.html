@@ -89,7 +89,7 @@
                 <img src={% static "images/documentation/nrpSelection.png" %} /></br>
 
                 <p> The functionality of the interface can be accessed mainly by the following 3 buttons </p>
-                
+
 
                   <button class="btn" style="margin-left:10px">Add monomer</button></br>
                   <p>When you want to elongate the sequence of monomers by one, you should press this button. Note that
@@ -249,7 +249,7 @@
             <div class="page-header">
             <h2> Contact </h2>
             </div>
-            <p style="margin-bottom: 400px"> Do you have further questions, feedback or suggestions? Then please do not hesitate to contact Ilia Kats (kats@stud.uni-heidelberg.de), Nikos Ignatiadis (nikos.ignatiadis01@gmail.com) or Nils Kurzawa (nilskurzawa@yahoo.de). </p>
+            <p style="margin-bottom: 400px"> Do you have further questions, feedback or suggestions? Then please do not hesitate to contact Ilia Kats (<a class="mail-crypt" data-user="kats" data-domain="stud.uni-heidelberg.de">Please enable Javascript to see the email address</a>), Nikos Ignatiadis (<a class="mail-crypt" data-user="nikos.ignatiadis01" data-domain="gmail.com">Please enable Javascript to see the email address</a>) or Nils Kurzawa (<a class="mail-crypt" data-user="nilskurzawa" data-domain="yahoo.de">Please enable Javascript to see the email address</a>). </p>
 
 
             </div><!--/span-->
@@ -261,7 +261,12 @@
               jQuery(function() {
 
                 var toc = jQuery("#toc").tocify({ selectors: "h2, h3, h4" });
-
+                var mails = jQuery("a.mail-crypt");
+                for (var i = 0; i < mails.length; ++i) {
+                    var mail = jQuery(mails[i]);
+                    mail.attr("href", "mailto:" + mail.data("user") + "@" + mail.data("domain"));
+                    mail.text(mail.data("user") + "@" + mail.data("domain"));
+                }
             });
         </script>
 
