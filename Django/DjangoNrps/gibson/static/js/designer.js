@@ -701,8 +701,13 @@ var fl = FragmentLabel.prototype = new Container();
 	{
 		var r = 0;
 		var erad = this._radius;
-		if(this._outward)
+        var baseline = 'bottom';
+		if(this._outward) {
 			erad = - this._radius;
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=737852
+            if (!navigator.userAgent.match(/Gecko\/[0-9]+/i))
+                baseline = 'top';
+        }
 
 		//for each letter
 		for(var i = 0; i < this._text.length; i = i + 1)
@@ -716,13 +721,11 @@ var fl = FragmentLabel.prototype = new Container();
 
 			//set the rotation
 			l.rotation = r2d(r) + 90;
+            l.textBaseline = baseline;
 			if(this._outward)
 			{
-				l.textBaseline = 'bottom';
 				l.rotation = -r2d(r) - 90;
 			}
-			else
-				l.textBaseline = 'bottom';
 
 			r = r + l.getMeasuredWidth() / this._radius;
 
@@ -750,20 +753,20 @@ var fl = FragmentLabel.prototype = new Container();
 		var h = Math.abs(p1.y - p2.y) + 2*pad;
 
 
-	/*	cache debugging
-	 * console.log(this+'.cache('+x+','+y+','+w+','+h+');');
-	 * this._cmark.graphics
-			.clear()
-			.setStrokeStyle(1)
-			.beginStroke(COL.RED)
-			.rect(x,y,w,h)
-			.endStroke()
-			.closePath()
-			.beginFill(COL.RED)
-			.drawCircle(p2.x,p2.y,3)
-			.beginFill(COL.GREEN)
-			.drawCircle(p1.x,p1.y,3);
-	*/
+		//cache debugging
+// 	   console.log(this+'.cache('+x+','+y+','+w+','+h+');');
+// 	   this._cmark.graphics
+// 			.clear()
+// 			.setStrokeStyle(1)
+// 			.beginStroke(COL.RED)
+// 			.rect(x,y,w,h)
+// 			.endStroke()
+// 			.closePath()
+// 			.beginFill(COL.RED)
+// 			.drawCircle(p2.x,p2.y,3)
+// 			.beginFill(COL.GREEN)
+// 			.drawCircle(p1.x,p1.y,3);
+//
 
 		this.cache(x,y,w,h);
 
