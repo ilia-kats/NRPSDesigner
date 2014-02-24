@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError, HttpResponseBadRequest
 from django.views.generic.base import TemplateView
 from django.views.generic import CreateView
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.core.mail import send_mail
 from django.template import loader, RequestContext
 
@@ -28,7 +28,10 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
 from databaseInput.models import Origin, Cds, Domain
-from databaseInput.forms import CdsFormSet, CdsForm, OriginForm, DomainForm, ProductForm
+from databaseInput.forms import (CdsFormSet, CdsForm, 
+    DoubleSubstrateForm, OriginForm, DomainForm,
+    ProductForm, LinkoutForm, LinkoutFormSet,
+    ExpDomainTupleForm)
 
 from gibson.jsonresponses import JsonResponse, ERROR
 
@@ -119,7 +122,8 @@ def msa_domain_view(request, task_id):
 def product_add(request):
     t = loader.get_template("databaseInput/addProduct.html")
     c = RequestContext(request, {
-        'form': ProductForm(prefix='product')
+        'form': ProductForm(prefix='product'),
+        'productLinkoutSet': LinkoutFormSet(prefix='productLinkout')
         })
     return HttpResponse(t.render(c))
 
@@ -128,6 +132,17 @@ def origin_add(request):
     t = loader.get_template('databaseInput/addOrigin.html')
     c = RequestContext(request, {
         'form':OriginForm(prefix='origin'),
+        'originLinkoutSet': LinkoutFormSet(prefix='originLinkout')
+    })
+    return HttpResponse(t.render(c))
+
+@login_required
+def substrate_add(request):
+    t = loader.get_template('databaseInput/addSubstrate.html')
+    c = RequestContext(request, {
+        'form':DoubleSubstrateForm(request.user, prefix='substrate'),
+        'substrateLinkoutSet': LinkoutFormSet(prefix='substrateLinkout'),
+        'enantiomerLinkoutSet': LinkoutFormSet(prefix='enantiomerLinkout')
     })
     return HttpResponse(t.render(c))
 
@@ -135,10 +150,22 @@ def origin_add(request):
 def product_ajax_save(request):
     if request.method == "POST":
         productForm = ProductForm(request.POST, prefix='product')
-        if productForm.is_valid():
+        linkoutFormSet = LinkoutFormSet(request.POST, prefix='productLinkout')
+
+        if productForm.is_valid() and linkoutFormSet.is_valid():
             product = productForm.save()
             product.user = request.user
             product.save()
+
+            #save linkouts
+            linkoutFormSet = LinkoutFormSet(request.POST, prefix='productLinkout')
+            for linkout in linkoutFormSet:
+                if linkout.is_valid():
+                    linkout = linkout.save(commit=False)
+                    linkout.content_object=product
+                    linkout.user = request.user
+                    linkout.save()
+
             cdsForm = CdsForm(request.POST, prefix='cds')
 
             cdsForm.full_clean()
@@ -150,6 +177,7 @@ def product_ajax_save(request):
             t = loader.get_template('databaseInput/cdsInputTab.html')
             c = RequestContext(request, {
             'form':updatedCdsForm,
+            'linkoutFormSet':LinkoutFormSet(request.POST, prefix='cdsLinkout')
                 })
             return JsonResponse({'html': t.render(c)})
 
@@ -157,6 +185,7 @@ def product_ajax_save(request):
             t = loader.get_template('databaseInput/addProduct.html')
             c = RequestContext(request, {
             'form':productForm,
+             'productLinkoutSet': linkoutFormSet
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
 
@@ -164,10 +193,22 @@ def product_ajax_save(request):
 def origin_ajax_save(request):
     if request.method == "POST":
         originForm = OriginForm(request.POST, prefix='origin')
-        if originForm.is_valid():
+        linkoutFormSet = LinkoutFormSet(request.POST, prefix='originLinkout')
+
+        if originForm.is_valid() and linkoutFormSet.is_valid():
             origin = originForm.save()
             origin.user = request.user
             origin.save()
+
+            # also make sure linkouts are saved
+            
+            for linkout in linkoutFormSet:
+                if linkout.is_valid():
+                    linkout = linkout.save(commit=False)
+                    linkout.content_object=origin
+                    linkout.user = request.user
+                    linkout.save()
+
             cdsForm = CdsForm(request.POST, prefix='cds')
 
             cdsForm.full_clean()
@@ -179,6 +220,7 @@ def origin_ajax_save(request):
             t = loader.get_template('databaseInput/cdsInputTab.html')
             c = RequestContext(request, {
             'form':updatedCdsForm,
+            'linkoutFormSet':LinkoutFormSet(request.POST, prefix='cdsLinkout')
                 })
             return JsonResponse({'html': t.render(c)})
 
@@ -186,15 +228,73 @@ def origin_ajax_save(request):
             t = loader.get_template('databaseInput/addOrigin.html')
             c = RequestContext(request, {
             'form':originForm,
+            'originLinkoutSet': linkoutFormSet
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
+
+@login_required
+def substrate_ajax_save(request):
+    if request.method == "POST":
+        form = DoubleSubstrateForm(request.user, request.POST, prefix='substrate')
+        substrateLinkoutSet = LinkoutFormSet(request.POST, prefix='substrateLinkout')
+        enantiomerLinkoutSet = LinkoutFormSet(request.POST, prefix='enantiomerLinkout')
+
+        if form.is_valid() and substrateLinkoutSet.is_valid():
+
+            substrate = form.save()
+
+            # start saving linkouts for main substrate
+            for linkout in substrateLinkoutSet:
+                if linkout.is_valid():
+                    linkout = linkout.save(commit=False)
+                    linkout.content_object=substrate
+                    linkout.user = request.user
+                    linkout.save()
+
+            if not substrate.enantiomer == None:
+                if enantiomerLinkoutSet.is_valid():
+                    for linkout in enantiomerLinkoutSet:
+                        if linkout.is_valid():
+                            linkout = linkout.save(commit=False)
+                            linkout.content_object=substrate.enantiomer
+                            linkout.user = request.user
+                            linkout.save()
+                else:
+                    t = loader.get_template('databaseInput/addSubstrate.html')
+                    c = RequestContext(request, {
+                        'form':form,
+                        'substrateLinkoutSet': substrateLinkoutSet,
+                        'enantiomerLinkoutSet': enantiomerLinkoutSet
+                        })
+                    return JsonResponse({'html': t.render(c)}, ERROR)
+
+
+            DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm)
+            domainFormSet = DomainFormSet(request.POST)
+           
+            t = loader.get_template('databaseInput/domainInput.html')
+            c = RequestContext(request, {
+                     'domainFormSet':domainFormSet,
+            })
+            return JsonResponse({'html': t.render(c)})
+        else:
+            t = loader.get_template('databaseInput/addSubstrate.html')
+            c = RequestContext(request, {
+            'form':form,
+            'substrateLinkoutSet': substrateLinkoutSet,
+            'enantiomerLinkoutSet': enantiomerLinkoutSet
+                })
+            return JsonResponse({'html': t.render(c)}, ERROR)
+
 
 @login_required
 def cds_input(request):
     t = loader.get_template('databaseInput/cdsInput.html')
     cdsForm = CdsForm(prefix='cds')
+    linkoutFormSet = LinkoutFormSet(prefix='cdsLinkout')
     c = RequestContext(request, {
         'form':cdsForm,
+        'linkoutFormSet':linkoutFormSet,
         'isAjax':False
     })
     return HttpResponse(t.render(c))
@@ -203,15 +303,16 @@ def cds_input(request):
 def domain_prediction(request):
     if request.method == "POST":
         cdsForm = CdsForm(request.POST, prefix='cds')
-        if cdsForm.is_valid():
+        linkoutFormSet = LinkoutFormSet(request.POST, prefix='cdsLinkout')
+        if cdsForm.is_valid() and linkoutFormSet.is_valid():
             cds = cdsForm.save(commit=False)
-            #test_task = cds.predictDomains.delay()
             task = cds.predictDomains.delay()
             return JsonResponse({'taskId': task.id})
         else:
             t = loader.get_template('databaseInput/cdsInputTab.html')
             c = RequestContext(request, {
             'form':cdsForm,
+            'linkoutFormSet':linkoutFormSet,
             'isAjax': True,
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
@@ -242,7 +343,14 @@ def save_cds_domains(request):
             cds.user = request.user
             domainFormSet = DomainFormSet(request.POST, instance = cds)
             if domainFormSet.is_valid():
+                # save our Cds and associated references
                 cds.save()
+                linkoutFormSet = LinkoutFormSet(request.POST, prefix='cdsLinkout')
+                for linkout in linkoutFormSet:
+                    if linkout.is_valid():
+                        linkout = linkout.save(commit=False)
+                        linkout.content_object=cds
+                        linkout.save()
                 domains = domainFormSet.save(commit=False)
                 for domain in domains:
                     domain.user = request.user
@@ -251,8 +359,10 @@ def save_cds_domains(request):
                 #if successful, render cds input form with clean form again!
                 t = loader.get_template('databaseInput/cdsInputTab.html')
                 cdsForm = CdsForm(prefix='cds')
+                linkoutFormSet = LinkoutFormSet(prefix='cdsLinkout')
                 c = RequestContext(request, {
                         'form':cdsForm,
+                        'linkoutFormSet':linkoutFormSet,
                         'isAjax':True,
                         'djangoSuccess': '<strong>Well done!</strong> Successfully added new coding sequence into database!'
                          })
@@ -313,6 +423,35 @@ def request_curation_privs(request):
         subject = ''.join(subject.splitlines())
         send_mail(subject, text.render(ctxt), request.user.email, settings.CURATION_REQUEST_RECIPIENTS)
     return HttpResponse()
+
+
+def experiments(request):
+    if request.method == "GET":
+        if "success" in request.GET:
+            success=True
+        else:
+            success=False
+
+        form = ExpDomainTupleForm(request.user, prefix="domainTuple")
+        t = loader.get_template('databaseInput/experiments.html')
+        c = RequestContext(request, {
+            "form": form,
+            "success": success
+                })
+        return HttpResponse(t.render(c))
+
+    elif request.method == "POST":
+        form = ExpDomainTupleForm(request.user, request.POST, prefix="domainTuple")
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'url': reverse("experiments") + "?success"})
+        else:
+            t = loader.get_template('databaseInput/experimentsErrors.html')
+            c = RequestContext(request, {
+            "form": form
+                })
+            return JsonResponse({'html': t.render(c)}, ERROR)
+
 
 #def sauceFunc(request):
     ##first read FASTA file and translate sequence to protein!

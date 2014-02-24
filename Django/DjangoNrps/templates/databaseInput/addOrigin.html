@@ -7,6 +7,20 @@
   <form id="addOriginForm" action="" method="post">
   {{ form.as_p }}
 
+  {{ originLinkoutSet.management_form }}
+  <div style="margin-left:1.5%;">
+<label >References:</label>
+  {% for originLinkout in originLinkoutSet %}
+
+<div class="originLinkoutSet">
+  {{ originLinkout.errors}}
+  {{ originLinkout.linkoutType }}
+  {{ originLinkout.identifier }}
+</div>
+</div>
+
+
+  {% endfor %}
   </div>
   <div class="modal-footer">
     <button id="closeOriginModal" class="btn" data-dismiss="modal" type="button" aria-hidden="true">Close</button>
@@ -18,7 +32,10 @@
 
 <script>
 
-
+jQuery(".originLinkoutSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+        prefix: '{{ originLinkoutSet.prefix }}',
+      });
 jQuery("#submitOrigin").click(function() {
     jQuery.post("{% url "saveOrigin" %}", jQuery("#addOriginForm, #cdsFormForDomainPrediction").serialize(), function(data){
         if (data[0] === AJAX_ERROR){

@@ -23,7 +23,7 @@
 
         <script src="{% static "js/vendor/bootstrap.min.js" %}"></script>
 
-        <script src="{% static "js/jquery.formset.min.js" %}"></script>
+        <script src="{% static "js/jquery.formset.js" %}"></script>
 
 
 {% block css-include %}
@@ -234,6 +234,8 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 						<li><a href="{% url 'peptides' %}">NRPSDesigner</a></li>
                             {% if user.is_authenticated %}
 						<li><a href="{% url 'pfam' %}">Add NRPS into library</a></li>
+                        <li><a href="{% url 'experiments' %}">Submit experimental data</a></li>
+
 						<li><a href="{% url 'fragment.views.fragments' %}">Manage Gibson fragments</a></li>
                           {% endif %}
 					</ul>
