@@ -189,7 +189,7 @@ def downloadLibrary(request, uuid):
     parentnrp = get_nrp(request.user, uuid)
     if not parentnrp:
         return HttpResponseNotFound()
-    cids = [child.construct.pk for child in parentnrp.child.filter(pk__in=request.POST.getlist('id'))]
+    cids = [child.construct.pk for child in parentnrp.child.filter(uuid__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
 
 def get_available_monomers(request):
