@@ -166,7 +166,7 @@ class NRP(models.Model):
             start_pos = domain1.domain.get_start(lastDomain) - 1
             for domain in connectedDomains:
                 domainGene.domains.add(domain.domain)
-                f = Feature(type="domain", start=domain.domain.get_start(with_linker=False) - 1 - start_pos, end=domain.domain.get_stop(with_linker=False) - start_pos, direction='f', gene=domainGene)
+                f = Feature(type="domain", start=domain.domain.get_start(lastDomain, with_linker=False) - 1 - start_pos, end=domain.domain.get_stop(nextDomain, with_linker=False) - start_pos, direction='f', gene=domainGene)
                 f.save()
                 Qualifier(name="type", data=domain.domain.domainType.name, feature=f).save()
                 Qualifier(name="module", data=domain.domain.module, feature=f).save()

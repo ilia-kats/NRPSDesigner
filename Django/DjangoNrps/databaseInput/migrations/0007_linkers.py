@@ -13,19 +13,23 @@ class Migration(DataMigration):
             domains = cds.domains.order_by('pfamStart')
             if (len(domains) == 0):
                 continue
-            lastDomain = domains[0]
-            for i in xrange(1, len(domains)):
+            lastDomain = None
+            for i in xrange(0, len(domains)):
                 try:
                     nextDomain = domains[i + 1]
                 except IndexError:
                     nextDomain = None
-                if domains[i].definedLinkerStart == 1:
+                if lastDomain is not None and domains[i].definedLinkerStart == 1:
                     if lastDomain.definedStop is not None:
                         domains[i].definedLinkerStart = lastDomain.definedStop + 1
                     else:
                         domains[i].definedLinkerStart = None
-                if domains[i].pfamLinkerStart == 1:
+                if lastDomain is not None and lastDomain.definedStop is not None and (domains[i].definedStart is not None and lastDomain.definedStop + 1 >= domains[i].definedStart or lastDomain.definedStop + 1 >= domains[i].pfamStart):
+                    domains[i].definedLinkerStart = None
+                if lastDomain is not None and domains[i].pfamLinkerStart == 1:
                     domains[i].pfamLinkerStart = lastDomain.pfamStop + 1
+                if domains[i].definedLinkerStart > domains[i].definedStart:
+                    domains[i].definedLinkerStart
                 if domains[i].definedLinkerStop == 1:
                     if nextDomain is not None:
                         if nextDomain.definedStart is not None:
