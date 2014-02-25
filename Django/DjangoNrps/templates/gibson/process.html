@@ -59,9 +59,9 @@ jQuery(window).ready( function() {
 		}
 		h.send(null);
 	});
-    if (primersAutoProcess) {
-        btn.click();
+    if (typeof(primersAutoProcess) != 'undefined' && primersAutoProcess) {
         primersAutoProcess = false;
+        btn.click();
     }
 });
 
