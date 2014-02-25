@@ -158,7 +158,6 @@ def product_ajax_save(request):
             product.save()
 
             #save linkouts
-            linkoutFormSet = LinkoutFormSet(request.POST, prefix='productLinkout')
             for linkout in linkoutFormSet:
                 if linkout.is_valid():
                     linkout = linkout.save(commit=False)
@@ -433,22 +432,34 @@ def experiments(request):
             success=False
 
         form = ExpDomainTupleForm(request.user, prefix="domainTuple")
+        linkoutFormSet = LinkoutFormSet(prefix='linkout')
+
         t = loader.get_template('databaseInput/experiments.html')
         c = RequestContext(request, {
             "form": form,
-            "success": success
+            "success": success,
+            "linkoutSet": linkoutFormSet
                 })
         return HttpResponse(t.render(c))
 
     elif request.method == "POST":
         form = ExpDomainTupleForm(request.user, request.POST, prefix="domainTuple")
-        if form.is_valid():
-            form.save()
+        linkoutFormSet = LinkoutFormSet(request.POST, prefix='linkout')
+
+        if form.is_valid() and linkoutFormSet.is_valid():
+            domain_tuple = form.save()
+
+            for linkout in linkoutFormSet:
+                linkout=linkout.save(commit=False)
+                linkout.content_object = domain_tuple.experiment
+                linkout.user = request.user
+                linkout.save()
             return JsonResponse({'url': reverse("experiments") + "?success"})
         else:
             t = loader.get_template('databaseInput/experimentsErrors.html')
             c = RequestContext(request, {
-            "form": form
+            "form": form,
+            "linkoutSet": linkoutFormSet
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
 

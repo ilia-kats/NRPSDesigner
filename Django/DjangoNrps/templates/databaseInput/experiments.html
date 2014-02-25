@@ -18,6 +18,12 @@ The experimentally described  domain interaction has been successfully entered i
 
 </div>
 
+{% else %}
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+Report a successful assembly of two NRPS domains.
+</div>
+
 {% endif %}
 
 <div id="errors">
@@ -25,7 +31,7 @@ The experimentally described  domain interaction has been successfully entered i
 
 <form id="domainTupleForm">
 <div class="row">
-<div class="span7">
+<div class="span5">
 
       <div class="fieldWrapper">
                   {{ form.description.errors }}
@@ -33,6 +39,21 @@ The experimentally described  domain interaction has been successfully entered i
                   {{ form.description }}
                 </div>
                 </div>
+
+<div class="span7">
+ {{ linkoutSet.management_form }}
+  <div>
+<label >References:</label>
+  {% for linkout in linkoutSet %}
+
+<div class="linkoutSet">
+  {{ linkout.linkoutType }}
+  {{ linkout.identifier }}
+</div>
+
+{% endfor %}
+</div>
+</div>
 </div>
 
 <div class="row">
@@ -87,7 +108,7 @@ Right domain:
       
 </form>
 
-  <button class="btn btn-large btn-primary" id="submitButton" type="button">Submit</button>
+  <button class="btn btn-large" id="submitButton" type="button">Submit</button>
 
 {% endblock %}
 
@@ -186,7 +207,10 @@ function jsonResponseResult(data, page) {
 	return { results: data[1]};
 }
 
-
+jQuery(".linkoutSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+        prefix: '{{ linkoutSet.prefix }}',
+      });
 
 jQuery("#submitButton").click( function() {
     jQuery.post( "{% url 'experiments' %}", emulateDjangoForm(), function(data){
@@ -198,8 +222,6 @@ jQuery("#submitButton").click( function() {
     });
 
 });
-
-
 
 
 });
