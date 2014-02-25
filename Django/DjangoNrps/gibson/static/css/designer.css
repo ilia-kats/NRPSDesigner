@@ -73,12 +73,12 @@ tr.settings-alt
 }
 .fragment-data
 {
-    min-width: 10em;
-    max-width: 20em;
-    min-height: 3em;
 }
 .fragment-info
 {
+    min-width: 10em;
+    max-width: 90%;
+    min-height: 3em;
     position: absolute;
     background: rgb(255,255,255);
     border: 1px solid #7b7b7b;
@@ -87,19 +87,35 @@ tr.settings-alt
 }
 .fragment-info:before{
     content: ' ';
-    border-color: #7b7b7b transparent transparent;
+    border-color: transparent;
     border-style: solid;
     border-width: 14px;
     position: absolute;
-    bottom: -29px;
-    left: 19px;
 }
 .fragment-info:after{
     content: ' ';
-    border-color: rgb(255,255,255) transparent transparent;
+    border-color: transparent;
     border-style: solid;
     border-width: 13px;
     position: absolute;
+}
+.fragment-info-arrow-bottom:before{
+    border-top-color: #7b7b7b;
+    bottom: -29px;
+    left: 19px;
+}
+.fragment-info-arrow-bottom:after{
+    border-top-color: #ffffff;
     bottom: -26px;
     left: 20px;
-}​
+}
+.fragment-info-arrow-top:before{
+    border-bottom-color: #7b7b7b;
+    top: -29px;
+    left: 19px;
+}
+.fragment-info-arrow-top:after{
+    border-bottom-color: #ffffff;
+    top: -26px;
+    left: 20px;
+}

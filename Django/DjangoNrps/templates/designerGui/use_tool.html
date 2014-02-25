@@ -79,7 +79,7 @@
         }
         jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
 
-        refreshModificationList();
+        //refreshModificationList();
         jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
     }
 
@@ -143,7 +143,7 @@
 
         jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
         makeStruct();
-        refreshModificationList();
+        //refreshModificationList();
     }
 
     function applyMonomerChild(e)
@@ -274,14 +274,14 @@
             formatResult: formatAA,
             dropdownCssClass: "bigdrop",
             escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
-        jQuery("#e11").select2({
-            data : [],
-            placeholder: "No modification selected",
-            allowClear: true,
-            formatResult: formatAAChild,
-            dropdownCssClass: "bigdrop",
-            escapeMarkup: function(m) { return m; }
-            }).change(function(e){applyMonomerChild(e);});
+//         jQuery("#e11").select2({
+//             data : [],
+//             placeholder: "No modification selected",
+//             allowClear: true,
+//             formatResult: formatAAChild,
+//             dropdownCssClass: "bigdrop",
+//             escapeMarkup: function(m) { return m; }
+//             }).change(function(e){applyMonomerChild(e);});
         jQuery("#monomer_chirality").buttonset().change(applyMonomer);
         jQuery("#monomer_add").button().click(addMonomer).click();
         //jQuery("#save").button().click(save).parent().buttonset();
@@ -310,7 +310,7 @@
 
         }
 
-        refreshModificationList();
+        //refreshModificationList();
         tmpId = {{monomer.substrate.pk}};
         jQuery('#e11').select2("val", tmpId, triggerChange=true);
         {% else %}
@@ -404,7 +404,7 @@
         <p>Options:</p>
         <div>
             <input type="checkbox" id="chk_curatedonly" checked="checked"/><label for="chk_curatedonly" style="margin-bottom:0">Use curated domains only</label>
-            <input type="checkbox" id="chk_indigoidinetag"{% if indigoidineTagged %} checked="checked"{% endif %}/><label for="chk_indigoidinetag" style="margin-bottom:0" data-step="3" data-intro="Check this if the peptide needs to be tagged with the blue pigment Indigoidine.">Tag NRP with Indigoidine</label>
+            <!--<input type="checkbox" id="chk_indigoidinetag"{% if indigoidineTagged %} checked="checked"{% endif %}/><label for="chk_indigoidinetag" style="margin-bottom:0" data-step="3" data-intro="Check this if the peptide needs to be tagged with the blue pigment Indigoidine.">Tag NRP with Indigoidine</label>-->
         </div>
     </div>
     <div class="box" data-intro="In this box you can choose the amino acid of your choice in L or D-form, if available. Press 'Add Monomer' in order to extend the peptide chain by 1 amino acid. Once you are done and you want to get your predicted domains, just press on 'Design Construct' " data-step="4">
@@ -416,11 +416,11 @@
             <input type="radio" name="chirality" value="D" id="monomer_chirality_D"/><label for="monomer_chirality_D">D-configuration</label>
         </div>
 
-        <div>
+        <!--<div>
             </br>
             <p>Select a possible amino acid modification, if you like!</p>
             <div id="e11" style="width:100%"></div>
-        </div>
+        </div>-->
 
         <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;"></div>
         <div>

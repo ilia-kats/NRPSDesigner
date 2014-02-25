@@ -1,0 +1,129 @@
+
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Add new substrate</h3>
+</div>
+<div class="modal-body">
+  <form id="addSubstrateForm" action="" method="post">
+  <div class="row">
+              <div class="span6">
+                <div class="fieldWrapper">
+                  {{ form.name.errors }}
+                  <label> Name: <br/> </label>
+                  {{ form.name }}
+                </div>
+
+                <div class="fieldWrapper">
+                  {{ form.chirality.errors }}
+                  <label> Chirality: <br/> </label>
+                  {{ form.chirality }}
+                </div>
+          
+
+                {{ substrateLinkoutSet.management_form }}
+                 <div style="margin-left:0.5%;">
+                <label >References:</label>
+                {% for substrateLinkout in substrateLinkoutSet %}
+
+                  <div class="substrateLinkoutSet">
+                  {{ substrateLinkout.errors}}
+                  {{ substrateLinkout.linkoutType }}
+                  {{ substrateLinkout.identifier }}
+                  </div>
+
+                {% endfor %}
+                </div>
+           
+                 <div class="fieldWrapper">
+                  {{ form.structure.errors }}
+                  <label> Monomer structure (.sdf): <br/> </label>
+                  {{ form.structure }}
+                </div>
+            
+
+                <div class="fieldWrapper">
+                  {{ form.hasEnantiomer.errors }}
+                 Is information for enantiomer available? {{ form.hasEnantiomer }}
+                </div>
+                
+                </br>
+           
+                 <div class="Enantiomer" style="display: none;">
+
+
+                {{ enantiomerLinkoutSet.management_form }}
+                 <div style="margin-left:0.5%;">
+                <label >Enantiomer References:</label>
+                {% for enantiomerLinkout in enantiomerLinkoutSet %}
+
+                  <div class="enantiomerLinkoutSet">
+                  {{ enantiomerLinkout.errors}}
+                  {{ enantiomerLinkout.linkoutType }}
+                  {{ enantiomerLinkout.identifier }}
+                  </div>
+
+                {% endfor %}
+
+                  <div class="fieldWrapper" >
+
+                  {{ form.enantiomerStructure.errors }}
+                  <label> Enantiomer structure (.sdf): <br/> </label>
+                  {{ form.enantiomerStructure }}
+                </div>
+                </div>
+                
+
+            </div>
+
+
+
+  </div>
+  </form>
+  </div>
+
+  <div class="modal-footer">
+    <button id="closeSubstrateModal" class="btn" data-dismiss="modal" type="button" aria-hidden="true">Close</button>
+    <button id="submitSubstrate" type="button" class="btn btn-inverse">Submit substrate</button>
+  </div>
+
+</form>
+</div>
+
+<script>
+jQuery(".substrateLinkoutSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+        prefix: '{{ substrateLinkoutSet.prefix }}',
+      });
+
+jQuery(".enantiomerLinkoutSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+        prefix: '{{ enantiomerLinkoutSet.prefix }}',
+      });
+
+function toggleEnantiomer(){
+   if (jQuery("#id_substrate-hasEnantiomer")[0].checked) {
+      jQuery(".Enantiomer").show();
+   } else {
+      jQuery(".Enantiomer").hide();
+   }
+}
+
+//toggle once when form is loaded and each time option is checked/unchecked
+toggleEnantiomer();
+jQuery('#id_substrate-hasEnantiomer').change(toggleEnantiomer);
+
+
+jQuery("#submitSubstrate").click(function() {
+   allForms = jQuery(document).find("form").serialize()
+    jQuery.post("{% url "saveSubstrate" %}", allForms, function(data){
+        if (data[0] === AJAX_ERROR){
+            jQuery("#myModal").html(data[1].html);
+        } else {
+            jQuery("#myModal").modal('hide');
+            jQuery("#myModal").html("");
+            jQuery("#domainInput").html(data[1].html);
+        }
+    });
+  });
+
+</script>

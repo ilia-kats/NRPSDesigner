@@ -8,4 +8,3 @@ def validateCodingSeq(sequence):
 		Seq(sequence, IUPAC.unambiguous_dna).translate(table="Bacterial", cds=True)
 	except TranslationError as e:
 		raise ValidationError(e)
-

@@ -19,6 +19,7 @@ set(SRCS
     monomer.cpp
     origin.cpp
     product.cpp
+    cds.cpp
     abstractdatabaseconnector.cpp
     mysqldatabaseconnector.cpp
     networkoptions.cpp
@@ -44,6 +45,7 @@ set(HEADERS
     domain.h
     origin.h
     product.h
+    cds.h
     abstractdatabaseconnector.h
     networkoptions.h
     taxon.h

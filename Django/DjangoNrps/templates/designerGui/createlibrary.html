@@ -72,7 +72,7 @@
         }
         jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
 
-        refreshModificationList();
+        //refreshModificationList();
         jQuery('#e11').select2("val", jQuery(e.delegateTarget).data("modId"));
     }
 
@@ -135,7 +135,7 @@
         btn.data("selectid", data.id);
 
         jQuery("#monomer_chirality").buttonset("option", "disabled", 'nid' in data || 'lid' in data ^ 'did' in data);
-        refreshModificationList();
+        //refreshModificationList();
     }
 
     function applyMonomerChild(e)
@@ -282,14 +282,14 @@
             formatResult: formatAA,
             dropdownCssClass: "bigdrop",
             escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
-        jQuery("#e11").select2({
+        /*jQuery("#e11").select2({
             data : [],
             placeholder: "No modification selected",
             allowClear: true,
             formatResult: formatAAChild,
             dropdownCssClass: "bigdrop",
             escapeMarkup: function(m) { return m; }
-            }).change(function(e){applyMonomerChild(e);});
+            }).change(function(e){applyMonomerChild(e);});*/
         jQuery("#monomer_chirality").buttonset().change(applyMonomer);
         jQuery("#submit").button().click(save).parent().buttonset();
         jQuery("#chk_curatedonly").click(function() {getSelectableMonomers(true);}).parent().buttonset();
@@ -381,11 +381,11 @@
             <input type="radio" name="chirality" value="D" id="monomer_chirality_D"/><label for="monomer_chirality_D">D-configuration</label>
         </div>
 
-        <div>
+        <!--<div>
             </br>
             <p>Select a possible amino acid modification, if you like!</p>
             <div id="e11" style="width:100%"></div>
-        </div>
+        </div>-->
 
         <div id="selected_monomers" style="white-space:nowrap;overflow:auto;margin-top:5px;margin-bottom:5px;padding-top:5px;padding-bottom:5px;">
             {% for monomer in scaffold %}

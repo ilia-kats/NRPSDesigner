@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-
+from django.core.validators import MinLengthValidator
 from celery.contrib.methods import task
 
 from itertools import count
@@ -21,7 +22,7 @@ import pdb
 from time import sleep
 class Cds(models.Model):
     origin = models.ForeignKey('Origin')
-    product = models.ForeignKey('Product', blank=True, null=True)
+    product = models.ForeignKey('Product', blank=True, null=True, related_name = "cdsSequence")
     geneName = models.CharField(max_length=100)
     dnaSequence = models.TextField(validators=[validateCodingSeq])
     description = models.TextField(blank=True, null=True)
@@ -45,7 +46,7 @@ class Cds(models.Model):
         try:
             consensusPreds = nrpsSmashResult.consensuspreds
         except AttributeError:
-            raise AttributeError("""According to the in-built domain prediction pipeline, 
+            raise AttributeError("""According to the in-built domain prediction pipeline,
                 the DNA sequence you entered does not contain any NRPS domains.""")
 
         #code below still not nice, should probably adapt nrpsSMASH to give nicer output
@@ -107,7 +108,7 @@ class Cds(models.Model):
 
     # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
-    def get_sequence(self, start_domain, stop_domain, linker_before=0, linker_after=0):
+    def get_sequence(self, start_domain, stop_domain, prev_domain=None, next_domain=None):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
             start_index = domain_list.index(start_domain)
@@ -115,8 +116,8 @@ class Cds(models.Model):
 
             # write custom functions for the below!!!
             # With linker consideration maybe???
-            start_position = start_domain.pfamStart - linker_before - 1
-            stop_position  = stop_domain.pfamStop + linker_after
+            start_position = start_domain.get_start(prev_domain) - 1
+            stop_position = stop_domain.get_stop(next_domain)
             ##
             return self.dnaSequence[start_position:stop_position]
         else:
@@ -163,6 +164,7 @@ class Domain(models.Model):
     pfamStop = models.IntegerField()
     definedStart = models.IntegerField(blank=True, null=True)
     definedStop = models.IntegerField(blank=True, null=True)
+    next_domain = models.ManyToManyField('self', symmetrical=False, through='DomainTuple', blank=True, related_name='prev_domain')
     linkout =  generic.GenericRelation('Linkout')
     user = models.ForeignKey('auth.User', blank=True, null=True)
 
@@ -170,10 +172,45 @@ class Domain(models.Model):
     def __unicode__(self):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
-    def get_sequence(self):
+    def short_name(self):
+        return str(self.cds.geneName) + str(self.module) + str(self.domainType)
+        
+    def get_start(self, prevd=None, with_linker=True):
+        if prevd is not None:
+            try:
+                return self.prev_domain.get(pk=prevd).next_position
+            except ObjectDoesNotExist:
+                pass
+        if with_linker:
+            if self.definedLinkerStart is not None:
+                return self.definedLinkerStart
+            elif self.pfamLinkerStart is not None:
+                return self.pfamLinkerStart
+        if self.definedStart is not None:
+            return self.definedStart
+        else:
+            return self.pfamStart
+
+    def get_stop(self, nextd=None, with_linker=False):
+        if nextd is not None:
+            try:
+                return self.next_domain.get(pk=nextd).prev_position
+            except ObjectDoesNotExist:
+                pass
+        if with_linker:
+            if self.definedLinkerStop is not None:
+                return self.definedLinkerStop
+            elif self.pfamLinkerStop is not None:
+                return self.pfamLinkerStop
+        if self.definedStop is not None:
+            return self.definedStop
+        else:
+            return self.pfamStop
+
+    def get_sequence(self, includeForwardLinker=False, includeAftLinker=False):
         cdsSequence = self.cds.dnaSequence
-        domainStart = self.pfamStart - 1
-        domainStop  = self.pfamStop
+        domainStart = self.get_start(with_linker=includeForwardLinker) - 1
+        domainStop  = self.get_stop(with_linker=includeAftLinker)
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
 
@@ -212,6 +249,12 @@ class Substrate(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def reverse_chirality(self):
+        if self.chirality == "L":
+            return "D"
+        else:
+            return "L"
 
     def can_be_added_by_adenylation_domain(self, curatedonly=False):
         domains = self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(domainType__name='A')
@@ -278,17 +321,26 @@ class Type(models.Model):
         domainSeqRecordList = [dom.get_seqrecord_object(protein=True) for dom in domains]
         return msa_run(domainSeqRecordList)
 
-class Linkout(models.Model):
-    linkoutType = models.ForeignKey('LinkoutType')
-    identifier = models.CharField(max_length=50)
-    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product')
-    content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
-    object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
-    user = models.ForeignKey('auth.User', blank=True, null=True)
+# models experimentally validated domain combinations
+class DomainTuple(models.Model):
+    prev_domain    = models.ForeignKey('Domain', related_name = "next_tuple",verbose_name="left domain")
+    next_domain    = models.ForeignKey('Domain', related_name = "prev_tuple",verbose_name="right domain")
+    prev_position  = models.IntegerField()
+    next_position  = models.IntegerField()
+    experiment     = models.ForeignKey('Experiment' , related_name="domain_tuples")
 
     def __unicode__(self):
-        return self.identifier
+        return str(self.prev_domain)+ "with" + str(self.next_domain)
+
+class Experiment(models.Model):
+    description = models.TextField()
+    linkout =  generic.GenericRelation('Linkout')
+    user= models.ForeignKey('auth.User', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.description[0:20]
+
+
 
 class LinkoutType(models.Model):
     shortcut = models.CharField(max_length=10)
@@ -297,3 +349,19 @@ class LinkoutType(models.Model):
 
     def __unicode__(self):
         return self.shortcut
+
+def get_pubmed_type():
+    return LinkoutType.objects.get(shortcut="PubMed");    
+
+
+class Linkout(models.Model):
+    linkoutType = models.ForeignKey('LinkoutType')
+    identifier = models.CharField(max_length=50, validators=[MinLengthValidator(3)])
+    limit = models.Q(app_label = 'databaseInput', model = 'Substrate') | models.Q(app_label = 'databaseInput', model = 'Domain') | models.Q(app_label = 'databaseInput', model = 'Origin') | models.Q(app_label = 'databaseInput', model = 'Cds') | models.Q(app_label = 'databaseInput', model = 'Product') | models.Q(app_label = 'databaseInput', model = 'Experiment')
+    content_type = models.ForeignKey(ContentType, limit_choices_to = limit)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    user = models.ForeignKey('auth.User', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.identifier

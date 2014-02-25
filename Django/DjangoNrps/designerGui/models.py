@@ -12,8 +12,8 @@ from uuid import uuid4
 from django.conf import settings
 from django.db import connection
 from databaseInput.models import Substrate, Domain
-from gibson.models import Construct, ConstructFragment
-from fragment.models import Gene
+from gibson.models import Construct, ConstructFragment, fragment_feature
+from fragment.models import Gene, DomainGene, Feature, Qualifier
 
 from celery.contrib.methods import task
 
@@ -62,7 +62,7 @@ class NRP(models.Model):
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.ForeignKey('gibson.Construct', null=True, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
-    
+
     class Meta:
         verbose_name = "Nonribosomal peptide"
         verbose_name_plural = "Nonribosomal peptides"
@@ -80,7 +80,7 @@ class NRP(models.Model):
         if self.construct is not None:
             for x in self.construct.cf.all():
                 if x.fragment is not None and x.fragment.origin == 'ND':
-                    x.fragment.delete()
+                    Gene.remove(x.fragment.owner, x.fragment.pk)
                 x.delete()
             if self.construct.primer is not None:
                 [x.del_all() for x in self.construct.primer.all() if x is not None]
@@ -136,14 +136,20 @@ class NRP(models.Model):
                 description = 'NRPS designer' + description,
                 shape = 'c')
 
+        lastDomain = None
+        nextDomain = None
         # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment
         for count, connectedDomains in enumerate(connectedDomainList):
-
             domain1 = connectedDomains[0]
             domain2 = connectedDomains[-1]
-            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, domain1.linkerBeforeLength, domain2.linkerAfterLength)
+            if count < len(connectedDomainList) - 1:
+                nextDomain = connectedDomainList[count + 1][0].domain.pk
+            else:
+                nextDomain = None
+            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, lastDomain, nextDomain)
+            lastDomain = domain2.domain.pk
 
-            domainGene = Gene.objects.create(owner = self.owner,
+            domainGene = DomainGene.objects.create(owner = self.owner,
                 name = ','.join([x.domain.domainType.name for x in connectedDomains]),
                 description = ' '.join(['DNA sequence of',
                         ','.join(map(lambda x: ' '.join([str(x.domain.domainType),
@@ -157,6 +163,30 @@ class NRP(models.Model):
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
+            start_pos = domain1.domain.get_start(lastDomain) - 1
+            for domain in connectedDomains:
+                domainGene.domains.add(domain.domain)
+                f = Feature(type="domain", start=domain.domain.get_start(lastDomain, with_linker=False) - 1 - start_pos, end=domain.domain.get_stop(nextDomain, with_linker=False) - start_pos, direction='f', gene=domainGene)
+                f.save()
+                Qualifier(name="type", data=domain.domain.domainType.name, feature=f).save()
+                Qualifier(name="module", data=domain.domain.module, feature=f).save()
+                if domain.domain.substrateSpecificity.count() > 0:
+                    Qualifier(name="substrate", data=", ".join([s.name for s in domain.domain.substrateSpecificity.all()]), feature=f).save()
+                curated = "No"
+                if len(domain.domain.user.groups.filter(name=settings.CURATION_GROUP)) > 0:
+                    curated = "Yes"
+                Qualifier(name="curated", data=curated, feature=f).save()
+            f = Feature(type=fragment_feature, start=0, end=len(domainSequence), direction='f', gene=domainGene)
+            f.save()
+            Qualifier(name="gene", data=domain1.domain.cds.geneName, feature=f).save()
+            Qualifier(name="species", data=domain1.domain.cds.origin.species, feature=f).save()
+            if domain1.domain.cds.origin.sourceType == 'Species':
+                sname = 'taxID'
+            elif domain1.domain.cds.origin.sourceType == 'Biobrick':
+                sname = 'BioBrick'
+            else:
+                sname = domain1.domain.cds.origin.sourceType
+            Qualifier(name=sname, data=domain1.domain.cds.origin.source, feature=f).save()
 
             domainConstructFragment = ConstructFragment.objects.create(
                 construct = self.construct,
@@ -196,7 +226,6 @@ class NRP(models.Model):
 
     def generatePfamGraphicJson(self):
         domainList = self.getDomainSequence()
-        domain_origins = []
         graphic_length = 350*len(domainList)
         regions = []
         i = 1
@@ -205,9 +234,11 @@ class NRP(models.Model):
             end = start+200
             i += 3
             x_domain = Domain.objects.get(pk=did)
-            domain_origins.append(x_domain.cds.origin)
+            substrates = []
+            for substrate in x_domain.substrateSpecificity.all():
+                substrates.append({'name': substrate.name, 'chirality': substrate.chirality})
             region_def = json.loads(x_domain.domainType.pfamGraphic)
-            region_def.update({"start" : str(start), "end" : str(end)})
+            region_def.update({"start" : str(start), "end" : str(end), "metadata": {'type': x_domain.domainType.name, 'substrates': substrates, 'chirality': x_domain.chirality, 'description': x_domain.description, 'curated': len(x_domain.user.groups.filter(name=settings.CURATION_GROUP)) > 0, 'gene': x_domain.cds.geneName, 'species': x_domain.cds.origin.species, 'source': x_domain.cds.origin.source, 'sourceType': x_domain.cds.origin.sourceType}})
             regions.append(region_def)
         pfamJson = json.dumps({"length" : graphic_length, "regions": regions})
         return pfamJson
@@ -296,8 +327,8 @@ class NRP(models.Model):
         prevDomains = DomainOrder.objects.filter(nrp = self)
         prevDomains.delete()
         for count, domainId in enumerate(domainIdList):
-            domain = Domain.objects.get(pk = domainId[0])
-            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count, linkerBeforeLength=domainId[1], linkerAfterLength=domainId[2])
+            domain = Domain.objects.get(pk = domainId)
+            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count)
         self.designed = True
         self.save()
         self.makeConstruct()
@@ -311,16 +342,7 @@ class NRP(models.Model):
                 did = comp.getElementsByTagName('s:displayId')[0].firstChild.data
                 if did[0] != '_':
                     raise Exception("Could not find domain ID, got %s instead." % did)
-                annots = comp.getElementsByTagName('s:SequenceAnnotation')
-                linkerbefore = 0
-                linkerafter = 0
-                for annot in annots:
-                    aid = annot.attributes.getNamedItem("rdf:about").value[1:]
-                    if aid.startswith("salb"):
-                        linkerbefore = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
-                    elif aid.startswith("sala"):
-                        linkerafter = int(annot.getElementsByTagName('s:bioEnd')[0].firstChild.data) - int(annot.getElementsByTagName('s:bioStart')[0].firstChild.data) + 1
-                domainIdList.append((int(did[1:]), linkerbefore, linkerafter))
+                domainIdList.append(int(did[1:]))
         return domainIdList
 
     def _runNrpsDesigner(self, params, stdin=None):
@@ -330,7 +352,7 @@ class NRP(models.Model):
         def processErr(lines):
             cat = 0
             def log():
-                if lasterror[0]is not None:
+                if lasterror[0]is None:
                     return
                 if cat == 0:
                     logger.error(lasterror[0])
@@ -424,5 +446,3 @@ class DomainOrder(models.Model):
     nrp = models.ForeignKey('NRP', related_name = 'domainOrder')
     domain = models.ForeignKey('databaseInput.Domain', related_name = 'domainOrder')
     order = models.PositiveIntegerField()
-    linkerBeforeLength = models.IntegerField(default=0)
-    linkerAfterLength = models.IntegerField(default=0)

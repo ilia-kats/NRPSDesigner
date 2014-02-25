@@ -6,9 +6,11 @@ from fragment.models import *
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.views.decorators.http import condition
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.conf import settings
 
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
@@ -69,6 +71,32 @@ def get_gene(usr, fid):
         return False
     return g
 
+def get_gene_info(g):
+    info = {
+        'id': g.id,
+        'name': g.name,
+        'desc': g.description,
+        'length': g.length(),
+        'viewable': g.viewable
+    }
+    try:
+        domaintypes = []
+        domains = g.domaingene.domains.all()
+        for domain in domains:
+            substrates = []
+            for substrate in domain.substrateSpecificity.all():
+                substrates.append({'name': substrate.name, 'chirality': substrate.chirality})
+            domaintypes.append({'type': domain.domainType.name, 'substrates': substrates, 'chirality': domain.chirality, 'description': domain.description, 'curated': len(domain.user.groups.filter(name=settings.CURATION_GROUP)) > 0, 'module': domain.module})
+        info['domaingene'] = True
+        info['domaintypes'] = domaintypes
+        info['gene'] = domains[0].cds.geneName
+        info['species'] = domains[0].cds.origin.species
+        info['source'] = domains[0].cds.origin.source
+        info['sourceType'] = domains[0].cds.origin.sourceType
+    except DomainGene.DoesNotExist:
+        pass
+    return info
+
 def read_meta(g):
     """Return JSON-ready metadata about a fragment"""
     refs = []
@@ -83,17 +111,12 @@ def read_meta(g):
     annots = {}
     for a in g.annotations.all():
         annots[a.key] = a.value
-
-    return {
-            'id': g.id,
-            'name': g.name,
-            'desc': g.description,
-            'viewable': g.viewable,
-            'refs': refs,
-            'annots': annots,
-            'origin': g.get_origin_display(),
-            'length': len(g.sequence)
-            }
+    info = get_gene_info(g)
+    info['refs'] = refs
+    info['annots'] = annots
+    info['origin'] = g.get_origin_display()
+    info['length'] = len(g.sequence)
+    return info
 
 def write_meta(g, meta):
     """save meta to g"""
@@ -193,13 +216,7 @@ def get_fragment(request, fid):
         return JsonResponse("Invalid fragment id: %s" % fid, ERROR)
     g = get_gene(request.user, fid)
     if g:
-        return JsonResponse({
-            'id': fid,
-            'name': g.name,
-            'desc': g.description,
-            'length': g.length(),
-            'viewable': g.viewable
-        })
+        return JsonResponse(get_gene_info(g))
     else:
         return HttpResponseNotFound()
 

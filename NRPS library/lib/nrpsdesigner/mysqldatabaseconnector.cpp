@@ -6,6 +6,7 @@
 #include "domaintypet.h"
 #include "domaintypete.h"
 #include "origin.h"
+#include "cds.h"
 #include "product.h"
 
 #include <unordered_map>
@@ -19,7 +20,7 @@ using namespace nrps;
 namespace po = boost::program_options;
 
 MySQLDatabaseConnector::MySQLDatabaseConnector()
-: AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomerId(nullptr), m_stmtMonomerSmash(nullptr), m_stmtMonomerSearch(nullptr), m_stmtCoreDomainsSubstrate(nullptr), m_stmtCoreDomainsNoSubstrate(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtOrigin(nullptr), m_curatedOnly(true)
+: AbstractDatabaseConnector(), m_connection(nullptr), m_stmtMonomerId(nullptr), m_stmtMonomerSmash(nullptr), m_stmtMonomerSearch(nullptr), m_stmtCoreDomainsSubstrate(nullptr), m_stmtCoreDomainsNoSubstrate(nullptr), m_stmtDomain(nullptr), m_stmtProduct(nullptr), m_stmtCds(nullptr), m_stmtOrigin(nullptr), m_curatedOnly(true)
 {}
 
 MySQLDatabaseConnector::~MySQLDatabaseConnector()
@@ -52,6 +53,9 @@ MySQLDatabaseConnector::~MySQLDatabaseConnector()
     if (m_stmtProduct != nullptr) {
         delete m_stmtProduct;
     }
+    if (m_stmtCds != nullptr) {
+        delete m_stmtCds;
+    }
     if (m_stmtOrigin != nullptr) {
         delete m_stmtOrigin;
     }
@@ -83,8 +87,8 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
     m_stmtMonomerId = m_connection->prepareStatement("SELECT id, name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE id = ?;");
     m_stmtMonomerSmash = m_connection->prepareStatement("SELECT id, name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE smashName = ?;");
     m_stmtMonomerSearch = m_connection->prepareStatement("SELECT id, name, chirality, enantiomer_id, parent_id FROM `databaseInput_substrate` WHERE name LIKE ?;");
-    std::string stmtCoreDomainsSubstrate = "SELECT domain.id AS did, domain.module AS module, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
-    std::string stmtCoreDomainsNoSubstrate = "SELECT domain.id AS did, domain.module AS module, origin.id AS orid, product.id AS pid FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
+    std::string stmtCoreDomainsSubstrate = "SELECT domain.id AS did, domain.module AS module, substr_xref.substrate_id AS sid, origin.id AS orid, product.id AS pid, cds.id AS cid, GROUP_CONCAT(dtuple.next_domain_id SEPARATOR ',') AS workswithnext, GROUP_CONCAT(dtuple.prev_domain_id SEPARATOR ',') AS workswithprev, GROUP_CONCAT(dtuple.prev_position SEPARATOR ',') AS prev_position, GROUP_CONCAT(dtuple.next_position SEPARATOR ',') AS next_position FROM databaseInput_domain AS domain INNER JOIN (databaseInput_domain_substrateSpecificity AS substr_xref, databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
+    std::string stmtCoreDomainsNoSubstrate = "SELECT domain.id AS did, domain.module AS module, origin.id AS orid, product.id AS pid, cds.id AS cid, GROUP_CONCAT(dtuple.next_domain_id SEPARATOR ',') AS workswithnext, GROUP_CONCAT(dtuple.prev_domain_id SEPARATOR ',') AS workswithprev, GROUP_CONCAT(dtuple.prev_position SEPARATOR ',') AS prev_position, GROUP_CONCAT(dtuple.next_position SEPARATOR ',') AS next_position FROM databaseInput_domain AS domain INNER JOIN (databaseInput_cds AS cds, databaseInput_origin AS origin, databaseInput_type AS dtype, databaseInput_product AS product";
     if (m_curatedOnly) {
         std::string s = ", auth_user AS user, auth_group AS `group`, auth_user_groups AS user_xref";
         stmtCoreDomainsSubstrate.append(s);
@@ -97,21 +101,22 @@ void MySQLDatabaseConnector::initialize() throw (DatabaseError)
         stmtCoreDomainsSubstrate.append(s);
         stmtCoreDomainsNoSubstrate.append(s);
     }
-    stmtCoreDomainsSubstrate.append(") WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ?");
-    stmtCoreDomainsNoSubstrate.append(") WHERE dtype.name = ?");
+    stmtCoreDomainsSubstrate.append(") LEFT JOIN databaseInput_domaintuple AS dtuple ON domain.id = dtuple.prev_domain_id WHERE (substr_xref.substrate_id = ? OR substr_xref.substrate_id = ?) AND dtype.name = ?");
+    stmtCoreDomainsNoSubstrate.append(") LEFT JOIN databaseInput_domaintuple AS dtuple ON domain.id = dtuple.prev_domain_id WHERE dtype.name = ?");
     if (m_curatedOnly) {
         std::string s = " AND group.name = ?";
         stmtCoreDomainsSubstrate.append(s);
         stmtCoreDomainsNoSubstrate.append(s);
     }
-    stmtCoreDomainsSubstrate.append(";");
-    stmtCoreDomainsNoSubstrate.append(";");
+    stmtCoreDomainsSubstrate.append(" GROUP BY IFNULL(dtuple.prev_domain_id, domain.id);");
+    stmtCoreDomainsNoSubstrate.append(" GROUP BY IFNULL(dtuple.prev_domain_id, domain.id);");
     m_stmtCoreDomainsSubstrate = m_connection->prepareStatement(stmtCoreDomainsSubstrate);
     m_stmtCoreDomainsNoSubstrate = m_connection->prepareStatement(stmtCoreDomainsNoSubstrate);
 
-    m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.chirality AS chirality, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, c.geneName AS cgenename, c.dnaSequence AS cdnaseq, c.description AS cdesc, o.id AS oid, p.id AS pid, dtype.name AS type FROM databaseInput_domain AS d INNER JOIN (databaseInput_cds AS c, databaseInput_origin AS o, databaseInput_product AS p, databaseInput_type AS dtype) ON (d.cds_id = c.id AND c.origin_id = o.id AND c.product_id = p.id AND d.domainType_id = dtype.id) WHERE d.id = ?;");
-    m_stmtDomainSubstrate = m_connection->prepareStatement("SELECT substrate_id AS sid FROM databaseInput_domain_substrateSpecificity WHERE domain_id = ?");
+    m_stmtDomain = m_connection->prepareStatement("SELECT d.id AS did, d.module AS dmodule, d.chirality AS chirality, d.description AS ddesc, d.pfamLinkerStart AS dpfamlinkerstart, d.pfamLinkerStop AS dpfamlinkerstop, d.definedLinkerStart AS ddefinedlinkerstart, d.definedLinkerStop AS ddefinedlinkerstop, d.pfamStart AS dpfamstart, d.pfamStop AS dpfamstop, d.definedStart AS ddefinedstart, d.definedStop AS ddefinedstop, c.id AS cid, o.id AS oid, p.id AS pid, dtype.name AS type, GROUP_CONCAT(dtuple.next_domain_id SEPARATOR ',') AS workswithnext, GROUP_CONCAT(dtuple.prev_domain_id SEPARATOR ',') AS workswithprev, GROUP_CONCAT(dtuple.prev_position SEPARATOR ',') AS prev_position, GROUP_CONCAT(dtuple.next_position SEPARATOR ',') AS next_position FROM databaseInput_domain AS d INNER JOIN (databaseInput_cds AS c, databaseInput_origin AS o, databaseInput_product AS p, databaseInput_type AS dtype) ON (d.cds_id = c.id AND c.origin_id = o.id AND c.product_id = p.id AND d.domainType_id = dtype.id) LEFT JOIN databaseInput_domaintuple AS dtuple ON d.id = dtuple.prev_domain_id WHERE d.id = ? GROUP BY IFNULL(dtuple.prev_domain_id, d.id);");
+    m_stmtDomainSubstrate = m_connection->prepareStatement("SELECT substrate_id AS sid FROM databaseInput_domain_substrateSpecificity WHERE domain_id = ?;");
     m_stmtProduct = m_connection->prepareStatement("SELECT id, name, description FROM databaseInput_product WHERE id = ?;");
+    m_stmtCds = m_connection->prepareStatement("SELECT id, origin_id, geneName, dnaSequence, description, product_id FROM databaseInput_cds WHERE id = ?;");
     m_stmtOrigin = m_connection->createStatement();
 }
 
@@ -223,7 +228,7 @@ std::vector<std::shared_ptr<DomainTypeTe>> MySQLDatabaseConnector::getTeDomains(
 
 bool MySQLDatabaseConnector::testInitialized(bool except) throw (DatabaseError)
 {
-    if (m_connection == nullptr || m_stmtMonomerId == nullptr || m_stmtMonomerSmash == nullptr || m_stmtMonomerSearch == nullptr|| m_stmtCoreDomainsSubstrate == nullptr || m_stmtCoreDomainsNoSubstrate == nullptr || m_stmtDomain == nullptr || m_stmtDomainSubstrate == nullptr || m_stmtProduct == nullptr || m_stmtOrigin == nullptr)
+    if (m_connection == nullptr || m_stmtMonomerId == nullptr || m_stmtMonomerSmash == nullptr || m_stmtMonomerSearch == nullptr|| m_stmtCoreDomainsSubstrate == nullptr || m_stmtCoreDomainsNoSubstrate == nullptr || m_stmtDomain == nullptr || m_stmtDomainSubstrate == nullptr || m_stmtProduct == nullptr || m_stmtCds == nullptr || m_stmtOrigin == nullptr)
         if (except)
             throw DatabaseError("Not initialized");
         else
@@ -272,8 +277,10 @@ std::vector<std::shared_ptr<RD>> MySQLDatabaseConnector::getCoreDomains(sql::Pre
             while (res->next()) {
                 D *d = new D(res->getUInt("did"));
                 d->setModule(res->getUInt("module"));
+                d->setCds(res->getUInt("cid"));
                 Origin *ori = d->setOrigin(res->getUInt("orid"));
                 d->setProduct(res->getUInt("pid"));
+                fillWorkingNextDomains(d, res->getString("workswithnext"), res->getString("prev_position"), res->getString("next_position"));
                 f(d, res);
                 vec.emplace_back(d);
                 fillOrigin(ori);
@@ -371,55 +378,74 @@ void MySQLDatabaseConnector::fillDomain(const std::shared_ptr<Domain> &d, sql::R
     try {
         d->setModule(res->getUInt("dmodule"));
         d->setDescription(res->getString("ddesc"));
-        d->setGeneName(res->getString("cgenename"));
-        d->setGeneDescription(res->getString("cdesc"));
-        std::string seq = res->getString("cdnaseq");
-        uint32_t lstart = res->getUInt("dpfamlinkerstart") - 1, lstop = res->getUInt("dpfamlinkerstop") - 1, start = res->getUInt("dpfamstart") - 1, stop = res->getUInt("dpfamstop") - 1; // database 1-based
-        if (seq.size()) {
-            if (stop <= seq.size())
-                d->setDnaSequencePfam(seq.substr(start, stop - start + 1));
-            if (start <= seq.size() && !res->isNull("dpfamlinkerstart"))
-                d->setNativePfamLinkerBefore(seq.substr(lstart, start - lstart));
-            if (lstop <= seq.size() && !res->isNull("dpfamlinkerstop"))
-                d->setNativePfamLinkerAfter(seq.substr(stop + 1, lstop - stop));
-            lstart = res->getUInt("ddefinedlinkerstart") - 1;
-            lstop = res->getUInt("ddefinedlinkerstop") - 1;
-            start = res->getUInt("ddefinedstart") - 1;
-            stop = res->getUInt("ddefinedstop") - 1;
-            if (stop <= seq.size() && !res->isNull("ddefinedstart") && !res->isNull("ddefinedstop"))
-                d->setDnaSequenceDefined(seq.substr(start, stop - start + 1));
-            if (lstart <= seq.size() && !res->isNull("ddefinedstart") && !res->isNull("ddefinedlinkerstart"))
-                d->setNativeDefinedLinkerBefore(seq.substr(lstart, start - lstart));
-            if (lstop <= seq.size() && !res->isNull("ddefinedstop") && !res->isNull("ddefinedlinkerstart"))
-                d->setNativeDefinedLinkerAfter(seq.substr(stop + 1, lstop - stop));
+        d->setPfamStart(res->getUInt("dpfamstart") - 1);
+        d->setPfamStop(res->getUInt("dpfamstop") - 1);
+        d->setDefinedStart(res->isNull("ddefinedstart") ? d->pfamStart() : res->getUInt("ddefinedstart") - 1);
+        d->setDefinedStop(res->isNull("ddefinedstop") ? d->pfamStop() : res->getUInt("ddefinedstop") - 1);
+        d->setPfamLinkerStart(res->isNull("dpfamlinkerstart") ? d->pfamStart() : res->getUInt("dpfamlinkerstart") - 1);
+        d->setPfamLinkerStop(res->isNull("dpfamlinkerstop") ? d->pfamStop() : res->getUInt("dpfamlinkerstop") - 1);
+        d->setDefinedLinkerStart(res->isNull("ddefinedlinkerstart") ? d->pfamLinkerStart() : res->getUInt("ddefinedlinkerstart") - 1);
+        d->setDefinedLinkerStop(res->isNull("ddefinedlinkerstop") ? d->pfamLinkerStop() : res->getUInt("ddefinedlinkerstop") - 1);
+        uint32_t id = res->getUInt("cid");
+        if (d->cds() == nullptr || d->cds()->id() != id) {
+            d->setCds(id);
         }
-        uint32_t id = res->getUInt("oid");
+        fillCds(d->cds());
+        id = res->getUInt("oid");
         if (d->origin() == nullptr || d->origin()->id() != id) {
-            Origin *ori = d->setOrigin(id);
-            fillOrigin(ori);
+            d->setOrigin(id);
         }
+        fillOrigin(d->origin());
         id = res->getUInt("pid");
         if (d->product() == nullptr || d->product()->id() != id) {
             d->setProduct(id);
         }
+        fillProduct(d->product());
+        fillWorkingNextDomains(d.get(), res->getString("workswithnext"), res->getString("prev_position"), res->getString("next_position"));
     } catch (const sql::SQLException &e) {
         throw makeException(e);
     }
-    res = nullptr;
+}
+
+void MySQLDatabaseConnector::fillCds(Cds *cds) throw (DatabaseError)
+{
+    if (!cds->dnaSequence().empty())
+        return;
+    sql::ResultSet *res = nullptr;
     try {
-        if (d->product()->name().empty()) {
-            m_stmtProduct->setUInt(1, d->product()->id());
-            res = m_stmtProduct->executeQuery();
-            res->next();
-            d->product()->setName(res->getString("name"));
-            d->product()->setDescription(res->getString("description"));
-            delete res;
-        }
+        m_stmtCds->setUInt(1, cds->id());
+        res = m_stmtCds->executeQuery();
+        res->next();
+        cds->setGeneName(res->getString("geneName"));
+        cds->setDnaSequence(res->getString("dnaSequence"));
+        cds->setDescription(res->getString("description"));
+        fillOrigin(cds->setOrigin(res->getUInt("origin_id")));
+        fillProduct(cds->setProduct(res->getUInt("product_id")));
     } catch (const sql::SQLException &e) {
         if (res != nullptr)
             delete res;
         throw makeException(e);
     }
+    delete res;
+}
+
+void MySQLDatabaseConnector::fillProduct(Product *prod) throw (DatabaseError)
+{
+    if (!prod->name().empty())
+        return;
+    sql::ResultSet *res = nullptr;
+    try {
+        m_stmtProduct->setUInt(1, prod->id());
+        res = m_stmtProduct->executeQuery();
+        res->next();
+        prod->setName(res->getString("name"));
+        prod->setDescription(res->getString("description"));
+    } catch (const sql::SQLException &e) {
+        if (res != nullptr)
+            delete res;
+        throw makeException(e);
+    }
+    delete res;
 }
 
 void MySQLDatabaseConnector::fillOrigin(Origin *ori) throw (DatabaseError)
@@ -453,6 +479,15 @@ void MySQLDatabaseConnector::fillOrigin(Origin *ori) throw (DatabaseError)
             delete m_stmtOrigin->getResultSet();
         }
         throw makeException(e);
+    }
+}
+
+void MySQLDatabaseConnector::fillWorkingNextDomains(Domain *d, const std::string &ids, const std::string &stops, const std::string &next_starts)
+{
+    std::istringstream idstr(ids), stopstr(stops), nstartstr(next_starts);
+    std::string tmp1, tmp2, tmp3;
+    while (std::getline(idstr, tmp1, ',') && std::getline(stopstr, tmp2) && std::getline(nstartstr, tmp3)) {
+        d->addWorkingNextDomain(std::stoul(tmp1), {.stop = std::stoul(tmp2), .next_start = std::stoul(tmp3)});
     }
 }
 

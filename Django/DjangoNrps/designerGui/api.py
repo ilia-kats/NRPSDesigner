@@ -18,6 +18,9 @@ def saveNrpMonomers(request, uuid):
         for count, monomerId in enumerate(request.POST.getlist('as[]')):
             monomer = Substrate.objects.get(pk=int(monomerId))
             so = SubstrateOrder.objects.create(nrp= nrp, substrate = monomer, order = count)
-        nrp.indigoidineTagged = toBool(request.POST['indtag'])
+        if 'indtag' in request.POST:
+            nrp.indigoidineTagged = toBool(request.POST['indtag'])
+        else:
+            nrp.indigoidineTagged = False
         nrp.save()
         return HttpResponse()

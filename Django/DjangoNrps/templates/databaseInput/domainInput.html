@@ -1,4 +1,5 @@
            <form>         {{domainFormSet.management_form}}  </form>
+
 <div id="accordion">
 
           {% for domainForm in domainFormSet %}
@@ -21,59 +22,43 @@
                   <label for="id_domainType">Domain Type: <br/> </label>
                   {{ domainForm.domainType }}
                 </div>
+
+                
               </div>
               <div class="span3">
 
 
                 <div class="fieldWrapper">
                   {{ domainForm.substrateSpecificity.errors }}
-                  <label for="id_substrateSpecificity">Substrate Specificty: <br/> </label>
+                  <label for="id_substrateSpecificity">Substrate Specificity: <br/> </label>
                   <div class = "domainSelect2Wrapper">
 
                     {{ domainForm.substrateSpecificity }}
                   </div>
-
-
-
-
                 </div>
 
+         <div class="fieldWrapper">
+                  {{ domainForm.chirality.errors }}
+                  <label for="id_chirality">Chirality: <br/> </label>
+                    {{ domainForm.chirality }}
+                </div>
               </div>
 
-              <div class="span3">
-
-              </div>
 
               <div class="span3">
                 <div class="fieldWrapper">
                   {{ domainForm.pfamStart.errors }}
-                  <label for="id_module">Pfam Start: <br/> </label>
+                  <label for="id_module">Predicted Start: <br/> </label>
                   {{ domainForm.pfamStart }}
                 </div>
 
                 <div class="fieldWrapper">
                   {{ domainForm.pfamStop.errors }}
-                  <label for="id_domainType">Pfam Stop: <br/> </label>
+                  <label for="id_domainType">Predicted Stop: <br/> </label>
                   {{ domainForm.pfamStop }}
                 </div>
               </div>
-              <div class="span3">
-
-                </div>
-              </div>
-              <div class="span3">
-                <div class="fieldWrapper">
-                  {{ domainForm.definedStart.errors }}
-                  <label for="id_module">definedStart: <br/> </label>
-                  {{ domainForm.definedStart }}
-                </div>
-
-                <div class="fieldWrapper">
-                  {{ domainForm.definedStop.errors }}
-                  <label for="id_domainType">definedStop: <br/> </label>
-                  {{ domainForm.definedStop}}
-                </div>
-              </div>
+          
 
               <div class="span3">
                 <div class="fieldWrapper">
@@ -84,24 +69,29 @@
 
 
 
+            
 
 
 
             </div>
 
-                        <button class="btn msaGenButton" type="button">MSA!</button>
+                        <!--<button class="btn msaGenButton" type="button">MSA!</button>-->
 
             </div>
 
           </form>
-
+</div>
                                 {% endfor %}
 
 
 
 
   </div>
+
+  <div class="btn-group">
+   <a href="{% url 'addSubstrate' %}" role="button" class="btn btn-lg" data-toggle="modal"  data-target="#myModal">Add new substrate</a>
           <button class="btn" id="saveCdsDomains" type="button">Save cds and domains!</button>
+  </div>
 
 
 <div id="msaModal" class="modal hide fade fullScreenModal">
@@ -117,13 +107,24 @@
 
 <script type="text/javascript">
 
+// code from http://blog.assimov.net/blog/2012/03/09/ajax-content-in-twitter-bootstrap-modal/
+// adapted from coffeescript to javascript
+// enables use of Bootstrap modal to load other html pages
+
+    jQuery("a[data-toggle=modal]").click(function() {
+  var target, url;
+  target = jQuery(this).attr('data-target');
+  url = jQuery(this).attr('href');
+  return jQuery(target).load(url);
+});
+
               jQuery( "#accordion" ).accordion({
                 heightStyle: "content",
                 collapsible: true
               });
 
 jQuery("#saveCdsDomains").click(function() {
-  allForms = jQuery(Document).find("form").serialize()
+  allForms = jQuery(document).find("form").serialize()
   jQuery.post("{% url "saveCdsDomains" %}", allForms, function(data){
     if (data[0] === AJAX_ERROR){
          jQuery("#domainInput").html(data[1].html);
