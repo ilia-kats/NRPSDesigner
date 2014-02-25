@@ -24,7 +24,7 @@
             <div class="btn-group" style="white-space:normal">
                 <button class="btn" type="button" id="download_sbol">Download SBOL</button>
                 <button class="btn" type="button" id="download_genbank">Download GenBank</button>
-                <button class="btn" type="button" onclick="jQuery('#tabs').tabs('option', 'active', 3);">Next</button>
+                <button class="btn" type="button" onclick="primersAutoProcess = true;jQuery('#tabs').tabs('option', 'active', 3);">Next</button>
             </div>
             <div id='frag_select'>
                 {%include 'fragment/jFragmentSelector.html' %}

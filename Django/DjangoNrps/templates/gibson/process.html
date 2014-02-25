@@ -34,9 +34,9 @@ function makeHttpObject() {
 }
 
 jQuery(window).ready( function() {
-	jQuery('#process_progress').progressbar({'value': 0,});
+	var progressbar = jQuery('#process_progress').progressbar({'value': 0,});
 
-	jQuery('#process_btn').button({
+	var btn = jQuery('#process_btn').button({
 		icons: {primary: 'ui-icon-gear',},
         {% if not construct.fragments.all %}
         disabled: true,
@@ -50,7 +50,7 @@ jQuery(window).ready( function() {
 		h.open('GET', "{% url 'process' construct.pk %}", true)
 		h.onreadystatechange = function (){
 			p = parseInt(this.responseText.split(':').pop());
-			jQuery('#process_progress').progressbar('value', p);
+			progressbar.progressbar('value', p);
 			if (p==100 && this.readyState == 4){
 				//location.reload()
 				//jQuery( "#tabs" ).tabs( "option", "active", 4 );
@@ -59,6 +59,10 @@ jQuery(window).ready( function() {
 		}
 		h.send(null);
 	});
+    if (primersAutoProcess) {
+        btn.click();
+        primersAutoProcess = false;
+    }
 });
 
 </script>
