@@ -10,7 +10,7 @@ function makeHttpObject() {
 }
 
 var validate = function(input) {
-	re = /^\d+(?:\.\d*)?jQuery/;
+	re = /^\d+(?:\.\d*)?/;
 	if(re.exec(input.value) === null){
 		jQuery(input.parentNode).addClass("errorcell");
 		return false;
@@ -80,28 +80,28 @@ Mix.prototype.go = function () {
 
 var MixFragment = function (mix, form) {
 	this.mix = mix;
-	this.prim_t_s = form.elements['primer_top_stock'];
-	this.prim_b_s = form.elements['primer_bottom_stock'];
-	this.temp_s = form.elements['template_stock'];
-	this.enz_v = form.elements['enzyme_vol'];
-	this.buff_v = form.elements['buffer_vol'];
-	this.dntp_v = form.elements['dntp_vol'];
-	this.prim_t_v = form.elements['primer_top_vol'];
-	this.prim_b_v = form.elements['primer_bottom_vol'];
-	this.temp_v = form.elements['template_vol'];
-	this.water_v = form.elements['water_vol'];
-	this.total_v = form.elements['total_vol'];
+	this.prim_t_s = form.elements['p_t_c'];
+	this.prim_b_s = form.elements['p_b_c'];
+	this.temp_s = form.elements['temp_c'];
+	this.enz_v = 0;
+	this.buff_v = 0;
+	this.dntp_v = 0;
+	this.prim_t_v = 0;
+	this.prim_b_v = 0;
+	this.temp_v = 0;
+	this.water_v = 0;
+	this.total_v = 0;
 }
 
 MixFragment.prototype.go = function () {
-	this.enz_v.value = (this.mix.m()*this.mix.enz_d.value/this.mix.enz_s.value).toFixed(1);
-	this.buff_v.value = (this.mix.vol_e.value*this.mix.m()*this.mix.buff_d.value/this.mix.buff_s.value).toFixed(1);
-	this.dntp_v.value = (this.mix.vol_e.value*this.mix.m()*this.mix.dntp_d.value/this.mix.dntp_s.value).toFixed(1);
-	this.temp_v.value = (this.mix.m()*this.mix.temp_d.value/this.temp_s.value).toFixed(1);
-	this.prim_t_v.value = (this.mix.vol_e.value*this.mix.m()*this.mix.prim_d.value/this.prim_t_s.value).toFixed(1);
-	this.prim_b_v.value = (this.mix.vol_e.value*this.mix.m()*this.mix.prim_d.value/this.prim_b_s.value).toFixed(1);
-	this.water_v.value = (this.mix.m()*this.mix.vol_e.value - (parseFloat(this.enz_v.value) + parseFloat(this.buff_v.value) + parseFloat(this.dntp_v.value) + parseFloat(this.temp_v.value) + parseFloat(this.prim_t_v.value) + parseFloat(this.prim_b_v.value))).toFixed(1);
-	this.total_v.value = (this.mix.m()*this.mix.vol_e.value).toFixed(1);
+	this.enz_v = this.mix.m()*this.mix.enz_d.value/this.mix.enz_s.value;
+	this.buff_v = this.mix.vol_e.value*this.mix.m()*this.mix.buff_d.value/this.mix.buff_s.value;
+	this.dntp_v = this.mix.vol_e.value*this.mix.m()*this.mix.dntp_d.value/this.mix.dntp_s.value;
+	this.temp_v = this.mix.m()*this.mix.temp_d.value/this.temp_s.value;
+	this.prim_t_v = this.mix.vol_e.value*this.mix.m()*this.mix.prim_d.value/this.prim_t_s.value;
+	this.prim_b_v = this.mix.vol_e.value*this.mix.m()*this.mix.prim_d.value/this.prim_b_s.value;
+	this.water_v = this.mix.m()*this.mix.vol_e.value - (this.enz_v + this.buff_v.value + this.dntp_v.value + this.temp_v.value + this.prim_t_v.value + this.prim_b_v.value);
+	this.total_v = this.mix.m()*this.mix.vol_e.value;
 }
 
 MixFragment.prototype.validate = function () {
@@ -114,12 +114,12 @@ MixFragment.prototype.validate = function () {
 
 MixFragment.prototype.warn = function () {
 	for (x in this){
-		if (this[x].constructor == HTMLInputElement && this[x].readOnly){
-			if (parseFloat(this[x].value) < 1 ){
-				jQuery(this[x].parentNode).addClass("warningcell");
+		if (this[x].constructor == Number){
+			if (this[x] < 1 ){
+				//jQuery(this[x].parentNode).addClass("warningcell");
 				this.mix.warnings += 1;
 			} else {
-				jQuery(this[x].parentNode).removeClass("warningcell");
+				//jQuery(this[x].parentNode).removeClass("warningcell");
 			}
 		}
 	}
@@ -130,11 +130,13 @@ jQuery('document').ready(function () {
 		collapsible:true,
 	});
 	jQuery('#warning').hide();
+    var mix = new Mix();
 	jQuery('.mix').change(function(){
 		validate(this);
 		if (jQuery('.errorcell').size() > 0){
 			jQuery('button#download_protocol').button('disable');
 		} else {
+            mix.go();
 			jQuery('button#download_protocol').button('enable');
 		}
 	});
