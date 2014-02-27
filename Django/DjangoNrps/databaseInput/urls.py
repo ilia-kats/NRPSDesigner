@@ -10,7 +10,9 @@ from databaseInput.views import (cds_input, domain_prediction,
 apipatterns = patterns('databaseInput.api',
     url(r'^getOrigins/$', 'get_origins', name="getOrigins"),
     url(r'^getDomainTypes/$', 'get_domain_types', name="getDomainTypes"),
-    url(r'getDomains/$', 'get_domains', name="getDomains")
+    url(r'^getDomains/$', 'get_domains', name="getDomains"),
+    url(r'^getDomainBioJsSequence/$' ,'get_domain_biojs_sequence', 
+        name="getDomainBioJsSequence"),
 )
 
 urlpatterns = patterns('',
