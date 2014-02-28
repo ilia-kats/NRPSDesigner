@@ -107,10 +107,14 @@ void NrpsLibrary::makeLibrary()
     std::vector<Monomer> nrp(scaffoldnrp);
     NrpsBuilder builder;
     for (int i = 1; i < m_nrp[switchedpos].size(); ++i) {
-        nrp[switchedpos] = m_nrp[switchedpos][i];
-        builder.setScaffold(&scaffoldnrp, &m_nrps);
-        m_library.push_back(builder.build(nrp));
+        if (m_nrp[switchedpos][i].id() != scaffoldnrp[switchedpos].id()) {
+            nrp[switchedpos] = m_nrp[switchedpos][i];
+            builder.setScaffold(&scaffoldnrp, &m_nrps);
+            m_library.push_back(builder.build(nrp));
+        }
     }
+    if (!m_library.size())
+        throw std::invalid_argument("No variants for the library defined.");
 }
 
 #ifdef WITH_INTERNAL_XML
