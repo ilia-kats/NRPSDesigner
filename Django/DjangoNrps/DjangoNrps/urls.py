@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from databaseInput.views import  UserDetailView, HomeTemplateView, ProfileTemplateView, request_curation_privs, change_password
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
@@ -17,9 +18,9 @@ urlpatterns = patterns('',
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^user/requestCurationPrivs', request_curation_privs, name="submitCurationRequest"),
 	url(r'^user/changePassword', change_password, name="changePassword"),
-    url(r'^user/profile', ProfileTemplateView.as_view(), name="userprofile"),
+    url(r'^user/profile', login_required(ProfileTemplateView.as_view()), name="userprofile"),
     url(r'^user/', include('registration.backends.default.urls')),
-    url(r'^users/(?P<slug>\w+)/$', UserDetailView.as_view(), name="profile"),
+    url(r'^users/(?P<slug>\w+)/$', login_required(UserDetailView.as_view()), name="profile"),
     url(r'^tool/', include('designerGui.urls')),
     url(r'^documentation/', include('documentation.urls')),
     url(r'^gibthon/', include('gibson.urls')),

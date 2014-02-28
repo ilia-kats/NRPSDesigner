@@ -207,7 +207,7 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 				</span>
 				{% else %}
                 <span class="user_tab drop">
-                <a href="{% url 'userprofile' %}" id="user_tab_profile" class="user_tab">Account</a>
+                <a href="{% if user.is_authenticated %}{% url 'userprofile' %}{% else %}#{% endif %}" id="user_tab_profile" class="user_tab">Account</a>
                     <ul class="ui-widget-content ui-corner-bottom">
                         <li><a <a href="{% url 'auth_login' %}">Login</a></li>
                         <li><a href="{% url 'registration_register' %}">Register</a></li>
