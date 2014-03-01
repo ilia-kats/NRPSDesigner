@@ -48,7 +48,7 @@ var fragment_api_url = fragment_base_url + 'api/';
 							{% if fragment.construct_slave.all %}
 							<ul>
 								{% for construct in fragment.construct_slave.all %}
-									<li><a href="{% url 'nrpDesigner' uuid=construct.nrp.uuid %}/{{ construct.id }}/">{{ construct.name }}</a></li>
+									<li><a href="{% url 'nrpDesigner' uuid=construct.nrp.uuid %}">{{ construct.name }}</a></li>
 								{% endfor %}
 							</ul>
 							{% else %}
