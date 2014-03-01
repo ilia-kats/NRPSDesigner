@@ -34,7 +34,8 @@ jQuery.widget('ui.cropform', {
 
         this.result_type.selectmenu({
             style:'dropdown',
-            width: 200,
+            width: '100%',
+            menuWidth: '100%',
             change: function(ev, ui)
             {
                 var act = jQuery(ui.option).val();
@@ -87,14 +88,14 @@ jQuery.widget('ui.cropform', {
             start: this.start.text()-1,
             end: this.end.text()-1,
             f_internal: this.cb_internal.is(':checked') ? 1 : 0,
-            f_all: (this.cb_internal.is(':checked') && 
+            f_all: (this.cb_internal.is(':checked') &&
                     this.cb_all.is(':checked')) ? 1 : 0,
             result: this.result_type.selectmenu('value'),
             new_name: this.name.val(),
             new_desc: this.desc.val(),
         }, function(id){
             if(jQuery('#go_new').is(':checked'))
-                window.location = '/fragment/'+id;
+                window.location = fragment_base_url + id;
             else
                 location.reload();
         });

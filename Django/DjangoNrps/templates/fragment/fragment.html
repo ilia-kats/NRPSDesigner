@@ -18,7 +18,7 @@ var fragment_api_url = fragment_base_url + 'api/';
 {% endblock %}
 
 {% block css-include%}
-<link rel="stylesheet" type="text/css" 
+<link rel="stylesheet" type="text/css"
     href="{% static "css/jquery.ui.selectmenu.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/fragmentview.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/tipTip.css" %}" />
@@ -34,11 +34,11 @@ var fragment_api_url = fragment_base_url + 'api/';
 
 
 		<div class="ui-widget-content ui-corner-top top-box content fixed-width">
-			<div id="fragment_head_wrap">	
+			<div id="fragment_head_wrap">
 				<div id="fragment_info_wrap">
 					<div id="fragment_info"></div>
 				</div>
-			
+
 				<div id="fragment_construct_wrap">
 					<div id="construct_wrap">
 						<div class="ui-widget-header ui-corner-top">
@@ -48,7 +48,7 @@ var fragment_api_url = fragment_base_url + 'api/';
 							{% if fragment.construct_slave.all %}
 							<ul>
 								{% for construct in fragment.construct_slave.all %}
-									<li><a href="{% url 'gibson.views.constructs' %}/{{ construct.id }}/">{{ construct.name }}</a></li>
+									<li><a href="{% url 'nrpDesigner' uuid=construct.nrp.uuid %}/{{ construct.id }}/">{{ construct.name }}</a></li>
 								{% endfor %}
 							</ul>
 							{% else %}
@@ -61,7 +61,7 @@ var fragment_api_url = fragment_base_url + 'api/';
 			</div>
 		</div>
 	<div id="sequence" class='full-width'>
-		
+
 	</div>
 {% endblock %}
 
@@ -81,7 +81,7 @@ jQuery(document).ready(function() {
 	});
 
 	jQuery('#fragment_info').load('getMeta/');
-	
+
 	jQuery('#sequence').load('getSeq/');
 
 });
