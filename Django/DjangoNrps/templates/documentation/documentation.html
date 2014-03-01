@@ -7,12 +7,12 @@
      <style type="text/css">
      .tocify-header {
         font-size: 13pt;
-        font-family: Helvetica, Arial;
+        font-family: Helvetica Neue, Arial;
     }
     .tocify {
         border: 1px solid #E5E5E5;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
-        overflow: none;
+        overflow: hidden;
     }
     .tocify-header > li > a {
             border: 1px solid #E5E5E5;
@@ -23,16 +23,20 @@
     }
     .tocify-subheader > li{
         font-size: 12pt;
-        font-family: Helvetica, Arial;
+        font-family: Helvetica Neue, Arial;
     }
     .well > li {
         font-size: 14pt;
-        font-family: Helvetica, Arial;
-        margin: 0 0 3px 0;
+        font-family: Helvetica Neue, Arial;
+        margin: 0 0 10px 20px;
+    	padding-left: 20px;
     }
     p {
-    	font-size: 12pt;
+    	font-size: 14pt;
+    	font-family: Helvetica Neue, Arial;
+    	text-align: justify;
     }
+
     </style>
     {% endblock %}
 
@@ -50,8 +54,9 @@
             </div><!--/span-->
             <div class="span9">
               <div class="hero-unit">
-                <h1>NRPSDesigner Docs</h1>
-                Welcome to the documentation of the NRPSDesigner. All the features as well as detailed description of how to access them is described below.
+                <h1 >NRPSDesigner Docs</h1>
+                <p class="lead" style="margin-top:15px">
+                Welcome to the documentation of the NRPSDesigner. All the features as well as detailed description of how to access them is described below.</p>
              </div>
 
              <div class="page-header">
@@ -78,8 +83,7 @@
                 <li>The NRPS DNA sequences can be inspected. </li>
                 <li>Appropriate backbone ( with a promoter, RBS, start codon) and other parts can be added to the plasmid. </li>
                 <li>Gibson assembly (or other cloning method) can be used in order to construct the plasmid and transform bacteria. </li>
-                <li><span class="label label-info">optional</span>
- A library is created by shuffling one of the monomer positions. </li>
+                <li><span class="label label-info">optional</span> A library is created by shuffling one of the monomer positions.</li>
                 <li><span class="label label-info">optional</span> The NRPSDesigner database can be extended with newly discovered synthetase sequences. </li>
 
               </div>
@@ -95,19 +99,19 @@
                 <p> The functionality of the interface can be accessed mainly by the following 3 buttons </p>
 
 
-                  <button class="btn" style="margin-left:10px">Add monomer</button></br>
-                  <p>When you want to elongate the sequence of monomers by one, you should press this button. Note that
+                  <button class="btn" style="margin-left:10px">Add monomer</button>
+                  <p style="margin-top:20px">When you want to elongate the sequence of monomers by one, you should press this button. Note that
                   you can click on the chosen monomers and then possibly replace the selection by choosing another one
                   from the dropdown. In addition, L or D-configurations can be selected, which is one of the
                   characteristics making NRPS so special. Also note that the monomer choices available will depend on the specificities of the adenylation domains available in the NRPSDesigner database and
                   the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
                    <button class="btn" style="margin-left:10px">Use curated domains only</button></br>
-                  <p>The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user
+                  <p style="margin-top:20px">The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user
                   can do so (see below). Those genes and domains will also be used in the NRPSDesigner algorithm, if the
                   above button has not been pressed. On the other hand, if it has been selected, then only
                   domains curated by the authors, or other scientists with NRPS expertise (curators) will be utilized.</p>
                   <button class="btn" style="margin-left:10px">Design construct</button></br>
-                  <p>Once all preferences have been set, the "Design construct" button can be pressed and a request will be
+                  <p style="margin-top:20px">Once all preferences have been set, the "Design construct" button can be pressed and a request will be
                   sent to the NRPSDesigner database.</p>
 
 
@@ -136,9 +140,10 @@
             <p>In fact, it is highly encouraged to use your own tool for CAD DNA design and assembly for the next steps, for example commercial offerings such as <a href="http://www.teselagen.com/"> teselagen's platform </a> or <a href="http://j5.jbei.org/index.php/Main_Page"> J5 </a>. Nevertheless, here we already provide an in-built solution for the CAD DNA assembly, namely Gibthon.
 
                 <h3> About Gibthon </h3>
-                 <img src={% static "images/documentation/gibthon2.0beta.png" %} /> </br>
-
-                 <p> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences the primer is complementary too. After each such modification, important primer properties, e.g. regarding self-priming are recalculated using UNAfold. In the next sections, the modified version of Gibthon for integration with the NRPSDesigner and its use will be explained. </p>
+                 <center>
+                 <img src={% static "images/documentation/gibthon2.0beta.png" %} /> 
+                 </center>
+                 <p style="margin-top:20px"> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences the primer is complementary too. After each such modification, important primer properties, e.g. regarding self-priming are recalculated using UNAfold. In the next sections, the modified version of Gibthon for integration with the NRPSDesigner and its use will be explained. </p>
 
                 <h3> Fragment library</h3>
                 <span class="label label-warning" style="margin-left:10px">[Login required]</span></br>
@@ -146,7 +151,7 @@
 
                 <img src={% static "images/documentation/fragmentLibrary.png" %} /></br>
 
-                <p>The first step when using Gibthon is to add the appropriate DNA fragments that have to be assembled to the library. In the case of the NRPSDesigner, the coding sequence for the synthetase is automatically returned. Yet, you still need to add your own DNA parts, for example a backbone with a promoter and a ribosome binding site. Note that some biological devices of general use are available to all users from the <a href="http://parts.igem.org/Main_Page"> Parts Registry </a>. </p>
+                <p style="margin-top:20px">The first step when using Gibthon is to add the appropriate DNA fragments that have to be assembled to the library. In the case of the NRPSDesigner, the coding sequence for the synthetase is automatically returned. Yet, you still need to add your own DNA parts, for example a backbone with a promoter and a ribosome binding site. Note that some biological devices of general use are available to all users from the <a href="http://parts.igem.org/Main_Page"> Parts Registry </a>. </p>
 
                <p> Logged-in users also have the ability to manage their own library of fragments for Gibson assembly and use those parts in their different NRPS constructs, as required. This can be achieved from the "apps" dropdown and then choosing "Manage Gibson fragments". There, a user can manage all the parts that he has already added (e.g. delete them or download their DNA sequence), as well as add new parts, as seen in the screenshot above. The current version includes API access to both the iGEM parts registry and NCBI. Of course it also possible to add sequences by submitting FASTA/Genbank files or by copying the raw sequence string. </p>
 
@@ -167,15 +172,15 @@
 
                       <img src={% static "images/documentation/primerOverview.png" %} /></br>
 
-                    <p> In particular, the generated overview of the primers, includes a graphical display of the fragments to be assembled and the corresponding primers. For each of these, the visual representation shows to which fragment the annealing sequence of the primer binds to and to which fragment the Gibson overhang is complementary to. In addition, a small table which summarizes all the primers, their length and their melting temperature (annealing end, whole primer). In the example above, 8 primers have been generated, corresponding to the 4 fragments (3 NRPS sequences, 1 backbone). </p>
+                    <p style="margin-top:20px"> In particular, the generated overview of the primers, includes a graphical display of the fragments to be assembled and the corresponding primers. For each of these, the visual representation shows to which fragment the annealing sequence of the primer binds to and to which fragment the Gibson overhang is complementary to. In addition, a small table which summarizes all the primers, their length and their melting temperature (annealing end, whole primer). In the example above, 8 primers have been generated, corresponding to the 4 fragments (3 NRPS sequences, 1 backbone). </p>
 
                     <p> Also note, that the graphical representation of the primers, can include a number (inside a red box). This numbers corresponds to the number of  the following types of warnings: </p>
-        <ul>
+        <div class="well">
             <li>T<sub>m</sub> warning: the annealing temperature of either the annealing portion or the whole primer
             is less than the target</li>
             <li>Self prime warning: the primer could potentially prime to itself on the 3' end</li>
             <li>Misprime warning: the primer could potentially prime elsewhere on the fragment</li>
-        </ul>
+        </div>
 
         <p> The last two warnings are actually produced by UNAfold. </p>
 
@@ -187,7 +192,9 @@
 <br/>
                     <h4> Boxplot </h4>
           <br/>
+          <center>
     <img src={% static "images/documentation/boxplot.png" %} />
+    </center>
     <p>A sample self-priming boxplot is shown above. This is the output of the folding program used to determine whether any self annealing will occur.
     Each mark on the plot represents a possible basepairing. The color determines the likelyhood of pairing forming.</p>
 
@@ -204,14 +211,15 @@
     does not include the 3' base pair. It is also a much higher free energy, and so is very unlikely to appear.</p>
                     <h3> Downloadable output </h3>
                    <p> All of the content readily available on the online interface, can also be downloaded in a convenient format. In particular, a .zip file with the contents seen below is returned: </p>
-
+            <center>
            <img src={% static "images/documentation/downloadableOutput.png" %} /></br>
+			</center>
 
-           <p>In particular, the downloaded archive contains an annotated description of the DNA sequences to be assembled in both the <a href="http://www.sbolstandard.org/"> SBOL </a> (Synthetic Biology Open Language) format, as well as in the GenBank format. Thus, those files can be edited and inspected using most available CAD-tools for biological assembly. A pdf describing the contents of the .zip archive, summarizing the source of the different DNA fragments to be assembled and also describing the Gibson assembly protocol to be used, is also returned. The PCR folder includes suggestions for the reactions necessary for the amplification of the appropriate fragments. Finally, the primers and their sequences are returned in a tabular format ("primers.csv"):</p>
+           <p style="margin-top:20px">In particular, the downloaded archive contains an annotated description of the DNA sequences to be assembled in both the <a href="http://www.sbolstandard.org/"> SBOL </a> (Synthetic Biology Open Language) format, as well as in the GenBank format. Thus, those files can be edited and inspected using most available CAD-tools for biological assembly. A pdf describing the contents of the .zip archive, summarizing the source of the different DNA fragments to be assembled and also describing the Gibson assembly protocol to be used, is also returned. The PCR folder includes suggestions for the reactions necessary for the amplification of the appropriate fragments. Finally, the primers and their sequences are returned in a tabular format ("primers.csv"):</p>
 
            <img src={% static "images/documentation/primerTable.png" %} /></br>
 
-           <p> This table contains the sequence of the primers, their length, as well as their melting temperature (including floppy ends). Thus, the primers can be quickly ordered from commercial providers. </p>
+           <p style="margin-top:20px"> This table contains the sequence of the primers, their length, as well as their melting temperature (including floppy ends). Thus, the primers can be quickly ordered from commercial providers. </p>
 
            <div class="page-header">
             <h2> Combinatorial libraries </h2>
@@ -236,7 +244,7 @@
             <p> As mentioned previously, every user can extend the NRPSDesigner database by adding new NRPS pathways (with the safety mechanism of distinguishing between sequences entered by curators or normal users). This functionality can be accessed from the "Apps" dropdown by choosing the "Add NRPS into library" option. Exemplary, a sample input of the tycB gene is shown below: </p>
 
             <img src={% static "images/documentation/dbInput.png" %} /></br>
-            <p> Beyond the source organism and the product synthesized in the native organism, the DNA sequence has to be entered. This can be a raw string or a FASTA formatted sequence. Here a number of conditions are checked: The DNA sequence entered has to be a coding sequence. Thus, its length has to be a multiple of 3 and it has to begin with a start codon, end with a stop codon and no stop codons should be interspersed within the gene (start/stop codon definition according to the <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG11"> NCBI Bacterial, Archaeal and Plant Plastid Code </a>). If one of these conditions is violated, then appropriate warnings are returned. </p>
+            <p style="margin-top:20px"> Beyond the source organism and the product synthesized in the native organism, the DNA sequence has to be entered. This can be a raw string or a FASTA formatted sequence. Here a number of conditions are checked: The DNA sequence entered has to be a coding sequence. Thus, its length has to be a multiple of 3 and it has to begin with a start codon, end with a stop codon and no stop codons should be interspersed within the gene (start/stop codon definition according to the <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG11"> NCBI Bacterial, Archaeal and Plant Plastid Code </a>). If one of these conditions is violated, then appropriate warnings are returned. </p>
 
             <p> Once everything has been entered, the request can be submitted to the NRPSDesigner server by pressing the "Generate Domains" button. The pipeline based on hidden markov models (HMM) then detects all NRPS domains. If none is found, then an appropriate error message is returned. In the example of the tycB gene, 11 domains are detected and returned. </p>
 
