@@ -154,6 +154,7 @@ def processLibrary(request, uuid):
         if not nrp:
             return HttpResponseNotFound()
         data = json.loads(request.body)
+        import pdb;pdb.set_trace()
         monomers = []
         haveUseAll = -1
         i = 0
@@ -191,6 +192,21 @@ def downloadLibrary(request, uuid):
         return HttpResponseNotFound()
     cids = [child.construct.pk for child in parentnrp.child.filter(uuid__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
+
+def create_boundary_library(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp:
+        return HttpResponseNotFound()
+    t = loader.get_template('designerGui/createBoundaryLibrary.html')
+    c = RequestContext(request)
+    substrateOrder = SubstrateOrder.objects.filter(nrp=nrp)
+    c['substrateOrder'] = substrateOrder
+    c['indigoidineTagged'] = nrp.indigoidineTagged
+    c['uuid'] = uuid
+    initialPic = nrp.getPeptideSequenceForStructView()
+    c['initialPic'] = initialPic
+    c['scaffold'] = nrp.monomers.order_by('substrateOrder')
+    return HttpResponse(t.render(c))
 
 def get_available_monomers(request):
     if request.method == 'POST' and "monomer[]" in request.POST:

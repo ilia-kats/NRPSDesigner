@@ -130,6 +130,7 @@ def run_nrpscodepred(options):
         pos = pos - startpos
         positions2.append(pos)
       positions = positions2
+
       #Count residues in ref sequence and put positions in list
       muscle_dict = fastadict(muscle_file)
       muscle_seqs = lseqs(muscle_dict)
