@@ -1405,9 +1405,9 @@ var df = DisplayFragment.prototype = new Container();
 * @constructor
 * @param {Server} server A server object for saving changes
 **/
-var FragmentContainer = function(designer, addCb, rmCb)
+var FragmentContainer = function(designer)
 {
-	this.initialize(designer, addCb, rmCb);
+	this.initialize(designer);
 }
 var fc = FragmentContainer.prototype = new Container();
 
@@ -1448,10 +1448,6 @@ var fc = FragmentContainer.prototype = new Container();
 
 	fc._designer = null;
 
-    fc._addCb = function(){};
-
-    fc._rmCb = function(){};
-
 //Constructor
 	/**
 	 * @property Container_initialize
@@ -1465,14 +1461,10 @@ var fc = FragmentContainer.prototype = new Container();
 	 * @method initialize
 	 * @protected
 	 **/
-	fc.initialize = function(d, addCb, rmCb)
+	fc.initialize = function(d)
 	{
 		this.Container_initialize();
 		this._designer = d;
-        if (addCb)
-            this._addCb = addCb;
-        if (rmCb)
-            this._rmCb = rmCb;
 	};
 
 //public methods
@@ -1592,7 +1584,6 @@ var fc = FragmentContainer.prototype = new Container();
     {
         if (df.f().getViewable() == 'H')
             this._hiddenFragments++;
-        this._addCb(df.f())
         Container.prototype.addChild.call(this, df);
     }
 
@@ -1603,7 +1594,6 @@ var fc = FragmentContainer.prototype = new Container();
     {
         if (df.f().getViewable() == 'H')
             this._hiddenFragments++;
-        this._addCb(df.f())
         Container.prototype.addChildAt.call(this, df, pos);
     }
 
@@ -1613,8 +1603,6 @@ var fc = FragmentContainer.prototype = new Container();
     fc.removeAllChildren = function()
     {
         this._hiddenFragments = 0;
-        for (var i = 0; i < this.children.length; ++i)
-            this._rmCb(this.children[i].f());
         Container.prototype.removeAllChildren.call(this);
     }
 
@@ -1629,7 +1617,6 @@ var fc = FragmentContainer.prototype = new Container();
 		if(i < 0) return this;
         if (df.f().getViewable() == 'H')
             this._hiddenFragments--;
-        this._rmCb(df.f());
 		var a = df.getMid();
 
 		this.removeChildAt(i);
@@ -1923,9 +1910,9 @@ var fc = FragmentContainer.prototype = new Container();
 * @class Server
 * @extends Container
 **/
-var Server = function()
+var Server = function(addCb, rmCb)
 {
-	this.initialize();
+	this.initialize(addCb, rmCb);
 }
 var s = Server.prototype = new Container();
 
@@ -1939,7 +1926,7 @@ var s = Server.prototype = new Container();
 
 	s._container_init = s.initialize;
 
-	s.initialize = function()
+	s.initialize = function(addCb, rmCb)
 	{
 		this._text.x = 0;
 		this._text.maxWidth = 1000;
@@ -1950,6 +1937,10 @@ var s = Server.prototype = new Container();
 		this._text.visible = false;
 
 		this.addChild(this._text, this._sm_text);
+        if (addCb)
+            this._addCb = addCb;
+        if (rmCb)
+            this._rmCb = rmCb;
 	}
 
 	//Public Functions
@@ -1983,17 +1974,19 @@ var s = Server.prototype = new Container();
 				self._hideMessage();
                 console.log('setting _cf = '+cf);
                 df._cf = cf;
+                self._addCb(cf.f);
 			});
 	}
 
-	s.rmFrag = function(cfid, cb)
+	s.rmFrag = function(cf, cb)
 	{
 		this._showMessage('Removing Fragment...');
 		var self = this;
-		this._con.rmFragment(cfid, function(data)
+		this._con.rmFragment(cf.id, function(data)
 			{
 				self._hideMessage();
 				if(jQuery.isFunction(cb)) cb();
+                self._rmCb(cf.f);
 			});
 	}
 
@@ -2055,6 +2048,10 @@ var s = Server.prototype = new Container();
 
 	s.toString = function() {return '[Server ]'};
 
+    s._addCb = function(){};
+
+    s._rmCb = function(){};
+
 /**
 * The actual designer, called with a jQuery HTML canvas
 * @class Designer
@@ -2099,10 +2096,10 @@ var d = Designer.prototype = new Container();
 		this._tlen.textAlign = 'center';
 		this._tlen.maxWidth = 1000;
 
-		this._fc = new FragmentContainer(this, addCb, rmCb);
+		this._fc = new FragmentContainer(this);
 //jQuery(window).keypress(function() {self._fc.debug();});
 
-		this._server = new Server();
+		this._server = new Server(addCb, rmCb);
 
 		this._child.addChild(this._tname, this._tlen, this._fc);
 		this.addChild(this._child, this._server);
@@ -2152,7 +2149,10 @@ var d = Designer.prototype = new Container();
             },
         });
 
-
+        if (addCb)
+            this._addCb = addCb;
+        if (rmCb)
+            this._rmCb = rmCb;
         //debug
         jQuerycanvas.on('mouseup', function(){ console.log('canvas mouseup');});
 
@@ -2206,7 +2206,7 @@ var d = Designer.prototype = new Container();
                 //Tell the server to remove the fragment
                 if(df._cf!=undefined)
                 {
-                   self._server.rmFrag(df._cf.id);
+                   self._server.rmFrag(df._cf);
                 }
 		}).appendTo(this._jQuerycanvas.parent());
 
@@ -2385,6 +2385,7 @@ var d = Designer.prototype = new Container();
         for(i in con.cfs)
         {
                 dfs.push(new DisplayFragment(con.cfs[i].f, con.cfs[i]));
+                this._addCb(con.cfs[i].f);
         }
 		this._fc.removeAllChildren();
 		this._fc.addMulti(dfs);
@@ -2393,3 +2394,8 @@ var d = Designer.prototype = new Container();
 	}
 
 	d.toString = function() {return '[Designer '+this._width+'x'+this._height+' (cid='+this._cid+') ]';};
+
+
+    d._addCb = function(){};
+
+    d._rmCb = function(){};
