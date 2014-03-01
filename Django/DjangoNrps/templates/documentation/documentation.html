@@ -94,7 +94,7 @@
              <p> The core functionality of the NRPSDesigner can be accessed by clicking on the "Apps" dropdown and then on the "NRPS Designer" button. Users that have not been logged in will be able to immediately proceed with the design of their synthetase of choice. Registered users will be redirected to their collection of already designed synthetases and thus will be able to reinspect or continue working on one of these or to design a new one. </p>
                 <h3> Input </h3>
                 <p> The input basically only consists of a sequence of monomers (amino acids) which should make up the final non-ribosomal peptide (NRP). This is achieved with the user-friendly interface shown below: </p>
-                <img src={% static "images/documentation/nrpSelection.png" %} /></br>
+                <img src={% static "images/documentation/screenshot1.png" %} /></br>
 
                 <p> The functionality of the interface can be accessed mainly by the following 3 buttons </p>
 
@@ -123,7 +123,7 @@
                 <h3> Plasmid view </h3>
                 <p> The NRPS domains shown in the previous visualization are encoded on the coding DNA sequences. Thus, as also exemplified in the screenshot below, the next step through the NRPSDesigner wizard leads to the actual DNA sequences and the fragments that have to be assembled. </p>
 
-                <img src={% static "images/documentation/gibthon1.png" %} /></br>
+                <img src={% static "images/documentation/screenshot4.png" %} /></br>
 
                 <p> Note that each fragment shown in the plasmid map corresponds to a particular sequence that has to be amplified by PCR from a source organism. For example, the clicked fragment above corresponds to a DNA sequence that has to be amplified from <i> Brevibacillus parabrevis </i> strain atcc 8185/dsm362. Also observe that this fragment codes for more than one domain, namely a condensation, an adenylation and a thiolation domain. In particular, the rules for weight assignment in the application of Dijkstra's algorithm also enforce the minimization of number of fragments that have to be amplified. Thus, less cloning steps will be necessary and less native NRPS domain interfaces will be disrupted. </p>
 
@@ -157,7 +157,7 @@
 
                 <h3> Plasmid view #2</h3>
                 <p>For use of Gibthon for a Gibson assembly strategy, the previously presented dynamic plasmid view can be utilized. In particular, parts that have been added to the user specific Gibson fragment library (for registered users) or globally available parts (available to all users) can be added to the plasmid by simple drag and drop. Dragging towards the inner side of the plasmid results in the fragments being entered in the reverse direction (as seen in the screenshot below), else the sequence is added in the forward direction. </p>
-                <img src={% static "images/documentation/gibthon2.png" %} /></br>
+                <img src={% static "images/documentation/screenshot3.png" %} /></br>
 
                 <p> The behaviour in the previously mentioned step is similar to the one present in the original Gibthon web-server, but with one important difference: Other fragments can't be entered into the plasmid in such a way so as to break the returned sequence of NRPS domains. Thus, other DNA sequences can be embedded in the plasmid only after the thioesterase (TE) domain or before the initialization adenylation domain. </p>
 
@@ -233,7 +233,7 @@
 
             <p> In the library view, the sequence of monomers of the NRP produced by the scaffold is highlighted. The heuristic utilized here for high throughput is the following: For the creation of a library, one particular monomer position can be shuffled with many different other monomers. Thus, most of the primers for the rest of the scaffold can be reused and only the set of primers necessary for the domain to be shuffled has to be ordered. The corresponding interface can be seen in the screenshot below: </p>
 
-            <img src={% static "images/documentation/library.png" %} /></br>
+            <img src={% static "images/documentation/screenshot2.png" %} /></br>
 
             <p> The monomer position to be exchanged can be chosen by clicking on the corresponding <i class="icon-ok"></i> or <i class="icon-plus"></i> button. Choosing the <i class="icon-ok"></i> option leads to the shuffling of that particular position with all monomers of the database. On the other hand, by repeated clicking of the <i class="icon-plus"></i> button, a manual selection of monomers to be used for the exchange can be accomplished. Once preferences have been set, the appropriate constructs are designed by clicking on the "Design library" button. Note that depending on the number of monomers, this procedure could take a long time. Once the calculation is ready, a downloadable output with SBOL/GenBank files, as well as primers, similar to the one described for the scaffold construct, is returned. </p>
 
