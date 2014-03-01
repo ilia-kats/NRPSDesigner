@@ -30,7 +30,7 @@ class Cds(models.Model):
     user = models.ForeignKey('auth.User', blank=True, null=True)
 
     def __unicode__(self):
-        return str(self.origin) + self.geneName
+        return str(self.origin) + " " + self.geneName
 
     class Meta:
         verbose_name = "Coding sequence"
@@ -123,6 +123,15 @@ class Cds(models.Model):
         else:
             pass  #raise some error..
 
+    def get_biojs_entry(self):
+        cds_name  = str(self)
+        seq   = self.dnaSequence
+        domains = self.domains.all()
+        biojs_entry = {'id':cds_name,
+            'sequence' : seq,
+            'annotations': [x.get_biojs_annotation() for x in domains]
+            }
+        return biojs_entry
 
 
 class Origin(models.Model):
@@ -235,6 +244,32 @@ class Domain(models.Model):
     # specific for only 1 substrate
     def number_of_specificities(self):
         return len(self.substrateSpecificity.all())
+
+    def get_biojs_annotation(self):
+        short_name  = self.short_name()
+        name = str(self)
+        start = self.get_start(with_linker=False)
+        stop  = self.get_stop(with_linker=False)
+        annotation = {'name': short_name,
+            'html': name,
+            'regions': [{'start':start, 'end':stop,'color':"blue"}]
+            }
+        return annotation
+
+    def get_biojs_highlight(self):
+        start = self.get_start(with_linker=False)
+        stop  = self.get_stop(with_linker=False)
+        highlight = { 'start':start,
+            'end':stop,
+            'color':"white",
+            'background':"green"}
+        return highlight
+    # return python dict to be converted to json for use by bioJs sequence
+    def get_biojs_entry(self):
+        biojs_entry = self.cds.get_biojs_entry()
+        biojs_entry['highlights'] = [self.get_biojs_highlight()]
+        return biojs_entry
+
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)

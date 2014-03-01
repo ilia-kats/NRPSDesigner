@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block js-include %}
+{% load staticfiles %}
+<script language="JavaScript" type="text/javascript" src="{% static "js/BioJS/Biojs.js" %}"></script>
+<script language="JavaScript" type="text/javascript" src="{% static "js/BioJS/Biojs.Sequence.js" %}"></script>
+<script language="JavaScript" type="text/javascript" src="{% static "js/BioJS/Biojs.Tooltip.js" %}"></script>
 {% endblock %}
 
 
@@ -40,7 +44,7 @@ Report a successful assembly of two NRPS domains.
                 </div>
                 </div>
 
-<div class="span7">
+<div class="span5">
  {{ linkoutSet.management_form }}
   <div>
 <label >References:</label>
@@ -56,59 +60,60 @@ Report a successful assembly of two NRPS domains.
 </div>
 </div>
 
+   
 <div class="row">
-
 <div class="span5">
 Left domain Filters:
 <input type="hidden" style="width:380px;" id="originsLeft"/>
 <input type="hidden" style="width:380px;" id="domainTypesLeft"/>
-
-</div>
-
-<div class="span5">
-Right domain Filters:
-<input type="hidden" style="width:380px;" id="originsRight"/>
-<input type="hidden" style="width:380px;" id="domainTypesRight"/>
-
-</div>
-
-
-</div>
-          
-<div class="row">
-<div class="span5">
+<br/>
 Left domain:
 <input type="hidden" id="domainsLeft" />
 
 
                 <div class="fieldWrapper">
                   {{ form.prev_position.errors }}
-                  <label> Left boundary: <br/> </label>
+                  Left boundary: 
                   {{ form.prev_position }}
                 </div>
 
 </div>
+<div class="span9">
+<div id="leftBioJsSequenceDiv" style="height:180px; overflow-y:auto"></div>
 
+</div>
+</div>
 
-<div class="span5=">
+<div class="row">
+<div class="span5">
+Right domain Filters:
+<input type="hidden" style="width:380px;" id="originsRight"/>
+<input type="hidden" style="width:380px;" id="domainTypesRight"/>
+<br/>
 Right domain:
 <input type="hidden" id="domainsRight" />
 
 
                 <div class="fieldWrapper">
                   {{ form.next_position.errors }}
-                  <label> Right boundary: <br/> </label>
+                  Right boundary: 
                   {{ form.next_position }}
                 </div>
 
-            
+       
+
+</div>
+
+<div class="span9">
+     <div id="rightBioJsSequenceDiv" style="height:180px; overflow-y:auto" ></div>
 
 </div>
 </div>
-      
+
 </form>
 
   <button class="btn btn-large" id="submitButton" type="button">Submit</button>
+
 
 {% endblock %}
 
@@ -222,6 +227,69 @@ jQuery("#submitButton").click( function() {
     });
 
 });
+
+
+leftSequence = new Biojs.Sequence();
+jQuery("#domainsLeft").change(function(){
+    jQuery("#id_domainTuple-prev_position").val("")
+    showLeftBioJsSequence();
+});
+
+
+
+function showLeftBioJsSequence() {
+    console.log("activated")
+    if (typeof(leftSequence)!== "undefined"){
+        leftSequence.clearSequence()
+        jQuery.get("{% url 'getDomainBioJsSequence' %}", 
+            {domainId: jQuery("#domainsLeft").val()}, 
+            function(data) {
+                if (data[0] !== -1) {
+                    bioJsData = data[1];
+                    bioJsData.columns = {'size':100};
+                    bioJsData.target = "leftBioJsSequenceDiv";
+                    bioJsData.format = "FASTA"
+                    bioJsData.formatSelectorVisible = false
+                    leftSequence = new Biojs.Sequence(bioJsData)
+                    leftSequence.onSelectionChange(
+                            function( objEvent ) {
+               jQuery("#id_domainTuple-prev_position").val(objEvent.end)
+                    });
+                }
+        });
+    }
+}
+
+rightSequence = new Biojs.Sequence();
+jQuery("#domainsRight").change(function(){
+    jQuery("#id_domainTuple-next_position").val("")
+    showRightBioJsSequence();
+});
+
+
+
+function showRightBioJsSequence() {
+    console.log("activated")
+    if (typeof(rightSequence)!== "undefined"){
+        rightSequence.clearSequence()
+        jQuery.get("{% url 'getDomainBioJsSequence' %}", 
+            {domainId: jQuery("#domainsRight").val()}, 
+            function(data) {
+                if (data[0] !== -1) {
+                    bioJsData = data[1];
+                    bioJsData.columns = {'size':100};
+                    bioJsData.target = "rightBioJsSequenceDiv";
+                    bioJsData.format = "FASTA"
+                    bioJsData.formatSelectorVisible = false
+                    rightSequence = new Biojs.Sequence(bioJsData)
+                    rightSequence.onSelectionChange(
+                            function( objEvent ) {
+               jQuery("#id_domainTuple-next_position").val(objEvent.end)
+                    });
+                }
+        });
+    }
+}
 
 
 });

@@ -79,19 +79,19 @@ var gibthon_primer_url = '{%url 'primers' construct.pk %}';
             <div style="width:200px; float:left;">
                 <table class="protocol">
                     <tr><th colspan="2">&nbsp;</th></tr>
-                    <tr><th>Repeats</th><td><input class="mix" name="repeats" value="{{ construct.pcrsettings.repeats }}" /></td></tr>
-                    <tr><th>Volume each</th><td><input class="mix" name="volume_each" value="{{ construct.pcrsettings.volume_each }}" /> &mu;l</td></th></tr>
-                    <tr><th>Error margin</th><td><input class="mix" name="error_margin" value="{{ construct.pcrsettings.error_margin }}" /> %</td></tr>
+                    <tr><th>Repeats</th><td><input class="mix" name="repeats" value="{{ construct.pcrsettings.repeats }}" id="repeats"/></td></tr>
+                    <tr><th>Volume each</th><td><input class="mix" name="volume_each" value="{{ construct.pcrsettings.volume_each }}" id="volume_each"/> &mu;l</td></th></tr>
+                    <tr><th>Error margin</th><td><input class="mix" name="error_margin" value="{{ construct.pcrsettings.error_margin }}" id="error_margin"/> %</td></tr>
                 </table>
             </div>
             <div style="width:270px; float:left;">
                 <table class="protocol">
                     <tr><th>Reagent</th><th>Stock</th><th>Desired</th></tr>
-                    <tr><td>Buffer</td><td><input class="mix" name="buffer_s" value="{{ construct.pcrsettings.buffer_s }}" /> X</td><td><input class="mix" name="buffer_d" value="{{ construct.pcrsettings.buffer_d }}" /> X</td></tr>
-                    <tr><td>dNTPs</td><td><input class="mix" name="dntp_s" value="{{ construct.pcrsettings.dntp_s }}" /> mM</td><td><input class="mix" name="dntp_d" value="{{ construct.pcrsettings.dntp_d }}" /> mM</td></tr>
-                    <tr><td>Enzyme</td><td><input class="mix" name="enzyme_s" value="{{ construct.pcrsettings.enzyme_s }}" /> U/&mu;l</td><td><input class="mix" name="enzyme_d" value="{{ construct.pcrsettings.enzyme_d }}" /> U</td></tr>
-                    <tr><td>Primer</td><th></th><td><input class="mix" name="primer_d" value="{{ construct.pcrsettings.primer_d }}" /> &mu;M</td></tr>
-                    <tr><td>Template</td><th></th><td><input class="mix" name="template_d" value="{{ construct.pcrsettings.template_d }}" /> ng</td></tr>
+                    <tr><td>Buffer</td><td><input class="mix" name="buffer_s" value="{{ construct.pcrsettings.buffer_s }}" id="buffer_stock"/> X</td><td><input class="mix" name="buffer_d" value="{{ construct.pcrsettings.buffer_d }}" id="buffer_desired"/> X</td></tr>
+                    <tr><td>dNTPs</td><td><input class="mix" name="dntp_s" value="{{ construct.pcrsettings.dntp_s }}" id="dntp_stock"/> mM</td><td><input class="mix" name="dntp_d" value="{{ construct.pcrsettings.dntp_d }}" id="dntp_desired"/> mM</td></tr>
+                    <tr><td>Enzyme</td><td><input class="mix" name="enzyme_s" value="{{ construct.pcrsettings.enzyme_s }}" id="enzyme_stock"/> U/&mu;l</td><td><input class="mix" name="enzyme_d" value="{{ construct.pcrsettings.enzyme_d }}" id="enzyme_desired"/> U</td></tr>
+                    <tr><td>Primer</td><th></th><td><input class="mix" name="primer_d" value="{{ construct.pcrsettings.primer_d }}" id="primer_desired"/> &mu;M</td></tr>
+                    <tr><td>Template</td><th></th><td><input class="mix" name="template_d" value="{{ construct.pcrsettings.template_d }}" id="template_desired"/> ng</td></tr>
                 </table>
             </div>
             </form>

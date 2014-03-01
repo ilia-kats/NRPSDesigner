@@ -159,12 +159,22 @@ class PCRSettings(models.Model):
     def template_v(self, template_s):
         return self.m() * self.template_d/template_s
 
-    def water_v(self, primer_t_s, primer_b_s, template_s):
-        return (self.m()*self.volume_each) - self.buffer_v() - self.dntp_v() - self.enzyme_v() - self.primer_v(primer_t_s) - self.primer_v(primer_b_s) - self.template_v(template_s)
+    def water_v(self, primer_t_s, primer_b_s, template_s, correct=True):
+        w_v = (self.m()*self.volume_each) - self.buffer_v() - self.dntp_v() - self.enzyme_v() - self.primer_v(primer_t_s) - self.primer_v(primer_b_s) - self.template_v(template_s)
+        if correct and w_v < 0:
+            return 0
+        else:
+            return w_v
 
-    def total_v(self):
-        return self.m() * self.volume_each
-
+    def total_v(self, primer_t_s=None, primer_b_s=None, template_s=None):
+        t_v = self.m() * self.volume_each
+        if primer_t_s is None or primer_b_s is None or template_s is None:
+            return t_v
+        w_v = self.water_v(primer_t_s, primer_b_s, template_s, False)
+        if w_v < 0:
+            return t_v + abs(w_v)
+        else:
+            return t_v
 
 class Warning(models.Model):
     primer = models.ForeignKey('Primer', related_name='warning')
@@ -775,6 +785,9 @@ class ConstructFragment(models.Model):
 
     def water_v(self):
         return self.construct.pcrsettings.water_v(self.primer_top().concentration, self.primer_bottom().concentration, self.concentration)
+
+    def total_v(self):
+        return self.construct.pcrsettings.total_v(self.primer_top().concentration, self.primer_bottom().concentration, self.concentration)
 
     def pcr_cycle(self):
         tm = int((self.primer_top().tm() + self.primer_bottom().tm())/2 - 4)

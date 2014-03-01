@@ -27,3 +27,10 @@ def get_domains(request):
 			domains = Domain.objects.filter(cds__origin__pk = origin_id, domainType__pk = type_id)
 		ret = [{'id':x.pk, 'text':x.short_name()} for x in domains]
 		return JsonResponse(ret)
+
+def get_domain_biojs_sequence(request):
+	if request.method == "GET":
+		domain_id = request.GET['domainId']
+		domain = Domain.objects.get(pk = domain_id)
+		biojs_entry = domain.get_biojs_entry()
+        return JsonResponse(biojs_entry)

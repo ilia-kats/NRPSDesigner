@@ -8,7 +8,7 @@
 <script type="text/javascript">
     var nrpEnabledEffects = false;
     var monomers;
-    var monomersList;
+    var monomersList = new Array();
     var animationDuration = 300;
     var structAR = 16 / 9;
     var lastretrieved;
@@ -57,6 +57,7 @@
         jQuery("#selected_monomers button.active").removeClass("active");
         jQuery(e.delegateTarget).addClass("active");
         var select = jQuery("#e23");
+        select.select2("enable", true);
         if (jQuery(select.data("currMonomer")).parent().parent().attr("id") != jQuery(e.delegateTarget).parent().parent().attr("id"))
             getSelectableMonomers(true);
         select.select2("val", jQuery(e.delegateTarget).data("selectid"));
@@ -281,7 +282,8 @@
         jQuery("#e23").select2({data: function(){return {results: monomersList};},
             formatResult: formatAA,
             dropdownCssClass: "bigdrop",
-            escapeMarkup: function(m) { return m; }}).change(function(e){applyMonomer(e);});
+            escapeMarkup: function(m) { return m; }
+        }).select2("enable", false).change(function(e){applyMonomer(e);});
         /*jQuery("#e11").select2({
             data : [],
             placeholder: "No modification selected",
