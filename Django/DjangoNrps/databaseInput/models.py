@@ -183,11 +183,11 @@ class Domain(models.Model):
 
     def short_name(self):
         return str(self.cds.geneName) + str(self.module) + str(self.domainType)
-        
+
     def get_start(self, prevd=None, with_linker=True):
         if prevd is not None:
             try:
-                return self.prev_domain.get(pk=prevd).next_position
+                return self.prev_domain.get(pk=prevd).next_tuple.get().next_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
@@ -203,7 +203,7 @@ class Domain(models.Model):
     def get_stop(self, nextd=None, with_linker=False):
         if nextd is not None:
             try:
-                return self.next_domain.get(pk=nextd).prev_position
+                return self.next_domain.get(pk=nextd).prev_tuple.get().prev_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
@@ -386,7 +386,7 @@ class LinkoutType(models.Model):
         return self.shortcut
 
 def get_pubmed_type():
-    return LinkoutType.objects.get(shortcut="PubMed");    
+    return LinkoutType.objects.get(shortcut="PubMed");
 
 
 class Linkout(models.Model):

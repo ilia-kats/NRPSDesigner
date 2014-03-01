@@ -60,7 +60,7 @@ class NRP(models.Model):
     designed = models.BooleanField(default=False)
     indigoidineTagged = models.BooleanField(default=False)
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
-    construct = models.ForeignKey('gibson.Construct', null=True, blank=True)
+    construct = models.OneToOneField('gibson.Construct', null=True, blank=True, related_name='nrp')
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
 
     class Meta:
@@ -69,8 +69,6 @@ class NRP(models.Model):
 
     def __unicode__(self):
         return self.name
-
-
 
     def delete_dependencies(self, all=True):
         self.designed = False

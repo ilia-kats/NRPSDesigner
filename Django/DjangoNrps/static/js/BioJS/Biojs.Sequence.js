@@ -1219,7 +1219,8 @@ Biojs.Sequence = Biojs.extend(
 
 			// Register the starting position
 			jQuery(this).mousedown(function() {
-				currentPos = parseInt(jQuery(this).attr('id'));
+                var id = jQuery(this).attr('id');
+                currentPos = parseInt(id.substr(id.indexOf("_") + 1));
 				clickPos = currentPos;
 				self._setSelection(clickPos,currentPos);
 				isMouseDown = true;
@@ -1236,8 +1237,8 @@ Biojs.Sequence = Biojs.extend(
 			}).mouseover(function() {
 				// Update selection
 				// Show tooltip containing the position
-
-				currentPos = parseInt(jQuery(this).attr('id'));
+                var id = jQuery(this).attr('id');
+                currentPos = parseInt(id.substr(id.indexOf("_") + 1));
 
 				if(isMouseDown) {
 					if( currentPos > clickPos ) {

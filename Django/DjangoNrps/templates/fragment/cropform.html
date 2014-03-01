@@ -7,8 +7,15 @@
 }
 .suboption
 {
-    margin-left: 2em;
+    margin-left: 0;
+    width: 100%;
 }
+
+#cropform label
+{
+    display: inline;
+}
+
 </style>
 
 <div id='cropform'>
@@ -16,7 +23,7 @@
         <h4>Operation</h4>
         <div class='crop-settings'>
             <p>
-                Crop to range <span id='range_from'></span>bp to 
+                Crop to range <span id='range_from'></span>bp to
                 <span id='range_to'></span>bp.
             </p>
             <input id='cb_internal' type='checkbox' name='feature_settings'
@@ -25,8 +32,8 @@
                     Preserve features
             </label><br />
             <div id='disableme'>
-                <input class='suboption' id='cb_all' type='checkbox' 
-                    name='feature_settings' value='preserve_all' /> 
+                <input class='suboption' id='cb_all' type='checkbox'
+                    name='feature_settings' value='preserve_all' />
                 <label for='cb_all'>
                     Preserve features not entirely within selection
                 </label>
@@ -42,10 +49,10 @@
             </div>
             <div id='new_settings'>
                 <label for='new_name'>Name</label> <br/>
-                <input id='new_name' class='suboption' type='text' 
+                <input id='new_name' class='suboption' type='text'
                     name='new_name' ></input><br/>
                 <label for='new_desc'>Description</label><br/>
-                <textarea id='new_desc' class='suboption' rows="4" cols="35" 
+                <textarea id='new_desc' class='suboption' rows="4" cols="35"
                     name='new_desc'></textarea><br/>
 
                 <input id='go_new' type='checkbox' checked='yes' />
