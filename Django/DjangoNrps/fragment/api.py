@@ -223,16 +223,16 @@ def get_fragment(request, fid):
 def list_fragments(request):
     """Return metadata of all fragments owned by a user"""
     if request.user.is_authenticated():
-        args = {'owner': request.user, 'viewable__in': ['L', 'G']}
+        args = Q(owner=request.user, viewable__in=['L', 'G']) | Q(viewable__in=['G'])
     else:
-        args = {'viewable__in': ['G']}
+        args = Q(viewable__in = ['G'])
     try:
         if 'type[]' in request.POST:
             args['annotations__key__exact'] = 'part_type'
             args['annotations__value__in'] = request.POST.getlist('type[]')
-            frags = Gene.objects.select_related('annotations').filter(**args)
+            frags = Gene.objects.select_related('annotations').filter(args)
         else:
-            frags = Gene.objects.filter(**args)
+            frags = Gene.objects.filter(args)
     except ObjectDoesNotExist:
         return JsonResponse('Could not read fragments', ERROR)
     ret = []
