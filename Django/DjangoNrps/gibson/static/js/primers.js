@@ -94,14 +94,27 @@ var MixFragment = function (mix, form) {
 }
 
 MixFragment.prototype.go = function () {
-	this.enz_v = this.mix.m()*this.mix.enz_d.value/this.mix.enz_s.value;
-	this.buff_v = this.mix.vol_e.value*this.mix.m()*this.mix.buff_d.value/this.mix.buff_s.value;
-	this.dntp_v = this.mix.vol_e.value*this.mix.m()*this.mix.dntp_d.value/this.mix.dntp_s.value;
-	this.temp_v = this.mix.m()*this.mix.temp_d.value/this.temp_s.value;
-	this.prim_t_v = this.mix.vol_e.value*this.mix.m()*this.mix.prim_d.value/this.prim_t_s.value;
-	this.prim_b_v = this.mix.vol_e.value*this.mix.m()*this.mix.prim_d.value/this.prim_b_s.value;
-	this.water_v = this.mix.m()*this.mix.vol_e.value - (this.enz_v + this.buff_v.value + this.dntp_v.value + this.temp_v.value + this.prim_t_v.value + this.prim_b_v.value);
-	this.total_v = this.mix.m()*this.mix.vol_e.value;
+    var m = this.mix.m();
+    this.enz_v = m*this.mix.enz_d.value/this.mix.enz_s.value;
+    var buff = m * this.mix.buff_d.value / this.mix.buff_s.value;
+    var dntp = m * this.mix.dntp_d.value / this.mix.dntp_s.value;
+    var primer_top = m * this.mix.prim_d.value / this.prim_t_s.value;
+    var primer_bottom = m * this.mix.prim_d.value / this.prim_b_s.value;
+    var template = m * this.mix.temp_d.value / this.temp_s.value;
+    var total = (- template - this.enz_v) / (buff + dntp + primer_top + primer_bottom - 1);
+    if (total < this.mix.vol_e.value) {
+        this.total_v = this.mix.vol_e.value;
+        this.water_v = this.total_v - this.total_v * (buff + dntp + primer_top + primer_bottom) - template - this.enz_v;
+    } else {
+        this.total_v = total;
+        this.water_v = 0;
+    }
+
+	this.buff_v = this.total_v * buff;
+	this.dntp_v = this.total_v * dntp;
+	this.temp_v = template;
+	this.prim_t_v = this.total_v * primer_top;
+	this.prim_b_v = this.total_v * primer_bottom;
 }
 
 MixFragment.prototype.validate = function () {
@@ -115,7 +128,7 @@ MixFragment.prototype.validate = function () {
 MixFragment.prototype.warn = function () {
 	for (x in this){
 		if (this[x].constructor == Number){
-			if (this[x] < 1 ){
+			if (this[x] < 1 && this[x] > 0){
 				//jQuery(this[x].parentNode).addClass("warningcell");
 				this.mix.warnings += 1;
 			} else {
