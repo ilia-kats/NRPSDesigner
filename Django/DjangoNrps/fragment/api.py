@@ -223,7 +223,7 @@ def get_fragment(request, fid):
 def list_fragments(request):
     """Return metadata of all fragments owned by a user"""
     if request.user.is_authenticated():
-        args = Q(owner=request.user) | Q(viewable__in=['L', 'G'])
+        args = Q(owner=request.user, viewable__in=['L', 'G']) | Q(viewable__in=['G'])
     else:
         args = Q(viewable__in = ['G'])
     try:
