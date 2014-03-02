@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import *
 from django.shortcuts import render_to_response
 from django.conf import settings
+from django.db.models import Q
 
 from Bio import SeqIO
 from api import JsonResponse
@@ -16,7 +17,7 @@ genbank_mimetype = 'chemical/seq-na-genbank'
 def get_fragment(user, fid):
     try:
         if user.is_authenticated():
-            f = Gene.objects.get(pk=fid, owner=user)
+            f = Gene.objects.get(Q(pk=fid) & (Q(owner=user, viewable__in=['L', 'G']) | Q(viewable__in=['G'])))
         else:
             f = Gene.objects.get(pk=fid, viewable__in=['G'])
     except ObjectDoesNotExist:
