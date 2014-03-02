@@ -5,7 +5,7 @@
 	{%csrf_token%}
 <div style="text-align:center">
 	<h3>{{ title }}</h3>
-	
+
 	<h4 class='label'>Name</h4>
 	<div id='name_error' class='error' style='display:none'></div>
 	<div>{{meta.name}}</div>
@@ -13,11 +13,15 @@
 	<h4 class='label'>Description</h4>
 	<div id='desc_error' class='error' style='display:none'></div>
 	<div>{{meta.desc}}</div>
-	
+
+	<h4 class='label'>Part Type</h4>
+	<div id='type_error' class='error' style='display:none'></div>
+	<div>{{part_type.part_type}}</div>
+
 	<h4 class='label'>Sequence</h4>
 	<div id='seq_error' class='error' style='display:none'></div>
 	<div>{{seq.seq}}</div>
-	
+
 </div>
 
 </form>

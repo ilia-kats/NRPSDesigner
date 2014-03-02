@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from views import get_construct
+from django.conf import settings
 
 from models import *
 from forms import *
@@ -26,6 +27,7 @@ def design_tab(request, cid):
         c = RequestContext(request,{
             #'id': cid,
             'construct':con,
+            'part_types': settings.PREDEFINED_PART_TYPES
         })
         return HttpResponse(t.render(c))
     else:

@@ -177,7 +177,7 @@ jQuery(document).ready(function() {
 		icons:{primary:'ui-icon-plusthick'}
 	}).click(function () {
 		jQuery('#fragment_form')
-			.importer()
+            .importer({part_types: new Array("{{part_types|join:'","'}}")})
 			.importer('open');
 	});
 

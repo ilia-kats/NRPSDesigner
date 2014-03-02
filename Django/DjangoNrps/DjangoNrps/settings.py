@@ -194,3 +194,5 @@ UNAFOLD_WD = '/tmp/'
 HYBRID_SS_MIN_PATH = 'hybrid-ss-min'
 HYBRID_MIN_PATH = 'hybrid-min'
 BOXPLOT_NG_PATH = 'boxplot_ng'
+
+PREDEFINED_PART_TYPES = ['Expression Plasmid', 'Plasmid Backbone', 'Promoter', 'RBS', 'Terminator']

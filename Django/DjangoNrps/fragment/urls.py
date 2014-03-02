@@ -24,6 +24,7 @@ apipatterns = patterns( 'fragment.api',
 		(r'^(\d+)/setFeats/$', 'set_features'),
 		(r'^(\d+)/getSeq/$', 'get_sequence'),
 		(r'^(\d+)/crop/$', 'crop'),
+		(r'^set_part_types/$', 'set_part_types'),
 		)
 
 urlpatterns = patterns('fragment',

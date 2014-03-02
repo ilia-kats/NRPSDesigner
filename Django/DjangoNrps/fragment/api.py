@@ -207,6 +207,21 @@ def chunk_sequence(g, chunk_size, pad_char):
     #return the last piece
     yield g.sequence[i:]
 
+def set_part_types(request):
+    if request.method == 'POST':
+        types = json.loads(request.POST['part_types'])
+        for t in types:
+            if t['part_type'] != '':
+                g = get_gene(request.user, t['id'])
+                if g:
+                    try:
+                        a = g.annotations.get(key='part_type')
+                        a.value = t['part_type']
+                    except ObjectDoesNotExist:
+                        a = Annotation(gene=g, key='part_type', value=t['part_type'])
+                    a.save()
+        return JsonResponse('OK')
+
 # Actual API stuff
 def get_fragment(request, fid):
     """Return a small amount of information about the fragment"""
@@ -228,8 +243,7 @@ def list_fragments(request):
         args = Q(viewable__in = ['G'])
     try:
         if 'type[]' in request.POST:
-            args['annotations__key__exact'] = 'part_type'
-            args['annotations__value__in'] = request.POST.getlist('type[]')
+            args = args & Q(annotations__key__exact='part_type', annotations__value__in=request.POST.getlist('type[]'))
             frags = Gene.objects.select_related('annotations').filter(args)
         else:
             frags = Gene.objects.filter(args)

@@ -1,14 +1,14 @@
 
 /*
 ** ui.importer
-* 
+*
 * Display a UI to import fragments, calling the appropriate JSON to do so
-* 
+*
 */
 
 var importer_html = '<div id="dlg_content"></div>';
 
-var importer_form_html = '' + 
+var importer_form_html = '' +
 '<div class="center-pad">' +
 '	<div><button id="back_btn" /> </div>' +
 '	<div id="form_holder"></div>' +
@@ -25,17 +25,17 @@ var busy = '<div style="text-align:center;margin-top:1.5em;">' +
 '	<h3 id="title"></h3>' +
 '</div>';
 
-var entrez_results = '' + 
+var entrez_results = '' +
 '<div class="center-pad">' +
 '	<div><button id="back_btn" />  <h3 style="display:inline-block;margin-left:2.5em;">Results:</h3></div>' +
 '	<div id="form_holder">' +
 '	<table>' +
-'		<thead>' + 
+'		<thead>' +
 '			<tr><th>Title</th><th>Length</th>' +
 ' 			<th><input class="all-selected" type="checkbox" name="select-all" value="select-all"/></th></tr>' +
-'		</thead>' + 
+'		</thead>' +
 '		<tbody id="results">' +
-'		</tbody>' +  
+'		</tbody>' +
 '	</table></div>' +
 '	<div><p id="error" style="display:hidden;color:red;font-weight:bold;" class="errorlist"></p></div>' +
 '	<div class="buttons" style="margin-left:auto;margin-right:auto;width:25em;text-align:center;">' +
@@ -44,13 +44,74 @@ var entrez_results = '' +
 '	</div>' +
 '</div>';
 
+var part_type = '<div class="center-pad">' +
+'<div id="form_holder">' +
+'<table>' +
+'<thead>' +
+'<tr><th style="width:1px;white-space:nowrap">Title</th><th>Part Type</th>' +
+'</thead>' +
+'<tbody id="parts">' +
+'</tbody>' +
+'</table></div>' +
+'   <div><p id="error" style="display:hidden;color:red;font-weight:bold;" class="errorlist"></p></div>' +
+'   <div class="buttons" style="margin-left:auto;margin-right:auto;width:25em;text-align:center;">' +
+'       <button id="ok_btn"></button>' +
+'   </div>' +
+'</div>';
+
+(function($, undefined) {
+jQuery.widget("ui.part_type_selector", {
+    options: {
+        data: new Array(),
+        part_types: new Array(),
+        success_cb: function(){}
+    },
+
+    _create: function() {
+        var self = this;
+        this.$dlg = jQuery(this.element[0]).html(part_type);
+        this.$partstable = this.$dlg.find("#parts");
+        for (var i = 0; i < this.options.data.length; ++i) {
+            this.$partstable.append('<tr><td>' + this.options.data[i].gene_name + '</td><td><input type="hidden" class="part_type_select" id="part_' + this.options.data[i].id + '" data-id="' + this.options.data[i].id + '" style="width:100%"/></td></tr>');
+        }
+        var select2data = new Array();
+        for (var i = 0; i < this.options.part_types.length; ++i) {
+            select2data.push({id: this.options.part_types[i], text: this.options.part_types[i]});
+        }
+
+        this.$partstable.find("input").select2({data: select2data});
+        this.$dlg.find("#ok_btn").button({label: 'OK', icons: {primary: "ui-icon-check"}}).
+            click(function(){
+                var inputs = self.$partstable.find("input.part_type_select");
+                var data = new Array();
+                for (var i = 0; i < inputs.length; ++i) {
+                    var jqInput = jQuery(inputs[i]);
+                    data.push({id: jqInput.data("id"), part_type: jqInput.select2("val")});
+                }
+                jQuery.ajax({
+                    url: fragment_api_url + 'set_part_types/',
+                    data: {part_types: JSON.stringify(data)},
+                    type: 'POST',
+                    success: function(data) {
+                        self.options.success_cb();
+                    }
+                });
+            });
+    }
+});
+
+})(jQuery);
+
 (function( $, undefined ) {
 
 jQuery.widget("ui.importer", {
+    options: {
+        part_types: new Array()
+    },
 	_create: function() {
 		var self = this;
-		this.updated = false; //set to true to reload the page on close		
-		
+		this.updated = false; //set to true to reload the page on close
+
 		this.$dlg = jQuery(this.element[0])
 			.html(importer_html)
 			.dialog({
@@ -71,7 +132,7 @@ jQuery.widget("ui.importer", {
 		this._results = new Array();
 	},
 	open: function(){ this.$dlg.dialog('open');},
-	close: function() { this.$dlg.dialog('close');},		
+	close: function() { this.$dlg.dialog('close');},
 	_show_main: function() { //show the main window
 		var self = this;
 		var $new = jQuery(document.createElement('div'));
@@ -112,7 +173,7 @@ jQuery.widget("ui.importer", {
 			self._show($new);
 			self._auto_size();
 		});
-		
+
 		$new.find('#ok_btn').button({
 				label: 'Import',
 			icons: {primary: 'ui-icon-gear'},
@@ -124,7 +185,7 @@ jQuery.widget("ui.importer", {
 				if($state.hasClass('status-ok')) //we've already imported this one!
 					return; //let's not do it again!
 				var $error = jQuery(this).siblings('.extender-error').slideUp('fast');
-				
+
 				$state
 					.removeClass('status-error')
 					.addClass('status-busy');
@@ -140,12 +201,12 @@ jQuery.widget("ui.importer", {
 					{
 						$state.removeClass('status-busy').addClass('status-ok');
 					}
-				}); 
-				
+				});
+
 			});
 		});
 		this._enable_back_cancel($new, 'Close');
-		
+
 	},
 	_show_manual: function(){
 		var self = this;
@@ -175,7 +236,7 @@ jQuery.widget("ui.importer", {
 			self._show($new);
 			self._auto_size('top');
 		});
-		
+
 		$new.find('#ok_btn').button({
 				label: 'Save',
 			icons: {primary: 'ui-icon-disk'},
@@ -198,19 +259,19 @@ jQuery.widget("ui.importer", {
 			}
 			else
 				$new.find('#seq_error').slideUp('fast');
-			
+
 			if(error) return;
-			
+
 			console.log('submit');
 			$new.find('form').submit();
 		});
-		
+
 		this._enable_back_cancel($new);
 	},
 	_show_entrez: function(error){
 		var self = this;
 		var $new = jQuery(document.createElement('div')).html(importer_form_html);
-		
+
         $new.find('#form_holder').load(fragment_base_url + 'import/entrez/', {}, function(){
 			$new.find('#add_form').submit(function() {
 				self._entrez_search();
@@ -229,17 +290,18 @@ jQuery.widget("ui.importer", {
 		$new.find('#ok_btn').button({
 			label: 'Search',
 			icons: {primary: 'ui-icon-search'},
-		}).click(function() { 
+		}).click(function() {
 			self._entrez_search();
 		});
 		this._enable_back_cancel($new);
-		
+
 	},
 	_show_upload: function(){
-		
+
 		var self = this;
 		var $new = jQuery(document.createElement('div')).html(importer_form_html);
-		
+
+        var added = new Array();
         $new.find('#form_holder').load(fragment_base_url + 'import/upload/', {}, function(){
 			$new.find('#add_form').submit(function() {
 				return false;
@@ -247,24 +309,28 @@ jQuery.widget("ui.importer", {
 			//show the whole kaboodle
 			self.$content.fadeOut('fast', function() {
 				jQuery(this).html($new)
-					.find('#fileupload').fileupload({dataType: 'json'});
+					.find('#fileupload').fileupload({dataType: 'json'}).on("fileuploaddone", function(e, data) {
+                        for (var i = 0; i < data.jqXHR.responseJSON.files.length; ++i) {
+                            jQuery.merge(added, data.jqXHR.responseJSON.files[i].gene_data);
+                        }
+                    });
 				jQuery(this).fadeIn('fast');
 				self._auto_size();
 			});
 			self.updated = true;
 		});
-		
+
 		//hookup the buttons
 		$new.find('#ok_btn').button({
 			label: 'Done',
 			icons: {primary: 'ui-icon-close'},
-		}).click(function() { 
-			location.reload();
+		}).click(function() {
+            self.$content.part_type_selector({data: added, part_types: self.options.part_types, success_cb:function(){location.reload();}});
 		});
 		this._enable_back_cancel($new);
-		
+
 	},
-	
+
 	_enable_back_cancel: function($new, cancel_label){
 		if (cancel_label == undefined) cancel_label = 'Cancel';
 		var self = this;
@@ -302,14 +368,14 @@ jQuery.widget("ui.importer", {
 		var cmds = new Array();
 		for( i in ids)
 		{
-			cmds.push({'desc': "Fetching info for id '" + ids[i] + "'", 
+			cmds.push({'desc': "Fetching info for id '" + ids[i] + "'",
                 'url': fragment_base_url + 'import/entrez/summary/',
 				'data': {'id': ids[i],},});
-		} 
+		}
 		var s = '';
 		if(ids.length > 1) s = 's';
 		this.$content.loader({
-			'commands': cmds, 
+			'commands': cmds,
 			'autoStart': true,
 			'data': function(val) {self._entrez_summary(val);},
 			'done': function(val) {self._entrez_show_results(val);},
@@ -324,20 +390,20 @@ jQuery.widget("ui.importer", {
 		var $results = jQuery(document.createElement('div'));
 		$results.html(entrez_results);
 		var $results_tbl = $results.find('#results');
-		
+
 		for (i in this._results)
 		{
 			var s = this._results[i];
 			$results_tbl.append(make_row(s));
 		}
-		
+
 		this._enable_back_cancel($results);
 		var $ok = $results.find('#ok_btn').button({
 			label: 'Import',
 			icons: {primary: 'ui-icon-transfer-e-w'}, //ui-icon-gear
 			disabled: true,
 		});
-			
+
 		$fl = $results.find('table')
 			.fragmentList({
 				selectChanged: function(event, d){
@@ -345,7 +411,7 @@ jQuery.widget("ui.importer", {
 						$ok.button('disable');
 					else
 						$ok.button('enable');
-				}	
+				}
 			})
 			.dataTable({
 				"bAutoWidth": false,
@@ -362,35 +428,36 @@ jQuery.widget("ui.importer", {
 						"sWidth":"40px"
 					},
 				]
-			});		
-		$ok.click(function() { 
+			});
+		$ok.click(function() {
 			//if some fragments have been selected, import them
 			var ids = $fl.fragmentList('getList');
 			var commands = new Array()
 			for( i in ids )
 			{
 				var id = ids[i];
-				commands.push( {'desc': "Importing id '" + id + "'...", 
+				commands.push( {'desc': "Importing id '" + id + "'...",
 								'url':fragment_base_url + 'import/entrez/import/',
 								'data': {'id': id,}, });
 			}
 			var s = '';
 			if(ids.length > 1) s = 's';
+            var addedData = new Array();
 			self.$content.loader({
-				'commands': commands, 
+				'commands': commands,
 				'autoStart': true,
-				'data': function(val) {},
-				'done': function(val) {location.reload();},
+				'data': function(val) {jQuery.merge(addedData, val);},
+				'done': function(val) {self.$content.part_type_selector({data: addedData, part_types: self.options.part_types, success_cb: function(){location.reload();}});},
 				'title': 'Importing ' + ids.length + ' fragment' + s + '...',
 			});
 			self._normal_size();
-		});	
-		
+		});
+
 		this._auto_size();
 		this.$content.html($results);
 	},
-	
-	
+
+
 //DIALOG RESIZING
 	_full_size: function()
 	{
@@ -435,21 +502,21 @@ var make_row = function(summary)
 
 /*
  * ui.loader
- * 
+ *
  * 	Performs a list of AJAX actions while displaying a progress bar
  *  Displays the error message if one accurs.
  *  Actions which return values (other than OK or ERROR) are not supported
- * 
+ *
  *  usage: jQuery(SELECTOR).loader({commands: [{	'desc': 'Command Description',
  * 											'url': '/url/to/call/',
  * 											'data': {	'the': 'data to post',
- * 														'to': 'the url'}, 
+ * 														'to': 'the url'},
  * 											}, MORE COMMANDS HERE];
- * 
+ *
  * then call .loader('start') to begin, or set option autoStart to true.
  */
 
-var loader_html = '' + 
+var loader_html = '' +
 '<div style="text-align:center;margin-top:1.5em;">' +
 '	<h2>Please Wait...</h2>' +
 '	<img src="' + STATIC_URL + 'images/spinner.gif" alt="Loading" style="margin-bottom:.5em;" />' +
@@ -478,7 +545,7 @@ jQuery.widget("ui.loader", {
 			console.error('ui.loader: init called without commands!');
 			return;
 		}
-		
+
 		var self = this;
 		var $new = jQuery(document.createElement('div')).html(loader_html);
 		this.$el = jQuery(this.element[0]).fadeOut('fast', function() {
@@ -499,7 +566,7 @@ jQuery.widget("ui.loader", {
 		this.$title = $new.find('#title').html(this.options.title);
 		this.$current = $new.find('#current');
 		this.$errors = $new.find('#errros');
-		
+
 		this._started = false;
 	},
 	start: function() //start performing the commands
@@ -532,19 +599,19 @@ jQuery.widget("ui.loader", {
 			'url': cmd.url,
 			'data': cmd.data,
 			'type': type,
-			'success': 
+			'success':
 				function(data){
 					if(data[0] != 0)
 					{
 						self.$errors.append(data[1] + '<br/>');
 						this._errors = this._errors + 1;
 					}
-					
+
 					//move on to the next command
 					self._next = self._next + 1;
 					self._update_progressbar();
 					self._next_action();
-					
+
 					if(data[0] == 0)
 						self.options.data(data[1]); //call data callback
 				},
@@ -552,7 +619,7 @@ jQuery.widget("ui.loader", {
 	},
 	_on_complete: function()
 	{
-		this.options.done(this._errors);		
+		this.options.done(this._errors);
 	},
 	_update_progressbar: function()
 	{
