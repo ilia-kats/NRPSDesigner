@@ -9,7 +9,7 @@
 <script type='text/javascript'>
 var myPrimers = {
     {% for p in construct.primer.all %}
-        '{{ p.name }}': {% include 'gibson/primer.json' with primer=p %},
+        '{{ p.id }}': {% include 'gibson/primer.json' with primer=p %},
     {% endfor %}
 };
 jQuery(document).ready( function(){
@@ -28,7 +28,7 @@ jQuery(document).ready( function(){
         {% for cf in construct.cf.all %}
 
         <div id='fragment-{{ cf.id }}' class='fragment'>
-            <div id='{{cf.primer_bottom.name}}' class='primer fwd-primer'>
+            <div id='primer-{{cf.primer_bottom.id}}' class='primer fwd-primer'>
                 <div class='pmark'>
                     <div class='pbody'></div>
                     <div class='parrow'></div>
@@ -46,7 +46,7 @@ jQuery(document).ready( function(){
 
             <div class='fname'><p>{{cf.fragment.name}}</p></div>
 
-            <div id='{{cf.primer_top.name}}' class='primer rev-primer'>
+            <div id='primer-{{cf.primer_top.id}}' class='primer rev-primer'>
                 <div class='pmark'>
                     <div class='pbody'></div>
                     <div class='parrow'></div>
@@ -79,10 +79,10 @@ jQuery(document).ready( function(){
                 <div style='text-align:center'>
                     <h3>Editing "<span id='pname'></span>"</h3>
                 </div>
-                <h4>Saved Sequence</h4> 
+                <h4>Saved Sequence</h4>
                 <p id='pseq' style="font-family:monospace;padding-left:2.5em;">
                 </p>
-                
+
                 <h4>Edit Length</h4>
                 <p style="padding-left:2.5em;">
                     Click on a base to move the end of the primer to that base
@@ -155,7 +155,7 @@ jQuery(document).ready( function(){
                 <div style='text-align:center;margin:1em;'>
                     <button class='boxplot-btn' pid=''>
                         Show Boxplot
-                    </button> 
+                    </button>
                 </div>
             </div>
         </div>
