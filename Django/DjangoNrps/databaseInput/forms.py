@@ -103,6 +103,12 @@ class DoubleSubstrateForm(ModelForm):
 			if commit:
 				m1.save()
 				m2.save()
+
+				m1.enantiomer = m2
+				m2.enantiomer = m1
+
+				m1.save()
+				m2.save()
 		else:
 			if commit:
 				m1.save()
