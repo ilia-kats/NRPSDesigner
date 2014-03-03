@@ -2250,7 +2250,6 @@ var d = Designer.prototype = new Container();
 		//setup the buttons
 		this._jQueryinfo.find('#fragment_remove')
 			.button({label: 'Remove', icons: {primary:'ui-icon-trash',},})
-			.click(function() {self._hideInfo()});
 
 		this._jQueryinfo.find('#fragment_clip')
 			.button({label: 'Clipping', icons: {primary:'ui-icon-scissors'}, disabled:true,})
@@ -2318,7 +2317,13 @@ var d = Designer.prototype = new Container();
         if (df.f().getViewable() == 'H')
             removebtn.button("option", "disabled", true);
         else
-            removebtn.button("option", "disabled", false).click(function() {self.hideInfo();self._fc.rm(df);});
+            removebtn.button("option", "disabled", false).click(function() {
+                self.hideInfo();
+                if(df._cf!=undefined) {
+                    self._server.rmFrag(df._cf);
+                }
+                self._fc.rm(df);
+            });
 		//binding to click means it gets triggered immediately
 		this._jQuerycanvas.mousedown(function() {self.hideInfo();});
 	}
