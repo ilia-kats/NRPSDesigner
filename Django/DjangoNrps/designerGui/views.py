@@ -69,6 +69,8 @@ def nrpDesigner(request, uuid, sample=False):
     if not nrp and request.user.is_authenticated():
         return HttpResponseNotFound()
     if not nrp:
+        if NRP.objects.filter(uuid=uuid).count() > 0:
+            return nrpListView(request, sample)
         nrp = NRP(owner=None, uuid=uuid)
         if sample:
             nrp.save()
