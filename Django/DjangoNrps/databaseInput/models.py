@@ -91,13 +91,14 @@ class Cds(models.Model):
     @staticmethod
     def type_list_to_modules(type_name_list):
         module_list = []
-        if type_name_list[0] in ['C_L','C_D']:
+        c_type_domains = ['C_L','C_D','C_Xg','C_du','C_gl','C_St']
+        if type_name_list[0] in c_type_domains:
             counter = count(0)
         else:
             counter = count(1)
         curr_count = counter.next()
         for domainTypeName in (type_name_list):
-            if domainTypeName in ['C_L','C_D']:
+            if domainTypeName in c_type_domains:
                 curr_count = counter.next()
             module_list.append(curr_count)
         return module_list
@@ -248,8 +249,8 @@ class Domain(models.Model):
     def get_biojs_annotation(self):
         short_name  = self.short_name()
         name = str(self)
-        start = self.get_start(with_linker=False)
-        stop  = self.get_stop(with_linker=False)
+        start = self.get_start()
+        stop  = self.get_stop()
         annotation = {'name': short_name,
             'html': name,
             'regions': [{'start':start, 'end':stop,'color':"blue"}]
@@ -257,8 +258,8 @@ class Domain(models.Model):
         return annotation
 
     def get_biojs_highlight(self):
-        start = self.get_start(with_linker=False)
-        stop  = self.get_stop(with_linker=False)
+        start = self.get_start()
+        stop  = self.get_stop()
         highlight = { 'start':start,
             'end':stop,
             'color':"white",
