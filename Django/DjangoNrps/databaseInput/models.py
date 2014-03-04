@@ -109,19 +109,19 @@ class Cds(models.Model):
 
     # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
-    def get_sequence(self, start_domain, stop_domain, start_boundary=None, stop_boundary=None):
+    def get_sequence(self, start_domain, stop_domain, start=None, stop=None):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
-            if start_boundary is None:
-                start_boundary = start_domain.get_start()
+            if start is None or isinstance(start, Domain) or type(start) not in [long, int]:
+                startpos = start_domain.get_start(start) - 1
+            else:
+                startpos = start
+            if stop is None or isinstance(stop, Domain) or type(stop) not in [long, int]:
+                stoppos = stop_domain.get_stop(stop)
+            else:
+                stoppos = stop
 
-            if stop_boundary is None:
-                stop_boundary = stop_domain.get_stop()
-
-            start_position = start_boundary - 1
-            stop_position = stop_boundary
-            ##
-            return self.dnaSequence[start_position:stop_position]
+            return self.dnaSequence[startpos:stoppos]
         else:
             pass  #raise some error..
 
@@ -190,7 +190,7 @@ class Domain(models.Model):
     def get_start(self, prevd=None, with_linker=True):
         if prevd is not None:
             try:
-                return self.prev_domain.get(pk=prevd).next_tuple.get().next_position
+                return self.prev_domain.get(pk=prevd.pk).next_tuple.get().next_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
@@ -206,7 +206,7 @@ class Domain(models.Model):
     def get_stop(self, nextd=None, with_linker=False):
         if nextd is not None:
             try:
-                return self.next_domain.get(pk=nextd).prev_tuple.get().prev_position
+                return self.next_domain.get(pk=nextd.pk).prev_tuple.get().prev_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:

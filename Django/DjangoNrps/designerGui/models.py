@@ -105,14 +105,14 @@ class NRP(models.Model):
             cdsDomainList = x.domain.cds.get_ordered_domain_list()
             adjacent = (cdsDomainList.index(y.domain) == cdsDomainList.index(x.domain) + 1)
             if y.left_boundary is None:
-                ystart = y.domain.get_start(x.domain.pk, with_linker=True)
+                ystart = y.domain.get_start(x.domain, with_linker=True)
             else:
                 ystart = y.left_boundary
             if x.right_boundary is None:
-                xstop = x.domain.get_stop(y.domain.pk, with_linker=True)
+                xstop = x.domain.get_stop(y.domain, with_linker=True)
             else:
                 xstop = x.right_boundary
-            continuous_seq = (ystart == xstop +1)
+            continuous_seq = (ystart == xstop)
             if adjacent and (y.left_boundary is None and x.right_boundary is None or continuous_seq):
                 return True
             else:
@@ -154,13 +154,22 @@ class NRP(models.Model):
             domain1 = connectedDomains[0]
             domain2 = connectedDomains[-1]
 
-            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain,
-                                         domain1.left_boundary, domain2.right_boundary)
-
             if count < len(connectedDomainList) - 1:
                 nextDomain = connectedDomainList[count + 1][0].domain.pk
             else:
                 nextDomain = None
+
+            if domain1.left_boundary is None:
+                start_pos = domain1.domain.get_start(lastDomain)
+                seqstart = lastDomain
+            else:
+                start_pos = seqstart = domain1.left_boundary
+            if domain2.right_boundary is None:
+                seqstop = domain2.domain
+            else:
+                seqstop = domain2.right_boundary
+            import pdb;pdb.set_trace()
+            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, seqstart, seqstop)
 
             domainGene = DomainGene.objects.create(owner = self.owner,
                 name = ','.join([x.domain.domainType.name for x in connectedDomains]),
@@ -176,10 +185,6 @@ class NRP(models.Model):
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
-            if domain1.left_boundary is None:
-                start_pos = start_pos = domain1.domain.get_start(lastDomain)
-            else:
-                start_pos = domain1.left_boundary
             for (i,domain) in enumerate(connectedDomains):
                 domainGene.domains.add(domain.domain)
                 if domain.left_boundary is None:
@@ -198,7 +203,7 @@ class NRP(models.Model):
                     stop = domain.domain.get_stop(nextd, with_linker=False)
                 else:
                     stop = domain.right_boundary
-                f = Feature(type="domain", start=start - start_pos, end=stop - start_pos + 1, direction='f', gene=domainGene)
+                f = Feature(type="domain", start=start - start_pos, end=stop - start_pos, direction='f', gene=domainGene)
                 f.save()
                 Qualifier(name="type", data=domain.domain.domainType.name, feature=f).save()
                 Qualifier(name="module", data=domain.domain.module, feature=f).save()
@@ -227,7 +232,7 @@ class NRP(models.Model):
                 direction = 'f'
                 )
 
-            lastDomain = domain2.domain.pk
+            lastDomain = domain2.domain
 
         self.save()
         return True
