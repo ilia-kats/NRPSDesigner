@@ -277,6 +277,71 @@ class NRP(models.Model):
         pfamJson = json.dumps({"length" : graphic_length, "regions": regions})
         return pfamJson
 
+    def adjustConstruct(self, target):
+        def porder(order, construct):
+            porder = order - 1
+            if porder < 0:
+                porder = construct.cf.count() - 1
+            return porder
+        def norder(order, construct):
+            norder = order + 1
+            if norder >= construct.cf.count():
+                norder = 0
+            return norder
+        if not self.construct.processed:
+            for j in self.construct.process():
+                pass
+        for (md, (sobj, nobj)) in {Settings: (self.construct.settings, target.construct.settings), PCRSettings: (self.construct.pcrsettings, target.construct.pcrsettings)}.iteritems():
+            for field in md._meta.fields:
+                if not isinstance(field, models.ManyToManyField) and not isinstance(field, models.OneToOneField) and not isinstance(field, models.ForeignKey) and not isinstance(field, models.AutoField):
+                    setattr(nobj, field.name, getattr(sobj, field.name))
+            nobj.save()
+        ncfs = {}
+        for j,cf in enumerate(self.construct.cf.order_by('order')):
+            ncf = None
+            if cf.fragment.origin != 'ND':
+                ncf = target.construct.add_fragment(cf.fragment, j, cf.direction)
+            else:
+                try:
+                    isIdentical = True
+                    if cf.fragment.domaingene.domains.count() == target.construct.cf.get(order=j).fragment.domaingene.domains.count():
+                        ourdomains = cf.fragment.domaingene.domains.all()
+                        otherdomains = target.construct.cf.get(order=j).fragment.domaingene.domains.all()
+                        for i in xrange(len(ourdomains)):
+                            if ourdomains[i].pk != otherdomains[i].pk:
+                                isIdentical = False
+                                break
+                    else:
+                        isIdentical = False
+                    if isIdentical:
+                        ncf = target.construct.cf.get(order=j)
+                except DomainGene.DoesNotExist:
+                    pass
+            if ncf is not None:
+                ncf.concentration = cf.concentration
+                ncf.save()
+                ncfs[cf] = ncf
+        for j in target.construct.process():
+            pass
+
+        for (cf, ncf) in ncfs.items():
+            ptop = ncf.primer_top()
+            pbottom = ncf.primer_bottom()
+            ptop.stick.length = cf.primer_top().stick.length
+            pbottom.stick.length = cf.primer_bottom().stick.length
+            pf = self.construct.cf.get(order=porder(cf.order, self.construct))
+            nf = self.construct.cf.get(order=norder(cf.order, self.construct))
+            if pf in ncfs and ncfs[pf].order == porder(ncf.order, ncf.construct):
+                pbottom.flap.length = cf.primer_bottom().flap.length
+            if nf in ncfs and ncfs[nf].order == norder(ncf.order, ncf.construct):
+                ptop.flap.length = cf.primer_top().flap.length
+            ptop.stick.save()
+            pbottom.stick.save()
+            ptop.flap.save()
+            pbottom.flap.save()
+            ncf.construct.reprocess_primer(ptop)
+            ncf.construct.reprocess_primer(pbottom)
+
     @task()
     def designDomains(self, curatedonly=True):
         #see deletion strategy in multiline comment above
@@ -297,9 +362,6 @@ class NRP(models.Model):
     @task()
     def makeLibrary(self, monomers, curatedonly=True):
         self.child.all().delete()
-        if not self.construct.processed:
-            for j in self.construct.process():
-                pass
         impl = getDOMImplementation()
         xml = impl.createDocument(None, 'nrp', None)
         root = xml.documentElement
@@ -336,16 +398,7 @@ class NRP(models.Model):
         designerDom = parseString(xmlout)
         nrpsList = designerDom.getElementsByTagName('s:component')
         i = 1
-        def porder(order, construct):
-            porder = order - 1
-            if porder < 0:
-                porder = construct.cf.count() - 1
-            return porder
-        def norder(order, construct):
-            norder = order + 1
-            if norder >= construct.cf.count():
-                norder = 0
-            return norder
+
         for nrps in nrpsList:
             description = self.description
             if description is not None and len(description) > 0:
@@ -361,56 +414,7 @@ class NRP(models.Model):
                 monomer = Substrate.objects.get(pk=monomerId[index])
                 SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
             nrp._design(self._parseNrps(nrps))
-            for (md, (sobj, nobj)) in {Settings: (self.construct.settings, nrp.construct.settings), PCRSettings: (self.construct.pcrsettings, nrp.construct.pcrsettings)}.iteritems():
-                for field in md._meta.fields:
-                    if not isinstance(field, models.ManyToManyField) and not isinstance(field, models.OneToOneField) and not isinstance(field, models.ForeignKey) and not isinstance(field, models.AutoField):
-                        setattr(nobj, field.name, getattr(sobj, field.name))
-                nobj.save()
-            ncfs = {}
-            for j,cf in enumerate(self.construct.cf.order_by('order')):
-                ncf = None
-                if cf.fragment.origin != 'ND':
-                    ncf = nrp.construct.add_fragment(cf.fragment, j, cf.direction)
-                else:
-                    try:
-                        isIdentical = True
-                        if cf.fragment.domaingene.domains.count() == nrp.construct.cf.get(order=j).fragment.domaingene.domains.count():
-                            ourdomains = cf.fragment.domaingene.domains.all()
-                            otherdomains = nrp.construct.cf.get(order=j).fragment.domaingene.domains.all()
-                            for i in xrange(len(ourdomains)):
-                                if ourdomains[i].pk != otherdomains[i].pk:
-                                    isIdentical = False
-                                    break
-                        else:
-                            isIdentical = False
-                        if isIdentical:
-                            ncf = nrp.construct.cf.get(order=j)
-                    except DomainGene.DoesNotExist:
-                        pass
-                if ncf is not None:
-                    ncf.concentration = cf.concentration
-                    ncf.save()
-                    ncfs[cf] = ncf
-            for j in nrp.construct.process():
-                pass
-
-            for (cf, ncf) in ncfs.items():
-                ptop = ncf.primer_top()
-                pbottom = ncf.primer_bottom()
-                ptop.stick.length = cf.primer_top().stick.length
-                pbottom.stick.length = cf.primer_bottom().stick.length
-                pf = self.construct.cf.get(order=porder(cf.order, self.construct))
-                nf = self.construct.cf.get(order=norder(cf.order, self.construct))
-                if pf in ncfs and ncfs[pf].order == porder(ncf.order, ncf.construct):
-                    pbottom.flap.length = cf.primer_bottom().flap.length
-                if nf in ncfs and ncfs[nf].order == norder(ncf.order, ncf.construct):
-                    ptop.flap.length = cf.primer_top().flap.length
-                ptop.stick.save()
-                pbottom.stick.save()
-                ptop.flap.save()
-                pbottom.flap.save()
-                ncf.construct.reprocess_primer(ptop)
-                ncf.construct.reprocess_primer(pbottom)
+            self.adjustConstruct(nrp)
             i += 1
 
     def _design(self, domainIdList):

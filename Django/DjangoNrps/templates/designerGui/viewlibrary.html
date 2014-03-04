@@ -17,7 +17,7 @@
 
 {% block content %}
 <div class="alert alert-info">
-NRP library generated from {{ parentnrp.name }}.
+NRP {%if libraryclassification %} {{libraryclassification}} {% endif %} library generated from {{ parentnrp.name }}.
 </div>
     <div class="btn-group" id="selection_btns">
         <button id="delete_btn" class="btn" disabled="disabled"><i class="icon-trash"></i> Delete Selection</button>

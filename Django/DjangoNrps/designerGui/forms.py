@@ -13,10 +13,10 @@ class NRPForm(ModelForm):
 		model = NRP
 		exclude = ['uuid', 'monomers','owner','designed','construct','designerDomains']
 
- 
+
 
 def make_changed_boundary_nrp_form(nrp_uuid):
-    class ChangedBoundaryNRPForm(Form): 
+    class ChangedBoundaryNRPForm(Form):
         domain = ChoiceField(label="Domain", widget=Select())
         left_boundary = IntegerField(label="Left Boundary", widget=TextInput)
         right_boundary = IntegerField(label="Right Boundary", widget=TextInput)
@@ -44,7 +44,7 @@ def make_changed_boundary_nrp_form(nrp_uuid):
             nrp.uuid = make_uuid()
             nrp.boundary_parent = NRP.objects.get(uuid=self.nrp_uuid)
 
-    
+
             nrp.save()
 
             for nrp_order in parent_nrp_order_all:
@@ -61,7 +61,8 @@ def make_changed_boundary_nrp_form(nrp_uuid):
                 domain_order.save()
 
             nrp.makeConstruct()
+            NRP.objects.get(uuid=self.nrp_uuid).adjustConstruct(nrp)
 
     return ChangedBoundaryNRPForm
-        
+
 

@@ -154,7 +154,6 @@ def processLibrary(request, uuid):
         if not nrp:
             return HttpResponseNotFound()
         data = json.loads(request.body)
-        import pdb;pdb.set_trace()
         monomers = []
         haveUseAll = -1
         i = 0
@@ -198,7 +197,7 @@ def create_boundary_library(request, uuid):
 
     ChangedBoundaryNRPForm = make_changed_boundary_nrp_form(uuid)
     changedBoundaryNRPFormset = formset_factory(ChangedBoundaryNRPForm, extra=1)
-    
+
     if request.method == "POST":
         boundary_formset = changedBoundaryNRPFormset(request.POST)
         if boundary_formset.is_valid():
@@ -213,7 +212,7 @@ def create_boundary_library(request, uuid):
                 })
 
         return HttpResponse(t.render(c))
-        
+
     else:
         #boundary_form = ChangedBoundaryNRPForm(nrp)
         t = loader.get_template('designerGui/createBoundaryLibrary.html')
@@ -223,7 +222,6 @@ def create_boundary_library(request, uuid):
 
         return HttpResponse(t.render(c))
 
-@login_required
 def view_boundary_library(request, uuid):
     parentnrp = get_nrp(request.user, uuid)
     if not parentnrp:
@@ -232,7 +230,8 @@ def view_boundary_library(request, uuid):
     c = RequestContext(request)
     c['parentnrp'] = parentnrp
     c['childnrps'] = childnrps
-    t = loader.get_template('designerGui/viewBoundaryLibrary.html')
+    c['libraryclassification'] = 'boundary'
+    t = loader.get_template('designerGui/viewlibrary.html')
     return HttpResponse(t.render(c))
 
 def get_available_monomers(request):
