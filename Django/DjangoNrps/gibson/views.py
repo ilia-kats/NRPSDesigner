@@ -393,6 +393,8 @@ def primer_length(request, cid, pid):
         try:
             p.flap.length = int(request.POST.get('flap_length', p.flap.length))
             p.stick.length = int(request.POST.get('stick_length', p.stick.length))
+            p.flap.save()
+            p.stick.save()
         except ValueError:
             return HttpResponseNotFound()
         #reprocess to generate the warnings

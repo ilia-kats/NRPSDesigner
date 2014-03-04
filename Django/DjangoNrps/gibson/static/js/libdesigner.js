@@ -327,9 +327,11 @@ jQuery.widget('ui.constructPreview', {
     {
         this.arrow.css({'left': this._get_center(jQueryp), });
         jQueryp.hasClass('fwd-primer') ? this.type='fwd' : this.type='rev';
-        var p = this.options.primers[jQueryp.attr('id')];
+        var pid = jQueryp.attr('id').substr(7);
+        var p = this.options.primers[pid];
         this.pedit.find('#pname').text(p.name);
         this.pedit.find('#pseq').text(p.seq);
+        this.pedit.data("pid", pid);
 
         if(this.type == 'fwd')
         {
@@ -399,7 +401,7 @@ jQuery.widget('ui.constructPreview', {
         this._set_saving(true);
         var l = jQuery('#left_fragment .base.sl');
         var r = jQuery('#right_fragment .base.sl');
-        p = this.options.primers[this.pedit.find('#pname').text()];
+        p = this.options.primers[this.pedit.data("pid")];
         var s = 10, f = 10;
         if(this.type == 'fwd')
         {
@@ -427,7 +429,7 @@ jQuery.widget('ui.constructPreview', {
                 self._show_warnings(p.warnings);
                 self._set_rulers(p);
                 self.pedit.find('#pseq').text(p.seq);
-                self.el.find('#'+p.name+'.primer .pwarn')
+                self.el.find('#primer-'+p.id+'.primer .pwarn')
                     .text(p.warnings.length);
                 var tr = jQuery('tr#tr-'+p.id);
                 tr.find('#length').text(p.length);
