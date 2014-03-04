@@ -103,8 +103,16 @@ class NRP(models.Model):
                 return False
             cdsDomainList = x.domain.cds.get_ordered_domain_list()
             adjacent = (cdsDomainList.index(y.domain) == cdsDomainList.index(x.domain) + 1)
-            continuous_seq = (y.left_boundary == x.right_boundary +1)
-            if adjacent and continuous_seq:
+            if y.left_boundary is None:
+                ystart = y.domain.get_start(x.domain.pk, with_linker=True)
+            else:
+                ystart = y.left_boundary
+            if x.right_boundary is None:
+                xstop = x.domain.get_stop(y.domain.pk, with_linker=True)
+            else:
+                xstop = x.right_boundary
+            continuous_seq = (ystart == xstop +1)
+            if adjacent and (y.left_boundary is None and x.right_boundary is None or continuous_seq):
                 return True
             else:
                 return False
@@ -152,7 +160,6 @@ class NRP(models.Model):
                 nextDomain = connectedDomainList[count + 1][0].domain.pk
             else:
                 nextDomain = None
-            lastDomain = domain2.domain.pk
 
             domainGene = DomainGene.objects.create(owner = self.owner,
                 name = ','.join([x.domain.domainType.name for x in connectedDomains]),
@@ -168,14 +175,30 @@ class NRP(models.Model):
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
-            start_pos = domain1.domain.get_start(lastDomain) - 1
-            for domain in connectedDomains:
+            if domain1.left_boundary is None:
+                start_pos = start_pos = domain1.domain.get_start(lastDomain)
+            else:
+                start_pos = domain1.left_boundary
+            for (i,domain) in enumerate(connectedDomains):
                 domainGene.domains.add(domain.domain)
-                #FIX ASAP!
-                #f = Feature(type="domain", start=domain.domain.get_start(lastDomain, with_linker=False) - 1 - start_pos, end=domain.domain.get_stop(nextDomain, with_linker=False) - start_pos, direction='f', gene=domainGene)
-                f = Feature(type="domain", start=5, end=15, gene=domainGene)
-
-                f.save() 
+                if domain.left_boundary is None:
+                    if i == 0:
+                        lastd = lastDomain
+                    else:
+                        lastd = None
+                    start = domain.domain.get_start(lastd, with_linker=False)
+                else:
+                    start = domain.left_boundary
+                if domain.right_boundary is None:
+                    if i == len(connectedDomains):
+                        nextd = nextDomain
+                    else:
+                        nextd = None
+                    stop = domain.domain.get_stop(nextd, with_linker=False)
+                else:
+                    stop = domain.right_boundary
+                f = Feature(type="domain", start=start - start_pos, end=stop - start_pos + 1, direction='f', gene=domainGene)
+                f.save()
                 Qualifier(name="type", data=domain.domain.domainType.name, feature=f).save()
                 Qualifier(name="module", data=domain.domain.module, feature=f).save()
                 if domain.domain.substrateSpecificity.count() > 0:
@@ -202,6 +225,8 @@ class NRP(models.Model):
                 order = count,
                 direction = 'f'
                 )
+
+            lastDomain = domain2.domain.pk
 
         self.save()
         return True
@@ -334,18 +359,10 @@ class NRP(models.Model):
     def _design(self, domainIdList):
         old_domains = DomainOrder.objects.filter(nrp = self)
         old_domains.delete()
-        prev_domain = None
         for count, domainId in enumerate(domainIdList):
-            if count < len(domainIdList)-1:
-                next_domain = domainIdList[count+1]
-            else:
-                next_domain = None
             domain = Domain.objects.get(pk = domainId)
-            left_boundary = domain.get_start(prev_domain)
-            right_boundary = domain.get_stop(next_domain)
-            domain_order = DomainOrder.objects.create(nrp= self, domain=domain, 
-                order=count, left_boundary=left_boundary, right_boundary=right_boundary)
-            prev_domain = domain.pk
+            domain_order = DomainOrder.objects.create(nrp= self, domain=domain,
+                order=count, left_boundary=None, right_boundary=None)
         self.designed = True
         self.save()
         self.makeConstruct()
@@ -463,8 +480,8 @@ class DomainOrder(models.Model):
     nrp = models.ForeignKey('NRP', related_name = 'domainOrder')
     domain = models.ForeignKey('databaseInput.Domain', related_name = 'domainOrder')
     order = models.PositiveIntegerField()
-    left_boundary = models.PositiveIntegerField()
-    right_boundary = models.PositiveIntegerField()
+    left_boundary = models.PositiveIntegerField(null=True, default=None)
+    right_boundary = models.PositiveIntegerField(null=True, default=None)
 
     def __unicode__(self):
         return self.domain.short_name()
