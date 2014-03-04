@@ -109,16 +109,17 @@ class Cds(models.Model):
 
     # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
-    def get_sequence(self, start_domain, stop_domain, prev_domain=None, next_domain=None):
+    def get_sequence(self, start_domain, stop_domain, start_boundary=None, stop_boundary=None):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
-            start_index = domain_list.index(start_domain)
-            stop_index  = domain_list.index(stop_domain)
+            if start_boundary is None:
+                start_boundary = start_domain.get_start()
 
-            # write custom functions for the below!!!
-            # With linker consideration maybe???
-            start_position = start_domain.get_start(prev_domain) - 1
-            stop_position = stop_domain.get_stop(next_domain)
+            if stop_boundary is None:
+                stop_boundary = stop_domain.get_stop()
+
+            start_position = start_boundary - 1
+            stop_position = stop_boundary
             ##
             return self.dnaSequence[start_position:stop_position]
         else:
@@ -184,6 +185,7 @@ class Domain(models.Model):
 
     def short_name(self):
         return str(self.cds.geneName) + str(self.module) + str(self.domainType)
+
 
     def get_start(self, prevd=None, with_linker=True):
         if prevd is not None:

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from designerGui.models import NRP
+from designerGui.models import NRP, DomainOrder
 
 class NRPInline(admin.TabularInline):
     model = NRP.monomers.through
@@ -10,4 +10,4 @@ class NRPAdmin(admin.ModelAdmin):
 	inlines = [NRPInline]
 
 admin.site.register(NRP, NRPAdmin)
-
+admin.site.register(DomainOrder)

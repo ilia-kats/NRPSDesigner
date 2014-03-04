@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block css-include %}
+
+{% endblock %}
+
+{% block js-include %}
+{% endblock %}
+
+
+{% block content %}
+
+<form action="" method="post">{% csrf_token %}
+{{ formset.management_form }}
+
+<label>Domain whose left and right boundaries will be changed:</label>
+{% for form in formset %}
+      <div class="formSet">
+          {{ form.errors}}
+          {{ form.domain }}
+          {{ form.left_boundary }}
+          {{ form.right_boundary }}
+      </div>
+
+{% endfor %}
+<br/>
+<br/>
+<input class="btn" type="submit" value="Create Library" />
+</form>
+{% endblock %}
+
+
+{% block js %}
+<script type='text/javascript'>
+
+jQuery(document).ready(function() {
+  jQuery(".formSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+      });
+
+
+});
+</script>
+{% endblock %}
