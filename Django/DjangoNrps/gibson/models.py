@@ -607,10 +607,13 @@ class Construct(models.Model):
                         length = self.settings.min_overlap
                     )
                 )
+                cf.recalculate()
         else:
             for p in self.primer.all():
                 p.stick.length = self.settings.min_overlap
+                p.stick.save()
                 p.flap.length = self.settings.min_overlap
+                p.flap.save()
                 p.save()
         for i,p in enumerate(self.primer.all()):
             if self.settings.min_anneal_tm > 0:
@@ -674,28 +677,28 @@ class ConstructFragment(models.Model):
         ordering = ['order']
 
     def set_concentration(self, conc):
-        self.concentration = Decimal(conc)
+        self.concentration = conc
         self.recalculate()
 
     def recalculate(self):
         ps = self.construct.pcrsettings
-        m = ps.m()
-        buff = m * ps.buffer_d / ps.buffer_s
-        dntp = m * ps.dntp_d / ps.dntp_s
-        primer_top = m * ps.primer_d / self.primer_top().concentration
-        primer_bottom = m * ps.primer_d / self.primer_bottom().concentration
-        template = m * ps.template_d / self.concentration
-        total = (-template - ps.enzyme_v()) / (buff + dntp + primer_top + primer_bottom - 1)
+        m = float(ps.m())
+        buff = m * float(ps.buffer_d) / float(ps.buffer_s)
+        dntp = m * float(ps.dntp_d) / float(ps.dntp_s)
+        primer_top = m * float(ps.primer_d) / float(self.primer_top().concentration)
+        primer_bottom = m * float(ps.primer_d) / float(self.primer_bottom().concentration)
+        template = m * float(ps.template_d) / float(self.concentration)
+        total = (template + float(ps.enzyme_v())) / (1 - buff - dntp - primer_top - primer_bottom)
         if total < ps.volume_each:
             self.total_v = ps.volume_each
-            self.water_v = self.total_v - self.total_v * (buff + dntp + primer_top + primer_bottom) - template - ps.enzyme_v()
+            self.water_v = float(self.total_v) - float(self.total_v) * (buff + dntp + primer_top + primer_bottom) - template - float(ps.enzyme_v())
         else:
             self.total_v = total
             self.water_v = 0
-        self.buffer_v = buff * self.total_v
-        self.dntp_v = dntp * self.total_v
-        self.primer_top_v = primer_top * self.total_v
-        self.primer_bottom_v = primer_bottom * self.total_v
+        self.buffer_v = buff * float(self.total_v)
+        self.dntp_v = dntp * float(self.total_v)
+        self.primer_top_v = primer_top * float(self.total_v)
+        self.primer_bottom_v = primer_bottom * float(self.total_v)
         self.template_v = template
         self.save()
 

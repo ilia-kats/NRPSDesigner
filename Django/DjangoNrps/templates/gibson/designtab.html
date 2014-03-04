@@ -3,6 +3,19 @@
 <div id='design-tab'>
 <div class="pad">
 	<div class="pad-content" style="padding:.2em;">
+        <div id="designer_buttons">
+            <div class="btn-group" style="white-space:normal">
+                <button class="btn" type="button" id="download_sbol">Download SBOL</button>
+                <button class="btn" type="button" id="download_genbank">Download GenBank</button>
+                <button class="btn" type="button" onclick="primersAutoProcess = true;jQuery('#tabs').tabs('option', 'active', 3);">Next</button>
+            </div>
+            <div class="btn-group" style="margin-left: 50px">
+                <a class="btn" id="make_library" href="{% url 'createLibrary' uuid=construct.nrp.uuid %}" target="_blank">Create library</a>
+                {% if con.nrp.child.count > 0 %}
+                <a class="btn" id="view_library" href="{% url 'viewLibrary' uuid=construct.nrp.uuid %}" target="_blank">View library</a>
+                {% endif %}
+            </div>
+        </div>
 		<div id='canvas_holder'>
 			<canvas id="cdesigner" style="display:block; height:100%; width:100%;"></canvas>
 
@@ -21,11 +34,6 @@
 
 		</div>
         <div id='frag_select_holder'>
-            <div class="btn-group" style="white-space:normal">
-                <button class="btn" type="button" id="download_sbol">Download SBOL</button>
-                <button class="btn" type="button" id="download_genbank">Download GenBank</button>
-                <button class="btn" type="button" onclick="primersAutoProcess = true;jQuery('#tabs').tabs('option', 'active', 3);">Next</button>
-            </div>
             <div id='frag_select'>
                 {%include 'fragment/jFragmentSelector.html' %}
             </div>

@@ -12,10 +12,11 @@ from uuid import uuid4
 from django.conf import settings
 from django.db import connection
 from databaseInput.models import Substrate, Domain
-from gibson.models import Construct, ConstructFragment, fragment_feature
+from gibson.models import Construct, ConstructFragment, fragment_feature, Settings, PCRSettings
 from fragment.models import Gene, DomainGene, Feature, Qualifier
 
 from celery.contrib.methods import task
+
 
 class Species(models.Model):
     species = models.CharField(max_length=100)
@@ -251,7 +252,6 @@ class NRP(models.Model):
         if self.indigoidineTagged:
             args.append("-t")
         xmlout = self._runNrpsDesigner(args)
-
         # parse xml to extract domain list
         # can not use libsbol here, as it only supports reading from file
         designerDom = parseString(xmlout)
@@ -301,10 +301,22 @@ class NRP(models.Model):
         designerDom = parseString(xmlout)
         nrpsList = designerDom.getElementsByTagName('s:component')
         i = 1
+        def porder(order, construct):
+            porder = order - 1
+            if porder < 0:
+                porder = construct.cf.count() - 1
+            return porder
+        def norder(order, construct):
+            norder = order + 1
+            if norder >= construct.cf.count():
+                norder = 0
+            return norder
         for nrps in nrpsList:
             description = self.description
             if description is not None and len(description) > 0:
                 description += "\n"
+            elif description is None:
+                description = ""
             varname = Substrate.objects.get(pk=monomers[varpos][i]).name
             nrp = NRP.objects.create(owner = self.owner, name="%s %s" % (self.name, varname), description=description + "library variant %d: %s" % (i, varname), indigoidineTagged=self.indigoidineTagged, parent=self)
             for j, monomerId in enumerate(monomers):
@@ -314,11 +326,56 @@ class NRP(models.Model):
                 monomer = Substrate.objects.get(pk=monomerId[index])
                 SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
             nrp._design(self._parseNrps(nrps))
+            for (md, (sobj, nobj)) in {Settings: (self.construct.settings, nrp.construct.settings), PCRSettings: (self.construct.pcrsettings, nrp.construct.pcrsettings)}.iteritems():
+                for field in md._meta.fields:
+                    if not isinstance(field, models.ManyToManyField) and not isinstance(field, models.OneToOneField) and not isinstance(field, models.ForeignKey) and not isinstance(field, models.AutoField):
+                        setattr(nobj, field.name, getattr(sobj, field.name))
+                nobj.save()
+            ncfs = {}
             for j,cf in enumerate(self.construct.cf.order_by('order')):
+                ncf = None
                 if cf.fragment.origin != 'ND':
-                    nrp.construct.add_fragment(cf.fragment, j, cf.direction)
+                    ncf = nrp.construct.add_fragment(cf.fragment, j, cf.direction)
+                else:
+                    try:
+                        isIdentical = True
+                        if cf.fragment.domaingene.domains.count() == nrp.construct.cf.get(order=j).fragment.domaingene.domains.count():
+                            ourdomains = cf.fragment.domaingene.domains.all()
+                            otherdomains = nrp.construct.cf.get(order=j).fragment.domaingene.domains.all()
+                            for i in xrange(len(ourdomains)):
+                                if ourdomains[i].pk != otherdomains[i].pk:
+                                    isIdentical = False
+                                    break
+                        else:
+                            isIdentical = False
+                        if isIdentical:
+                            ncf = nrp.construct.cf.get(order=j)
+                    except DomainGene.DoesNotExist:
+                        pass
+                if ncf is not None:
+                    ncf.concentration = cf.concentration
+                    ncf.save()
+                    ncfs[cf] = ncf
             for j in nrp.construct.process():
                 pass
+
+            for (cf, ncf) in ncfs.items():
+                ptop = ncf.primer_top()
+                pbottom = ncf.primer_bottom()
+                ptop.stick.length = cf.primer_top().stick.length
+                pbottom.stick.length = cf.primer_bottom().stick.length
+                pf = self.construct.cf.get(order=porder(cf.order, self.construct))
+                nf = self.construct.cf.get(order=norder(cf.order, self.construct))
+                if pf in ncfs and ncfs[pf].order == porder(ncf.order, ncf.construct):
+                    pbottom.flap.length = cf.primer_bottom().flap.length
+                if nf in ncfs and ncfs[nf].order == norder(ncf.order, ncf.construct):
+                    ptop.flap.length = cf.primer_top().flap.length
+                ptop.stick.save()
+                pbottom.stick.save()
+                ptop.flap.save()
+                pbottom.flap.save()
+                ncf.construct.reprocess_primer(ptop)
+                ncf.construct.reprocess_primer(pbottom)
             i += 1
 
     def _design(self, domainIdList):
@@ -345,38 +402,38 @@ class NRP(models.Model):
 
     def _runNrpsDesigner(self, params, stdin=None):
         lasterror = [None] # nonlocal only in python3
+        lastcat = [0]
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3
         def processErr(lines):
-            cat = 0
             def log():
                 if lasterror[0]is None:
                     return
-                if cat == 0:
+                if lastcat[0] == 0:
                     logger.error(lasterror[0])
-                elif cat == 1:
+                elif lastcat[0] == 1:
                     logger.warning(lasterror[0])
-                elif cat == 2:
+                elif lastcat[0] == 2:
                     logger.info(lasterror[0])
             lines = lines.splitlines()
             for line in lines:
                 if line.startswith("WARNING: "):
                     log()
-                    cat = 1
+                    lastcat[0] = 1
                     lasterror[0] = line[9:]
                 elif line.startswith("ERROR: "):
                     log()
-                    cat = 0
+                    lastcat[0] = 0
                     lasterror[0] = line[7:]
                 elif line.startswith("INFO: "):
                     log()
-                    cat = 2
+                    lastcat[0] = 2
                     lasterror[0] = line[6:]
                 elif line.startswith(" "):
                     lasterror[0] += line.strip()
                 else:
                     log()
-                    cat = 0
+                    lastcat[0] = 0
                     lasterror[0] = line
             log()
         def processOut(lines):
@@ -407,13 +464,15 @@ class NRP(models.Model):
         if stdin is not None:
             child.stdin.write(stdin)
             child.stdin.close()
-        while child.poll() is None:
-            fdsready = poll.poll()
+        def processFds(fdsready):
             for fd in fdsready:
-                if fd[0] == fds[1] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
+                if fd[0] == fds[1] and (fd[1] & select.POLLIN or fd[1] & select.POLLPRI):
                     readFrom(child.stderr, processErr)
-                elif fd[0] == fds[0] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
+                elif fd[0] == fds[0] and (fd[1] & select.POLLIN or fd[1] & select.POLLPRI):
                     readFrom(child.stdout, processOut)
+        while child.poll() is None:
+            processFds(poll.poll())
+        processFds(poll.poll())
         if child.returncode == -11:
             lasterror[0] = "Segmentation fault"
         if child.returncode != 0:

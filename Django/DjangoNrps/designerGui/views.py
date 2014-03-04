@@ -97,7 +97,6 @@ def peptide_add(request):
     else:
         return HttpResponseNotFound()
 
-@login_required
 def peptide_delete(request, uuid):
     peptide = get_nrp(request.user, uuid)
     if peptide:
@@ -133,7 +132,6 @@ def SpeciesListView(request, uuid):
     c = RequestContext(request, {'nrp': nrp, 'uuid': uuid, 'myFormSet': SubstrateFormSet(), 'modifications': modfs.values(), 'substrateOrder': substrateOrder, 'indigoidineTagged': nrp.indigoidineTagged, 'initialPic': nrp.getPeptideSequenceForStructView()})
     return HttpResponse(t.render(c))
 
-@login_required
 def createLibrary(request, uuid):
     nrp = get_nrp(request.user, uuid)
     if not nrp:
@@ -149,7 +147,6 @@ def createLibrary(request, uuid):
     c['scaffold'] = nrp.monomers.order_by('substrateOrder')
     return HttpResponse(t.render(c))
 
-@login_required
 def processLibrary(request, uuid):
     if request.method == 'POST':
         nrp = get_nrp(request.user, uuid)
@@ -174,7 +171,6 @@ def processLibrary(request, uuid):
                     data['as'][haveUseAll].append(s.pk)
         return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
 
-@login_required
 def viewLibrary(request, uuid):
     parentnrp = get_nrp(request.user, uuid)
     if not parentnrp:
@@ -186,7 +182,6 @@ def viewLibrary(request, uuid):
     t = loader.get_template('designerGui/viewlibrary.html')
     return HttpResponse(t.render(c))
 
-@login_required
 def downloadLibrary(request, uuid):
     parentnrp = get_nrp(request.user, uuid)
     if not parentnrp:
