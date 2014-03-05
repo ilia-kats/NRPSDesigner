@@ -442,7 +442,7 @@ jQuery.widget("ui.importer", {
 			}
 			var s = '';
 			if(ids.length > 1) s = 's';
-            var addedData = new Array();
+            var addedData = [];
 			self.$content.loader({
 				'commands': commands,
 				'autoStart': true,
@@ -610,10 +610,9 @@ jQuery.widget("ui.loader", {
 					//move on to the next command
 					self._next = self._next + 1;
 					self._update_progressbar();
+                    if(data[0] == 0)
+                        self.options.data(data[1]); //call data callback
 					self._next_action();
-
-					if(data[0] == 0)
-						self.options.data(data[1]); //call data callback
 				},
 		});
 	},
