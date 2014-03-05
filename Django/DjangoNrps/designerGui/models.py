@@ -168,7 +168,6 @@ class NRP(models.Model):
                 seqstop = domain2.domain
             else:
                 seqstop = domain2.right_boundary
-            import pdb;pdb.set_trace()
             domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, seqstart, seqstop)
 
             domainGene = DomainGene.objects.create(owner = self.owner,
