@@ -14,19 +14,23 @@ class Migration(DataMigration):
             if (len(domains) == 0):
                 continue
             for domain in domains:
-                domain.pfamLinkerStart += 1 - domain.pfamLinkerStart % 3
-                domain.definedLinkerStart += 1 - domain.definedLinkerStart % 3
-                domain.pfamLinkerStop -= domain.pfamLinkerStop % 3
-                domain.definedLinkerStop -= domain.definedLinkerStop % 3
-                domain.pfamStart += 1 - domain.pfamStart % 1
-                domain.definedStart += 1 - domain.definedStart % 3
-                domain.pfamStop -= domain.pfamStop % 3
-                domain.definedStop -= domain.definedStop % 3
+                if not domain.pfamLinkerStart == None:
+                    domain.pfamLinkerStart += 1 - domain.pfamLinkerStart % 3
+                if not domain.definedLinkerStart == None:
+                    domain.definedLinkerStart += 1 - domain.definedLinkerStart % 3
+                if not domain.pfamLinkerStop == None:
+                    domain.pfamLinkerStop -= domain.pfamLinkerStop % 3
+                if not domain.definedLinkerStop == None:
+                    domain.definedLinkerStop -= domain.definedLinkerStop % 3
+                if not domain.pfamStart == None:
+                    domain.pfamStart += 1 - domain.pfamStart % 1
+                if not domain.definedStart == None:
+                    domain.definedStart += 1 - domain.definedStart % 3
+                if not domain.pfamStop == None:
+                    domain.pfamStop -= domain.pfamStop % 3
+                if not domain.definedStop == None:
+                    domain.definedStop -= domain.definedStop % 3
                 domain.save()
-                for nd in domain.next_domain.all():
-                    nd.prev_position -= domain.next_domain.prev_position % 3
-                    nd.next_position += 1 - domain.next_domain.next_position % 3
-                    nd.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."

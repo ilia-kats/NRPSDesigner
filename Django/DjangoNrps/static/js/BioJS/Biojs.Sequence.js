@@ -153,6 +153,7 @@ Biojs.Sequence = Biojs.extend(
 		highlights : [],
 		annotations: [],
 		sequenceUrl: 'http://www.ebi.ac.uk/das-srv/uniprot/das/uniprot/sequence',
+		protein: false,
 
 		// Styles
 		selectionColor : 'Yellow',
@@ -830,7 +831,12 @@ Biojs.Sequence = Biojs.extend(
 
 		var i = 1;
 		var arr = [];
+		if (this.opt.protein){
+		var str = '>' + this.opt.id + ' ' + a.length + ' amino acids<br/>';
+
+		} else {
 	    var str = '>' + this.opt.id + ' ' + a.length + ' bp<br/>';
+		}
 
 		/* Correct column size in case the sequence is as small peptide */
 		var numCols = this.opt.columns.size;
