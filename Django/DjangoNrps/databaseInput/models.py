@@ -190,7 +190,8 @@ class Domain(models.Model):
     def get_start(self, prevd=None, with_linker=True):
         if prevd is not None:
             try:
-                return self.prev_domain.get(pk=prevd.pk).next_tuple.get().next_position
+                # TODO: need to find a better way to handle multiple experimental data
+                return self.prev_domain.get(pk=prevd.pk).next_tuple.filter(next_domain__pk=self.pk)[0].next_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
@@ -206,7 +207,8 @@ class Domain(models.Model):
     def get_stop(self, nextd=None, with_linker=False):
         if nextd is not None:
             try:
-                return self.next_domain.get(pk=nextd.pk).prev_tuple.get().prev_position
+                # TODO: need to find a better way to handle multiple experimental data
+                return self.next_domain.get(pk=nextd.pk).prev_tuple.filter(prev_domain__pk=self.pk)[0].prev_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
