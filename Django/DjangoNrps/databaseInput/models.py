@@ -261,13 +261,13 @@ class Domain(models.Model):
     def get_biojs_annotation(self, protein=False):
         short_name  = self.short_name()
         name = str(self)
-        start = self.get_start()
+        start = self.get_start() + 1
         stop  = self.get_stop()
         if protein:
             start, stop = dna_to_prot_coords(start, stop)
         annotation = {'name': short_name,
             'html': name,
-            'regions': [{'start':start + 1, 'end':stop,'color':"blue"}]
+            'regions': [{'start':start, 'end':stop,'color':"blue"}]
             }
         return annotation
 

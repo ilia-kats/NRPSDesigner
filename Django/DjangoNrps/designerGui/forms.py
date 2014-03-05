@@ -7,6 +7,7 @@ from django.forms.formsets import BaseFormSet
 
 from designerGui.models import DomainOrder, SubstrateOrder
 from designerGui.models import make_uuid
+from databaseInput.models import prot_to_dna_coords
 
 class NRPForm(ModelForm):
 	description = CharField(widget=Textarea, required=False)
@@ -34,13 +35,14 @@ def make_changed_boundary_nrp_form(nrp_uuid):
             left_boundary    = self.cleaned_data['left_boundary']
             right_boundary   = self.cleaned_data['right_boundary']
 
+
             # start saving nrp variants
             nrp = NRP.objects.get(uuid = self.nrp_uuid)
             parent_dom_order_all = DomainOrder.objects.filter(nrp=nrp)
             parent_nrp_order_all = SubstrateOrder.objects.filter(nrp=nrp)
             nrp.pk = None
             nrp.name = str(nrp.name) + " Boundary variant"
-            nrp.description = str(chosen_dom_order) + " Boundaries:" + str(left_boundary) + "-" + str(right_boundary)
+            nrp.description = str(chosen_dom_order) + " Boundaries:" + str(left_boundary) + "-" + str(right_boundary) + str("aa")
             nrp.construct = None
             nrp.uuid = make_uuid()
             nrp.boundary_parent = NRP.objects.get(uuid=self.nrp_uuid)
@@ -52,6 +54,8 @@ def make_changed_boundary_nrp_form(nrp_uuid):
                 nrp_order.pk = None
                 nrp_order.nrp = nrp
                 nrp_order.save()
+
+            left_boundary, right_boundary = prot_to_dna_coords(left_boundary,right_boundary)
 
             for domain_order in parent_dom_order_all:
                 if domain_order == chosen_dom_order:
@@ -71,7 +75,7 @@ def make_changed_boundary_nrp_form(nrp_uuid):
             chosen_dom_order = DomainOrder.objects.get(pk = cleaned_data.get("domain"))
 
             left_min = 1
-            right_max = len(chosen_dom_order.domain.cds.dnaSequence)
+            right_max = len(chosen_dom_order.domain.cds.dnaSequence)/3
             if  left_boundary < left_min:
                 raise ValidationError("Left boundary has to be greater or equal to " + str(left_min)+".")
             if right_boundary > right_max:

@@ -32,7 +32,7 @@ def get_domain_biojs_sequence(request):
 	if request.method == "GET":
 		domain_id = request.GET['domainId']
 		domain = Domain.objects.get(pk = domain_id)
-		biojs_entry = domain.get_biojs_entry(protein=True)
+		biojs_entry = domain.get_biojs_entry()
         return JsonResponse(biojs_entry)
 
 def get_domain_order_biojs_sequence(request):
