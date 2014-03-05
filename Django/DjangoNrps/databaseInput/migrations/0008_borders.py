@@ -23,7 +23,7 @@ class Migration(DataMigration):
                 if not domain.definedLinkerStop == None:
                     domain.definedLinkerStop -= domain.definedLinkerStop % 3
                 if not domain.pfamStart == None:
-                    domain.pfamStart += 1 - domain.pfamStart % 1
+                    domain.pfamStart += 1 - domain.pfamStart % 3
                 if not domain.definedStart == None:
                     domain.definedStart += 1 - domain.definedStart % 3
                 if not domain.pfamStop == None:
