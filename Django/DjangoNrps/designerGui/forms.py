@@ -1,6 +1,7 @@
 from designerGui.models import NRP
 from django.forms.models import inlineformset_factory, formset_factory
 from django.forms import ModelForm, CharField, Textarea, Form, Select, ChoiceField,IntegerField,TextInput
+from django.forms import ValidationError
 from django.forms.widgets import TextInput
 from django.forms.formsets import BaseFormSet
 
@@ -62,6 +63,22 @@ def make_changed_boundary_nrp_form(nrp_uuid):
 
             nrp.makeConstruct()
             NRP.objects.get(uuid=self.nrp_uuid).adjustConstruct(nrp)
+
+        def clean(self):
+            cleaned_data = super(ChangedBoundaryNRPForm, self).clean()
+            left_boundary = cleaned_data.get("left_boundary")
+            right_boundary = cleaned_data.get("right_boundary")
+            chosen_dom_order = DomainOrder.objects.get(pk = cleaned_data.get("domain"))
+
+            left_min = 1
+            right_max = len(chosen_dom_order.domain.cds.dnaSequence)
+            if  left_boundary < left_min:
+                raise ValidationError("Left boundary has to be greater or equal to " + str(left_min)+".")
+            if right_boundary > right_max:
+                raise ValidationError("Right boundary exceeds length of sequence (" + str(right_max) +")")
+            if right_boundary < left_boundary:
+                raise ValidationError("Right boundary has to be greater than left boundary!")
+            return cleaned_data
 
     return ChangedBoundaryNRPForm
 
