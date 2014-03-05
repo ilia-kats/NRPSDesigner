@@ -112,7 +112,7 @@ class NRP(models.Model):
                 xstop = x.domain.get_stop(y.domain, with_linker=True)
             else:
                 xstop = x.right_boundary
-            continuous_seq = (ystart == xstop)
+            continuous_seq = (ystart == xstop + 1)
             if adjacent and (y.left_boundary is None and x.right_boundary is None or continuous_seq):
                 return True
             else:
@@ -155,7 +155,7 @@ class NRP(models.Model):
             domain2 = connectedDomains[-1]
 
             if count < len(connectedDomainList) - 1:
-                nextDomain = connectedDomainList[count + 1][0].domain.pk
+                nextDomain = connectedDomainList[count + 1][0].domain
             else:
                 nextDomain = None
 

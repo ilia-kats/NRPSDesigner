@@ -113,7 +113,7 @@ class Cds(models.Model):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
             if start is None or isinstance(start, Domain) or type(start) not in [long, int]:
-                startpos = start_domain.get_start(start) - 1
+                startpos = start_domain.get_start(start)
             else:
                 startpos = start
             if stop is None or isinstance(stop, Domain) or type(stop) not in [long, int]:
@@ -188,42 +188,48 @@ class Domain(models.Model):
 
 
     def get_start(self, prevd=None, with_linker=True):
+        """returns in python format: 0-based"""
+        start = None
         if prevd is not None:
             try:
                 # TODO: need to find a better way to handle multiple experimental data
-                return self.prev_domain.get(pk=prevd.pk).next_tuple.filter(next_domain__pk=self.pk)[0].next_position
+                start = self.prev_domain.get(pk=prevd.pk).next_tuple.filter(next_domain__pk=self.pk)[0].next_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
             if self.definedLinkerStart is not None:
-                return self.definedLinkerStart
+                start = self.definedLinkerStart
             elif self.pfamLinkerStart is not None:
-                return self.pfamLinkerStart
+                start = self.pfamLinkerStart
         if self.definedStart is not None:
-            return self.definedStart
+            start = self.definedStart
         else:
-            return self.pfamStart
+            start = self.pfamStart
+        return start - 1
 
     def get_stop(self, nextd=None, with_linker=False):
+        """returns in python format: 0-based, 1 position after end"""
+        stop = None
         if nextd is not None:
             try:
                 # TODO: need to find a better way to handle multiple experimental data
-                return self.next_domain.get(pk=nextd.pk).prev_tuple.filter(prev_domain__pk=self.pk)[0].prev_position
+                stop = self.next_domain.get(pk=nextd.pk).prev_tuple.filter(prev_domain__pk=self.pk)[0].prev_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
             if self.definedLinkerStop is not None:
-                return self.definedLinkerStop
+                stop = self.definedLinkerStop
             elif self.pfamLinkerStop is not None:
-                return self.pfamLinkerStop
+                stop = self.pfamLinkerStop
         if self.definedStop is not None:
-            return self.definedStop
+            stop = self.definedStop
         else:
-            return self.pfamStop
+            stop = self.pfamStop
+        return stop
 
     def get_sequence(self, includeForwardLinker=False, includeAftLinker=False):
         cdsSequence = self.cds.dnaSequence
-        domainStart = self.get_start(with_linker=includeForwardLinker) - 1
+        domainStart = self.get_start(with_linker=includeForwardLinker)
         domainStop  = self.get_stop(with_linker=includeAftLinker)
         domainSequence = cdsSequence[domainStart:domainStop]
         return domainSequence
@@ -257,14 +263,14 @@ class Domain(models.Model):
         stop  = self.get_stop()
         annotation = {'name': short_name,
             'html': name,
-            'regions': [{'start':start, 'end':stop,'color':"blue"}]
+            'regions': [{'start':start + 1, 'end':stop,'color':"blue"}]
             }
         return annotation
 
     def get_biojs_highlight(self):
         start = self.get_start()
         stop  = self.get_stop()
-        highlight = { 'start':start,
+        highlight = { 'start':start + 1,
             'end':stop,
             'color':"white",
             'background':"green"}

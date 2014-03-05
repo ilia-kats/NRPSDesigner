@@ -55,7 +55,7 @@ def make_changed_boundary_nrp_form(nrp_uuid):
 
             for domain_order in parent_dom_order_all:
                 if domain_order == chosen_dom_order:
-                    domain_order.left_boundary = left_boundary - 1
+                    domain_order.left_boundary = left_boundary
                     domain_order.right_boundary = right_boundary
                 domain_order.pk = None
                 domain_order.nrp = nrp
