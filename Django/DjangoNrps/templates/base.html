@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load userhandling %}
+{% load piwik_tags %}
 
 <!DOCTYPE HTML>
 <html>
@@ -289,6 +290,6 @@ function checkCeleryStatus(taskId, callbackProgress, callbackError, callbackSucc
 	<!-- <h4>Follow us:</h4>
 	<a href="https://www.facebook.com/pages/IGEM-Team-Heidelberg-2013/265102553624765" target="_blank"><img src="{% static "img/FB-f-Logo__blue_144.png" %}" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd"/></a>
 	<a href="https://twitter.com/igem_heidelberg" target="_blank"><img src="{% static "img/twitter-bird-dark-bgs.png" %}" style="height:60px; padding:5px 10px; float:left;" alt="iGEMhd" /></a> -->
-
+{% tracking_code %}
 </body>
 </html>
