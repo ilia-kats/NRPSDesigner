@@ -1,5 +1,9 @@
 from django.conf.urls import patterns, include, url
-from designerGui.views import SpeciesListView, make_structure, submit_nrp, nrpListView, peptide_add, peptide_delete, nrpDesigner, getConstruct, makeConstruct, domainSequenceView, get_available_monomers, createLibrary, processLibrary, viewLibrary, downloadLibrary
+from designerGui.views import (SpeciesListView, make_structure, submit_nrp, nrpListView,
+		 peptide_add, peptide_delete, nrpDesigner, getConstruct, 
+		 makeConstruct, domainSequenceView, get_available_monomers, 
+		 createLibrary, processLibrary, viewLibrary, downloadLibrary,
+		 create_boundary_library, view_boundary_library)
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -18,6 +22,10 @@ urlpatterns = patterns('',
 					url(r'^(?P<uuid>' + uuidregex + ')/library/process/$', processLibrary, name="processLibrary"),
 					url(r'^(?P<uuid>' + uuidregex + ')/library/view/$', viewLibrary, name="viewLibrary"),
 					url(r'^(?P<uuid>' + uuidregex + ')/library/download/$', downloadLibrary, name="downloadLibrary"),
+					url(r'^(?P<uuid>' + uuidregex + ')/boundaryLibrary/$', 
+								create_boundary_library, name="createBoundaryLibrary"),
+					url(r'^(?P<uuid>' + uuidregex + ')/boundaryLibrary/view/$', 
+								view_boundary_library, name="viewBoundaryLibrary"),
 					url(r'^nrpselection/(?P<uuid>' + uuidregex + ')/$', SpeciesListView, name="guiTool"),
 					url(r'^selectableMonomers/$', get_available_monomers, name="selectableMonomers"),
 					url(r'^makeConstruct/(?P<uuid>' + uuidregex + ')$', makeConstruct, name="makeConstruct"),

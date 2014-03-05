@@ -701,12 +701,12 @@ var fl = FragmentLabel.prototype = new Container();
 	{
 		var r = 0;
 		var erad = this._radius;
-        var baseline = 'bottom';
+        var baseline = 'middle';
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=737852
+        if (navigator.userAgent.match(/Gecko\/[0-9]+/i))
+            baseline = 'bottom';
 		if(this._outward) {
 			erad = - this._radius;
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=737852
-            if (!navigator.userAgent.match(/Gecko\/[0-9]+/i))
-                baseline = 'top';
         }
 
 		//for each letter

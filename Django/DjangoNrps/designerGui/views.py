@@ -1,7 +1,7 @@
 from designerGui.models import Species, NRP, SubstrateOrder
 from databaseInput.models import Substrate, Modification, Domain, Type
 from databaseInput.forms import SubstrateFormSet, ModificationsFormSet
-from designerGui.forms import NRPForm
+from designerGui.forms import NRPForm, make_changed_boundary_nrp_form
 from gibson.jsonresponses import JsonResponse, ERROR
 from gibson.views import primer_download
 
@@ -13,6 +13,7 @@ from django.template import Context, loader, RequestContext
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
 from django.core.exceptions import ObjectDoesNotExist
+from django.forms.formsets import formset_factory
 
 
 import math
@@ -97,7 +98,6 @@ def peptide_add(request):
     else:
         return HttpResponseNotFound()
 
-@login_required
 def peptide_delete(request, uuid):
     peptide = get_nrp(request.user, uuid)
     if peptide:
@@ -133,7 +133,6 @@ def SpeciesListView(request, uuid):
     c = RequestContext(request, {'nrp': nrp, 'uuid': uuid, 'myFormSet': SubstrateFormSet(), 'modifications': modfs.values(), 'substrateOrder': substrateOrder, 'indigoidineTagged': nrp.indigoidineTagged, 'initialPic': nrp.getPeptideSequenceForStructView()})
     return HttpResponse(t.render(c))
 
-@login_required
 def createLibrary(request, uuid):
     nrp = get_nrp(request.user, uuid)
     if not nrp:
@@ -149,7 +148,6 @@ def createLibrary(request, uuid):
     c['scaffold'] = nrp.monomers.order_by('substrateOrder')
     return HttpResponse(t.render(c))
 
-@login_required
 def processLibrary(request, uuid):
     if request.method == 'POST':
         nrp = get_nrp(request.user, uuid)
@@ -174,7 +172,6 @@ def processLibrary(request, uuid):
                     data['as'][haveUseAll].append(s.pk)
         return JsonResponse({'taskId': nrp.makeLibrary.delay(data['as'], data['curatedonly']).id})
 
-@login_required
 def viewLibrary(request, uuid):
     parentnrp = get_nrp(request.user, uuid)
     if not parentnrp:
@@ -186,13 +183,56 @@ def viewLibrary(request, uuid):
     t = loader.get_template('designerGui/viewlibrary.html')
     return HttpResponse(t.render(c))
 
-@login_required
 def downloadLibrary(request, uuid):
     parentnrp = get_nrp(request.user, uuid)
     if not parentnrp:
         return HttpResponseNotFound()
     cids = [child.construct.pk for child in parentnrp.child.filter(uuid__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
+
+def create_boundary_library(request, uuid):
+    nrp = get_nrp(request.user, uuid)
+    if not nrp:
+        return HttpResponseNotFound()
+
+    ChangedBoundaryNRPForm = make_changed_boundary_nrp_form(uuid)
+    changedBoundaryNRPFormset = formset_factory(ChangedBoundaryNRPForm, extra=1)
+
+    if request.method == "POST":
+        boundary_formset = changedBoundaryNRPFormset(request.POST)
+        if boundary_formset.is_valid():
+            for boundary_form in boundary_formset:
+                if boundary_form.is_valid():
+                    boundary_form.save()
+            return HttpResponseRedirect(reverse("viewBoundaryLibrary", kwargs={'uuid': uuid}))
+        else:
+            t = loader.get_template('designerGui/createBoundaryLibrary.html')
+            c = RequestContext(request,{
+                    'formset': boundary_formset
+                })
+
+        return HttpResponse(t.render(c))
+
+    else:
+        #boundary_form = ChangedBoundaryNRPForm(nrp)
+        t = loader.get_template('designerGui/createBoundaryLibrary.html')
+        c = RequestContext(request,{
+                    'formset': changedBoundaryNRPFormset
+                })
+
+        return HttpResponse(t.render(c))
+
+def view_boundary_library(request, uuid):
+    parentnrp = get_nrp(request.user, uuid)
+    if not parentnrp:
+        return HttpResponseNotFound()
+    childnrps = parentnrp.boundary_child.all()
+    c = RequestContext(request)
+    c['parentnrp'] = parentnrp
+    c['childnrps'] = childnrps
+    c['libraryclassification'] = 'boundary'
+    t = loader.get_template('designerGui/viewlibrary.html')
+    return HttpResponse(t.render(c))
 
 def get_available_monomers(request):
     if request.method == 'POST' and "monomer[]" in request.POST:

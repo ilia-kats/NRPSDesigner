@@ -238,7 +238,6 @@ jQuery("#domainsLeft").change(function(){
 
 
 function showLeftBioJsSequence() {
-    console.log("activated")
     if (typeof(leftSequence)!== "undefined"){
         leftSequence.clearSequence()
         jQuery.get("{% url 'getDomainBioJsSequence' %}", 
@@ -269,7 +268,6 @@ jQuery("#domainsRight").change(function(){
 
 
 function showRightBioJsSequence() {
-    console.log("activated")
     if (typeof(rightSequence)!== "undefined"){
         rightSequence.clearSequence()
         jQuery.get("{% url 'getDomainBioJsSequence' %}", 

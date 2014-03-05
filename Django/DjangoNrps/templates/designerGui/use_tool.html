@@ -315,13 +315,12 @@
         jQuery('#e11').select2("val", tmpId, triggerChange=true);
         {% else %}
         tmpId = {{monomer.substrate.pk}};
-        selectId = monomersList.filter(function(value) {return value.lid == tmpId || value.did == tmpId;})[0];
+        selectId = monomersList.filter(function(value) {return 'lid' in value && value.lid == tmpId || 'did' in value && value.did == tmpId || 'nid' in value && value.nid == tmpId;})[0];
         jQuery('#e23').select2("val", selectId.id, triggerChange = true);
         if ('lid' in selectId && tmpId == selectId.lid) {
                 jQuery("#monomer_chirality_L").click();
         } else {
                 jQuery("#monomer_chirality_D").click();
-
         }
 
         {% endif %}

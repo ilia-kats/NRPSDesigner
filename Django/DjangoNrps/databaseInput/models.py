@@ -109,18 +109,19 @@ class Cds(models.Model):
 
     # get DNA sequence based on start and stop domain
     # should be actual domain objects, not IDs
-    def get_sequence(self, start_domain, stop_domain, prev_domain=None, next_domain=None):
+    def get_sequence(self, start_domain, stop_domain, start=None, stop=None):
         if start_domain.cds == self and stop_domain.cds == self:
             domain_list = self.get_ordered_domain_list()
-            start_index = domain_list.index(start_domain)
-            stop_index  = domain_list.index(stop_domain)
+            if start is None or isinstance(start, Domain) or type(start) not in [long, int]:
+                startpos = start_domain.get_start(start) - 1
+            else:
+                startpos = start
+            if stop is None or isinstance(stop, Domain) or type(stop) not in [long, int]:
+                stoppos = stop_domain.get_stop(stop)
+            else:
+                stoppos = stop
 
-            # write custom functions for the below!!!
-            # With linker consideration maybe???
-            start_position = start_domain.get_start(prev_domain) - 1
-            stop_position = stop_domain.get_stop(next_domain)
-            ##
-            return self.dnaSequence[start_position:stop_position]
+            return self.dnaSequence[startpos:stoppos]
         else:
             pass  #raise some error..
 
@@ -185,10 +186,12 @@ class Domain(models.Model):
     def short_name(self):
         return str(self.cds.geneName) + str(self.module) + str(self.domainType)
 
+
     def get_start(self, prevd=None, with_linker=True):
         if prevd is not None:
             try:
-                return self.prev_domain.get(pk=prevd).next_tuple.get().next_position
+                # TODO: need to find a better way to handle multiple experimental data
+                return self.prev_domain.get(pk=prevd.pk).next_tuple.filter(next_domain__pk=self.pk)[0].next_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:
@@ -204,7 +207,8 @@ class Domain(models.Model):
     def get_stop(self, nextd=None, with_linker=False):
         if nextd is not None:
             try:
-                return self.next_domain.get(pk=nextd).prev_tuple.get().prev_position
+                # TODO: need to find a better way to handle multiple experimental data
+                return self.next_domain.get(pk=nextd.pk).prev_tuple.filter(prev_domain__pk=self.pk)[0].prev_position
             except ObjectDoesNotExist:
                 pass
         if with_linker:

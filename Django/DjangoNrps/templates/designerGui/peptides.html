@@ -36,7 +36,7 @@ Welcome to your collection of non-ribosomal peptides. Choose one of your existin
 		</thead>
 		<tbody class="ui-widget-content">
 			{% for nrp in nrpList %}
-                {% if not nrp.parent %}
+                {% if not nrp.parent and not nrp.boundary_parent %}
                     <tr>
                         <td>
                             <div class="btn-group">
@@ -44,9 +44,13 @@ Welcome to your collection of non-ribosomal peptides. Choose one of your existin
                                 <button class="btn btn-small dropdown-toggle" data-toggle="dropdown" {% if not nrp.designed %} disabled="disabled" {% endif %}><span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     {% if nrp.child.count > 0 %}
-                                    <li><a href="{% url 'viewLibrary' nrp.uuid %}">View library</a></li>
+                                    <li><a href="{% url 'viewLibrary' nrp.uuid %}">View monomer library</a></li>
                                     {% endif %}
-                                    <li><a href="{%url 'createLibrary' nrp.uuid %}">Create library</a></li>
+                                    <li><a href="{%url 'createLibrary' nrp.uuid %}">Create monomer library</a></li>
+                                    {% if nrp.boundary_child.count > 0 %}
+                                    <li><a href="{% url 'viewBoundaryLibrary' nrp.uuid %}">View boundary library</a></li>
+                                    {% endif %}
+                                    <li><a href="{%url 'createBoundaryLibrary' nrp.uuid %}">Create boundary library</a></li>
                                 </ul>
                             </div>
                         </td>

@@ -64,7 +64,7 @@
                             <h2>Features</h2>
                         </div>
              <div class="well">
-                                     <li> Graphical NRP design platform with a total of 682 amino acid monomers to chose from</li>
+                                     <li> Graphical NRP design platform</li>
                                     <li> <i>In silico</i> prediction of the corresponding optimal NRPS domain sequence according to the evolutionary distance of the host organism, cloning practicability and experimentally characterized domain interactions</li>
                                     <li> Framework for the development of a cloning strategy including Gibson primer design, integration of the NRPS sequence into a standard or custom backbone and the incorporation of additional biological parts</li>
                                     <li> Automated extension of the NRPSDesigner database by newly discovered NRPS pathways and further characterization of existing domains upon experimental testing</li>
@@ -82,10 +82,11 @@
                 <li>The NRP has to be chosen (sequence of amino acids).</li>
                 <li>An optimal NRPS domain sequence is returned.</li>
                 <li>The NRPS DNA sequences can be inspected. </li>
-                <li>Appropriate backbone ( with a promoter, RBS, start codon) and other parts can be added to the plasmid. </li>
+                <li>Appropriate backbone (with a promoter, RBS, start and stop codon) and other parts can be added to the plasmid. </li>
                 <li>Gibson assembly can be used in order to construct the plasmid and transform bacteria. </li>
-                <li>Experimental results can be added to further characterize domains stored in the database</li>
+                <li>Experimental results can be entered into the database, thus further characterizing the corresponding domains.</li>
                 <li><span class="label label-info">optional</span> A library is created by shuffling one of the monomer positions.</li>
+                <li><span class="label label-info">optional</span> A library is created by shifting the boundaries of the domains.</li>
                 <li><span class="label label-info">optional</span> The NRPSDesigner database can be extended with newly discovered synthetase sequences. </li>
 
               </div>
@@ -98,7 +99,7 @@
                 <p> The input basically only consists of a sequence of monomers (amino acids) which should make up the final non-ribosomal peptide (NRP). This is achieved with the user-friendly interface shown below: </p>
                 <img src={% static "images/documentation/screenshot1.png" %} /></br>
 
-                <p>The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user can do so (see below). Those genes and domains will also be used in the NRPSDesigner algorithm, if the above button has not been pressed. On the other hand, if it has been selected, then only domains curated by the authors, or other scientists with NRPS expertise (curators), will be utilized. In the next panel the actual the actual sequence of NRP monomers can be stepwise selected. If a particular monomer is chosen its configuration can be specified as L or D. Note that the monomer choices available will depend on the specificities of the adenylation domains available in NRPSDesigner database and the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. When you want to elongate the sequence of monomers by one, you should press the ‘Add monomer’ button. You can click on the chosen monomers and then possibly replace the selection by choosing another one from the dropdown. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
+                <p>The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user can do so (see below). Those genes and domains will also be used in the NRPSDesigner algorithm, if the above button has not been pressed. On the other hand, if it has been selected, then only domains curated by the authors, or other scientists with NRPS expertise (curators), will be utilized. In the next panel the actual the actual sequence of NRP monomers can be stepwise selected. If a particular monomer is chosen its configuration can be specified as L or D. Note that the monomer choices available will depend on the specificities of the adenylation and condensation domains available in NRPSDesigner database and the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. When you want to elongate the sequence of monomers by one, you should press the ‘Add monomer’ button. You can click on the chosen monomers and then possibly replace the selection by choosing another one from the dropdown. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
 
 
                   <button class="btn" style="margin-left:10px">Add monomer</button>
@@ -145,7 +146,7 @@
                  <center>
                  <img src={% static "images/documentation/gibthon2.0beta.png" %} /> 
                  </center>
-                 <p style="margin-top:20px"> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences. After each sequence modification, important primer properties (e.g. regarding self-priming) are re-calculated using UNAfold. In the next sections, the adapted version of Gibthon and its integration in NRPSDesigner will be explained. In the next sections, the modified version of Gibthon for integration with the NRPSDesigner and its use will be explained. </p>
+                 <p style="margin-top:20px"> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences. After each sequence modification, important primer properties (e.g. regarding self-priming) are re-calculated using UNAfold. In the next sections, the adapted version of Gibthon and its integration in NRPSDesigner will be explained. </p>
 
                 <h3> Fragment library</h3>
                 <span class="label label-warning" style="margin-left:10px">[Login required]</span></br>
@@ -163,7 +164,7 @@
 
                 <p> The behaviour in the previously mentioned step is similar to the one present in the original Gibthon web-server, but with one important difference: Other fragments cannot be entered into the plasmid if they would disrupt the previously returned sequence of NRPS domains. Thus, other DNA sequences can be embedded in the plasmid only after the thioesterase (TE) domain or before the initialization adenylation domain. </p>
 
-                <p> <span class="label label-important">Important</span> As mentioned before, it is very important to ensure the addition of a promoter, a ribosome binding site and a start codon in the final sequence!</p>
+                <p> <span class="label label-important">Important</span> As mentioned before, it is very important to ensure the addition of a promoter, a ribosome binding site, a start and a stop codon in the final sequence!</p>
 
                     <h3> Primers </h3>
                     <p> If you click on the "Primers" tab, you will initially come across the following loading bar: </p>
@@ -250,7 +251,17 @@
 
              <img src={% static "images/documentation/HMMoutput.png" %} /></br>
 
-             <p> Once this output has been returned, manual curation has to take place: This includes adding appropriate descriptions to the files, checking or adding specificities to the adenylation domains and checking domain boundaries, for example with the in-built multiple sequence alignment. Pressing on the "Save cds and domains!" button results in the storage of all the previously entered and predicted information to the NRPSDesigner database. </p>
+             <p> Once this output has been returned, manual curation has to take place: This includes adding appropriate descriptions to the files, checking or adding specificities to the adenylation domains and checking domain boundaries. In particular, for each of the domains the following fields can be modified:</p>
+             <ul>
+             <li> <b> Module:</b> The number of the module to which the domain belongs. This is automatically calculated, but can be readjusted in the case of several genes coding for the same synthetase (for example the module number of tycC domains could be readjusted to start at 5). In this case, the final domain of tycB interacts with the first domain of tycB during the production of Tyrocidine in nature. Thus, by tagging them with consequent module numbers, the NRPSDesigner scoring function can prioritize them accordingly. </li>
+             <li> <b> Domain Type: </b> The type of the domain which was predicted.</li>
+             <li> <b> Substrate Specificity: </b> In the case of adenylation domains, it is very important to check for the correct specificity. If the antiSMASH2 substrate specificity prediction reaches a consensus, then this consensus is displayed. Nevertheless, this prediction might be wrong, so adjust accordingly. Condensation domains also have a specificity for the acceptor substrate. The input of this type of substrate specificity is optional, as it can be inferred from the specificity of the subsequent adenylation domain.</li>
+             <li> <b> Chirality: </b> (Optional): The chirality of a condensation domain describes its specificity for the preceding monomer, which is based on the monomer's chirality. This does not have to be entered in general, as the HMMs can distinguish between "C_L" and "C_D" domains (condensation domains with L or D specificities respectively).</li>
+             <li> <b> Predicted Start, Predicted Stop: </b> The start and stop of the domain (left and right boundary), as predicted by the HMM pipeline. Cannot be changed. Once all domains have been submitted and entered into the database, you will be able to enter experimental evidence for other domain boundaries by the appropriate NRPSDesigner application ("Submit experimental data"). </li>
+             <li> <b> Description: </b> An optional short description of some the domain's features or experimental findings regarding this domain (cite references which were added during the first step).</li>
+             </ul>
+
+             <p> Pressing on the "Save cds and domains!" button results in the storage of all the previously entered and predicted information to the NRPSDesigner database. </p>
 
              <div class="page-header">
              <h2> Privacy </h2>

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError, HttpResponseBadRequest
 from databaseInput.models import Origin, Type, Domain
-
+from designerGui.models import DomainOrder
 from gibson.jsonresponses import JsonResponse, ERROR
 
 def get_origins(request):
@@ -32,5 +32,13 @@ def get_domain_biojs_sequence(request):
 	if request.method == "GET":
 		domain_id = request.GET['domainId']
 		domain = Domain.objects.get(pk = domain_id)
+		biojs_entry = domain.get_biojs_entry()
+        return JsonResponse(biojs_entry)
+
+def get_domain_order_biojs_sequence(request):
+	if request.method == "GET":
+		domain_order_id = request.GET['domainOrderId']
+		domain_order = DomainOrder.objects.get(pk = domain_order_id)
+		domain = domain_order.domain
 		biojs_entry = domain.get_biojs_entry()
         return JsonResponse(biojs_entry)

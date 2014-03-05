@@ -12,10 +12,11 @@ from uuid import uuid4
 from django.conf import settings
 from django.db import connection
 from databaseInput.models import Substrate, Domain
-from gibson.models import Construct, ConstructFragment, fragment_feature
+from gibson.models import Construct, ConstructFragment, fragment_feature, Settings, PCRSettings
 from fragment.models import Gene, DomainGene, Feature, Qualifier
 
 from celery.contrib.methods import task
+
 
 class Species(models.Model):
     species = models.CharField(max_length=100)
@@ -62,6 +63,7 @@ class NRP(models.Model):
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.OneToOneField('gibson.Construct', null=True, blank=True, related_name='nrp')
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
+    boundary_parent = models.ForeignKey('self', blank=True, null=True, related_name='boundary_child')
 
     class Meta:
         verbose_name = "Nonribosomal peptide"
@@ -101,7 +103,17 @@ class NRP(models.Model):
             if x.domain.cds != y.domain.cds:
                 return False
             cdsDomainList = x.domain.cds.get_ordered_domain_list()
-            if cdsDomainList.index(y.domain) == cdsDomainList.index(x.domain) + 1:
+            adjacent = (cdsDomainList.index(y.domain) == cdsDomainList.index(x.domain) + 1)
+            if y.left_boundary is None:
+                ystart = y.domain.get_start(x.domain, with_linker=True)
+            else:
+                ystart = y.left_boundary
+            if x.right_boundary is None:
+                xstop = x.domain.get_stop(y.domain, with_linker=True)
+            else:
+                xstop = x.right_boundary
+            continuous_seq = (ystart == xstop)
+            if adjacent and (y.left_boundary is None and x.right_boundary is None or continuous_seq):
                 return True
             else:
                 return False
@@ -136,16 +148,27 @@ class NRP(models.Model):
 
         lastDomain = None
         nextDomain = None
+
         # each list of connectedDomains corresponds to 1 fragment.gene and hence to 1 construct fragment
         for count, connectedDomains in enumerate(connectedDomainList):
             domain1 = connectedDomains[0]
             domain2 = connectedDomains[-1]
+
             if count < len(connectedDomainList) - 1:
                 nextDomain = connectedDomainList[count + 1][0].domain.pk
             else:
                 nextDomain = None
-            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, lastDomain, nextDomain)
-            lastDomain = domain2.domain.pk
+
+            if domain1.left_boundary is None:
+                start_pos = domain1.domain.get_start(lastDomain)
+                seqstart = lastDomain
+            else:
+                start_pos = seqstart = domain1.left_boundary
+            if domain2.right_boundary is None:
+                seqstop = domain2.domain
+            else:
+                seqstop = domain2.right_boundary
+            domainSequence = domain1.domain.cds.get_sequence(domain1.domain,domain2.domain, seqstart, seqstop)
 
             domainGene = DomainGene.objects.create(owner = self.owner,
                 name = ','.join([x.domain.domainType.name for x in connectedDomains]),
@@ -161,10 +184,25 @@ class NRP(models.Model):
                 sequence = domainSequence,
                 origin = 'ND',
                 viewable = 'H')
-            start_pos = domain1.domain.get_start(lastDomain) - 1
-            for domain in connectedDomains:
+            for (i,domain) in enumerate(connectedDomains):
                 domainGene.domains.add(domain.domain)
-                f = Feature(type="domain", start=domain.domain.get_start(lastDomain, with_linker=False) - 1 - start_pos, end=domain.domain.get_stop(nextDomain, with_linker=False) - start_pos, direction='f', gene=domainGene)
+                if domain.left_boundary is None:
+                    if i == 0:
+                        lastd = lastDomain
+                    else:
+                        lastd = None
+                    start = domain.domain.get_start(lastd, with_linker=False)
+                else:
+                    start = domain.left_boundary
+                if domain.right_boundary is None:
+                    if i == len(connectedDomains):
+                        nextd = nextDomain
+                    else:
+                        nextd = None
+                    stop = domain.domain.get_stop(nextd, with_linker=False)
+                else:
+                    stop = domain.right_boundary
+                f = Feature(type="domain", start=start - start_pos, end=stop - start_pos, direction='f', gene=domainGene)
                 f.save()
                 Qualifier(name="type", data=domain.domain.domainType.name, feature=f).save()
                 Qualifier(name="module", data=domain.domain.module, feature=f).save()
@@ -192,6 +230,8 @@ class NRP(models.Model):
                 order = count,
                 direction = 'f'
                 )
+
+            lastDomain = domain2.domain
 
         self.save()
         return True
@@ -241,6 +281,71 @@ class NRP(models.Model):
         pfamJson = json.dumps({"length" : graphic_length, "regions": regions})
         return pfamJson
 
+    def adjustConstruct(self, target):
+        def porder(order, construct):
+            porder = order - 1
+            if porder < 0:
+                porder = construct.cf.count() - 1
+            return porder
+        def norder(order, construct):
+            norder = order + 1
+            if norder >= construct.cf.count():
+                norder = 0
+            return norder
+        if not self.construct.processed:
+            for j in self.construct.process():
+                pass
+        for (md, (sobj, nobj)) in {Settings: (self.construct.settings, target.construct.settings), PCRSettings: (self.construct.pcrsettings, target.construct.pcrsettings)}.iteritems():
+            for field in md._meta.fields:
+                if not isinstance(field, models.ManyToManyField) and not isinstance(field, models.OneToOneField) and not isinstance(field, models.ForeignKey) and not isinstance(field, models.AutoField):
+                    setattr(nobj, field.name, getattr(sobj, field.name))
+            nobj.save()
+        ncfs = {}
+        for j,cf in enumerate(self.construct.cf.order_by('order')):
+            ncf = None
+            if cf.fragment.origin != 'ND':
+                ncf = target.construct.add_fragment(cf.fragment, j, cf.direction)
+            else:
+                try:
+                    isIdentical = True
+                    if cf.fragment.domaingene.domains.count() == target.construct.cf.get(order=j).fragment.domaingene.domains.count():
+                        ourdomains = cf.fragment.domaingene.domains.all()
+                        otherdomains = target.construct.cf.get(order=j).fragment.domaingene.domains.all()
+                        for i in xrange(len(ourdomains)):
+                            if ourdomains[i].pk != otherdomains[i].pk:
+                                isIdentical = False
+                                break
+                    else:
+                        isIdentical = False
+                    if isIdentical:
+                        ncf = target.construct.cf.get(order=j)
+                except DomainGene.DoesNotExist:
+                    pass
+            if ncf is not None:
+                ncf.concentration = cf.concentration
+                ncf.save()
+                ncfs[cf] = ncf
+        for j in target.construct.process():
+            pass
+
+        for (cf, ncf) in ncfs.items():
+            ptop = ncf.primer_top()
+            pbottom = ncf.primer_bottom()
+            ptop.stick.length = cf.primer_top().stick.length
+            pbottom.stick.length = cf.primer_bottom().stick.length
+            pf = self.construct.cf.get(order=porder(cf.order, self.construct))
+            nf = self.construct.cf.get(order=norder(cf.order, self.construct))
+            if pf in ncfs and ncfs[pf].order == porder(ncf.order, ncf.construct):
+                pbottom.flap.length = cf.primer_bottom().flap.length
+            if nf in ncfs and ncfs[nf].order == norder(ncf.order, ncf.construct):
+                ptop.flap.length = cf.primer_top().flap.length
+            ptop.stick.save()
+            pbottom.stick.save()
+            ptop.flap.save()
+            pbottom.flap.save()
+            ncf.construct.reprocess_primer(ptop)
+            ncf.construct.reprocess_primer(pbottom)
+
     @task()
     def designDomains(self, curatedonly=True):
         #see deletion strategy in multiline comment above
@@ -251,7 +356,6 @@ class NRP(models.Model):
         if self.indigoidineTagged:
             args.append("-t")
         xmlout = self._runNrpsDesigner(args)
-
         # parse xml to extract domain list
         # can not use libsbol here, as it only supports reading from file
         designerDom = parseString(xmlout)
@@ -262,9 +366,6 @@ class NRP(models.Model):
     @task()
     def makeLibrary(self, monomers, curatedonly=True):
         self.child.all().delete()
-        if not self.construct.processed:
-            for j in self.construct.process():
-                pass
         impl = getDOMImplementation()
         xml = impl.createDocument(None, 'nrp', None)
         root = xml.documentElement
@@ -301,10 +402,13 @@ class NRP(models.Model):
         designerDom = parseString(xmlout)
         nrpsList = designerDom.getElementsByTagName('s:component')
         i = 1
+
         for nrps in nrpsList:
             description = self.description
             if description is not None and len(description) > 0:
                 description += "\n"
+            elif description is None:
+                description = ""
             varname = Substrate.objects.get(pk=monomers[varpos][i]).name
             nrp = NRP.objects.create(owner = self.owner, name="%s %s" % (self.name, varname), description=description + "library variant %d: %s" % (i, varname), indigoidineTagged=self.indigoidineTagged, parent=self)
             for j, monomerId in enumerate(monomers):
@@ -314,19 +418,16 @@ class NRP(models.Model):
                 monomer = Substrate.objects.get(pk=monomerId[index])
                 SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
             nrp._design(self._parseNrps(nrps))
-            for j,cf in enumerate(self.construct.cf.order_by('order')):
-                if cf.fragment.origin != 'ND':
-                    nrp.construct.add_fragment(cf.fragment, j, cf.direction)
-            for j in nrp.construct.process():
-                pass
+            self.adjustConstruct(nrp)
             i += 1
 
     def _design(self, domainIdList):
-        prevDomains = DomainOrder.objects.filter(nrp = self)
-        prevDomains.delete()
+        old_domains = DomainOrder.objects.filter(nrp = self)
+        old_domains.delete()
         for count, domainId in enumerate(domainIdList):
             domain = Domain.objects.get(pk = domainId)
-            domainOrder = DomainOrder.objects.create(nrp= self, domain=domain, order=count)
+            domain_order = DomainOrder.objects.create(nrp= self, domain=domain,
+                order=count, left_boundary=None, right_boundary=None)
         self.designed = True
         self.save()
         self.makeConstruct()
@@ -345,38 +446,38 @@ class NRP(models.Model):
 
     def _runNrpsDesigner(self, params, stdin=None):
         lasterror = [None] # nonlocal only in python3
+        lastcat = [0]
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3
         def processErr(lines):
-            cat = 0
             def log():
                 if lasterror[0]is None:
                     return
-                if cat == 0:
+                if lastcat[0] == 0:
                     logger.error(lasterror[0])
-                elif cat == 1:
+                elif lastcat[0] == 1:
                     logger.warning(lasterror[0])
-                elif cat == 2:
+                elif lastcat[0] == 2:
                     logger.info(lasterror[0])
             lines = lines.splitlines()
             for line in lines:
                 if line.startswith("WARNING: "):
                     log()
-                    cat = 1
+                    lastcat[0] = 1
                     lasterror[0] = line[9:]
                 elif line.startswith("ERROR: "):
                     log()
-                    cat = 0
+                    lastcat[0] = 0
                     lasterror[0] = line[7:]
                 elif line.startswith("INFO: "):
                     log()
-                    cat = 2
+                    lastcat[0] = 2
                     lasterror[0] = line[6:]
                 elif line.startswith(" "):
                     lasterror[0] += line.strip()
                 else:
                     log()
-                    cat = 0
+                    lastcat[0] = 0
                     lasterror[0] = line
             log()
         def processOut(lines):
@@ -407,13 +508,15 @@ class NRP(models.Model):
         if stdin is not None:
             child.stdin.write(stdin)
             child.stdin.close()
-        while child.poll() is None:
-            fdsready = poll.poll()
+        def processFds(fdsready):
             for fd in fdsready:
-                if fd[0] == fds[1] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
+                if fd[0] == fds[1] and (fd[1] & select.POLLIN or fd[1] & select.POLLPRI):
                     readFrom(child.stderr, processErr)
-                elif fd[0] == fds[0] and (fd[1] == select.POLLIN or fd[1] == select.POLLPRI):
+                elif fd[0] == fds[0] and (fd[1] & select.POLLIN or fd[1] & select.POLLPRI):
                     readFrom(child.stdout, processOut)
+        while child.poll() is None:
+            processFds(poll.poll())
+        processFds(poll.poll())
         if child.returncode == -11:
             lasterror[0] = "Segmentation fault"
         if child.returncode != 0:
@@ -444,3 +547,9 @@ class DomainOrder(models.Model):
     nrp = models.ForeignKey('NRP', related_name = 'domainOrder')
     domain = models.ForeignKey('databaseInput.Domain', related_name = 'domainOrder')
     order = models.PositiveIntegerField()
+    left_boundary = models.PositiveIntegerField(null=True, default=None)
+    right_boundary = models.PositiveIntegerField(null=True, default=None)
+
+    def __unicode__(self):
+        return self.domain.short_name()
+
