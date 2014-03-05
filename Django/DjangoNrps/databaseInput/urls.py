@@ -13,6 +13,8 @@ apipatterns = patterns('databaseInput.api',
     url(r'^getDomains/$', 'get_domains', name="getDomains"),
     url(r'^getDomainBioJsSequence/$' ,'get_domain_biojs_sequence', 
         name="getDomainBioJsSequence"),
+    url(r'^getDomainOrderBioJsSequence/$' ,'get_domain_order_biojs_sequence', 
+        name="getDomainOrderBioJsSequence"),
 )
 
 urlpatterns = patterns('',
