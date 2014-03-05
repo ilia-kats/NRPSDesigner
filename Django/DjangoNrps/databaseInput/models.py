@@ -125,13 +125,15 @@ class Cds(models.Model):
         else:
             pass  #raise some error..
 
-    def get_biojs_entry(self):
+    def get_biojs_entry(self, protein=False):
         cds_name  = str(self)
         seq   = self.dnaSequence
+        if protein:
+            seq = translate_dna(seq, cds=True)
         domains = self.domains.all()
         biojs_entry = {'id':cds_name,
             'sequence' : seq,
-            'annotations': [x.get_biojs_annotation() for x in domains]
+            'annotations': [x.get_biojs_annotation(protein=protein) for x in domains]
             }
         return biojs_entry
 
@@ -256,29 +258,34 @@ class Domain(models.Model):
     def number_of_specificities(self):
         return len(self.substrateSpecificity.all())
 
-    def get_biojs_annotation(self):
+    def get_biojs_annotation(self, protein=False):
         short_name  = self.short_name()
         name = str(self)
         start = self.get_start()
         stop  = self.get_stop()
+        if protein:
+            start, stop = dna_to_prot_coords(start, stop)
         annotation = {'name': short_name,
             'html': name,
             'regions': [{'start':start + 1, 'end':stop,'color':"blue"}]
             }
         return annotation
 
-    def get_biojs_highlight(self):
-        start = self.get_start()
+    def get_biojs_highlight(self, protein=False):
+        start = self.get_start() + 1
         stop  = self.get_stop()
-        highlight = { 'start':start + 1,
+
+        if protein:
+            start, stop = dna_to_prot_coords(start,stop)
+        highlight = { 'start':start ,
             'end':stop,
             'color':"white",
             'background':"green"}
         return highlight
     # return python dict to be converted to json for use by bioJs sequence
-    def get_biojs_entry(self):
-        biojs_entry = self.cds.get_biojs_entry()
-        biojs_entry['highlights'] = [self.get_biojs_highlight()]
+    def get_biojs_entry(self, protein=False):
+        biojs_entry = self.cds.get_biojs_entry(protein=protein)
+        biojs_entry['highlights'] = [self.get_biojs_highlight(protein=protein)]
         return biojs_entry
 
 
@@ -411,3 +418,22 @@ class Linkout(models.Model):
 
     def __unicode__(self):
         return self.identifier
+
+
+
+# some dna-protein helper functions
+
+def translate_dna(dna_seq, cds=True):
+    prot_seq = str(Seq(dna_seq, IUPAC.unambiguous_dna).translate(cds=cds, table="Bacterial"))
+    return prot_seq
+
+def dna_to_prot_coords(start,stop):
+    if start % 3 == 1 and stop % 3 ==0:
+        prot_start = (start+2)/3
+        prot_stop = stop/3
+        return (prot_start,prot_stop)
+    else:
+        raise ValueError("Can't convert DNA coords to protein coords")
+
+def prot_to_dna_coords(start,stop):
+    return (3*start-2, 3*stop)
