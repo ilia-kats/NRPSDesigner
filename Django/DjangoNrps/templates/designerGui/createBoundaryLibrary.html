@@ -17,7 +17,11 @@
 <form action="" method="post">{% csrf_token %}
 {{ formset.management_form }}
 
-<label>Domain whose left and right boundaries (DNA coordinates) will be changed:</label>
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+For each of the domains you choose below, a new construct will be created based on the left and right boundary (DNA coordinates, bp) you define in the adjacent input boxes. Use the corresponding <i class="icon-refresh"></i>  button in order to get a graphical view of the domain you want to modify (domain is highlighted in green, whole coding sequence is shown) and select new boundaries by dragging mouse.</div>
+
+
 {% for form in formset %}
       <div class="formSet">
           {{ form.errors}}
@@ -41,7 +45,19 @@
 {% block js %}
 <script type='text/javascript'>
 
+
+
 jQuery(document).ready(function() {
+
+function formsetAdded() {
+	lastForm = jQuery(".formSet")[jQuery(".formSet").length-1]
+  	domainOrder = jQuery(lastForm).closest(".formSet").find("select").val()
+  	tmp = jQuery(lastForm).closest(".formSet").find("input")
+  	leftBoundary = jQuery(tmp[0])
+  	rightBoundary = jQuery(tmp[1])
+  	showLeftBioJsSequence(domainOrder, leftBoundary, rightBoundary);
+ }
+
   jQuery(".formSet").formset({addText:'<i class="icon-plus"></i>',
         deleteText:'<i class="icon-remove"></i>',
       });
@@ -86,7 +102,8 @@ leftSequence = new Biojs.Sequence();
 }
 
 
-});
+})
+
 
 </script>
 {% endblock %}
