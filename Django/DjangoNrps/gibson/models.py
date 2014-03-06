@@ -620,9 +620,9 @@ class Construct(models.Model):
                 p.tm_len_anneal(self.settings.min_anneal_tm)
             if self.settings.min_primer_tm > 0:
                 p.tm_len_primer(self.settings.min_primer_tm)
-            #p.self_prime_check()
+            p.self_prime_check()
             yield ':%d'%(((2*i)+1)*(90.0/(4.0*n)))
-            #p.misprime_check()
+            p.misprime_check()
             yield ':%d'%(((2*i)+2)*(90.0/(4.0*n)))
         self.processed = True
         self.save()
@@ -634,8 +634,8 @@ class Construct(models.Model):
         if not p in self.primer.all():
             raise ValueError("Primer (id='%s') not found in Construct (id=%s)" %
                     (p.id, self.id))
-        #p.self_prime_check()
-        #p.misprime_check()
+        p.self_prime_check()
+        p.misprime_check()
 
     def reset(self):
         """Return the construct to an unprocessed state"""
