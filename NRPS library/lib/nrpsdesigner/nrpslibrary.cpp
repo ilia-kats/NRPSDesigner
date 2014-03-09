@@ -110,6 +110,7 @@ void NrpsLibrary::makeLibrary()
         if (m_nrp[switchedpos][i].id() != scaffoldnrp[switchedpos].id()) {
             nrp[switchedpos] = m_nrp[switchedpos][i];
             builder.setScaffold(&scaffoldnrp, &m_nrps);
+            std::clog << "INFO: Building NRPS variant for monomer " << nrp[switchedpos].name() << std::endl;
             m_library.push_back(builder.build(nrp));
         }
     }

@@ -365,6 +365,7 @@ class NRP(models.Model):
 
     @task()
     def makeLibrary(self, monomers, curatedonly=True):
+        logger = logging.getLogger('user_visible')
         self.child.all().delete()
         impl = getDOMImplementation()
         xml = impl.createDocument(None, 'nrp', None)
@@ -398,6 +399,7 @@ class NRP(models.Model):
         args = ['-n', '-', '-s', '-']
         if curatedonly:
             args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
+        logger.info('Running NRPSDesigner...')
         xmlout = self._runNrpsDesigner(args, xmlstr)
         designerDom = parseString(xmlout)
         nrpsList = designerDom.getElementsByTagName('s:component')
@@ -417,7 +419,9 @@ class NRP(models.Model):
                     index = i
                 monomer = Substrate.objects.get(pk=monomerId[index])
                 SubstrateOrder.objects.create(nrp=nrp, substrate=monomer, order=j)
+            logger.info('Making Gibson construct for %s...' % nrp.name)
             nrp._design(self._parseNrps(nrps))
+            logger.info('Designing Gibson primers for %s...' % nrp.name)
             self.adjustConstruct(nrp)
             i += 1
 
@@ -461,7 +465,6 @@ class NRP(models.Model):
                 elif lastcat[0] == 2:
                     logger.info(lasterror[0])
             slines = lines.splitlines()
-
             for line in slines:
                 if line.startswith("WARNING: "):
                     log()
@@ -486,6 +489,7 @@ class NRP(models.Model):
             else:
                 toappend[0] = False
                 log()
+                lasterror[0] = None
         def processOut(lines):
             xmlout[0] += lines
         # call NRPS Designer C++ program
