@@ -99,15 +99,11 @@
                 <p> The input basically only consists of a sequence of monomers (amino acids) which should make up the final non-ribosomal peptide (NRP). This is achieved with the user-friendly interface shown below: </p>
                 <img src={% static "images/documentation/screenshot1.png" %} /></br>
 
-                <p>The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user can do so (see below). Those genes and domains will also be used in the NRPSDesigner algorithm, if the above button has not been pressed. On the other hand, if it has been selected, then only domains curated by the authors, or other scientists with NRPS expertise (curators), will be utilized. In the next panel the actual the actual sequence of NRP monomers can be stepwise selected. If a particular monomer is chosen its configuration can be specified as L or D. Note that the monomer choices available will depend on the specificities of the adenylation and condensation domains available in NRPSDesigner database and the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. When you want to elongate the sequence of monomers by one, you should press the ‘Add monomer’ button. You can click on the chosen monomers and then possibly replace the selection by choosing another one from the dropdown. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
+          <p style="margin-top:20px"> Here, the actual sequence of NRP monomers can be stepwise selected. If a particular monomer is chosen its configuration can be specified as L or D. Note that the monomer choices available will depend on the specificities of the adenylation and condensation domains available in NRPSDesigner database and the chirality of the preceding monomer, as dictated by the rules of NRP synthesis.</p>
 
 
                   <button class="btn" style="margin-left:10px">Add monomer</button>
-                  <p style="margin-top:20px">When you want to elongate the sequence of monomers by one, you should press this button. Note that
-                  you can click on the chosen monomers and then possibly replace the selection by choosing another one
-                  from the dropdown. In addition, L or D-configurations can be selected, which is one of the
-                  characteristics making NRPS so special. Also note that the monomer choices available will depend on the specificities of the adenylation domains available in the NRPSDesigner database and
-                  the chirality of the preceding monomer, as dictated by the rules of NRP synthesis. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
+                  <p style="margin-top:20px"> When you want to elongate the sequence of monomers by one, you should press the ‘Add monomer’ button. You can click on the chosen monomers and then possibly replace the selection by choosing another one from the dropdown. Finally, the peptide to be assembled is also presented graphically in the panel to the right.</p>
                    <button class="btn" style="margin-left:10px">Use curated domains only</button></br>
                   <p style="margin-top:20px">The NRPSDesigner makes it very easy to extend the database with novel NRPS genes and every user
                   can do so (see below). Those genes and domains will also be used in the NRPSDesigner algorithm, if the
@@ -126,13 +122,27 @@
                 <h3> Plasmid view </h3>
                 <p> The NRPS domains shown in the previous visualization are encoded on the coding DNA sequences. Thus, as also exemplified in the screenshot below, the next step through the NRPSDesigner wizard leads to the actual DNA sequences and the fragments that have to be assembled. </p>
 
-                <img src={% static "images/documentation/screenshot4.png" %} /></br>
+                <img src={% static "images/documentation/gibthonDomains.png" %} /></br>
 
-                <p> Note that each fragment shown in the plasmid map corresponds to a particular sequence that has to be amplified by PCR from a source organism. For example, the clicked fragment above corresponds to a DNA sequence that has to be amplified from <i> Brevibacillus parabrevis </i> strain atcc 8185/dsm362. Also observe that this fragment codes for more than one domain, namely a condensation, an adenylation and a thiolation domain. n particular, the rules that produce the domain score, which is integrated in Dijkstra's algorithm also enforce the minimization of the number of fragments that have to be amplified. Thus, less cloning steps will be necessary and less native NRPS domain interfaces will be disrupted. </p>
+                <p> Note that each fragment shown in the plasmid map corresponds to a particular sequence that has to be amplified by PCR from a source organism. For example, the clicked fragment above corresponds to a DNA sequence that has to be amplified from <i> Penicillium chrysogenum </i>. Also observe that this fragment codes for more than one domain, namely a thiolation, an epimerisations and a thioesterase domain. In particular, the rules that produce the domain score, which is integrated in Dijkstra's algorithm also enforce the minimization of the number of fragments that have to be amplified. Thus, less cloning steps will be necessary and less native NRPS domain interfaces will be disrupted. </p>
 
-                <p> The DNA sequences of all those fragments can be downloaded from this panel in both SBOL and GenBank format. They form the basic requirement for further use of the NRPSDesigner output, e.g. with available Bio-CAD tools. </p>
 
-               <p> <span class="label label-important">Important</span> Finally, note that synthetic NRPS were also functional when an adenylation domain, natively found in an elongation module, is used as the initiation domain. The consequence for the NRPSDesigner is that returned NRPS coding sequences may start without a start codon. Thus, in the subsequent steps of design of an appropriate cloning strategy, it is essential to introduce a start codon e.g. by including it in the backbone.</p>
+                <div class="btn-group" style="margin-left:10px">
+                <a class="btn">Download SBOL</a>
+                <a class="btn" >Download GenBank</a>
+               </div>
+
+                <p style="margin-top:20px"> The DNA sequences of all those fragments can be downloaded from this panel in both SBOL and GenBank format with the above buttons. They form the basic requirement for further use of the NRPSDesigner output, e.g. with available Bio-CAD tools. </p>
+
+                <div class="btn-group" style="margin-left:10px">
+                <a class="btn">Create monomer library</a>
+                <a class="btn" >Create boundary library</a>
+            </div>
+
+              <p style="margin-top:20px">
+              Also, it is possible to create combinatorial libraries by starting from this construct, either by shuffling one of the monomers or by changing the boundaries of some of the domains. This functionality, which can be accessed with the above buttons, will be explained in a subsequent section.
+              </p>
+               <p> <span class="label label-important">Important</span> Finally, note that synthetic NRPS are also functional when an adenylation domain, natively found in an elongation module, is used as the initiation domain. The consequence for the NRPSDesigner is that returned NRPS coding sequences may start without a start codon. Thus, in the subsequent steps of design of an appropriate cloning strategy, it is essential to introduce a start codon e.g. by including it in the backbone. Similarly, in order to enable more complicated experimental strategies, for example the addition of a GFP at the end of the synthetic NRPS, no Stop codon is added automatically, thus the stop codon also has to be introduced in the subsequent cloning strategy.</p>
 
 
             <div class="page-header">
@@ -164,7 +174,7 @@
 
                 <p> The behaviour in the previously mentioned step is similar to the one present in the original Gibthon web-server, but with one important difference: Other fragments cannot be entered into the plasmid if they would disrupt the previously returned sequence of NRPS domains. Thus, other DNA sequences can be embedded in the plasmid only after the thioesterase (TE) domain or before the initialization adenylation domain. </p>
 
-                <p> <span class="label label-important">Important</span> As mentioned before, it is very important to ensure the addition of a promoter, a ribosome binding site, a start and a stop codon in the final sequence!</p>
+                <p> <span class="label label-important">Important</span> It is very important to ensure the addition of a promoter, a ribosome binding site, a start and a stop codon in the final sequence!</p>
 
                     <h3> Primers </h3>
                     <p> If you click on the "Primers" tab, you will initially come across the following loading bar: </p>
@@ -224,9 +234,9 @@
            <p style="margin-top:20px"> This table contains the sequence of the primers, their length, as well as their melting temperature (including floppy ends). Thus, the primers can be quickly ordered from commercial providers. </p>
 
            <div class="page-header">
-            <h2> Combinatorial libraries </h2>
+            <h2> Monomer libraries </h2>
             </div>
-            <p> For logged-in users, the NRPSDesigner also provides an experimental feature for high-throughput generation of peptide libraries by starting from a given scaffold (with applications for example in the case of production of novel antibiotics by starting from a known non-ribosomal peptide antibiotic). Thus, the login requirement is enforced, because the procedure can only begin from a succesfully cloned NRPS construct, as designed in one of the previous steps and saved in a user-specific session. In particular, the user can visit his collection of designed NRPs and then click on the downwards-pointing arrow of the button of his peptide of choice and then choose "Create library", as seen in the screenshot below.</p>
+            <p>The NRPSDesigner also provides an experimental feature for high-throughput generation of peptide libraries by starting from a given scaffold (with applications for example in the case of production of novel antibiotics by starting from a known non-ribosomal peptide antibiotic). This functionality can be accessed, from the Designer tab of the main construct, as shown previously. Logged-in users can also access this functionality by visiting their collection of designed NRPs and then clicking on the downwards-pointing arrow of their peptide of choice and then choosing "Create monomer library", as seen in the screenshot below.</p>
 
 
 
@@ -237,6 +247,17 @@
             <img src={% static "images/documentation/screenshot2.png" %} /></br>
 
             <p> The monomer position to be exchanged can be chosen by clicking on the corresponding <i class="icon-ok"></i> or <i class="icon-plus"></i> button. Choosing the <i class="icon-ok"></i> option leads to the shuffling of that particular position with all monomers of the database. On the other hand, by repeated clicking of the <i class="icon-plus"></i> button, a manual selection of monomers to be used for the exchange can be accomplished. Once preferences have been set, the appropriate constructs are designed by clicking on the "Design library" button. Note that depending on the number of monomers, this procedure could take a long time. Once the calculation is ready, a downloadable output with SBOL/GenBank files, as well as primers, similar to the one described for the scaffold construct, is returned. </p>
+
+
+
+           <div class="page-header">
+            <h2> Boundary libraries </h2>
+            </div>
+
+            <p> Similarly to the monomer library functionality, a boundary library functionality exists, in which the user can modify the boundaries of the domains included in the original construct. For each domain, the protein sequence of the whole synthetase which natively codes for it, can be shown. This makes it easy to choose different boundaries for a particular domain, as exemplified in the screenshot of this functionality below: </p>
+
+           <img src={% static "images/documentation/boundaryLibrary.png" %} /></br>
+
 
             <div class="page-header">
             <h2> Extending the database </h2>
@@ -262,6 +283,14 @@
              </ul>
 
              <p> Pressing on the "Save cds and domains!" button results in the storage of all the previously entered and predicted information to the NRPSDesigner database. </p>
+
+             <div class="page-header">
+            <h2> Submit experimental data </h2>
+            </div>
+
+<p> In this panel (see screenshot below) you can report the result of a successful NRPS assembly. If a construct has worked experimentally the domain borders of the respective database entries can be updated accordingly. First, you have to select two neighboring domains from your construct. Different filtering options help you to find the correct domains quickly in the database. Subsequently the corresponding coding sequence will be displayed. In green you can find the current domain length and borders. If your experimentally tested domain borders differ you can enter your result into the respective input fields e.g. by clicking on the corresponding base pair in the sequence shown. Finally, you can specify if your domain can be found also in external databases, as well as references validating this particular domain combination. </p> 
+             <img src={% static "images/documentation/expData.png" %} /></br>
+
 
              <div class="page-header">
              <h2> Privacy </h2>
