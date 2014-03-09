@@ -243,7 +243,7 @@ def get_available_monomers(request):
             selected = None
         aas = get_available_substrates(monomers, toBool(request.POST['current']), toBool(request.POST['curatedonly']), selected)
     else:
-        aas = filter(lambda x: x.can_be_added(), Substrate.objects.exclude(user__username='sbspks'))
+        aas = filter(lambda x: x.can_be_added(curatedonly=toBool(request.POST['curatedonly'])), Substrate.objects.exclude(user__username='sbspks'))
     json = {}
     minid = float("Inf")
     for aa in aas:

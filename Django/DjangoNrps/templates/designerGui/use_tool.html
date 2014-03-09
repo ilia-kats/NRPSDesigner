@@ -164,19 +164,22 @@
     function removeMonomer(e)
     {
         var monomer = jQuery(e.delegateTarget).parent();
-        if (nrpEnabledEffects) {
-        monomer.animate({width:0, opacity: 0}, animationDuration, function() {
-                monomer.remove();
-                makeStruct();
-                var selected = jQuery('#selected_monomers :input[type="checkbox"]');
-                if (selected.find(':checked').length == 0)
-                    jQuery(selected[selected.length - 1]).click();
-            });
-        } else {
+        var onRemove = function() {
             monomer.remove();
+            makeStruct();
             var selected = jQuery('#selected_monomers :input[type="checkbox"]');
-            if (selected.find(':checked').length == 0)
+            var checked = selected.filter(':checked');
+            if (checked.length == 0)
                 jQuery(selected[selected.length - 1]).click();
+            else {
+                getSelectableMonomers(true);
+                checked.click();
+            }
+        }
+        if (nrpEnabledEffects) {
+        monomer.animate({width:0, opacity: 0}, animationDuration, onRemove);
+        } else {
+            onRemove();
         }
 
     }
