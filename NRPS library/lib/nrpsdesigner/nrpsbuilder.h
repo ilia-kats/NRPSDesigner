@@ -24,7 +24,7 @@ public:
     NrpsBuilder();
     NrpsBuilder(const std::vector<Monomer>*, const Nrps*);
     void setScaffold(const std::vector<Monomer>*, const Nrps*);
-    Nrps build(const std::vector<Monomer>&, bool indTag = false) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError);
+    Nrps build(const std::vector<Monomer>&, bool indTag = false, bool handleLogicErrors = false) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError);
 
 private:
     std::shared_ptr<std::vector<Node*>> makeCDomains(const Monomer&, std::shared_ptr<std::vector<Node*>>, std::shared_ptr<std::vector<Node*>>, Configuration);

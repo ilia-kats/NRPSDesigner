@@ -54,7 +54,7 @@ void NrpsBuilder::setScaffold(const std::vector<Monomer> *scaffoldNrp, const Nrp
     m_scaffoldNrps = scaffoldNrps;
 }
 
-Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError)
+Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag, bool handleLogicErrors) throw (NetworkError, NCBITaxonomyError, TaxonomyDumpError, DatabaseError)
 {
     m_db = AbstractDatabaseConnector::getInstance();
     Nrps ret;
@@ -221,7 +221,16 @@ Nrps NrpsBuilder::build(const std::vector<Monomer> &nrp, bool indTag) throw (Net
             n->neighbors = goal;
     }
     m_graph.push_back(m_endn);
-    TaxonBuilder::getInstance()->process();
+
+    if (handleLogicErrors) {
+        try {
+            TaxonBuilder::getInstance()->process();
+        } catch (std::logic_error &e) {
+            std::clog << "WARNING: " << e.what() << std::endl;
+        }
+    } else {
+        TaxonBuilder::getInstance()->process();
+    }
 
     std::priority_queue<dijkstra_weight, std::vector<dijkstra_weight>, std::greater<dijkstra_weight>> heap;
     heap.push(dijkstra_weight(0, m_startn, m_startn));

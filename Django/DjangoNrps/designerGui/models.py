@@ -449,6 +449,7 @@ class NRP(models.Model):
         lastcat = [0]
         logger = logging.getLogger('user_visible')
         xmlout = [""] # nonlocal only in python3
+        toappend = [False]
         def processErr(lines):
             def log():
                 if lasterror[0]is None:
@@ -459,8 +460,9 @@ class NRP(models.Model):
                     logger.warning(lasterror[0])
                 elif lastcat[0] == 2:
                     logger.info(lasterror[0])
-            lines = lines.splitlines()
-            for line in lines:
+            slines = lines.splitlines()
+
+            for line in slines:
                 if line.startswith("WARNING: "):
                     log()
                     lastcat[0] = 1
@@ -473,13 +475,17 @@ class NRP(models.Model):
                     log()
                     lastcat[0] = 2
                     lasterror[0] = line[6:]
-                elif line.startswith(" "):
+                elif line.startswith(" ") or toappend[0]:
                     lasterror[0] += line.strip()
                 else:
                     log()
                     lastcat[0] = 0
                     lasterror[0] = line
-            log()
+            if not lines.endswith("\n"):
+                toappend[0] = True
+            else:
+                toappend[0] = False
+                log()
         def processOut(lines):
             xmlout[0] += lines
         # call NRPS Designer C++ program
@@ -489,7 +495,7 @@ class NRP(models.Model):
             '--mysql-user'     : settings.DATABASES[connection.alias]['USER'],
             '--mysql-password' : settings.DATABASES[connection.alias]['PASSWORD']
             }
-        args = ["nrpsdesigner"]
+        args = ["nrpsdesigner", "-e"]
         args.extend(params)
         for k,v in dbSettings.items():
             if v:

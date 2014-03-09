@@ -3,6 +3,8 @@
 #include "product.h"
 #include "taxonbuilder.h"
 
+#include <limits>
+
 namespace std
 {
 size_t hash<pair<uint32_t, uint32_t>>::operator()(const pair<uint32_t, uint32_t> &s) const
@@ -14,6 +16,8 @@ size_t hash<pair<uint32_t, uint32_t>>::operator()(const pair<uint32_t, uint32_t>
 float nrps::makeWeight(const std::shared_ptr<Domain> &lhs, const std::shared_ptr<Domain> &rhs, std::unordered_map<uint32_t, std::shared_ptr<Taxon>> *taxonCache,  std::unordered_map<std::pair<uint32_t, uint32_t>, float> *weightCache)
 {
     uint32_t taxid1 = lhs->origin()->taxId(), taxid2 = rhs->origin()->taxId();
+    if (taxid1 == 0 || taxid2 == 0)
+        return std::numeric_limits<float>::infinity();
     std::pair<uint32_t, uint32_t> key(std::min(taxid1, taxid2), std::max(taxid1, taxid2));
     float weight;
     if (weightCache == nullptr || !weightCache->count(key)) {

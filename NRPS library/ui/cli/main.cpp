@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     std::string outfile;
     std::string outsbol;
     bool indTag = false;
+    bool handleLogicErrors = false;
     std::string inputnrps;
     po::options_description options("General options");
     options.add_options()("help,h", "print this help")
@@ -42,7 +43,8 @@ int main(int argc, char *argv[])
                          ("outsbol,s", po::value<std::string>(&outsbol), "Path to output file in SBOL format. Use - for stdout.")
 #endif
                          ("indigoidine-tag,t", po::bool_switch(&indTag), "Append an indigoidine tag to the NRP.")
-                         ("input-nrps,n", po::value<std::string>(&inputnrps), "Path to input NRPS file for library generation. Use - for stdin.");
+                         ("input-nrps,n", po::value<std::string>(&inputnrps), "Path to input NRPS file for library generation. Use - for stdin.")
+                         ("handle-logic-errors,e", po::bool_switch(&handleLogicErrors), "Gracefully handle mismatches between requested and returned TaxIDs.");
     auto dbConn = AbstractDatabaseConnector::getInstance();
 
     TaxonBuilder *tb = TaxonBuilder::getInstance();
@@ -75,7 +77,7 @@ int main(int argc, char *argv[])
             }
             std::free(monomersch);
 
-            Nrps nrps = NrpsBuilder().build(monomers, indTag);
+            Nrps nrps = NrpsBuilder().build(monomers, indTag, handleLogicErrors);
 #ifdef WITH_INTERNAL_XML
             if (!outfile.empty()) {
                 if (outfile == "-")
