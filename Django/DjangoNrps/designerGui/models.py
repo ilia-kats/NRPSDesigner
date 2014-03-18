@@ -60,6 +60,7 @@ class NRP(models.Model):
     modified = models.DateTimeField(auto_now=True)
     designed = models.BooleanField(default=False)
     indigoidineTagged = models.BooleanField(default=False)
+    curatedonly = models.BooleanField(default=True)
     designerDomains = models.ManyToManyField('databaseInput.Domain', through = 'DomainOrder', blank=True, related_name = 'includedIn')
     construct = models.OneToOneField('gibson.Construct', null=True, blank=True, related_name='nrp')
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child')
@@ -347,11 +348,11 @@ class NRP(models.Model):
             ncf.construct.reprocess_primer(pbottom)
 
     @task()
-    def designDomains(self, curatedonly=True):
+    def designDomains(self):
         #see deletion strategy in multiline comment above
         self.delete_dependencies(False)
         args = ["-m", self.getPeptideSequenceAsString(), "-s", "-"]
-        if curatedonly:
+        if self.curatedonly:
             args.extend(["--curated-only", "--curation-group", settings.CURATION_GROUP])
         if self.indigoidineTagged:
             args.append("-t")
@@ -412,7 +413,7 @@ class NRP(models.Model):
             elif description is None:
                 description = ""
             varname = Substrate.objects.get(pk=monomers[varpos][i]).name
-            nrp = NRP.objects.create(owner = self.owner, name="%s %s" % (self.name, varname), description=description + "library variant %d: %s" % (i, varname), indigoidineTagged=self.indigoidineTagged, parent=self)
+            nrp = NRP.objects.create(owner = self.owner, name="%s %s" % (self.name, varname), description=description + "library variant %d: %s" % (i, varname), indigoidineTagged=self.indigoidineTagged, curatedonly=curatedonly, parent=self)
             for j, monomerId in enumerate(monomers):
                 index = 0
                 if j == varpos:

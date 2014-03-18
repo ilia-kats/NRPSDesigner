@@ -22,5 +22,7 @@ def saveNrpMonomers(request, uuid):
             nrp.indigoidineTagged = toBool(request.POST['indtag'])
         else:
             nrp.indigoidineTagged = False
+        if 'curatedonly' in request.POST:
+            nrp.curatedonly = toBool(request.POST['curatedonly'])
         nrp.save()
         return HttpResponse()

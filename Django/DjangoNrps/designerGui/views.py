@@ -44,7 +44,7 @@ def makeConstruct(request, uuid):
         return HttpResponseNotFound()
     else:
         nrp.designed = False
-        return JsonResponse({'taskId': nrp.designDomains.delay(toBool(request.POST['curatedonly'])).id})
+        return JsonResponse({'taskId': nrp.designDomains.delay().id})
 
 def getConstruct(request, uuid):
     nrp = get_nrp(request.user, uuid)
@@ -130,7 +130,7 @@ def SpeciesListView(request, uuid):
     t = loader.get_template('designerGui/use_tool.html')
     substrateOrder = SubstrateOrder.objects.filter(nrp = nrp)
     modfs = Modification.objects.all()
-    c = RequestContext(request, {'nrp': nrp, 'uuid': uuid, 'myFormSet': SubstrateFormSet(), 'modifications': modfs.values(), 'substrateOrder': substrateOrder, 'indigoidineTagged': nrp.indigoidineTagged, 'initialPic': nrp.getPeptideSequenceForStructView()})
+    c = RequestContext(request, {'nrp': nrp, 'uuid': uuid, 'myFormSet': SubstrateFormSet(), 'modifications': modfs.values(), 'substrateOrder': substrateOrder, 'indigoidineTagged': nrp.indigoidineTagged, 'curatedonly': nrp.curatedonly, 'initialPic': nrp.getPeptideSequenceForStructView()})
     return HttpResponse(t.render(c))
 
 def createLibrary(request, uuid):

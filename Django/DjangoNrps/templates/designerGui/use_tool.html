@@ -263,7 +263,7 @@
 
     function save(e)
     {
-        jQuery.post("{% url 'saveNrpMonomers' uuid %}", {as: getMonomers()[0], indtag: jQuery('#chk_indigoidinetag').prop("checked")}, makeConstruct, "text").fail(function(){alert("failed");});
+        jQuery.post("{% url 'saveNrpMonomers' uuid %}", {as: getMonomers()[0], indtag: jQuery('#chk_indigoidinetag').prop("checked"), curatedonly: jQuery('#chk_curatedonly').prop("checked")}, makeConstruct, "text").fail(function(){alert("failed");});
     }
 
 
@@ -405,7 +405,7 @@
     <div class="box" data-intro="In this step you can select whether you want all domains used to be curated rather than domains entered by any user." data-step="2">
         <p>Options:</p>
         <div>
-            <input type="checkbox" id="chk_curatedonly" checked="checked"/><label for="chk_curatedonly" style="margin-bottom:0">Use curated domains only</label>
+            <input type="checkbox" id="chk_curatedonly" {% if curatedonly %} checked="checked"{% endif %}/><label for="chk_curatedonly" style="margin-bottom:0">Use curated domains only</label>
             <!--<input type="checkbox" id="chk_indigoidinetag"{% if indigoidineTagged %} checked="checked"{% endif %}/><label for="chk_indigoidinetag" style="margin-bottom:0" data-step="3" data-intro="Check this if the peptide needs to be tagged with the blue pigment Indigoidine.">Tag NRP with Indigoidine</label>-->
         </div>
     </div>
