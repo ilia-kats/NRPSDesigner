@@ -372,6 +372,9 @@ class Construct(models.Model):
         acc = 0
         ph_top = dict()
         ph_bottom = dict()
+        nrp_start = None
+        nrp_stop = None
+        nrp_fragment = None
         for fr in self.cf.all():
             start = acc
             fe = fr.features()
@@ -390,6 +393,12 @@ class Construct(models.Model):
             acc += fr.end() - fr.start()
             try:
                 fr.fragment.domaingene is None
+                if nrp_start is None:
+                    nrp_start = start
+                if nrp_stop is None or acc > nrp_stop:
+                    nrp_stop = acc
+                if nrp_fragment is None:
+                    nrp_fragment = fr # ugly hack
             except DomainGene.DoesNotExist:
                 yield Feature(type=fragment_feature, start=start, end=acc, direction=fr.direction, gene=fr.fragment)
             if self.processed:
@@ -399,6 +408,9 @@ class Construct(models.Model):
                         ph_top[start + ph.start()] = ph
                     elif not ph.top and ph.isflap():
                         ph_bottom[start + ph.start()] = ph
+        if nrp_start is not None and nrp_stop is not None:
+            yield Feature(type='gene', start=nrp_start, end=nrp_stop, direction=nrp_fragment.direction, gene=nrp_fragment.fragment)
+            yield Feature(type='CDS', start=nrp_start, end=nrp_stop, direction=nrp_fragment.direction, gene=nrp_fragment.fragment)
         for start, stick in ph_top.iteritems():
             start = start
             primer = stick.stick
