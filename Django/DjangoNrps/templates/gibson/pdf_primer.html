@@ -24,19 +24,28 @@ h2.title {
 	padding-top:7px;
 }
 
-.ui-widget-header { border: 1px solid #4297d7; background: #5c9ccc url({{ STATIC_URL }}/css/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
+.ui-widget-header { background: #5c9ccc url({{ STATIC_URL }}/css/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
 @page {
   margin: 1cm;
   margin-bottom: 2.5cm;
   @frame header {
     -pdf-frame-content: headerContent;
+    border: 0;
     top: 0.8cm;
     margin-left: 0.8cm;
     margin-right: 0.8cm;
     height: 2cm;
   }
+  @frame content {
+    border:0;
+    bottom:2cm;
+    top: 0.8cm;
+    margin-left: 0.8cm;
+    margin-right: 0.8cm;
+  }
   @frame footer {
   	-pdf-frame-content: footerContent;
+    border: 0;
   	bottom: 0cm;
   	margin-left: 0.8cm;
     margin-right: 0.8cm;
@@ -44,6 +53,7 @@ h2.title {
   }
   @frame footerText {
   	-pdf-frame-content: footerText;
+    border: 0;
   	bottom: 0cm;
   	margin-left: 0.8cm;
     margin-right: 0.8cm;

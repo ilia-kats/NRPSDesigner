@@ -500,7 +500,7 @@ def primer_download(request, cid, *args):
                 'each':5.0/con.fragments.all().count()
             })
             pdfbuffer = StringIO()
-            pdf = pisa.CreatePDF(StringIO(t.render(c).encode("ISO-8859-1")), pdfbuffer, link_callback=fetch_resources)
+            pdf = pisa.CreatePDF(t.render(c).encode("utf-8"), pdfbuffer, link_callback=fetch_resources)
 
             # write the zip file
 
