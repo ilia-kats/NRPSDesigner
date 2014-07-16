@@ -48,7 +48,28 @@
         var chosenmonomers = getMonomers();
         selected.append(div);
         spinner.spin(div[0]);
-        jQuery.ajax({type: "POST", url: "{%url 'selectableMonomers' %}", data: {monomer: chosenmonomers[0], selected: chosenmonomers[1], curatedonly: jQuery('#chk_curatedonly').prop("checked"), current: current}, async: false}).done(function(data){monomers = data[1].monomers; monomersList = data[1].monomerslist; spinner.stop(); div.remove();});
+        jQuery.ajax({type: "POST", url: "{%url 'selectableMonomers' %}", data: {monomer: chosenmonomers[0], selected: chosenmonomers[1], curatedonly: jQuery('#chk_curatedonly').prop("checked"), current: current}, async: false}).done(function(data) {
+            monomers = data[1].monomers;
+            monomersList = data[1].monomerslist;
+            spinner.stop();
+            div.remove();
+            reasontext = "";
+            switch (data[1].reason) {
+                case 0:
+                    reasontext = "Only monomers for which a suitable A domain is present in the database are available for selection.";
+                    break;
+                case 1:
+                    reasontext = "Only those monomers are available for selection for which a suitable A domain as well as C domains specific for the monomer itself and the chirality of the monomer at the preceding position as well as the monomer at the following position and the chirality of the monomer itself are present in the database.";
+                    break;
+                case 2:
+                    reasontext = "Only those monomers are available for selection for which a suitable A domain as well as a C domain specific for the monomer itself and the chirality of the monomer at the preceding position are present in the database.";
+                    break;
+                case 3:
+                    reasontext = "Only those monomers are available for selection for which a suitable A domain as well as a C domain specific for the monomer at the following position and the chirality of the monomer itself are present in the database.";
+                    break;
+            }
+            showError(reasontext, "info");
+        });
     }
 
     function makeStruct()

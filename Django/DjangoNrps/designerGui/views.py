@@ -165,7 +165,7 @@ def processLibrary(request, uuid):
         if haveUseAll != -1:
             for m in data['as']:
                 del m[1:]
-            substrates = get_available_substrates(monomers, True, data['curatedonly'], haveUseAll)
+            substrates = get_available_substrates(monomers, True, data['curatedonly'], haveUseAll)[0]
             scaffold = data['as'][haveUseAll][0]
             for s in substrates:
                 if s.pk != scaffold:
@@ -235,15 +235,17 @@ def view_boundary_library(request, uuid):
     return HttpResponse(t.render(c))
 
 def get_available_monomers(request):
+    reason = None
     if request.method == 'POST' and "monomer[]" in request.POST:
         monomers = request.POST.getlist("monomer[]")
         if 'selected' in request.POST:
             selected = int(request.POST['selected'])
         else:
             selected = None
-        aas = get_available_substrates(monomers, toBool(request.POST['current']), toBool(request.POST['curatedonly']), selected)
+        aas, reason = get_available_substrates(monomers, toBool(request.POST['current']), toBool(request.POST['curatedonly']), selected)
     else:
         aas = filter(lambda x: x.can_be_added(curatedonly=toBool(request.POST['curatedonly'])), Substrate.objects.exclude(user__username='sbspks'))
+        reason = 0
     json = {}
     minid = float("Inf")
     for aa in aas:
@@ -272,25 +274,34 @@ def get_available_monomers(request):
 
     jsonlist = json.values()
     jsonlist.sort(lambda x,y: cmp(x['text'], y['text']))
-    return JsonResponse({"monomers": json, "monomerslist": jsonlist})
+    return JsonResponse({"monomers": json, "monomerslist": jsonlist, "reason": reason})
 
 def get_available_substrates(monomers, current, curatedonly=True, selected=None):
     if selected is None:
         selected = len(monomers) - 1
+    reason = None
     if current:
         if selected > 0:
             chirality = Substrate.objects.get(pk=monomers[selected - 1]).chirality
         else:
             chirality = None
+            reason = 3
     else:
         chirality = Substrate.objects.get(pk=monomers[-1]).chirality
     substrates = Substrate.objects.exclude(user__username='sbspks')
+
     if not current or selected == len(monomers) - 1:
         aas = filter(lambda x: x.can_be_added(chirality, curatedonly), substrates)
+        if reason is None:
+            reason = 2
     else:
         following = Substrate.objects.get(pk=monomers[selected + 1])
         aas = filter(lambda x: x.can_be_added(chirality, curatedonly) and following.can_be_added(x.chirality, curatedonly), substrates)
-    return aas
+        if reason is None:
+            reason = 1
+    if len(monomers) == 1 and current:
+        reason = 0
+    return (aas, reason)
 
 @login_required
 def submit_nrp(request):
