@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block css-include %}
+<style type="text/css">
+div.selectrow {
+    display:table
+}
+
+span.selectrow {
+    display: table-row;
+    width: 100%;
+}
+span.selectrow > * {
+    display: table-cell;
+}
+
+span.selectrow span.select {
+    box-sizing:border-box;
+    width: 100%;
+    padding-left: 5px;
+}
+
+</style>
+{% endblock %}
+
+{% load staticfiles %}
+
+{% block js-include %}
+<script type="text/javascript" src="{% static "js/BioJS/Biojs.js" %}"></script>
+<script type="text/javascript" src="{% static "js/BioJS/Biojs.Sequence.js" %}"></script>
+<script type="text/javascript" src="{% static "js/BioJS/Biojs.Tooltip.js" %}"></script>
+
+<script type="text/javascript" src="{% static "js/jquery.scrollTo.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/biojs_helper.js" %}"></script>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+jQuery(function() {
+    var seq = new BiojsSequenceHelper({target: "seqDiv", url: "{% url 'getBioJsSequence' %}"});
+
+    function populateInfoTable() {
+        var infotable = jQuery('#infotable');
+        infotable.html('');
+        jQuery.ajax({
+            type: "POST",
+            url:  "{% url 'getInfo' %}",
+            data: {cdsId: jQuery("#geneselect").select2("val"), domainId: jQuery("#domainselect").select2("val")},
+                    async: true
+        }).done(function(data) {
+            var htmlstr = '';
+            for (var i = 0; i < data[1].length; ++i) {
+                htmlstr += '<tr><td>' + data[1][i][0] + '</td><td>' + data[1][i][1] + '</td></tr>'
+            }
+            infotable.html(htmlstr);
+            var pre = jQuery('#seqDiv > div > pre');
+                jQuery('#seqDiv').height(infotable.height());
+        })
+    }
+
+    // to be used on callbacks by select2.js after ajax response
+    function jsonResponseResult(data, page) {
+        return { results: data[1]};
+    }
+    jQuery("#organismselect").select2({
+        placeholder: "Select an organism",
+        ajax: {
+            url: "{% url 'getOrigins' %}",
+            dataType: 'json',
+            results: jsonResponseResult
+        },
+        width: "100%"
+    });
+    jQuery("#organismselect").select2({
+        placeholder: "Select an organism",
+        ajax: {
+            url: "{% url 'getOrigins' %}",
+            dataType: 'json',
+            results: jsonResponseResult
+        },
+        width: "100%"
+    }).change(function(e){jQuery("#geneselect").select2("val", "");jQuery("#domainselect").select2("val", "");jQuery('#infotable').html();});
+
+    jQuery("#geneselect").select2({
+        placeholder: "Select a gene",
+        ajax: {
+            url: "{% url 'getCodingSequences' %}",
+            dataType: 'json',
+            data: function(term, page) {
+                return {originId: jQuery("#organismselect").val()};
+            },
+            results: jsonResponseResult
+        },
+        width: "100%"
+    }).change(function(e){
+        jQuery("#domainselect").select2("val", "");
+        populateInfoTable();
+        seq.showBioJsSequence({cdsId:e.val});
+    });
+
+    jQuery("#domainselect").select2({
+        placeholder: "Select a domain",
+        ajax: {
+            url: "{% url 'getDomains' %}",
+            dataType: 'json',
+            data: function(term, page) {
+                return {originId: jQuery("#organismselect").select2("val"), cdsId: jQuery("#geneselect").select2("val")};
+            },
+            results: jsonResponseResult
+        },
+        width: "100%"
+    }).change(function(e){
+        populateInfoTable();
+        if (jQuery("#geneselect").select2("val") == "")
+            seq.showBioJsSequence({domainId:e.val});
+        else
+            seq.showBioJsDomain(e.val);
+    });
+
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+<div class="span4 selectrow">
+    <span class="selectrow"><span>Organism:</span>
+    <span class="select"><input type="hidden" id="organismselect"/></span></span>
+</div>
+<div class="span4 selectrow">
+    <span class="selectrow"><span>Gene:</span>
+    <span class="select"><input type="hidden" id="geneselect"/></span></span>
+</div>
+<div class="span4 selectrow">
+    <span class="selectrow"><span>Domain:</span>
+    <span class="select"><input type="hidden" id="domainselect" style="width:100%"/></span></span>
+</div>
+</div>
+<div class="row-fluid">
+<div class="span6">
+    <table class="table table-striped" id="infotable">
+    </table>
+</div>
+<div class="span6" id="seqDiv" style="overflow:auto"></div>
+</div>
+
+{% endblock %}

@@ -6,9 +6,12 @@
 
 {% block js-include %}
 {% load staticfiles %}
-<script language="JavaScript" type="text/javascript" src="{% static "js/BioJS/Biojs.js" %}"></script>
-<script language="JavaScript" type="text/javascript" src="{% static "js/BioJS/Biojs.Sequence.js" %}"></script>
-<script language="JavaScript" type="text/javascript" src="{% static "js/BioJS/Biojs.Tooltip.js" %}"></script>
+<script type="text/javascript" src="{% static "js/BioJS/Biojs.js" %}"></script>
+<script type="text/javascript" src="{% static "js/BioJS/Biojs.Sequence.js" %}"></script>
+<script type="text/javascript" src="{% static "js/BioJS/Biojs.Tooltip.js" %}"></script>
+
+<script type="text/javascript" src="{% static "js/jquery.scrollTo.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/biojs_helper.js" %}"></script>
 {% endblock %}
 
 
@@ -60,7 +63,7 @@ Report a successful assembly of two NRPS domains.
 </div>
 </div>
 
-   
+
 <div class="row">
 <div class="span5">
 Left domain Filters:
@@ -73,7 +76,7 @@ Left domain:
 
                 <div class="fieldWrapper">
                   {{ form.prev_position.errors }}
-                  Left boundary: 
+                  Left boundary:
                   {{ form.prev_position }}
                 </div>
 
@@ -96,11 +99,11 @@ Right domain:
 
                 <div class="fieldWrapper">
                   {{ form.next_position.errors }}
-                  Right boundary: 
+                  Right boundary:
                   {{ form.next_position }}
                 </div>
 
-       
+
 
 </div>
 
@@ -159,7 +162,7 @@ jQuery("#domainsLeft").select2({
         dataType: 'json',
         data: function (term, page) { // page is the one-based page number tracked by Select2
             return {
-                originId: jQuery("#originsLeft").val(), 
+                originId: jQuery("#originsLeft").val(),
                 typeId: jQuery("#domainTypesLeft").val()
             };
         },
@@ -197,7 +200,7 @@ jQuery("#domainsRight").select2({
         dataType: 'json',
         data: function (term, page) { // page is the one-based page number tracked by Select2
             return {
-                originId: jQuery("#originsRight").val(), 
+                originId: jQuery("#originsRight").val(),
                 typeId: jQuery("#domainTypesRight").val()
             };
         },
@@ -229,69 +232,19 @@ jQuery("#submitButton").click( function() {
 });
 
 
-leftSequence = new Biojs.Sequence();
-jQuery("#domainsLeft").change(function(){
+leftSequence = new BiojsSequenceHelper({target: "leftBioJsSequenceDiv", url: "{% url 'getBioJsSequence' %}", onSelectionChange: function( objEvent ) {jQuery("#id_domainTuple-prev_position").val(objEvent.end)}});
+jQuery("#domainsLeft").change(function(e){
     jQuery("#id_domainTuple-prev_position").val("")
-    showLeftBioJsSequence();
+    leftSequence.showBioJsSequence({domainId:e.val});
 });
 
-
-
-function showLeftBioJsSequence() {
-    if (typeof(leftSequence)!== "undefined"){
-        leftSequence.clearSequence()
-        jQuery.get("{% url 'getDomainBioJsSequence' %}", 
-            {domainId: jQuery("#domainsLeft").val()}, 
-            function(data) {
-                if (data[0] !== -1) {
-                    bioJsData = data[1];
-                    bioJsData.columns = {'size':100};
-                    bioJsData.target = "leftBioJsSequenceDiv";
-                    bioJsData.format = "FASTA"
-                    bioJsData.formatSelectorVisible = false
-                    leftSequence = new Biojs.Sequence(bioJsData)
-                    leftSequence.onSelectionChange(
-                            function( objEvent ) {
-               jQuery("#id_domainTuple-prev_position").val(objEvent.end)
-                    });
-                }
-        });
-    }
-}
-
-rightSequence = new Biojs.Sequence();
-jQuery("#domainsRight").change(function(){
+rightSequence = new BiojsSequenceHelper({target: "rightBioJsSequenceDiv", url: "{% url 'getBioJsSequence' %}", onSelectionChange: function( objEvent ) {jQuery("#id_domainTuple-next_position").val(objEvent.end)}});
+jQuery("#domainsRight").change(function(e){
     jQuery("#id_domainTuple-next_position").val("")
-    showRightBioJsSequence();
+    rightSequence.showBioJsSequence({domainId:e.val});
 });
-
-
-
-function showRightBioJsSequence() {
-    if (typeof(rightSequence)!== "undefined"){
-        rightSequence.clearSequence()
-        jQuery.get("{% url 'getDomainBioJsSequence' %}", 
-            {domainId: jQuery("#domainsRight").val()}, 
-            function(data) {
-                if (data[0] !== -1) {
-                    bioJsData = data[1];
-                    bioJsData.columns = {'size':100};
-                    bioJsData.target = "rightBioJsSequenceDiv";
-                    bioJsData.format = "FASTA"
-                    bioJsData.formatSelectorVisible = false
-                    rightSequence = new Biojs.Sequence(bioJsData)
-                    rightSequence.onSelectionChange(
-                            function( objEvent ) {
-               jQuery("#id_domainTuple-next_position").val(objEvent.end)
-                    });
-                }
-        });
-    }
-}
-
-
 });
 
 </script>
-          
+
 {% endblock %}

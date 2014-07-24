@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.validators import MinLengthValidator
+from django.conf import settings
 from celery.contrib.methods import task
 
 from itertools import count
@@ -137,9 +138,10 @@ class Cds(models.Model):
             }
         return biojs_entry
 
+ORIGIN_TYPES = (('Species','Species'),('Biobrick','Biobrick'), ('Other', 'Other DNA source'))
 
 class Origin(models.Model):
-    sourceType = models.CharField(max_length=10, choices= (('Species','Species'),('Biobrick','Biobrick'), ('Other', 'Other DNA source')))
+    sourceType = models.CharField(max_length=10, choices= ORIGIN_TYPES)
     source = models.CharField(max_length=20) #usually taxon ID, can also be biobrick or plasmid identifier
     species = models.CharField(max_length = 100, blank=True, null= True)
     description = models.TextField()
@@ -186,7 +188,7 @@ class Domain(models.Model):
         return str(self.cds) + str(self.module) + str(self.domainType)
 
     def short_name(self):
-        return str(self.cds.geneName) + str(self.module) + str(self.domainType)
+        return str(self.cds.geneName) + str(self.module) + " " + str(self.domainType)
 
 
     def get_start(self, prevd=None, with_linker=True):
@@ -282,12 +284,6 @@ class Domain(models.Model):
             'color':"white",
             'background':"green"}
         return highlight
-    # return python dict to be converted to json for use by bioJs sequence
-    def get_biojs_entry(self, protein=False):
-        biojs_entry = self.cds.get_biojs_entry(protein=protein)
-        biojs_entry['highlights'] = [self.get_biojs_highlight(protein=protein)]
-        return biojs_entry
-
 
 class Substrate(models.Model):
     name = models.CharField(max_length=30)
@@ -312,13 +308,13 @@ class Substrate(models.Model):
     def can_be_added_by_adenylation_domain(self, curatedonly=False):
         domains = self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks').filter(domainType__name='A')
         if curatedonly:
-            domains = domains.filter(user__groups__name='curator')
+            domains = domains.filter(user__groups__name=settings.CURATION_GROUP)
         return domains.count() > 0
 
     def can_be_added_by_condensation_adenylation_domain(self, chirality, curatedonly=False):
         domains =  self.adenylationDomain.annotate(models.Count('substrateSpecificity')).exclude(substrateSpecificity__count__gt=1, user__username='sbspks')
         if curatedonly:
-            domains = domains.filter(user__groups__name='curator')
+            domains = domains.filter(user__groups__name=settings.CURATION_GROUP)
         return domains.filter(domainType__name='A').count() > 0 and domains.filter(domainType__name='C_' + chirality).count() > 0
 
     def can_be_added_by_modification_domain(self):

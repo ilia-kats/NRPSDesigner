@@ -4,17 +4,19 @@ from databaseInput.views import (cds_input, domain_prediction,
 	product_add, product_ajax_save, substrate_ajax_save,
     get_predicted_domain_formset,
 	get_predicted_domain_formset_base, save_cds_domains,
-    substrate_add, experiments)
+    substrate_add, experiments, view_db_contents)
 
 # API patterns below used for entry of experimental evidence!
 apipatterns = patterns('databaseInput.api',
     url(r'^getOrigins/$', 'get_origins', name="getOrigins"),
     url(r'^getDomainTypes/$', 'get_domain_types', name="getDomainTypes"),
     url(r'^getDomains/$', 'get_domains', name="getDomains"),
-    url(r'^getDomainBioJsSequence/$' ,'get_domain_biojs_sequence', 
-        name="getDomainBioJsSequence"),
-    url(r'^getDomainOrderBioJsSequence/$' ,'get_domain_order_biojs_sequence', 
+    url(r'^getBioJsSequence/$' ,'get_biojs_sequence',
+        name="getBioJsSequence"),
+    url(r'^getDomainOrderBioJsSequence/$' ,'get_domain_order_biojs_sequence',
         name="getDomainOrderBioJsSequence"),
+    url(r'^getCodingSequences/$', 'get_cds', name="getCodingSequences"),
+    url(r'^getInfo/$', 'get_info', name="getInfo"),
 )
 
 urlpatterns = patterns('',
@@ -31,7 +33,8 @@ urlpatterns = patterns('',
     url(r'^saveSubstrate/', substrate_ajax_save, name="saveSubstrate"),
     url(r'^MSA/(?P<task_id>\S+)', msa_domain_view, name="msaDomainView"),
     url(r'^MSA/', do_msa, name="doMsa"),
-    url(r'experiments/', experiments, name="experiments"),
+    url(r'^experiments/$', experiments, name="experiments"),
+    url(r'^viewDB/$', view_db_contents, name="viewDB"),
     (r'^api/', include(apipatterns)),
 )
 

@@ -27,8 +27,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-from databaseInput.models import Origin, Cds, Domain
-from databaseInput.forms import (CdsFormSet, CdsForm, 
+from databaseInput.models import Origin, Cds, Domain, ORIGIN_TYPES
+from databaseInput.forms import (CdsFormSet, CdsForm,
     DoubleSubstrateForm, OriginForm, DomainForm,
     ProductForm, LinkoutForm, LinkoutFormSet,
     ExpDomainTupleForm)
@@ -200,7 +200,7 @@ def origin_ajax_save(request):
             origin.save()
 
             # also make sure linkouts are saved
-            
+
             for linkout in linkoutFormSet:
                 if linkout.is_valid():
                     linkout = linkout.save(commit=False)
@@ -270,7 +270,7 @@ def substrate_ajax_save(request):
 
             DomainFormSet = inlineformset_factory(Cds, Domain, form= DomainForm)
             domainFormSet = DomainFormSet(request.POST)
-           
+
             t = loader.get_template('databaseInput/domainInput.html')
             c = RequestContext(request, {
                      'domainFormSet':domainFormSet,
@@ -463,6 +463,10 @@ def experiments(request):
                 })
             return JsonResponse({'html': t.render(c)}, ERROR)
 
+def view_db_contents(request):
+    ctxt = RequestContext(request)
+    t = loader.get_template('databaseInput/view_db_contents.html')
+    return HttpResponse(t.render(ctxt))
 
 #def sauceFunc(request):
     ##first read FASTA file and translate sequence to protein!

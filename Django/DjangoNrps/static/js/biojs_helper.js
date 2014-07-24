@@ -1,0 +1,61 @@
+function BiojsSequenceHelper(options)
+{
+    this.opts = {
+        columns: {'size':100},
+        format: "FASTA",
+        formatSelectorVisible: false,
+    };
+    for (var opt in options) {
+        this.opts[opt] = options[opt];
+    }
+    this.seq = new Biojs.Sequence();
+
+    this.showBioJsSequence = function (data) {
+        this.seq.clearSequence();
+        var self = this;
+        jQuery.get(this.opts.url,
+            data,
+            function(data) {
+                if (data[0] !== -1) {
+                    if (typeof(data[1].biojs) !== 'undefined') {
+                        var options = self.opts;
+                        for (var attr in data[1].biojs) {
+                            options[attr] = data[1].biojs[attr];
+                        }
+                        self.seq = new Biojs.Sequence(options);
+                        if (typeof(self.opts.onAnnotationClicked) !== 'undefined')
+                            self.seq.onAnnotationClicked(self.opts.onAnnotationClicked);
+                        if (typeof(self.opts.onSelectionChange) !== 'undefined')
+                            self.seq.onSelectionChange(self.opts.onSelectionChange);
+                        if (typeof(self.opts.onSelectionChanged) !== 'undefined')
+                            self.seq.onSelectionChanged(self.opts.onSelectionChanged);
+                    }
+                    if (typeof(data[1].highlight) != 'undefined') {
+                        self.seq.addHighlight(data[1].highlight);
+                        var seqelems = self.seq._contentDiv.find('.sequence');
+                        self.seq._container.scrollTo(seqelems[data[1].highlight.start - 1]);
+                    }
+                }
+        });
+    };
+
+    this.showBioJsDomain = function (domain) {
+        this.seq.unHighlightAll();
+        var self = this;
+        jQuery.get(this.opts.url,
+            {domainId: domain, domainOnly: true},
+            function(data) {
+                if (data[0] !== -1) {
+                    if (typeof(data[1].highlight) != 'undefined') {
+                        self.seq.addHighlight(data[1].highlight);
+                        var seqelems = self.seq._contentDiv.find('.sequence');
+                        self.seq._container.scrollTo(seqelems[data[1].highlight.start - 1]);
+                    }
+                }
+        });
+    }
+
+    this.getBiojsSequence = function() {
+        return this.seq;
+    }
+}
