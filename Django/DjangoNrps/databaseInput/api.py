@@ -63,6 +63,7 @@ def get_info(request):
         if domain is None:
             jsondata.append(('Description', cds.description))
             user = cds.user
+            linkouts = cds.linkout.all()
         else:
             jsondata.append(('Domain', domain.domainType.name))
             jsondata.append(('Module', domain.module))
@@ -73,12 +74,16 @@ def get_info(request):
                 jsondata.append(('Chirality', domain.chirality))
             jsondata.append(('Description', domain.description))
             user = domain.user
+            linkouts = domain.linkout.all()
         if user is not None and user.groups.filter(name=settings.CURATION_GROUP).count() > 0:
             curated = "Yes"
         else:
             curated = "No"
         jsondata.append(('Curated', curated))
-        return JsonResponse(jsondata)
+        jsonlinks = []
+        for l in linkouts:
+            jsonlinks.append({'name': l.linkoutType.shortcut, 'url': l.linkoutType.url % l.identifier})
+        return JsonResponse({'info': jsondata, 'linkouts': jsonlinks})
     else:
         return HttpResponseNotFound()
 

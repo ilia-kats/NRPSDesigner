@@ -20,6 +20,10 @@ span.selectrow span.select {
     padding-left: 5px;
 }
 
+a.linkout {
+    color: #3366bb;
+}
+
 </style>
 {% endblock %}
 
@@ -49,9 +53,14 @@ jQuery(function() {
                     async: true
         }).done(function(data) {
             var htmlstr = '';
-            for (var i = 0; i < data[1].length; ++i) {
-                htmlstr += '<tr><td>' + data[1][i][0] + '</td><td>' + data[1][i][1] + '</td></tr>'
+            for (var i = 0; i < data[1].info.length; ++i) {
+                htmlstr += '<tr><td>' + data[1].info[i][0] + '</td><td>' + data[1].info[i][1] + '</td></tr>'
             }
+            htmlstr += '<tr><td>Crossreferences</td><td>';
+            for (var i = 0; i < data[1].linkouts.length; ++i) {
+                htmlstr += '<a href="' + data[1].linkouts[i].url + '" target="_blank" class="linkout">' + data[1].linkouts[i].name + '</a> ';
+            }
+            htmlstr += '</tr>';
             infotable.html(htmlstr);
             var pre = jQuery('#seqDiv > div > pre');
                 jQuery('#seqDiv').height(infotable.height());
