@@ -19,11 +19,6 @@ span.selectrow span.select {
     width: 100%;
     padding-left: 5px;
 }
-
-a.linkout {
-    color: #3366bb;
-}
-
 </style>
 {% endblock %}
 
@@ -57,10 +52,11 @@ jQuery(function() {
                 htmlstr += '<tr><td>' + data[1].info[i][0] + '</td><td>' + data[1].info[i][1] + '</td></tr>'
             }
             htmlstr += '<tr><td>Crossreferences</td><td>';
+            var linkoutstr = new Array();
             for (var i = 0; i < data[1].linkouts.length; ++i) {
-                htmlstr += '<a href="' + data[1].linkouts[i].url + '" target="_blank" class="linkout">' + data[1].linkouts[i].name + '</a> ';
+                linkoutstr.push('<a href="' + data[1].linkouts[i].url + '" target="_blank" class="linkout">' + data[1].linkouts[i].name + '</a> ');
             }
-            htmlstr += '</tr>';
+            htmlstr += linkoutstr.join(' ') + '</tr>';
             infotable.html(htmlstr);
             var pre = jQuery('#seqDiv > div > pre');
                 jQuery('#seqDiv').height(infotable.height());

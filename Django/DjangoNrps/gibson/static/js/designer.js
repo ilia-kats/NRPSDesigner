@@ -2285,7 +2285,12 @@ var d = Designer.prototype = new Container();
                     }
                     contentstr += '<tr><td>Substrate</td><td>' + substratestr.join(", ") + '</td></tr>';
                 }
-                contentstr += '<tr><td>Description</td><td>' + domains[i].description + '</td></tr><tr><td>Curated</td><td>' + (domains[i].curated ? 'Yes' : 'No') + '</td></tr></table>';
+                contentstr += '<tr><td>Description</td><td>' + domains[i].description + '</td></tr><tr><td>Curated</td><td>' + (domains[i].curated ? 'Yes' : 'No') + '</td></tr><tr><td>Crossreferences</td><td>';
+                var linkoutstr = new Array();
+                for (var j = 0; j < domains[i].linkouts.length; ++j) {
+                    linkoutstr.push('<a href="' + domains[i].linkouts[j].url + '" target="_blank" class="linkout">' + domains[i].linkouts[j].name + '</a> ');
+                }
+                contentstr += linkoutstr.join(' ') + '</td></tr></table>';
             }
             navstr += '</ul>';
             contentstr += '</div>';

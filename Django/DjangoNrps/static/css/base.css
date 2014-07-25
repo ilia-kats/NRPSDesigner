@@ -234,7 +234,9 @@ ul.errorlist li {
 	width:100%;
 }
 
-
+a.linkout {
+    color: #3366bb;
+}
 
 #originChosenWrapper * {
 	data-placeholder: "Select existing origin"
