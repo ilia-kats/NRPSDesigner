@@ -21,7 +21,7 @@ from Bio.Alphabet import IUPAC
 
 #  decide later on regarding how to best set those options for server etc
 #  possibly convert options from argparse.Namespace to dictionary
-#  but for now use this as a hack.. WHICH has terrible side-effects
+#  but for now use this
 
 
 def nrpsSmash(dnaSeq):
@@ -32,9 +32,9 @@ def nrpsSmash(dnaSeq):
     tstFeature = SeqFeature(FeatureLocation(0, len(dnaSeq)), type="CDS", strand=1)
     tstFeature.qualifiers = {'gene':['gene']}
     sequenceRecord = SeqRecord(Seq(dnaSeq, IUPAC.unambiguous_dna),
-        id = "sauce",
-        name = "bbqSauce",
-        description = "wtfDude")
+        id = "seq_id",
+        name = "seq_name",
+        description = "seq_description")
     sequenceRecord.features = [tstFeature]
     analysis = specific_analysis(sequenceRecord, options)
     shutil.rmtree(options.raw_predictions_outputfolder)
