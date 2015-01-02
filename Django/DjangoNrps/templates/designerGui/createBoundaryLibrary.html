@@ -21,25 +21,26 @@
 {{ formset.management_form }}
 
 <div class="alert alert-info">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<button type="button" class="close" data-dismiss="alert">&times;</button>
 For each of the domains you choose below, a new construct will be created based on the left and right boundary (Protein coordinates, amino acids) you define in the adjacent input boxes. Use the corresponding <i class="icon-refresh"></i>  button in order to get a graphical view of the domain you want to modify (domain is highlighted in green, whole protein which includes the domain is shown) and select new boundaries by dragging mouse.</div>
 
 
 {% for form in formset %}
-      <div class="formSet">
-          {{ form.errors}}
-          {{ form.domain }}
-          {{ form.left_boundary }}
-          {{ form.right_boundary }}
-          <button class="seqBtn btn btn-link" type="button"><i class="icon-refresh"></i>
+<div class="formSet">
+{{ form.errors}}
+{{ form.linkers }}
+{{ form.left_boundary }}
+{{ form.right_boundary }}
+<button class="seqBtn btn btn-link" type="button"><i class="icon-refresh"></i>
 </button>
-      </div>
+</div>
 
 {% endfor %}
-<br/>
-<br/>
 
-<div id="leftBioJsSequenceDiv" style="height:250px; overflow-y:auto"></div>
+<div class="row-fluid">
+    <div id="leftBioJsSequenceDiv" style="height:250px; overflow-y:auto" class="span6"></div>
+    <div id="rightBioJsSequenceDiv" style="height:250px; overflow-y:auto" class="span6 ofset2"></div>
+</div>
 <input class="btn" type="submit" value="Create Library" />
 </form>
 {% endblock %}
@@ -52,29 +53,38 @@ For each of the domains you choose below, a new construct will be created based 
 
 jQuery(document).ready(function() {
 
-var lb;
-var rb;
+    var lb;
+    var rb;
 
-var seq = new BiojsSequenceHelper({
+    var lseq = new BiojsSequenceHelper({
         target: "leftBioJsSequenceDiv",
         url: "{% url 'getDomainOrderBioJsSequence' %}",
-        onSelectionChange: function( objEvent ) {
-                lb.val(objEvent.start);
-                rb.val(objEvent.end);
+        onSelectionChanged: function( objEvent ) {
+            lb.val(objEvent.start);
         }
-});
-
-jQuery(".formSet").formset({addText:'<i class="icon-plus"></i>',
-    deleteText:'<i class="icon-remove"></i>',
+    });
+    var rseq = new BiojsSequenceHelper({
+        target: "rightBioJsSequenceDiv",
+        url: "{% url 'getDomainOrderBioJsSequence' %}",
+        onSelectionChanged: function( objEvent ) {
+            rb.val(objEvent.start);
+        }
     });
 
-jQuery(document).on('click','.seqBtn',function(){
-    domainOrder = jQuery(this).closest(".formSet").find("select").val()
-    tmp = jQuery(this).closest(".formSet").find("input")
-    lb = jQuery(tmp[0])
-    rb = jQuery(tmp[1])
-    seq.showBioJsSequence({domainOrderId: domainOrder});
-});
+    jQuery(".formSet").formset({addText:'<i class="icon-plus"></i>',
+        deleteText:'<i class="icon-remove"></i>',
+    });
+
+    jQuery(document).on('click','.seqBtn',function(){
+        domainOrder = jQuery(this).closest(".formSet").find("select").val()
+        leftdomain = parseInt(domainOrder.substr(1))
+        rightdomain = parseInt(domainOrder.substr(domainOrder.indexOf(',') + 1))
+        tmp = jQuery(this).closest(".formSet").find("input")
+        lb = jQuery(tmp[0])
+        rb = jQuery(tmp[1])
+        lseq.showBioJsSequence({domainOrderId: leftdomain}, lseq.scrollTo.end);
+        rseq.showBioJsSequence({domainOrderId: rightdomain});
+    });
 
 });
 
