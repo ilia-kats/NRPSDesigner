@@ -138,6 +138,10 @@ jQuery(document).ready(function() {
                 currRow.find("input[type=hidden]").val(parentParent);
             }
         }
+        e.preventDefault();
+        submitCeleryJob("{% url 'createBoundaryLibrary' uuid %}", form.serialize(), undefined, undefined, function(data) {
+            jQuery(location).attr("href", "{% url 'viewBoundaryLibrary' uuid %}");
+        });
     });
 
 });

@@ -642,7 +642,7 @@ class Construct(models.Model):
 
     def reprocess_primer(self, p):
         """Recalculate all the warnings associated with the given primer"""
-        Check that the primer belongs in this construct
+        #Check that the primer belongs in this construct
         if not p in self.primer.all():
             raise ValueError("Primer (id='%s') not found in Construct (id=%s)" %
                     (p.id, self.id))

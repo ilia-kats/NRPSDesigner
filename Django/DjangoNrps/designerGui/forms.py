@@ -18,7 +18,6 @@ class NRPForm(ModelForm):
 		exclude = ['uuid', 'monomers','owner','designed','construct','designerDomains']
 
 
-
 def make_changed_boundary_nrp_form(nrp_uuid):
     class ChangedBoundaryNRPForm(Form):
         parent = CharField(required=False, widget=HiddenInput())
@@ -53,7 +52,7 @@ def make_changed_boundary_nrp_form(nrp_uuid):
             nrp.name = str(nrp.name)
             desc = str("%s - %s" % (str(left_domain), str(right_domain))) + " Boundaries:" + str(left_boundary) + "-" + str(right_boundary) + str("aa")
             if nrp.name.endswith(" Boundary variant"):
-                nrp.description += "%s " % desc
+                nrp.description += " %s" % desc
             else:
                 nrp.name += " Boundary variant"
                 nrp.description = desc
@@ -101,5 +100,3 @@ def make_changed_boundary_nrp_form(nrp_uuid):
             return cleaned_data
 
     return ChangedBoundaryNRPForm
-
-

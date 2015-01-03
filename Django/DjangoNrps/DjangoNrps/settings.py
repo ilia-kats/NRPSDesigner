@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 import djcelery
 djcelery.setup_loader()
 BROKER_URL = 'django://'
-CELERY_IMPORTS=("databaseInput.models", "designerGui.models")
+CELERY_IMPORTS=("databaseInput.models", "designerGui.models", "designerGui.views")
 CELERY_TRACK_STARTED = True
 #CELERY_RESULT_BACKEND = "amqp"
 

@@ -15,6 +15,8 @@ from django.views.decorators.cache import cache_page
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.formsets import formset_factory
 
+from celery import task
+import logging
 
 import math
 import json
@@ -190,6 +192,23 @@ def downloadLibrary(request, uuid):
     cids = [child.construct.pk for child in parentnrp.child.filter(uuid__in=request.POST.getlist('id'))]
     return primer_download(request, parentnrp.construct.pk, *cids)
 
+@task
+def save_boundary_library(boundary_formset, parent):
+    parents = {}
+    ChangedBoundaryNRPForm = make_changed_boundary_nrp_form(parent.uuid)
+    logger = logging.getLogger('user_visible')
+    for i,cdata in enumerate(boundary_formset):
+        bparent = None
+        if 'parent' in cdata and len(cdata['parent']) > 0 and cdata['parent'] in parents:
+            bparent = parents[cdata['parent']]
+        else:
+            bparent = parent
+        boundary_form = ChangedBoundaryNRPForm()
+        boundary_form.cleaned_data = cdata
+        logger.info("Saving variant %d..." % (i + 1))
+        parents['%s__%d_%d' % (boundary_form.cleaned_data['linker'], boundary_form.cleaned_data['left_boundary'], boundary_form.cleaned_data['right_boundary'])] = boundary_form.save(bparent)
+        logger.info("Saved variant %d." % (i + 1))
+
 def create_boundary_library(request, uuid):
     nrp = get_nrp(request.user, uuid)
     if not nrp:
@@ -201,18 +220,12 @@ def create_boundary_library(request, uuid):
     if request.method == "POST":
         boundary_formset = changedBoundaryNRPFormset(request.POST)
         if boundary_formset.is_valid():
-            parents = {}
-            for boundary_form in boundary_formset:
-                if boundary_form.is_valid():
-                    parent = None
-                    if len(boundary_form.cleaned_data['parent']) > 0 and boundary_form.cleaned_data['parent'] in parents:
-                        parent = parents[boundary_form.cleaned_data['parent']]
-                    parents['%s__%d_%d' % (boundary_form.cleaned_data['linker'], boundary_form.cleaned_data['left_boundary'], boundary_form.cleaned_data['right_boundary'])] = boundary_form.save(parent)
-            return HttpResponseRedirect(reverse("viewBoundaryLibrary", kwargs={'uuid': uuid}))
+            return JsonResponse({'taskId': save_boundary_library.delay([f.cleaned_data for f in boundary_formset], nrp).id})
         else:
             t = loader.get_template('designerGui/createBoundaryLibrary.html')
             c = RequestContext(request,{
-                    'formset': boundary_formset
+                    'formset': boundary_formset,
+                    'uuid': uuid
                 })
 
         return HttpResponse(t.render(c))
@@ -221,7 +234,8 @@ def create_boundary_library(request, uuid):
         #boundary_form = ChangedBoundaryNRPForm(nrp)
         t = loader.get_template('designerGui/createBoundaryLibrary.html')
         c = RequestContext(request,{
-                    'formset': changedBoundaryNRPFormset
+                    'formset': changedBoundaryNRPFormset,
+                    'uuid': uuid
                 })
 
         return HttpResponse(t.render(c))
