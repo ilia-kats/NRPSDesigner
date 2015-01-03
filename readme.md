@@ -53,7 +53,7 @@ C++ stuff
 * [__libXML__](http://www.xmlsoft.org): C library for XML handling
 * [__libcurl__](http://curl.haxx.se): C library for HTTP
 * [__Boost.program_options__](http://www.boost.org): C++ library for command-line option parsing
-* [__libSBOLc__](https://github.com/SynBioDex/libSBOLc) (fixed version from https://github.com/ilia-kats/libSBOLc required): C library for SBOL IO
+* [__libSBOLc__](https://github.com/SynBioDex/libSBOLc): C library for SBOL IO
 * [__GCC__](http://gcc.gnu.org) (>= 4.8) or a comparable compiler with C++11 support
 
 Compilation
