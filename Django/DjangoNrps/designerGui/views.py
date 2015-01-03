@@ -201,9 +201,13 @@ def create_boundary_library(request, uuid):
     if request.method == "POST":
         boundary_formset = changedBoundaryNRPFormset(request.POST)
         if boundary_formset.is_valid():
+            parents = {}
             for boundary_form in boundary_formset:
                 if boundary_form.is_valid():
-                    boundary_form.save()
+                    parent = None
+                    if len(boundary_form.cleaned_data['parent']) > 0 and boundary_form.cleaned_data['parent'] in parents:
+                        parent = parents[boundary_form.cleaned_data['parent']]
+                    parents['%s__%d_%d' % (boundary_form.cleaned_data['linker'], boundary_form.cleaned_data['left_boundary'], boundary_form.cleaned_data['right_boundary'])] = boundary_form.save(parent)
             return HttpResponseRedirect(reverse("viewBoundaryLibrary", kwargs={'uuid': uuid}))
         else:
             t = loader.get_template('designerGui/createBoundaryLibrary.html')

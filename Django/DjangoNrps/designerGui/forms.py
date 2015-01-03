@@ -1,6 +1,6 @@
 from designerGui.models import NRP
 from django.forms.models import inlineformset_factory, formset_factory
-from django.forms import ModelForm, CharField, Textarea, Form, Select, ChoiceField,IntegerField,TextInput
+from django.forms import ModelForm, CharField, Textarea, Form, Select, ChoiceField,IntegerField,TextInput, HiddenInput
 from django.forms import ValidationError
 from django.forms.widgets import TextInput
 from django.forms.formsets import BaseFormSet
@@ -21,7 +21,8 @@ class NRPForm(ModelForm):
 
 def make_changed_boundary_nrp_form(nrp_uuid):
     class ChangedBoundaryNRPForm(Form):
-        linkers = ChoiceField(label="Linker", widget=Select())
+        parent = CharField(required=False, widget=HiddenInput())
+        linker = ChoiceField(label="Linker", widget=Select())
         left_boundary = IntegerField(label="Left Boundary", widget=TextInput)
         right_boundary = IntegerField(label="Right Boundary", widget=TextInput)
 
@@ -30,24 +31,33 @@ def make_changed_boundary_nrp_form(nrp_uuid):
             self.nrp_uuid = nrp_uuid
             nrp = NRP.objects.get(uuid = nrp_uuid)
             domains = DomainOrder.objects.filter(nrp=nrp)
-            self.fields['linkers'].choices = [((x.pk, y.pk), "%s - %s" % (str(x), str(y))) for x,y in zip(domains, domains[1:])]
+            self.fields['linker'].choices = [((x.pk, y.pk), "%s - %s" % (str(x), str(y))) for x,y in zip(domains, domains[1:])]
 
-        def save(self):
+        def save(self, parent=None):
             # extract data from cleaned form
-            linkers = literal_eval(self.cleaned_data.get("linkers"))
-            left_domain = DomainOrder.objects.get(pk = linkers[0])
-            right_domain = DomainOrder.objects.get(pk=linkers[1])
+            linker = literal_eval(self.cleaned_data.get("linker"))
+            left_domain = DomainOrder.objects.get(pk = linker[0])
+            right_domain = DomainOrder.objects.get(pk=linker[1])
             left_boundary    = self.cleaned_data['left_boundary']
             right_boundary   = self.cleaned_data['right_boundary']
 
 
             # start saving nrp variants
-            nrp = NRP.objects.get(uuid = self.nrp_uuid)
+            if parent is None:
+                nrp = NRP.objects.get(uuid = self.nrp_uuid)
+            else:
+                nrp = parent
             parent_dom_order_all = DomainOrder.objects.filter(nrp=nrp)
             parent_nrp_order_all = SubstrateOrder.objects.filter(nrp=nrp)
             nrp.pk = None
-            nrp.name = str(nrp.name) + " Boundary variant"
-            nrp.description = str("%s - %s" % (str(left_domain), str(right_domain))) + " Boundaries:" + str(left_boundary) + "-" + str(right_boundary) + str("aa")
+            nrp.name = str(nrp.name)
+            desc = str("%s - %s" % (str(left_domain), str(right_domain))) + " Boundaries:" + str(left_boundary) + "-" + str(right_boundary) + str("aa")
+            if nrp.name.endswith(" Boundary variant"):
+                nrp.description += "%s " % desc
+            else:
+                nrp.name += " Boundary variant"
+                nrp.description = desc
+            nrp.description
             nrp.construct = None
             nrp.uuid = make_uuid()
             nrp.boundary_parent = NRP.objects.get(uuid=self.nrp_uuid)
@@ -73,14 +83,15 @@ def make_changed_boundary_nrp_form(nrp_uuid):
 
             nrp.makeConstruct()
             NRP.objects.get(uuid=self.nrp_uuid).adjustConstruct(nrp)
+            return nrp
 
         def clean(self):
             cleaned_data = super(ChangedBoundaryNRPForm, self).clean()
             left_boundary = cleaned_data.get("left_boundary")
             right_boundary = cleaned_data.get("right_boundary")
-            linkers = literal_eval(cleaned_data.get("linkers"))
-            left_domain = DomainOrder.objects.get(pk = linkers[0])
-            right_domain = DomainOrder.objects.get(pk=linkers[1])
+            linker = literal_eval(cleaned_data.get("linker"))
+            left_domain = DomainOrder.objects.get(pk = linker[0])
+            right_domain = DomainOrder.objects.get(pk=linker[1])
 
             left_min,right_max = dna_to_prot_coords(1, len(right_domain.domain.cds.dnaSequence))
             if  left_boundary < left_min:

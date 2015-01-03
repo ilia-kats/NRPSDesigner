@@ -15,10 +15,10 @@ class UnaFolder():
 		self.na_salt = na_salt
 		self.mg_salt = mg_salt
 		self.warnings = []
-		
+
 	def hybrid_options(self):
 		return ' -n DNA -t %.2f -T %.2f -N %.2f -M %.2f --mfold=5,-1,100 ' %(self.t + self.safety, self.t + self.safety, self.na_salt, self.mg_salt)
-	
+
 	def process(self, cline):
 		try:
 			print 'subprocess.Popen(shlex.split(%s), stdout=subprocess.PIPE, stderr=subprocess.PIPE)' % cline
@@ -30,7 +30,7 @@ class UnaFolder():
 		if p.returncode > 0:
 			return False
 		return True
-	
+
 	def self_prime(self, sequence):
 		cwd = os.getcwd()
 		os.chdir(self.wd)
@@ -63,7 +63,7 @@ class UnaFolder():
 				os.remove(f)
 		os.chdir(cwd)
 		return (True, self.wd + self.name + '.png')
-		
+
 	def mis_prime(self, target, primer):
 		primerloc = self.name + '-primer'
 		targetloc = self.name + '-target'
@@ -93,6 +93,6 @@ class UnaFolder():
 				continue
 			else:
 				self.warnings.append((l,j,i,float(r['energy'])/10))
-		
+
 		os.chdir(cwd)
 		return True

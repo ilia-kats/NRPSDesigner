@@ -163,7 +163,7 @@ class Warning(models.Model):
     text = models.CharField(max_length=150)
 
 class Primer(models.Model):
-    name = models.CharField(max_length=80)
+    name = models.CharField(max_length=200)
     construct = models.ForeignKey('Construct', related_name='primer')
     flap = models.OneToOneField('PrimerHalf', related_name='flap')
     stick = models.OneToOneField('PrimerHalf', related_name='stick')
@@ -642,7 +642,7 @@ class Construct(models.Model):
 
     def reprocess_primer(self, p):
         """Recalculate all the warnings associated with the given primer"""
-        #Check that the primer belongs in this construct
+        Check that the primer belongs in this construct
         if not p in self.primer.all():
             raise ValueError("Primer (id='%s') not found in Construct (id=%s)" %
                     (p.id, self.id))
@@ -676,7 +676,6 @@ class ConstructFragment(models.Model):
     end_offset = models.IntegerField(default=0) #positive in direction of sequence
     concentration = models.DecimalField(default=100, max_digits=4, decimal_places=1)
 
-    total_v = models.DecimalField(max_digits=5, decimal_places=1)
     buffer_v = models.DecimalField(max_digits=5, decimal_places=1, default=0)
     dntp_v = models.DecimalField(max_digits=5, decimal_places=1, default=0)
     primer_top_v = models.DecimalField(max_digits=5, decimal_places=1, default=0)
