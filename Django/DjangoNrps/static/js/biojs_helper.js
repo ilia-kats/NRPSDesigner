@@ -1,14 +1,25 @@
 function BiojsSequenceHelper(options)
 {
     this.opts = {
-        columns: {'size':100},
+        columns: {size:100},
         format: "FASTA",
         formatSelectorVisible: false,
     };
     for (var opt in options) {
         this.opts[opt] = options[opt];
     }
-    this.seq = new Biojs.Sequence();
+    this.seq = new Biojs.Sequence(this.opts);
+
+    if ('target' in this.opts) {
+        var self = this;
+        this.seq._container.ready(function(){
+            var chr = jQuery("<span>&nbsp;</span>");
+            var width = chr.appendTo(self.seq._contentDiv).outerWidth(true);
+            self.opts.columns.size = Math.floor(self.seq._contentDiv.innerWidth() / width * 0.9);
+            self.seq._contentDiv.hide();
+            chr.remove();
+        });
+    }
 
     this.showBioJsSequence = function (data, scrollTo) {
         if (typeof scrollTo == 'undefined')
