@@ -154,7 +154,7 @@
 
                 <h3> About Gibthon </h3>
                  <center>
-                 <img src={% static "images/documentation/gibthon2.0beta.png" %} /> 
+                 <img src={% static "images/documentation/gibthon2.0beta.png" %} />
                  </center>
                  <p style="margin-top:20px"> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences. After each sequence modification, important primer properties (e.g. regarding self-priming) are re-calculated using UNAfold. In the next sections, the adapted version of Gibthon and its integration in NRPSDesigner will be explained. </p>
 
@@ -254,10 +254,12 @@
             <h2> Boundary libraries </h2>
             </div>
 
-            <p> Similarly to the monomer library functionality, a boundary library functionality exists, in which the user can modify the boundaries of the domains included in the original construct. For each domain, the protein sequence of the whole synthetase which natively codes for it, can be shown. This makes it easy to choose different boundaries for a particular domain, as exemplified in the screenshot of this functionality below: </p>
+            <p> Similarly to the monomer library functionality, a boundary library functionality exists, in which the user can modify the boundaries of the domains included in the original construct. For each pair of adjacent domains, the protein sequence of the corresponding synthetases which natively code for then, can be shown. This makes it easy to choose different boundaries for a particular domain combination, as exemplified in the screenshot of this functionality below: </p>
 
            <img src={% static "images/documentation/boundaryLibrary.png" %} /></br>
+<p> In this example, the user wants to modify the boundary/linker between an Adenylation and a Thiolation domain. In the left panel, the adenylation domain is highlighted in green. All other domains in this synthetase have a blue tooltip below them, such as the thiolation domain which follows the adenylation domain. Likewise, in the right panel, the thiolation domain is highlighted in green.  The yellow amino acids correspond to the amino acids the user has chosen for the corresponding boundaries. In this case, the two domains will be linked at the highlighted P and A residues (i.e. the designed NRPS will include the sequence AARTP-AEIQLTA). </p>
 
+<p> This functionality enables experts to easily apply their knowledge regarding functional NRPS domain boundaries while designing their constructs and can also serve as a platform for elucidating this relationship.</p>
 
             <div class="page-header">
             <h2> Extending the database </h2>
@@ -288,7 +290,7 @@
             <h2> Submit experimental data </h2>
             </div>
 
-<p> In this panel (see screenshot below) you can report the result of a successful NRPS assembly. If a construct has worked experimentally the domain borders of the respective database entries can be updated accordingly. First, you have to select two neighboring domains from your construct. Different filtering options help you to find the correct domains quickly in the database. Subsequently the corresponding coding sequence will be displayed. In green you can find the current domain length and borders. If your experimentally tested domain borders differ you can enter your result into the respective input fields e.g. by clicking on the corresponding base pair in the sequence shown. Finally, you can specify if your domain can be found also in external databases, as well as references validating this particular domain combination. </p> 
+<p> In this panel (see screenshot below) you can report the result of a successful NRPS assembly. If a construct has worked experimentally the domain borders of the respective database entries can be updated accordingly. First, you have to select two neighboring domains from your construct. Different filtering options help you to find the correct domains quickly in the database. Subsequently the corresponding coding sequence will be displayed. In green you can find the current domain length and borders. If your experimentally tested domain borders differ you can enter your result into the respective input fields e.g. by clicking on the corresponding base pair in the sequence shown. Finally, you can specify if your domain can be found also in external databases, as well as references validating this particular domain combination. </p>
              <img src={% static "images/documentation/expData.png" %} /></br>
 
 
