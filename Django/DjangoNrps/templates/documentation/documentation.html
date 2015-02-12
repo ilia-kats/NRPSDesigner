@@ -71,6 +71,7 @@
                                     <li> Integration of Gibthon to facilitate implementation of cloning strategy</li>
                                     <li> Parts registry interface and SBOL output format</li>
                                     <li> <a href="http://hdl.handle.net/1721.1/81333"><b>RFC100</b></a> for non-ribosomal peptide synthesis design</li>
+                                    <li> The database can be explored. </li>
 
              </div>
              <div class="page-header">
@@ -88,7 +89,7 @@
                 <li><span class="label label-info">optional</span> A library is created by shuffling one of the monomer positions.</li>
                 <li><span class="label label-info">optional</span> A library is created by shifting the boundaries of the domains.</li>
                 <li><span class="label label-info">optional</span> The NRPSDesigner database can be extended with newly discovered synthetase sequences. </li>
-
+                <li><span class="label label-info">optional</span> The NRPSDesigner database can be explored. </li>
               </div>
 
             <div class="page-header">
@@ -154,7 +155,7 @@
 
                 <h3> About Gibthon </h3>
                  <center>
-                 <img src={% static "images/documentation/gibthon2.0beta.png" %} /> 
+                 <img src={% static "images/documentation/gibthon2.0beta.png" %} />
                  </center>
                  <p style="margin-top:20px"> <a href="http://django.gibthon.org/"> Gibthon </a> was started as the software project of the Cambridge iGEM teams of 2010 and 2011 and comprises an open source tool which aids "in the design and manufacture of synthetic parts and devices for biological systems." The manufacture of the synthetic parts is accomplished by means of Gibson assembly, a technique for one-pot isothermal and scarless assembly of DNA fragments. Gibthon was chosen because of its user-friendly interface, which rapidly allows the scientist to use his expertise and modify the Gibson assembly primer suggestions by having direct access to the sequences. After each sequence modification, important primer properties (e.g. regarding self-priming) are re-calculated using UNAfold. In the next sections, the adapted version of Gibthon and its integration in NRPSDesigner will be explained. </p>
 
@@ -254,10 +255,12 @@
             <h2> Boundary libraries </h2>
             </div>
 
-            <p> Similarly to the monomer library functionality, a boundary library functionality exists, in which the user can modify the boundaries of the domains included in the original construct. For each domain, the protein sequence of the whole synthetase which natively codes for it, can be shown. This makes it easy to choose different boundaries for a particular domain, as exemplified in the screenshot of this functionality below: </p>
+            <p> Similarly to the monomer library functionality, a boundary library functionality exists, in which the user can modify the boundaries of the domains included in the original construct. For each pair of adjacent domains, the protein sequence of the corresponding synthetases which natively code for then, can be shown. This makes it easy to choose different boundaries for a particular domain combination, as exemplified in the screenshot of this functionality below: </p>
 
            <img src={% static "images/documentation/boundaryLibrary.png" %} /></br>
+<p> In this example, the user wants to modify the boundary/linker between an Adenylation and a Thiolation domain. In the left panel, the adenylation domain is highlighted in green. All other domains in this synthetase have a blue tooltip below them, such as the thiolation domain which follows the adenylation domain. Likewise, in the right panel, the thiolation domain is highlighted in green.  The yellow amino acids correspond to the amino acids the user has chosen for the corresponding boundaries. In this case, the two domains will be linked at the highlighted P and A residues (i.e. the designed NRPS will include the sequence AARTP-AEIQLTA). </p>
 
+<p> This functionality enables experts to easily apply their knowledge regarding functional NRPS domain boundaries while designing their constructs and can also serve as a platform for elucidating this relationship.</p>
 
             <div class="page-header">
             <h2> Extending the database </h2>
@@ -268,6 +271,18 @@
             <img src={% static "images/documentation/dbInput.png" %} /></br>
             <p style="margin-top:20px"> Beyond the source organism and the product synthesized in the native organism, the DNA sequence has to be entered. This can be a raw string or a FASTA formatted sequence. Here a number of conditions are checked: The DNA sequence entered has to be a coding sequence. Thus, its length has to be a multiple of 3 and it has to begin with a start codon, end with a stop codon and no stop codons should be interspersed within the gene (start/stop codon definition according to the <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG11"> NCBI Bacterial, Archaeal and Plant Plastid Code </a>). If one of these conditions is violated, appropriate warnings are returned. </p>
 
+            <p> In regards to references, the following resources can (and should be cited), when adding new entries to the database (the examples illustrate the format in which these should be entered): </p>
+            <div class="well">
+                <li> <a href="http://www.ncbi.nlm.nih.gov/taxonomy"> NCBI taxon </a>(e.g. <a href="http://www.ncbi.nlm.nih.gov/taxonomy/?term=58340"> 58340 </a>)</li>
+                <li> <a href="http://www.ncbi.nlm.nih.gov/pubmed"> Pubmed </a> (e.g. <a href="http://www.ncbi.nlm.nih.gov/pubmed/19098220">19098220 </a>)</li>
+                <li> <a href="http://www.ncbi.nlm.nih.gov/nuccore"> GB_nuccore </a> (e.g. <a href="http://www.ncbi.nlm.nih.gov/nuccore/2894185"> 2894185 </a>)</li>
+                <li><a href="http://www.ncbi.nlm.nih.gov/nucest/"> GB_nucest </a> (as in nuccore)</li>
+                <li><a href="http://www.ncbi.nlm.nih.gov/gss/"> GB_nucgss</a> (as in nuccore)</li>
+                <li> <a href="http://pubchem.ncbi.nlm.nih.gov/"> PubChem </a> (e.g. <a href="http://pubchem.ncbi.nlm.nih.gov/compound/145742"> 145742 </a>) </li>
+                <li> <a href="http://www.nii.ac.in/~pksdb/sbspks/master.html"> SBSPKS </a> (e.g. <a href="http://www.nii.ac.in/~pksdb/DBASE/webpages/balhi"> balhi </a>)</li>
+                <li> <a href="http://bioinfo.lifl.fr/norine/"> Norine </a>(e.g. <a href="http://bioinfo.lifl.fr/norine/result.jsp?ID=NOR00343"> NOR00343 </a>)</li>
+                <li> <a href="http://www.uniprot.org/"> UniProt <a> (e.g. <a href="http://www.uniprot.org/uniprot/D3QLM9"> D3QLM9 </a>)</li>
+            </div>
             <p> Once everything has been entered, the request can be submitted to the NRPSDesigner server by pressing the "Generate Domains" button. The pipeline based on hidden markov models (HMM) then detects all NRPS domains. If none is found, then an appropriate error message is returned. In the example of the tycB gene, 11 domains are detected and returned. </p>
 
              <img src={% static "images/documentation/HMMoutput.png" %} /></br>
@@ -288,8 +303,15 @@
             <h2> Submit experimental data </h2>
             </div>
 
-<p> In this panel (see screenshot below) you can report the result of a successful NRPS assembly. If a construct has worked experimentally the domain borders of the respective database entries can be updated accordingly. First, you have to select two neighboring domains from your construct. Different filtering options help you to find the correct domains quickly in the database. Subsequently the corresponding coding sequence will be displayed. In green you can find the current domain length and borders. If your experimentally tested domain borders differ you can enter your result into the respective input fields e.g. by clicking on the corresponding base pair in the sequence shown. Finally, you can specify if your domain can be found also in external databases, as well as references validating this particular domain combination. </p> 
+<p> In this panel (see screenshot below) you can report the result of a successful NRPS assembly. If a construct has worked experimentally the domain borders of the respective database entries can be updated accordingly. First, you have to select two neighboring domains from your construct. Different filtering options help you to find the correct domains quickly in the database. Subsequently the corresponding coding sequence will be displayed. In green you can find the current domain length and borders. If your experimentally tested domain borders differ you can enter your result into the respective input fields e.g. by clicking on the corresponding base pair in the sequence shown. Finally, you can specify if your domain can be found also in external databases, as well as references validating this particular domain combination. </p>
              <img src={% static "images/documentation/expData.png" %} /></br>
+
+             <div class="page-header">
+               <h2> Inspect the database </h2>
+             </div>
+
+             <p> The contents of the NRPSDesigner database can also be explored. The user first chooses the origin of the NRPS (e.g. organism or BioBrick) and then the gene. It is also possibly to inspect the individual domains within a gene. An exemplary screenshot is shown below: </p>
+             <img src={% static "images/documentation/db_inspection.png" %} /></br>
 
 
              <div class="page-header">

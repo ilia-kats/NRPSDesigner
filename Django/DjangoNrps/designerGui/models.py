@@ -53,7 +53,7 @@ def make_uuid():
 class NRP(models.Model):
     owner = models.ForeignKey('auth.User', null=True)
     uuid = models.CharField(max_length=36, db_index=True, default=make_uuid)
-    name = models.CharField(max_length=80)
+    name = models.CharField(max_length=200)
     description = models.CharField(max_length=2000, null= True, blank=True)
     monomers = models.ManyToManyField('databaseInput.Substrate', through='SubstrateOrder', blank=True, related_name='includedIn')
     created = models.DateTimeField(auto_now_add=True)
